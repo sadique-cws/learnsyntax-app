@@ -2,9 +2,14 @@ import { Head } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { CreditCard, Download, Receipt, User } from 'lucide-react';
+import { Receipt, User } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
+    
+    const formatDate = (date: string) => mounted ? new Date(date).toLocaleDateString() : '';
     return (
         <>
             <Head title="Payments & Revenue" />
@@ -44,7 +49,7 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
                                         </td>
                                         <td className="p-4">
                                             <div className="text-sm font-medium">{payment.enrollment.course.title}</div>
-                                            <div className="text-[10px] text-muted-foreground uppercase">Enrolled on {new Date(payment.created_at).toLocaleDateString()}</div>
+                                            <div className="text-[10px] text-muted-foreground uppercase">Enrolled on {formatDate(payment.created_at)}</div>
                                         </td>
                                         <td className="p-4">
                                             <div className="font-bold text-sm">${payment.amount}</div>

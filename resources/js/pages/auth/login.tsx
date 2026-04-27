@@ -1,7 +1,6 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, Link } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
-import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -31,11 +30,11 @@ export default function Login({
                 resetOnSuccess={['password']}
                 className="flex flex-col gap-6"
             >
-                {({ processing, errors }) => (
+                {({ processing, errors, data, setData }) => (
                     <>
-                        <div className="grid gap-6">
+                        <div className="grid gap-5">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">Email address</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -44,22 +43,23 @@ export default function Login({
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="email"
-                                    placeholder="email@example.com"
+                                    placeholder="name@example.com"
+                                    className="rounded-xl border-border bg-background h-11 px-4 shadow-none focus-visible:ring-primary/20 transition-all"
                                 />
                                 <InputError message={errors.email} />
                             </div>
 
                             <div className="grid gap-2">
-                                <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                                <div className="flex items-center justify-between ml-1">
+                                    <Label htmlFor="password" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Password</Label>
                                     {canResetPassword && (
-                                        <TextLink
-                                            href={request()}
-                                            className="ml-auto text-sm"
+                                        <Link
+                                            href={request().url}
+                                            className="text-[11px] font-bold text-primary hover:underline"
                                             tabIndex={5}
                                         >
                                             Forgot password?
-                                        </TextLink>
+                                        </Link>
                                     )}
                                 </div>
                                 <PasswordInput
@@ -68,54 +68,60 @@ export default function Login({
                                     required
                                     tabIndex={2}
                                     autoComplete="current-password"
-                                    placeholder="Password"
+                                    placeholder="Enter your password"
+                                    className="rounded-xl border-border bg-background h-11 px-4 shadow-none focus-visible:ring-primary/20 transition-all"
                                 />
                                 <InputError message={errors.password} />
                             </div>
 
-                            <div className="flex items-center space-x-3">
+                            <div className="flex items-center space-x-2 ml-1">
                                 <Checkbox
                                     id="remember"
                                     name="remember"
                                     tabIndex={3}
+                                    className="rounded shadow-none border-border"
                                 />
-                                <Label htmlFor="remember">Remember me</Label>
+                                <Label htmlFor="remember" className="text-xs font-medium text-muted-foreground select-none">Remember me for 30 days</Label>
                             </div>
 
                             <Button
                                 type="submit"
-                                className="mt-4 w-full"
+                                className="mt-2 w-full h-11 rounded-xl bg-primary hover:bg-primary/90 font-bold shadow-none tracking-wide"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
                             >
-                                {processing && <Spinner />}
-                                Log in
+                                {processing && <Spinner className="mr-2" />}
+                                Sign In
                             </Button>
                         </div>
 
                         {canRegister && (
-                            <div className="text-center text-sm text-muted-foreground">
-                                Don't have an account?{' '}
-                                <TextLink href={register()} tabIndex={5}>
-                                    Sign up
-                                </TextLink>
+                            <div className="text-center text-xs font-medium text-muted-foreground">
+                                New to Learn Syntax?{' '}
+                                <Link href={register().url} className="text-primary font-bold hover:underline" tabIndex={5}>
+                                    Create an account
+                                </Link>
                             </div>
                         )}
 
-                        {/* Demo Access Section */}
-                        <div className="mt-4 rounded-lg border border-border bg-muted/50 p-4">
-                            <h4 className="mb-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Demo Access</h4>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <div className="mb-1 text-[10px] font-bold uppercase text-primary">Admin</div>
-                                    <div className="text-[10px] font-mono select-all">admin@learnsyntax.com</div>
-                                    <div className="text-[10px] font-mono">password</div>
+                        {/* Demo Access Section - More styled */}
+                        <div className="mt-2 rounded-2xl border border-dashed border-border bg-muted/30 p-4">
+                            <h4 className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 text-center">Demo Environment</h4>
+                            <div className="grid grid-cols-1 gap-3">
+                                <div className="flex items-center justify-between p-2 rounded-lg bg-background border border-border/50">
+                                    <div className="flex flex-col">
+                                        <span className="text-[9px] font-black uppercase text-primary mb-0.5">Admin Account</span>
+                                        <span className="text-[10px] font-mono text-foreground leading-none">admin@learnsyntax.com</span>
+                                    </div>
+                                    <div className="px-2 py-1 bg-muted rounded text-[9px] font-mono text-muted-foreground">password</div>
                                 </div>
-                                <div>
-                                    <div className="mb-1 text-[10px] font-bold uppercase text-accent">Student</div>
-                                    <div className="text-[10px] font-mono select-all">student@learnsyntax.com</div>
-                                    <div className="text-[10px] font-mono">password</div>
+                                <div className="flex items-center justify-between p-2 rounded-lg bg-background border border-border/50">
+                                    <div className="flex flex-col">
+                                        <span className="text-[9px] font-black uppercase text-accent mb-0.5">Student Account</span>
+                                        <span className="text-[10px] font-mono text-foreground leading-none">student@learnsyntax.com</span>
+                                    </div>
+                                    <div className="px-2 py-1 bg-muted rounded text-[9px] font-mono text-muted-foreground">password</div>
                                 </div>
                             </div>
                         </div>
@@ -124,7 +130,7 @@ export default function Login({
             </Form>
 
             {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
+                <div className="mt-4 text-center text-xs font-bold text-green-600 bg-green-50 py-2 rounded-lg border border-green-100">
                     {status}
                 </div>
             )}
@@ -133,6 +139,6 @@ export default function Login({
 }
 
 Login.layout = {
-    title: 'Log in to your account',
-    description: 'Enter your email and password below to log in',
+    title: 'Welcome Back',
+    description: 'Please enter your details to sign in',
 };

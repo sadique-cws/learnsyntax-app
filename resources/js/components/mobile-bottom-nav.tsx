@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { Home, LayoutGrid, User, Palette } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCurrentUrl } from '@/hooks/use-current-url';
@@ -7,9 +7,11 @@ import { edit as appearanceEdit } from '@/routes/appearance';
 import { edit as profileEdit } from '@/routes/profile';
 
 export function MobileBottomNav() {
+    const { auth } = usePage().props as any;
     const { isCurrentUrl } = useCurrentUrl();
+    const user = auth?.user;
 
-    const navItems = [
+    const navItems = user ? [
         {
             title: 'Home',
             href: dashboard().url,
@@ -17,7 +19,7 @@ export function MobileBottomNav() {
         },
         {
             title: 'Explore',
-            href: home().url,
+            href: '/courses',
             icon: LayoutGrid,
         },
         {
@@ -28,6 +30,22 @@ export function MobileBottomNav() {
         {
             title: 'Profile',
             href: profileEdit().url,
+            icon: User,
+        },
+    ] : [
+        {
+            title: 'Home',
+            href: '/',
+            icon: Home,
+        },
+        {
+            title: 'Courses',
+            href: '/courses',
+            icon: LayoutGrid,
+        },
+        {
+            title: 'Login',
+            href: '/login',
             icon: User,
         },
     ];

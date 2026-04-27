@@ -21,7 +21,7 @@ export default function AuthSimpleLayout({
                                 <AppLogoIcon className="size-8 text-primary" />
                             </div>
                             <div className="flex flex-col items-center leading-none">
-                                <span className="font-black text-xl tracking-tighter uppercase text-foreground">Learn <span className="text-primary">Syntax</span></span>
+                                <span className="font-black text-xl tracking-tighter uppercase">Learn <span className="text-primary">Syntax</span></span>
                             </div>
                         </Link>
 

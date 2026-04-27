@@ -11,12 +11,14 @@ class EnrollmentController extends Controller
     {
         $user = auth()->user();
         
-        // Check if already enrolled
         $existing = \App\Models\Enrollment::where('user_id', $user->id)
             ->where('course_id', $course->id)
             ->first();
             
         if ($existing) {
+            if ($existing->status === 'paid' && !$existing->batch_id) {
+                return redirect()->route('student.enrollments.batch', $existing);
+            }
             return redirect()->route('student.enrollments.show', $existing);
         }
 
@@ -32,23 +34,24 @@ class EnrollmentController extends Controller
     public function show(\App\Models\Enrollment $enrollment)
     {
         if ($enrollment->status === 'paid') {
+            if (!$enrollment->batch_id) {
+                return redirect()->route('student.enrollments.batch', $enrollment);
+            }
             return redirect()->route('dashboard');
         }
 
         return inertia('enrollments/show', [
-            'enrollment' => $enrollment->load(['course.batches']),
+            'enrollment' => $enrollment->load(['course']),
+            'razorpay_key' => env('RAZORPAY_KEY', 'rzp_test_placeholder'),
         ]);
     }
 
-    public function update(\Illuminate\Http\Request $request, \App\Models\Enrollment $enrollment)
+    public function processPayment(Request $request, \App\Models\Enrollment $enrollment)
     {
-        $request->validate([
-            'batch_id' => 'required|exists:batches,id',
-            'payment_method' => 'required|string',
-        ]);
-
+        // In a real app, verify Razorpay signature here
+        // For now, we simulate success
+        
         $enrollment->update([
-            'batch_id' => $request->batch_id,
             'status' => 'paid',
         ]);
 
@@ -56,8 +59,8 @@ class EnrollmentController extends Controller
             'enrollment_id' => $enrollment->id,
             'amount' => $enrollment->course->price,
             'status' => 'completed',
-            'transaction_id' => 'TXN-' . strtoupper(str()->random(10)),
-            'payment_method' => $request->payment_method,
+            'transaction_id' => $request->razorpay_payment_id ?? 'SIM-' . strtoupper(str()->random(10)),
+            'payment_method' => 'razorpay',
         ]);
 
         \App\Models\Invoice::create([
@@ -67,6 +70,34 @@ class EnrollmentController extends Controller
             'total_amount' => $payment->amount,
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Successfully enrolled!');
+        return redirect()->route('student.enrollments.batch', $enrollment);
+    }
+
+    public function batchSelection(\App\Models\Enrollment $enrollment)
+    {
+        if ($enrollment->status !== 'paid') {
+            return redirect()->route('student.enrollments.show', $enrollment);
+        }
+
+        if ($enrollment->batch_id) {
+            return redirect()->route('dashboard');
+        }
+
+        return inertia('enrollments/batch', [
+            'enrollment' => $enrollment->load(['course.batches']),
+        ]);
+    }
+
+    public function selectBatch(Request $request, \App\Models\Enrollment $enrollment)
+    {
+        $request->validate([
+            'batch_id' => 'required|exists:batches,id',
+        ]);
+
+        $enrollment->update([
+            'batch_id' => $request->batch_id,
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'Batch selected successfully! You can now access your course.');
     }
 }

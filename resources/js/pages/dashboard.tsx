@@ -1,4 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
+import { dashboard } from '@/routes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Book, CreditCard, Receipt, Users, TrendingUp } from 'lucide-react';
@@ -134,7 +135,7 @@ Dashboard.layout = {
     breadcrumbs: [
         {
             title: 'Dashboard',
-            href: dashboard(),
+            href: dashboard().url,
         },
     ],
 };

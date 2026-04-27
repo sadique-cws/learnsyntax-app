@@ -1,124 +1,125 @@
 import { Head, useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import AppLayout from '@/layouts/app-layout';
-import { Wallet, CreditCard, Receipt } from 'lucide-react';
+import PublicLayout from '@/layouts/public-layout';
+import { CreditCard, ShieldCheck, Zap, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
 
-export default function EnrollmentShow({ enrollment }: { enrollment: any }) {
-    const { data, setData, patch, processing } = useForm({
-        batch_id: '',
-        payment_method: 'credit_card',
-    });
+declare global {
+    interface Window {
+        Razorpay: any;
+    }
+}
 
-    const handleUpdate = (e: React.FormEvent) => {
-        e.preventDefault();
-        patch(`/enrollments/${enrollment.id}`);
+export default function EnrollmentShow({ enrollment, razorpay_key }: { enrollment: any, razorpay_key: string }) {
+    const { post, processing } = useForm();
+    const [isPaying, setIsPaying] = useState(false);
+
+    const handlePayment = () => {
+        setIsPaying(true);
+        
+        // Mocking Razorpay behavior
+        // In real app, you would load script: https://checkout.razorpay.com/v1/checkout.js
+        console.log('Opening Razorpay with key:', razorpay_key);
+        
+        setTimeout(() => {
+            // Simulating a successful payment callback
+            post(`/enrollments/${enrollment.id}/payment`, {
+                data: {
+                    razorpay_payment_id: 'pay_' + Math.random().toString(36).substring(7),
+                }
+            });
+        }, 1500);
     };
 
     return (
-        <>
-            <Head title={`Enrollment - ${enrollment.course.title}`} />
+        <div className="w-full p-4 lg:p-6 font-sans selection:bg-primary/20">
+            <Head title={`Checkout - ${enrollment.course.title}`} />
             
-            <div className="w-full p-4 lg:p-6">
-                <Card className="max-w-4xl mx-auto border-border shadow-none rounded-3xl overflow-hidden">
-                    <CardHeader className="bg-primary text-primary-foreground p-8">
-                        <CardTitle className="text-2xl">Complete Enrollment</CardTitle>
-                        <p className="opacity-80">Finalize your course selection and payment</p>
+            <div className="max-w-xl mx-auto space-y-6">
+                <Card className="border-border shadow-none rounded-[2rem] overflow-hidden">
+                    <CardHeader className="bg-primary/5 p-8 border-b border-border/50">
+                        <div className="flex items-center gap-3 mb-2">
+                            <div className="size-10 rounded-xl bg-primary flex items-center justify-center text-white">
+                                <Zap className="size-5 fill-current" />
+                            </div>
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Secure Checkout</span>
+                        </div>
+                        <CardTitle className="text-3xl font-black tracking-tight leading-none">Confirm Enrollment</CardTitle>
                     </CardHeader>
                     
-                    <form onSubmit={handleSubmit}>
-                        <CardContent className="p-8 space-y-8">
-                            {/* Batch Selection */}
-                            <section>
-                                <h3 className="text-lg font-bold mb-4">1. Select Your Batch</h3>
-                                <RadioGroup 
-                                    value={data.batch_id} 
-                                    onValueChange={(val) => setData('batch_id', val)}
-                                    className="grid grid-cols-1 gap-3"
-                                >
-                                    {enrollment.course.batches.map((batch: any) => (
-                                        <div key={batch.id}>
-                                            <RadioGroupItem
-                                                value={batch.id.toString()}
-                                                id={`batch-${batch.id}`}
-                                                className="peer sr-only"
-                                            />
-                                            <Label
-                                                htmlFor={`batch-${batch.id}`}
-                                                className="flex items-center justify-between p-4 rounded-xl border border-border cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 hover:bg-muted/50 transition-all"
-                                            >
-                                                <div>
-                                                    <div className="font-bold">{batch.name}</div>
-                                                    <div className="text-xs text-muted-foreground uppercase">{batch.type}</div>
-                                                </div>
-                                                <div className="text-sm font-medium">Starts {new Date(batch.start_date).toLocaleDateString()}</div>
-                                            </Label>
-                                        </div>
-                                    ))}
-                                </RadioGroup>
-                            </section>
+                    <CardContent className="p-8 space-y-8">
+                        <div className="flex items-center gap-4 p-4 rounded-2xl bg-muted/30 border border-border/50">
+                            <div className="size-16 rounded-xl bg-background border border-border flex items-center justify-center overflow-hidden">
+                                <img 
+                                    src="/images/ai_cover.png" 
+                                    alt={enrollment.course.title}
+                                    className="size-full object-cover opacity-80" 
+                                />
+                            </div>
+                            <div className="flex-1">
+                                <h3 className="font-bold text-lg leading-tight">{enrollment.course.title}</h3>
+                                <p className="text-xs text-muted-foreground uppercase font-medium tracking-wider mt-1">Professional Certification</p>
+                            </div>
+                        </div>
 
-                            {/* Payment Method */}
-                            <section>
-                                <h3 className="text-lg font-bold mb-4">2. Payment Method</h3>
-                                <RadioGroup 
-                                    value={data.payment_method} 
-                                    onValueChange={(val) => setData('payment_method', val)}
-                                    className="grid grid-cols-2 gap-3"
-                                >
-                                    <div>
-                                        <RadioGroupItem value="credit_card" id="cc" className="peer sr-only" />
-                                        <Label htmlFor="cc" className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all text-center">
-                                            <CreditCard className="size-6 mb-1" />
-                                            <span className="text-sm font-medium">Credit Card</span>
-                                        </Label>
-                                    </div>
-                                    <div>
-                                        <RadioGroupItem value="upi" id="upi" className="peer sr-only" />
-                                        <Label htmlFor="upi" className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all text-center">
-                                            <Wallet className="size-6 mb-1" />
-                                            <span className="text-sm font-medium">UPI / Wallet</span>
-                                        </Label>
-                                    </div>
-                                </RadioGroup>
-                            </section>
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between text-sm font-medium">
+                                <span className="text-muted-foreground">Course Fee</span>
+                                <span>${enrollment.course.price}</span>
+                            </div>
+                            <div className="flex items-center justify-between text-sm font-medium">
+                                <span className="text-muted-foreground">Platform Taxes (GST)</span>
+                                <span className="text-green-600">FREE</span>
+                            </div>
+                            <div className="pt-4 border-t border-border flex items-center justify-between">
+                                <span className="font-black text-lg uppercase tracking-tight">Total Amount</span>
+                                <span className="text-3xl font-black text-primary">${enrollment.course.price}</span>
+                            </div>
+                        </div>
 
-                            {/* Order Summary */}
-                            <section className="bg-muted/50 p-4 rounded-2xl border border-border">
-                                <div className="flex items-center justify-between text-sm mb-2">
-                                    <span className="text-muted-foreground">Course Fee</span>
-                                    <span className="font-medium">${enrollment.course.price}</span>
+                        <div className="grid grid-cols-1 gap-3">
+                            <div className="flex items-center gap-3 p-4 rounded-xl border border-border bg-muted/20">
+                                <ShieldCheck className="size-5 text-green-600" />
+                                <div className="text-[11px] leading-snug">
+                                    <span className="font-bold block">100% Secure Payment</span>
+                                    <span className="text-muted-foreground">Your transaction is protected with 256-bit encryption</span>
                                 </div>
-                                <div className="flex items-center justify-between text-sm mb-2">
-                                    <span className="text-muted-foreground">Platform Fee</span>
-                                    <span className="font-medium">$0.00</span>
-                                </div>
-                                <div className="pt-2 mt-2 border-t border-border flex items-center justify-between font-bold">
-                                    <span>Total Amount</span>
-                                    <span className="text-primary text-xl">${enrollment.course.price}</span>
-                                </div>
-                            </section>
-                        </CardContent>
+                            </div>
+                        </div>
+                    </CardContent>
 
-                        <CardFooter className="p-8 pt-0 flex flex-col gap-4">
-                            <Button size="lg" className="w-full rounded-xl h-12 font-bold shadow-none" disabled={processing || !data.batch_id}>
-                                {processing ? 'Processing...' : `Pay $${enrollment.course.price} & Enroll`}
-                            </Button>
-                            <p className="text-center text-[10px] text-muted-foreground px-4">
-                                By clicking the button above, you agree to our Terms of Service and Privacy Policy.
-                            </p>
-                        </CardFooter>
-                    </form>
+                    <CardFooter className="p-8 pt-0 flex flex-col gap-4">
+                        <Button 
+                            size="lg" 
+                            className="w-full rounded-2xl h-14 font-black shadow-none bg-primary hover:bg-primary/90 text-white uppercase tracking-widest text-sm" 
+                            onClick={handlePayment}
+                            disabled={isPaying || processing}
+                        >
+                            {isPaying ? (
+                                <span className="flex items-center gap-2">Connecting to Razorpay...</span>
+                            ) : (
+                                <span className="flex items-center gap-2">Pay Now <ArrowRight className="size-4" /></span>
+                            )}
+                        </Button>
+                        <div className="flex items-center justify-center gap-6 opacity-40">
+                            <CreditCard className="size-6" />
+                            <div className="font-black italic text-sm">RAZORPAY</div>
+                            <Zap className="size-6" />
+                        </div>
+                    </CardFooter>
                 </Card>
+
+                <p className="text-center text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
+                    Secured by Razorpay • India's Leading Payment Gateway
+                </p>
             </div>
-        </>
+        </div>
     );
 }
 
-EnrollmentShow.layout = (page: React.ReactNode, { enrollment }: { enrollment: any }) => (
-    <AppLayout breadcrumbs={[{ title: 'Enrollment', href: '#' }, { title: enrollment.course.title, href: '#' }]}>
+EnrollmentShow.layout = (page: any) => (
+    <PublicLayout>
         {page}
-    </AppLayout>
+    </PublicLayout>
 );

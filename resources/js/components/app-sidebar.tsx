@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid, Book, Users, CreditCard, ShoppingBag } from 'lucide-react';
+import { BookOpen, FolderGit2, LayoutGrid, Book, Users, CreditCard, ShoppingBag, Home, GraduationCap } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -18,45 +18,66 @@ import type { NavItem } from '@/types';
 
 export function AppSidebar() {
     const { auth } = usePage().props as any;
-    const isAdmin = auth.user.is_admin;
+    const user = auth?.user;
+    const isAdmin = user?.is_admin;
 
-    const mainNavItems: NavItem[] = [
-        {
+    const mainNavItems: NavItem[] = [];
+
+    if (user) {
+        mainNavItems.push({
             title: 'Dashboard',
             href: dashboard().url,
             icon: LayoutGrid,
-        },
-    ];
+        });
 
-    if (isAdmin) {
-        mainNavItems.push(
-            {
-                title: 'Manage Courses',
-                href: '/admin/courses',
-                icon: Book,
-            },
-            {
-                title: 'Manage Batches',
-                href: '/admin/batches',
-                icon: Users,
-            },
-            {
-                title: 'All Payments',
-                href: '/admin/payments',
-                icon: CreditCard,
-            }
-        );
+        if (isAdmin) {
+            mainNavItems.push(
+                {
+                    title: 'Manage Courses',
+                    href: '/admin/courses',
+                    icon: Book,
+                },
+                {
+                    title: 'Manage Students',
+                    href: '/admin/students',
+                    icon: Users,
+                },
+                {
+                    title: 'Manage Batches',
+                    href: '/admin/batches',
+                    icon: GraduationCap,
+                },
+                {
+                    title: 'All Payments',
+                    href: '/admin/payments',
+                    icon: CreditCard,
+                }
+            );
+        } else {
+            mainNavItems.push(
+                {
+                    title: 'Browse Courses',
+                    href: '/courses',
+                    icon: ShoppingBag,
+                },
+                {
+                    title: 'My Courses',
+                    href: '/dashboard',
+                    icon: Book,
+                }
+            );
+        }
     } else {
         mainNavItems.push(
             {
-                title: 'Browse Courses',
-                href: '/courses',
-                icon: ShoppingBag,
+                title: 'Home',
+                href: '/',
+                icon: Home,
             },
             {
-                title: 'My Courses',
-                href: '/dashboard',
-                icon: Book,
+                title: 'All Courses',
+                href: '/courses',
+                icon: ShoppingBag,
             }
         );
     }

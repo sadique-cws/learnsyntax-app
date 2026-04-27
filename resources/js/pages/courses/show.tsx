@@ -1,15 +1,26 @@
 import { Head, Link, useForm } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { CheckCircle2, Globe, Users, Calendar } from 'lucide-react';
-import AppLayout from '@/layouts/app-layout';
+import PublicLayout from '@/layouts/public-layout';
 
 export default function CourseShow({ course }: { course: any }) {
     const { post, processing } = useForm();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const handleEnroll = () => {
         post(`/enroll/${course.id}`);
+    };
+
+    const formatDate = (dateString: string) => {
+        if (!mounted) return '';
+        return new Date(dateString).toLocaleDateString();
     };
 
     return (
@@ -54,7 +65,7 @@ export default function CourseShow({ course }: { course: any }) {
                                                 </div>
                                                 <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
                                                     <Calendar className="size-3.5" />
-                                                    <span>Starts {new Date(batch.start_date).toLocaleDateString()}</span>
+                                                    <span>Starts {formatDate(batch.start_date)}</span>
                                                 </div>
                                                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                                                     <Users className="size-3.5" />
@@ -63,6 +74,13 @@ export default function CourseShow({ course }: { course: any }) {
                                             </CardContent>
                                         </Card>
                                     ))}
+
+                                    {course.batches.length === 0 && (
+                                        <div className="col-span-full py-12 text-center border-2 border-dashed border-border rounded-2xl">
+                                            <Calendar className="size-8 text-muted-foreground mx-auto mb-3 opacity-20" />
+                                            <p className="text-sm text-muted-foreground">New batches starting soon. Stay tuned!</p>
+                                        </div>
+                                    )}
                                 </div>
                             </section>
                         </div>
@@ -100,8 +118,8 @@ export default function CourseShow({ course }: { course: any }) {
     );
 }
 
-CourseShow.layout = (page: React.ReactNode, { course }: { course: any }) => (
-    <AppLayout breadcrumbs={[{ title: 'Courses', href: '/courses' }, { title: course.title, href: `/courses/${course.slug}` }]}>
+CourseShow.layout = (page: any) => (
+    <PublicLayout>
         {page}
-    </AppLayout>
+    </PublicLayout>
 );
