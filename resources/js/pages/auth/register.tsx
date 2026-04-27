@@ -101,6 +101,23 @@ export default function Register() {
                                 Log in
                             </TextLink>
                         </div>
+
+                        {/* Demo Access Section */}
+                        <div className="mt-4 rounded-xl border border-border bg-muted/50 p-4">
+                            <h4 className="mb-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Demo Access</h4>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <div className="mb-1 text-[10px] font-bold uppercase text-primary">Admin</div>
+                                    <div className="text-[10px] font-mono select-all">admin@learnsyntax.com</div>
+                                    <div className="text-[10px] font-mono">password</div>
+                                </div>
+                                <div>
+                                    <div className="mb-1 text-[10px] font-bold uppercase text-accent">Student</div>
+                                    <div className="text-[10px] font-mono select-all">student@learnsyntax.com</div>
+                                    <div className="text-[10px] font-mono">password</div>
+                                </div>
+                            </div>
+                        </div>
                     </>
                 )}
             </Form>

@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+
+#[Fillable(['title', 'slug', 'description', 'price', 'image_path', 'is_active'])]
+class Course extends Model
+{
+    public function batches()
+    {
+        return $this->hasMany(Batch::class);
+    }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+}
