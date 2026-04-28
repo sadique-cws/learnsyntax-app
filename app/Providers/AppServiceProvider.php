@@ -10,17 +10,11 @@ use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         $this->configureDefaults();
@@ -28,11 +22,12 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\Gate::define('admin', function ($user) {
             return $user->is_admin;
         });
+
+        \Illuminate\Support\Facades\Gate::define('teacher', function ($user) {
+            return $user->is_teacher;
+        });
     }
 
-    /**
-     * Configure default behaviors for production-ready applications.
-     */
     protected function configureDefaults(): void
     {
         Date::use(CarbonImmutable::class);
