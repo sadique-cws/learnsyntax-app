@@ -1,9 +1,9 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import PublicLayout from '@/layouts/public-layout';
-import { CreditCard, ShieldCheck, Zap, ArrowRight } from 'lucide-react';
-import { useState } from 'react';
+import { CreditCard, ShieldCheck, Zap, ArrowRight, Loader2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 declare global {
     interface Window {
@@ -11,25 +11,67 @@ declare global {
     }
 }
 
-export default function EnrollmentShow({ enrollment, razorpay_key }: { enrollment: any, razorpay_key: string }) {
+interface RazorpayOrder {
+    id: string;
+    amount: number;
+    currency: string;
+}
+
+export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_order, auth }: { enrollment: any, razorpay_key: string, razorpay_order: RazorpayOrder, auth: any }) {
     const { post, processing } = useForm();
     const [isPaying, setIsPaying] = useState(false);
+    const [scriptLoaded, setScriptLoaded] = useState(false);
+
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.async = true;
+        script.onload = () => setScriptLoaded(true);
+        document.body.appendChild(script);
+    }, []);
 
     const handlePayment = () => {
+        if (!scriptLoaded || !window.Razorpay) {
+            alert('Razorpay SDK is still loading. Please try again in a moment.');
+            return;
+        }
+
         setIsPaying(true);
-        
-        // Mocking Razorpay behavior
-        // In real app, you would load script: https://checkout.razorpay.com/v1/checkout.js
-        console.log('Opening Razorpay with key:', razorpay_key);
-        
-        setTimeout(() => {
-            // Simulating a successful payment callback
-            post(`/enrollments/${enrollment.id}/payment`, {
-                data: {
-                    razorpay_payment_id: 'pay_' + Math.random().toString(36).substring(7),
+
+        const options = {
+            key: razorpay_key,
+            amount: razorpay_order.amount,
+            currency: razorpay_order.currency,
+            name: 'Learn Syntax',
+            description: `Enrollment for ${enrollment.course.title}`,
+            image: '/images/app_logo.png',
+            order_id: razorpay_order.id,
+            handler: function (response: any) {
+                router.post(`/enrollments/${enrollment.id}/payment`, {
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_signature: response.razorpay_signature,
+                }, {
+                    onFinish: () => setIsPaying(false),
+                });
+            },
+            prefill: {
+                name: auth.user.name,
+                email: auth.user.email,
+                contact: auth.user.phone || '',
+            },
+            theme: {
+                color: '#2563eb', // Using primary blue
+            },
+            modal: {
+                ondismiss: function () {
+                    setIsPaying(false);
                 }
-            });
-        }, 1500);
+            }
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
     };
 
     return (
@@ -66,15 +108,15 @@ export default function EnrollmentShow({ enrollment, razorpay_key }: { enrollmen
                         <div className="space-y-3">
                             <div className="flex items-center justify-between text-sm font-medium">
                                 <span className="text-muted-foreground">Course Fee</span>
-                                <span>${enrollment.course.price}</span>
+                                <span>₹{enrollment.course.price}</span>
                             </div>
                             <div className="flex items-center justify-between text-sm font-medium">
                                 <span className="text-muted-foreground">Platform Taxes (GST)</span>
-                                <span className="text-green-600">FREE</span>
+                                <span className="text-green-600">INCLUDED</span>
                             </div>
                             <div className="pt-4 border-t border-border flex items-center justify-between">
                                 <span className="font-black text-lg uppercase tracking-tight">Total Amount</span>
-                                <span className="text-3xl font-black text-primary">${enrollment.course.price}</span>
+                                <span className="text-3xl font-black text-primary">₹{enrollment.course.price}</span>
                             </div>
                         </div>
 
@@ -94,14 +136,17 @@ export default function EnrollmentShow({ enrollment, razorpay_key }: { enrollmen
                             size="lg" 
                             className="w-full rounded-2xl h-14 font-black shadow-none bg-primary hover:bg-primary/90 text-white uppercase tracking-widest text-sm" 
                             onClick={handlePayment}
-                            disabled={isPaying || processing}
+                            disabled={isPaying || processing || !scriptLoaded}
                         >
                             {isPaying ? (
-                                <span className="flex items-center gap-2">Connecting to Razorpay...</span>
+                                <span className="flex items-center gap-2"><Loader2 className="size-4 animate-spin" /> Verifying...</span>
                             ) : (
                                 <span className="flex items-center gap-2">Pay Now <ArrowRight className="size-4" /></span>
                             )}
                         </Button>
+                        {!scriptLoaded && (
+                            <p className="text-[10px] text-center font-bold text-muted-foreground uppercase animate-pulse">Initializing Gateway...</p>
+                        )}
                         <div className="flex items-center justify-center gap-6 opacity-40">
                             <CreditCard className="size-6" />
                             <div className="font-black italic text-sm">RAZORPAY</div>

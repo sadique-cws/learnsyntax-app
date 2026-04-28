@@ -4,14 +4,25 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Razorpay\Api\Api;
+use App\Models\Enrollment;
+use App\Models\Payment;
+use App\Models\Invoice;
 
 class EnrollmentController extends Controller
 {
+    protected $razorpay;
+
+    public function __construct()
+    {
+        $this->razorpay = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
+    }
+
     public function store(\App\Models\Course $course)
     {
         $user = auth()->user();
         
-        $existing = \App\Models\Enrollment::where('user_id', $user->id)
+        $existing = Enrollment::where('user_id', $user->id)
             ->where('course_id', $course->id)
             ->first();
             
@@ -22,7 +33,7 @@ class EnrollmentController extends Controller
             return redirect()->route('student.enrollments.show', $existing);
         }
 
-        $enrollment = \App\Models\Enrollment::create([
+        $enrollment = Enrollment::create([
             'user_id' => $user->id,
             'course_id' => $course->id,
             'status' => 'pending',
@@ -31,7 +42,7 @@ class EnrollmentController extends Controller
         return redirect()->route('student.enrollments.show', $enrollment);
     }
 
-    public function show(\App\Models\Enrollment $enrollment)
+    public function show(Enrollment $enrollment)
     {
         if ($enrollment->status === 'paid') {
             if (!$enrollment->batch_id) {
@@ -40,40 +51,64 @@ class EnrollmentController extends Controller
             return redirect()->route('dashboard');
         }
 
+        // Create Razorpay Order
+        $orderData = [
+            'receipt'         => 'rcpt_' . $enrollment->id,
+            'amount'          => $enrollment->course->price * 100, // in paise
+            'currency'        => 'INR',
+        ];
+
+        $razorpayOrder = $this->razorpay->order->create($orderData);
+
         return inertia('enrollments/show', [
             'enrollment' => $enrollment->load(['course']),
-            'razorpay_key' => env('RAZORPAY_KEY', 'rzp_test_placeholder'),
+            'razorpay_key' => config('services.razorpay.key'),
+            'razorpay_order' => $razorpayOrder->toArray(),
         ]);
     }
 
-    public function processPayment(Request $request, \App\Models\Enrollment $enrollment)
+    public function processPayment(Request $request, Enrollment $enrollment)
     {
-        // In a real app, verify Razorpay signature here
-        // For now, we simulate success
-        
-        $enrollment->update([
-            'status' => 'paid',
+        $request->validate([
+            'razorpay_payment_id' => 'required',
+            'razorpay_order_id' => 'required',
+            'razorpay_signature' => 'required',
         ]);
 
-        $payment = \App\Models\Payment::create([
+        // Verify signature
+        try {
+            $attributes = [
+                'razorpay_order_id' => $request->razorpay_order_id,
+                'razorpay_payment_id' => $request->razorpay_payment_id,
+                'razorpay_signature' => $request->razorpay_signature
+            ];
+            $this->razorpay->utility->verifyPaymentSignature($attributes);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Payment verification failed: ' . $e->getMessage());
+        }
+
+        $enrollment->update(['status' => 'paid']);
+
+        $payment = Payment::create([
             'enrollment_id' => $enrollment->id,
             'amount' => $enrollment->course->price,
             'status' => 'completed',
-            'transaction_id' => $request->razorpay_payment_id ?? 'SIM-' . strtoupper(str()->random(10)),
-            'payment_method' => 'razorpay',
+            'razorpay_order_id' => $request->razorpay_order_id,
+            'razorpay_payment_id' => $request->razorpay_payment_id,
+            'currency' => 'INR',
         ]);
 
-        \App\Models\Invoice::create([
+        Invoice::create([
             'payment_id' => $payment->id,
             'invoice_number' => 'INV-' . date('Ymd') . '-' . $payment->id,
-            'issue_date' => now(),
-            'total_amount' => $payment->amount,
+            'issued_at' => now(),
+            'amount' => $payment->amount,
         ]);
 
         return redirect()->route('student.enrollments.batch', $enrollment);
     }
 
-    public function batchSelection(\App\Models\Enrollment $enrollment)
+    public function batchSelection(Enrollment $enrollment)
     {
         if ($enrollment->status !== 'paid') {
             return redirect()->route('student.enrollments.show', $enrollment);
@@ -88,7 +123,7 @@ class EnrollmentController extends Controller
         ]);
     }
 
-    public function selectBatch(Request $request, \App\Models\Enrollment $enrollment)
+    public function selectBatch(Request $request, Enrollment $enrollment)
     {
         $request->validate([
             'batch_id' => 'required|exists:batches,id',

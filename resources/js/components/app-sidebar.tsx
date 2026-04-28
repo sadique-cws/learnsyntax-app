@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid, Book, Users, CreditCard, ShoppingBag, Home, GraduationCap } from 'lucide-react';
+import { BookOpen, FolderGit2, LayoutGrid, Book, Users, CreditCard, ShoppingBag, Home, GraduationCap, Trophy } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -51,6 +51,16 @@ export function AppSidebar() {
                     title: 'All Payments',
                     href: '/admin/payments',
                     icon: CreditCard,
+                },
+                {
+                    title: 'Manage Assignments',
+                    href: '/admin/academic/assignments',
+                    icon: BookOpen,
+                },
+                {
+                    title: 'Manage Exams',
+                    href: '/admin/academic/exams',
+                    icon: Trophy,
                 }
             );
         } else {
@@ -82,18 +92,7 @@ export function AppSidebar() {
         );
     }
 
-    const footerNavItems: NavItem[] = [
-        {
-            title: 'Repository',
-            href: 'https://github.com/laravel/react-starter-kit',
-            icon: FolderGit2,
-        },
-        {
-            title: 'Documentation',
-            href: 'https://laravel.com/docs/starter-kits#react',
-            icon: BookOpen,
-        },
-    ];
+    const footerNavItems: NavItem[] = [];
 
     return (
         <Sidebar collapsible="icon" variant="sidebar">
@@ -114,7 +113,6 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

@@ -48,6 +48,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('students', [App\Http\Controllers\Admin\StudentController::class, 'index'])->name('admin.students.index');
         Route::get('students/{student}', [App\Http\Controllers\Admin\StudentController::class, 'show'])->name('admin.students.show');
         Route::patch('enrollments/{enrollment}/batch', [App\Http\Controllers\Admin\StudentController::class, 'updateBatch'])->name('admin.enrollments.update-batch');
+
+        // Academic Management (Assignments & Exams)
+        Route::prefix('academic')->group(function () {
+            Route::get('assignments', [App\Http\Controllers\Admin\AssignmentController::class, 'index'])->name('admin.assignments.index');
+            Route::post('assignments', [App\Http\Controllers\Admin\AssignmentController::class, 'store'])->name('admin.assignments.store');
+            Route::get('assignments/{assignment}', [App\Http\Controllers\Admin\AssignmentController::class, 'show'])->name('admin.assignments.show');
+            Route::patch('submissions/{submission}/grade', [App\Http\Controllers\Admin\AssignmentController::class, 'grade'])->name('admin.submissions.grade');
+
+            Route::get('exams', [App\Http\Controllers\Admin\ExamController::class, 'index'])->name('admin.exams.index');
+            Route::post('exams', [App\Http\Controllers\Admin\ExamController::class, 'store'])->name('admin.exams.store');
+            Route::get('exams/{exam}/results', [App\Http\Controllers\Admin\ExamController::class, 'results'])->name('admin.exams.results');
+            Route::patch('exam-attempts/{attempt}', [App\Http\Controllers\Admin\ExamController::class, 'updateResult'])->name('admin.exam-attempts.update');
+        });
+    });
+
+    // Student Academic Routes
+    Route::prefix('my-course/{enrollment}')->group(function () {
+        Route::get('assignments', [App\Http\Controllers\Student\AcademicController::class, 'assignments'])->name('student.academic.assignments');
+        Route::get('exam', [App\Http\Controllers\Student\AcademicController::class, 'exam'])->name('student.academic.exam');
+        Route::post('exam', [App\Http\Controllers\Student\AcademicController::class, 'submitExam'])->name('student.academic.submit-exam');
+        Route::get('certificate', [App\Http\Controllers\Student\AcademicController::class, 'certificate'])->name('student.academic.certificate');
     });
 });
 
