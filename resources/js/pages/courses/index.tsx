@@ -17,10 +17,10 @@ export default function CourseIndex({ courses }: { courses: any[] }) {
         <>
             <Head title="Our Courses" />
             
-            <div className="w-full p-4 lg:p-6">
+            <div className="w-full p-4 lg:p-6 max-w-7xl mx-auto">
                 <div className="mb-10">
-                    <h1 className="text-3xl font-extrabold tracking-tight mb-2">Our Courses</h1>
-                    <p className="text-muted-foreground">Master your skills with our industry-leading programming courses.</p>
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-foreground leading-[1.15] mb-2">Our Courses</h1>
+                    <p className="text-base md:text-lg text-muted-foreground leading-relaxed">Master your skills with our industry-leading programming courses.</p>
                 </div>
 
                 {/* Search Bar */}
@@ -35,47 +35,38 @@ export default function CourseIndex({ courses }: { courses: any[] }) {
                     />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                     {filteredCourses.map((course, idx) => {
                         const covers = ['/images/ai_cover.png', '/images/web_cover.png', '/images/python_cover.png'];
                         const cover = covers[idx % covers.length];
 
                         return (
-                            <Card key={course.id} className="group flex flex-col overflow-hidden border-border bg-card rounded-xl  hover:border-primary transition-all duration-300">
-                                <div className="relative aspect-video overflow-hidden">
-                                    <img 
-                                        src={cover} 
-                                        alt={course.title} 
-                                        className="size-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                    />
-                                    <div className="absolute top-3 left-3 flex flex-col gap-2">
-                                        <span className="px-2 py-1 bg-background/95 backdrop-blur  rounded text-[10px] font-bold text-foreground">
+                            <Link key={course.id} href={`/courses/${course.slug}`} className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded">
+                                <div className="flex flex-col border border-border bg-card rounded overflow-hidden transition-colors hover:border-primary group-hover:bg-muted/10 h-full">
+                                    <div className="relative aspect-[16/9] bg-muted border-b border-border">
+                                        <img src={cover} alt={course.title} className="w-full h-full object-cover transition-opacity group-hover:opacity-90" />
+                                        <div className="absolute top-2 right-2 px-2 py-1 bg-background border border-border rounded text-[10px] font-bold text-foreground">
                                             ${course.price}
-                                        </span>
+                                        </div>
+                                    </div>
+                                    <div className="p-4 flex flex-col flex-1">
+                                        <div className="text-[10px] font-black text-primary uppercase tracking-widest mb-2">Programming</div>
+                                        <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-4 leading-snug">
+                                            {course.title}
+                                        </h3>
+                                        <div className="mt-auto flex items-center justify-between text-xs text-muted-foreground pt-3 border-t border-border">
+                                            <div className="flex items-center gap-1.5 font-medium">
+                                                <Clock className="size-3.5 text-foreground/70" />
+                                                <span>24 Weeks</span>
+                                            </div>
+                                            <div className="flex items-center gap-1.5 font-medium">
+                                                <Users className="size-3.5 text-foreground/70" />
+                                                <span>1.2k+ Enrolled</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                
-                                <CardContent className="p-5 flex flex-col flex-1">
-                                    <h3 className="text-lg font-bold mb-4 group-hover:text-primary transition-colors line-clamp-2 min-h-[3.5rem] leading-tight">
-                                        {course.title}
-                                    </h3>
-                                    
-                                    <div className="mt-auto grid grid-cols-2 gap-4 pt-4 border-t border-border">
-                                        <div className="flex items-center gap-2 text-muted-foreground">
-                                            <Clock className="size-3.5 text-primary" />
-                                            <span className="text-[11px] font-medium">24 Weeks</span>
-                                        </div>
-                                        <div className="flex items-center gap-2 text-muted-foreground">
-                                            <Users className="size-3.5 text-primary" />
-                                            <span className="text-[11px] font-medium">1.2k+ Enrolled</span>
-                                        </div>
-                                    </div>
-
-                                    <Button asChild variant="outline" className="mt-5 w-full rounded-lg border-border group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all font-bold text-xs h-10">
-                                        <Link href={`/courses/${course.slug}`}>View Details</Link>
-                                    </Button>
-                                </CardContent>
-                            </Card>
+                            </Link>
                         );
                     })}
                 </div>

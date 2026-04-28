@@ -10,9 +10,9 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
             <>
                 <Head title="Admin Dashboard" />
                 <div className="flex flex-1 flex-col gap-6 p-4">
-                    <h1 className="text-2xl font-bold tracking-tight">Admin Overview</h1>
+                    <h1 className="text-2xl md:text-3xl font-black tracking-tight text-foreground mb-2">Admin Overview</h1>
                     <div className="grid gap-4 md:grid-cols-3">
-                        <Card className="border-border  rounded-xl">
+                        <Card className="border-border">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
                                 <CardTitle className="text-sm font-medium">Total Courses</CardTitle>
                                 <Book className="size-4 text-muted-foreground" />
@@ -21,7 +21,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                 <div className="text-2xl font-bold">{stats.courses}</div>
                             </CardContent>
                         </Card>
-                        <Card className="border-border  rounded-xl">
+                        <Card className="border-border">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
                                 <CardTitle className="text-sm font-medium">Total Enrollments</CardTitle>
                                 <Users className="size-4 text-muted-foreground" />
@@ -30,7 +30,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                 <div className="text-2xl font-bold">{stats.enrollments}</div>
                             </CardContent>
                         </Card>
-                        <Card className="border-border  rounded-xl">
+                        <Card className="border-border">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
                                 <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
                                 <TrendingUp className="size-4 text-primary" />
@@ -50,19 +50,19 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
             <Head title="My Dashboard" />
             <div className="w-full flex flex-1 flex-col gap-8 p-4 lg:p-6">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight mb-1">My Dashboard</h1>
-                    <p className="text-muted-foreground text-sm">Welcome back! Here are your active courses and recent bills.</p>
+                    <h1 className="text-2xl md:text-3xl font-black tracking-tight text-foreground mb-1">My Dashboard</h1>
+                    <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Welcome back! Here are your active courses and recent bills.</p>
                 </div>
 
                 {/* My Courses */}
                 <section>
-                    <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-                        <Book className="size-5" />
+                    <h2 className="text-xl md:text-2xl font-black tracking-tight text-foreground mb-4 flex items-center gap-2">
+                        <Book className="size-5 text-primary" />
                         My Courses
                     </h2>
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                         {enrollments.length > 0 ? enrollments.map((enrollment: any) => (
-                            <Card key={enrollment.id} className="border-border  rounded-xl overflow-hidden">
+                            <Card key={enrollment.id} className="border-border overflow-hidden hover:border-primary transition-colors">
                                 <CardContent className="p-4">
                                     <div className="flex items-center justify-between mb-3">
                                         <span className={cn(
@@ -73,17 +73,17 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                         </span>
                                         <span className="text-xs text-muted-foreground">{enrollment.batch?.type ?? 'TBD'}</span>
                                     </div>
-                                    <h3 className="font-bold mb-1 line-clamp-1">{enrollment.course.title}</h3>
+                                    <h3 className="font-bold mb-1 line-clamp-1 group-hover:text-primary transition-colors">{enrollment.course.title}</h3>
                                     <p className="text-xs text-muted-foreground mb-4">{enrollment.batch?.name ?? 'Batch assignment pending'}</p>
-                                    <Button asChild variant="outline" size="sm" className="w-full rounded-lg">
+                                    <Button asChild variant="outline" size="sm" className="w-full rounded h-9 font-bold">
                                         <Link href={`/courses/${enrollment.course.slug}`}>Course Details</Link>
                                     </Button>
                                 </CardContent>
                             </Card>
                         )) : (
-                            <div className="col-span-full py-12 text-center border-2 border-dashed border-border rounded-xl">
-                                <p className="text-muted-foreground mb-4">You haven't enrolled in any courses yet.</p>
-                                <Button asChild variant="default" className="rounded-lg">
+                            <div className="col-span-full py-12 text-center border border-border bg-muted/20 rounded">
+                                <p className="text-sm font-medium text-muted-foreground mb-4">You haven't enrolled in any courses yet.</p>
+                                <Button asChild variant="default" className="rounded h-10 px-6 font-bold tracking-widest uppercase text-xs">
                                     <Link href="/courses">Browse Courses</Link>
                                 </Button>
                             </div>
@@ -93,15 +93,15 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
 
                 {/* My Bills */}
                 <section>
-                    <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-                        <Receipt className="size-5" />
+                    <h2 className="text-xl md:text-2xl font-black tracking-tight text-foreground mb-4 flex items-center gap-2">
+                        <Receipt className="size-5 text-primary" />
                         Billing & Invoices
                     </h2>
                     <div className="grid gap-4">
                         {enrollments.filter((e: any) => e.payment).map((enrollment: any) => (
-                            <div key={enrollment.payment.id} className="flex items-center justify-between p-4 bg-muted/30 border border-border rounded-xl">
+                            <div key={enrollment.payment.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-muted/20 border border-border rounded gap-4 hover:border-primary transition-colors">
                                 <div className="flex items-center gap-4">
-                                    <div className="size-10 rounded-lg bg-background flex items-center justify-center border border-border">
+                                    <div className="size-10 rounded bg-background flex items-center justify-center border border-border shrink-0">
                                         <Receipt className="size-5 text-muted-foreground" />
                                     </div>
                                     <div>
@@ -109,12 +109,12 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                         <div className="text-[10px] text-muted-foreground uppercase">{enrollment.course.title} • {enrollment.payment.payment_method}</div>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-6">
-                                    <div className="text-right">
+                                <div className="flex items-center gap-6 sm:justify-end justify-between pt-4 sm:pt-0 border-t border-border sm:border-0">
+                                    <div className="sm:text-right">
                                         <div className="font-bold text-sm">${enrollment.payment.amount}</div>
-                                        <div className="text-[10px] text-green-600 font-bold uppercase">{enrollment.payment.status}</div>
+                                        <div className="text-[10px] text-green-600 font-black tracking-widest uppercase">{enrollment.payment.status}</div>
                                     </div>
-                                    <Button variant="ghost" size="sm" className="rounded-lg h-8">
+                                    <Button variant="outline" size="sm" className="rounded h-8 font-bold text-xs">
                                         Download
                                     </Button>
                                 </div>
