@@ -63,6 +63,13 @@ export default function AdminGSTReport({ invoices, stats }: { invoices: any[], s
             )
         },
         {
+            key: 'sac_code',
+            label: 'SAC Code',
+            render: (invoice) => (
+                <div className="font-mono text-[10px] text-muted-foreground">{invoice.sac_code || '9992'}</div>
+            )
+        },
+        {
             key: 'amount',
             label: 'Total Bill',
             sortable: true,
@@ -130,6 +137,7 @@ export default function AdminGSTReport({ invoices, stats }: { invoices: any[], s
                 <AdminDataTable 
                     data={invoices}
                     columns={columns}
+                    dateFilterKey="issued_at"
                     searchPlaceholder="Search invoices or GSTIN..."
                 />
             </div>

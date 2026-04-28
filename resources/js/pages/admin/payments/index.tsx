@@ -1,10 +1,9 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { Receipt, User, CreditCard } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { AdminDataTable, Column } from '@/components/admin/admin-data-table';
-import { Link } from '@inertiajs/react';
 
 export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
     const [mounted, setMounted] = useState(false);
@@ -59,13 +58,20 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
             )
         },
         {
+            key: 'sac_code',
+            label: 'SAC Code',
+            render: (payment) => (
+                <div className="font-mono text-[10px] text-muted-foreground">{payment.invoice?.sac_code || '9992'}</div>
+            )
+        },
+        {
             key: 'amount',
             label: 'Amount',
             sortable: true,
             render: (payment) => (
                 <div>
                     <div className="font-medium text-sm">₹{payment.amount}</div>
-                    <div className="text-[10px] text-green-600 font-medium tracking-tight">{payment.status}</div>
+                    <div className="text-[10px] text-green-600 font-medium tracking-tight uppercase tracking-widest text-[8px]">{payment.status}</div>
                 </div>
             )
         }
@@ -91,6 +97,7 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
                 <AdminDataTable 
                     data={payments}
                     columns={columns}
+                    dateFilterKey="created_at"
                     filterableColumns={[
                         {
                             key: 'status',
@@ -113,7 +120,14 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
                                     </Link>
                                 </Button>
                             ) : (
-                                <span className="text-[10px] text-muted-foreground italic px-3">No Invoice</span>
+                                <Button 
+                                    onClick={() => router.post(`/admin/payments/${payment.id}/generate-invoice`)}
+                                    variant="outline" 
+                                    size="sm" 
+                                    className="rounded h-8 text-[10px] font-bold uppercase tracking-wider px-3 border-primary text-primary hover:bg-primary/5"
+                                >
+                                    Generate Invoice
+                                </Button>
                             )}
                         </div>
                     )}

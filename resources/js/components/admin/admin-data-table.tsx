@@ -10,7 +10,8 @@ import {
     ChevronLeft,
     ChevronRight,
     MoreHorizontal,
-    X
+    X,
+    Calendar
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -127,7 +128,17 @@ export function AdminDataTable<T extends { id: number | string }>({
             }
         });
 
-        // 3. Sort
+        // 3. Date Range
+        if (dateFilterKey && (dateRange.start || dateRange.end)) {
+            items = items.filter(item => {
+                const itemDate = new Date((item as any)[dateFilterKey]);
+                if (dateRange.start && itemDate < new Date(dateRange.start)) return false;
+                if (dateRange.end && itemDate > new Date(dateRange.end)) return false;
+                return true;
+            });
+        }
+
+        // 4. Sort
         if (sortConfig.key && sortConfig.direction) {
             items.sort((a, b) => {
                 const aValue = (a as any)[sortConfig.key];
@@ -139,7 +150,7 @@ export function AdminDataTable<T extends { id: number | string }>({
         }
 
         return items;
-    }, [data, search, activeFilters, sortConfig, searchKey]);
+    }, [data, search, activeFilters, sortConfig, searchKey, dateRange, dateFilterKey]);
 
     const SortIcon = ({ column }: { column: string }) => {
         if (sortConfig.key !== column) return <ArrowUpDown className="ml-2 h-3 w-3 opacity-30" />;
@@ -164,8 +175,8 @@ export function AdminDataTable<T extends { id: number | string }>({
                 </div>
             )}
 
-            <div className="flex flex-col sm:flex-row gap-3">
-                <div className="relative flex-1">
+            <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
+                <div className="relative w-full lg:w-72 shrink-0">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                     <Input 
                         placeholder={searchPlaceholder} 
@@ -175,6 +186,43 @@ export function AdminDataTable<T extends { id: number | string }>({
                     />
                 </div>
                 
+                {dateFilterKey && (
+                    <div className="flex items-center gap-3 p-1 px-4 rounded-full border border-border bg-muted/30 hover:border-primary/30 transition-colors group/range">
+                        <Calendar 
+                            className="size-3.5 text-muted-foreground group-hover/range:text-primary transition-colors cursor-pointer" 
+                            onClick={() => (document.getElementById('date-filter-start') as HTMLInputElement)?.showPicker?.()}
+                        />
+                        <div className="flex items-center gap-2">
+                            <Input 
+                                id="date-filter-start"
+                                type="date" 
+                                className="h-8 border-none bg-transparent text-[11px] font-semibold focus-visible:ring-0 w-[100px] p-0 cursor-pointer"
+                                value={dateRange.start}
+                                onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
+                                onClick={(e) => e.currentTarget.showPicker?.()}
+                            />
+                            <span className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-tighter">to</span>
+                            <Input 
+                                type="date" 
+                                className="h-8 border-none bg-transparent text-[11px] font-semibold focus-visible:ring-0 w-[100px] p-0 cursor-pointer"
+                                value={dateRange.end}
+                                onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
+                                onClick={(e) => e.currentTarget.showPicker?.()}
+                            />
+                        </div>
+                        {(dateRange.start || dateRange.end) && (
+                            <button 
+                                onClick={() => setDateRange({ start: '', end: '' })}
+                                className="p-1 hover:bg-background rounded-full transition-colors"
+                            >
+                                <X className="size-3 text-muted-foreground hover:text-destructive" />
+                            </button>
+                        )}
+                    </div>
+                )}
+                
+                <div className="flex-1" />
+
                 {filterableColumns.length > 0 && (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>

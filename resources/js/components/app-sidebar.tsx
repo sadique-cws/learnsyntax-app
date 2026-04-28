@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid, Book, Users, CreditCard, ShoppingBag, Home, GraduationCap, Trophy, Receipt } from 'lucide-react';
+import { BookOpen, FolderGit2, LayoutGrid, Book, Users, CreditCard, ShoppingBag, Home, GraduationCap, Trophy, Receipt, Settings } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -68,6 +68,11 @@ export function AppSidebar() {
                     title: 'Manage Exams',
                     href: '/admin/academic/exams',
                     icon: Trophy,
+                },
+                {
+                    title: 'Invoice Settings',
+                    href: '/admin/settings',
+                    icon: Settings,
                 }
             );
         } else {

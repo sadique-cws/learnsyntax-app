@@ -1,145 +1,217 @@
 import { Head } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
-import { Download, Printer, ChevronLeft, ShieldCheck } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Download, Printer, ChevronLeft } from 'lucide-react';
+import { Link } from '@inertiajs/react';
 
 export default function InvoicePage({ invoice, company }: { invoice: any, company: any }) {
-    const student = invoice.payment.enrollment.user;
-    const course = invoice.payment.enrollment.course;
-    
     const handlePrint = () => {
         window.print();
     };
 
+    // Helper to format amount in words (Simple version)
+    const amountInWords = (num: number) => {
+        return "Indian Rupee " + num.toLocaleString('en-IN', { style: 'currency', currency: 'INR' }).replace('₹', '') + " Only";
+    };
+
     return (
-        <div className="min-h-screen bg-slate-50 py-12 px-4 selection:bg-primary/20">
+        <div className="min-h-screen bg-slate-50 py-12 px-4 print:p-0 print:bg-white">
             <Head title={`Invoice ${invoice.invoice_number}`} />
             
-            {/* Top Bar - Hidden on print */}
-            <div className="max-w-[800px] mx-auto mb-8 flex justify-between items-center print:hidden">
-                <Button variant="ghost" onClick={() => window.history.back()} className="text-muted-foreground hover:text-foreground">
-                    <ChevronLeft className="size-4 mr-1" /> Back
-                </Button>
-                <div className="flex gap-3">
-                    <Button variant="outline" onClick={handlePrint} className="rounded-xl border-border bg-card">
-                        <Printer className="size-4 mr-2" /> Print Invoice
-                    </Button>
-                    <Button onClick={handlePrint} className="rounded-xl px-6 bg-primary hover:bg-primary/90 text-white">
-                        <Download className="size-4 mr-2" /> Download PDF
-                    </Button>
-                </div>
-            </div>
-
-            {/* Invoice Container */}
-            <div className="max-w-[800px] mx-auto bg-white shadow-2xl shadow-slate-200 border border-slate-200 rounded-[2rem] overflow-hidden print:shadow-none print:border-none print:rounded-none">
-                {/* Header Section */}
-                <div className="p-12 border-b border-slate-100 bg-slate-50/50 flex flex-col md:flex-row justify-between gap-8">
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-3">
-                            <div className="size-12 rounded-2xl bg-primary flex items-center justify-center text-white text-xl font-black">LS</div>
-                            <h1 className="text-2xl font-black tracking-tight text-slate-900">{company.name}</h1>
-                        </div>
-                        <div className="text-xs text-slate-500 font-medium leading-relaxed max-w-xs">
-                            {company.address}<br />
-                            GSTIN: <span className="font-bold text-slate-900">{company.gstin}</span><br />
-                            Email: {company.email}<br />
-                            Phone: {company.phone}
-                        </div>
-                    </div>
-                    <div className="text-right flex flex-col justify-end">
-                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-1">Tax Invoice</div>
-                        <h2 className="text-4xl font-black tracking-tight text-slate-900">#{invoice.invoice_number}</h2>
-                        <div className="text-sm font-medium text-slate-500 mt-2">
-                            Date: {new Date(invoice.issued_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })}
-                        </div>
+            <div className="max-w-[850px] mx-auto print:max-w-none">
+                {/* Action Bar */}
+                <div className="flex justify-between items-center mb-6 print:hidden">
+                    <Link href="/admin/payments" className="flex items-center text-sm font-medium text-slate-600 hover:text-primary transition-colors">
+                        <ChevronLeft className="size-4 mr-1" /> Back to Ledger
+                    </Link>
+                    <div className="flex gap-3">
+                        <Button variant="outline" onClick={handlePrint} className="rounded border-slate-300 bg-white">
+                            <Printer className="size-4 mr-2" /> Print
+                        </Button>
+                        <Button onClick={handlePrint} className="rounded shadow-lg shadow-primary/20">
+                            <Download className="size-4 mr-2" /> Download PDF
+                        </Button>
                     </div>
                 </div>
 
-                {/* Billing Details */}
-                <div className="p-12 grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div className="space-y-3">
-                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Billed To</div>
-                        <div className="space-y-1">
-                            <div className="text-lg font-black text-slate-900">{student.name}</div>
-                            <div className="text-xs text-slate-500 font-medium">
-                                Email: {student.email}<br />
-                                {student.phone && <>Phone: {student.phone}<br /></>}
-                                {invoice.gst_number && (
-                                    <div className="mt-2 py-1 px-3 bg-primary/5 border border-primary/10 rounded-lg inline-block">
-                                        <span className="text-primary font-bold">GSTIN: {invoice.gst_number}</span>
-                                    </div>
-                                )}
+                {/* Main Invoice Container (The Tally Style) */}
+                <div className="bg-white border-[1px] border-black text-[11px] leading-tight text-black font-serif overflow-hidden">
+                    
+                    {/* Header Section */}
+                    <div className="flex justify-center py-1 border-b border-black">
+                        <h1 className="text-sm font-bold uppercase">Tax Invoice</h1>
+                    </div>
+
+                    {/* Meta Section */}
+                    <div className="grid grid-cols-2 border-b border-black h-24">
+                        <div className="p-2 border-r border-black flex flex-col justify-between">
+                            <div>
+                                <div className="font-bold mb-1">{company.company_name}</div>
+                                <div className="whitespace-pre-line">{company.company_address}</div>
+                            </div>
+                            <div className="mt-2">
+                                <div>GSTIN/UIN: <span className="font-bold">{company.company_gstin}</span></div>
+                                <div>State Name: <span className="font-bold">{company.company_state}</span>, Code: <span className="font-bold">{company.company_state_code}</span></div>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2">
+                            <div className="p-2 border-r border-black border-b">
+                                <div className="text-[9px] text-slate-600">Invoice No.</div>
+                                <div className="font-bold">{invoice.invoice_number}</div>
+                            </div>
+                            <div className="p-2 border-b border-black">
+                                <div className="text-[9px] text-slate-600">Dated</div>
+                                <div className="font-bold">{new Date(invoice.issued_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: '2-digit' })}</div>
+                            </div>
+                            <div className="p-2 border-r border-black">
+                                <div className="text-[9px] text-slate-600">Mode/Terms of Payment</div>
+                                <div className="font-bold uppercase">{invoice.payment.payment_method || 'Online'}</div>
+                            </div>
+                            <div className="p-2">
+                                <div className="text-[9px] text-slate-600">Other References</div>
+                                <div className="font-bold">{invoice.payment.transaction_id}</div>
                             </div>
                         </div>
                     </div>
-                    <div className="space-y-3 md:text-right">
-                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Place of Supply</div>
-                        <div className="text-sm font-bold text-slate-900">Uttar Pradesh (09)</div>
-                    </div>
-                </div>
 
-                {/* Table Section */}
-                <div className="px-12 pb-12">
-                    <div className="border border-slate-100 rounded-3xl overflow-hidden">
-                        <table className="w-full text-left">
+                    {/* Consignee / Buyer Section */}
+                    <div className="grid grid-cols-2 border-b border-black">
+                        <div className="p-2 border-r border-black">
+                            <div className="text-[9px] text-slate-600 italic">Consignee (Ship to)</div>
+                            <div className="font-bold mt-1 uppercase">{invoice.payment.enrollment.user.name}</div>
+                            <div>{invoice.payment.enrollment.user.email}</div>
+                            <div>{invoice.payment.enrollment.user.phone}</div>
+                        </div>
+                        <div className="p-2">
+                            <div className="text-[9px] text-slate-600 italic">Buyer (Bill to)</div>
+                            <div className="font-bold mt-1 uppercase">{invoice.payment.enrollment.user.name}</div>
+                            <div>{invoice.payment.enrollment.user.email}</div>
+                            {invoice.gst_number && (
+                                <div className="mt-2">
+                                    <div>GSTIN/UIN: <span className="font-bold">{invoice.gst_number}</span></div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Items Table */}
+                    <table className="w-full border-collapse">
+                        <thead>
+                            <tr className="border-b border-black font-bold">
+                                <th className="border-r border-black py-1 px-1 w-8 text-center">SI No.</th>
+                                <th className="border-r border-black py-1 px-2 text-left">Description of Goods</th>
+                                <th className="border-r border-black py-1 px-1 w-16 text-center">HSN/SAC</th>
+                                <th className="border-r border-black py-1 px-1 w-16 text-center">Quantity</th>
+                                <th className="border-r border-black py-1 px-1 w-16 text-center">Rate</th>
+                                <th className="border-r border-black py-1 px-1 w-12 text-center">per</th>
+                                <th className="border-r border-black py-1 px-1 w-16 text-center">Disc. %</th>
+                                <th className="py-1 px-2 text-right w-24">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody className="min-h-[250px]">
+                            <tr className="border-b border-black align-top">
+                                <td className="border-r border-black py-2 px-1 text-center">1</td>
+                                <td className="border-r border-black py-2 px-2 min-h-[150px]">
+                                    <div className="font-bold">{invoice.payment.enrollment.course.title}</div>
+                                    <div className="mt-1 text-[10px] text-slate-500 italic font-normal">Learning access for 1 year</div>
+                                    
+                                    <div className="mt-8 flex justify-end font-bold italic">
+                                        <div className="w-24 flex flex-col items-end">
+                                            <span>CGST</span>
+                                            <span>SGST</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="border-r border-black py-2 px-1 text-center font-bold">{invoice.sac_code || '9992'}</td>
+                                <td className="border-r border-black py-2 px-1 text-center font-bold">1 No</td>
+                                <td className="border-r border-black py-2 px-1 text-center font-bold">{invoice.taxable_amount}</td>
+                                <td className="border-r border-black py-2 px-1 text-center font-bold">No</td>
+                                <td className="border-r border-black py-2 px-1 text-center"></td>
+                                <td className="py-2 px-2 text-right font-bold">
+                                    <div>{invoice.taxable_amount}</div>
+                                    <div className="mt-8">
+                                        <div>{invoice.cgst}</div>
+                                        <div>{invoice.sgst}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {/* Totals Row */}
+                            <tr className="border-b border-black font-bold h-8">
+                                <td className="border-r border-black"></td>
+                                <td className="border-r border-black text-right px-2">Total</td>
+                                <td className="border-r border-black"></td>
+                                <td className="border-r border-black text-center">1 No</td>
+                                <td className="border-r border-black"></td>
+                                <td className="border-r border-black"></td>
+                                <td className="border-r border-black"></td>
+                                <td className="px-2 text-right bg-slate-50">₹ {invoice.amount}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {/* Summary Sections */}
+                    <div className="p-2 border-b border-black">
+                        <div className="text-[9px] text-slate-600 mb-1 italic">Amount Chargeable (in words)</div>
+                        <div className="font-bold text-sm">{amountInWords(parseFloat(invoice.amount))}</div>
+                    </div>
+
+                    {/* Tax Breakup Table */}
+                    <div className="border-b border-black">
+                        <table className="w-full border-collapse text-[10px]">
                             <thead>
-                                <tr className="bg-slate-50/80 text-[10px] font-black uppercase tracking-[0.1em] text-slate-400 border-b border-slate-100">
-                                    <th className="px-6 py-4">Description</th>
-                                    <th className="px-6 py-4 text-center">SAC Code</th>
-                                    <th className="px-6 py-4 text-right">Amount</th>
+                                <tr className="border-b border-black font-bold">
+                                    <th className="border-r border-black py-1 px-2 text-left" rowSpan={2}>HSN/SAC</th>
+                                    <th className="border-r border-black py-1 px-2 text-center" rowSpan={2}>Taxable Value</th>
+                                    <th className="border-b border-black py-1 px-2 text-center" colSpan={2}>Central Tax</th>
+                                    <th className="border-b border-black py-1 px-2 text-center" colSpan={2}>State Tax</th>
+                                    <th className="py-1 px-2 text-center" rowSpan={2}>Total Tax Amount</th>
+                                </tr>
+                                <tr className="border-b border-black font-bold">
+                                    <th className="border-r border-black py-1 px-2 text-center">Rate</th>
+                                    <th className="border-r border-black py-1 px-2 text-center">Amount</th>
+                                    <th className="border-r border-black py-1 px-2 text-center">Rate</th>
+                                    <th className="border-r border-black py-1 px-2 text-center">Amount</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-50 text-sm">
-                                <tr>
-                                    <td className="px-6 py-6">
-                                        <div className="font-bold text-slate-900">{course.title}</div>
-                                        <div className="text-xs text-slate-500 font-medium mt-1">Professional Certification Course Enrollment</div>
-                                    </td>
-                                    <td className="px-6 py-6 text-center font-mono text-slate-400">9992</td>
-                                    <td className="px-6 py-6 text-right font-bold text-slate-900">₹{invoice.taxable_amount}</td>
+                            <tbody>
+                                <tr className="border-b border-black text-center">
+                                    <td className="border-r border-black py-1 px-2 text-left">{invoice.sac_code || '9992'}</td>
+                                    <td className="border-r border-black py-1 px-2 font-bold">{invoice.taxable_amount}</td>
+                                    <td className="border-r border-black py-1 px-2">9%</td>
+                                    <td className="border-r border-black py-1 px-2 font-bold">{invoice.cgst}</td>
+                                    <td className="border-r border-black py-1 px-2">9%</td>
+                                    <td className="border-r border-black py-1 px-2 font-bold">{invoice.sgst}</td>
+                                    <td className="py-1 px-2 font-bold">{parseFloat(invoice.cgst) + parseFloat(invoice.sgst)}</td>
+                                </tr>
+                                <tr className="font-bold text-center">
+                                    <td className="border-r border-black py-1 px-2 text-right uppercase">Total</td>
+                                    <td className="border-r border-black py-1 px-2">{invoice.taxable_amount}</td>
+                                    <td className="border-r border-black py-1 px-2"></td>
+                                    <td className="border-r border-black py-1 px-2">{invoice.cgst}</td>
+                                    <td className="border-r border-black py-1 px-2"></td>
+                                    <td className="border-r border-black py-1 px-2">{invoice.sgst}</td>
+                                    <td className="py-1 px-2">{parseFloat(invoice.cgst) + parseFloat(invoice.sgst)}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </div>
 
-                {/* Summary Section */}
-                <div className="px-12 pb-12 flex justify-end">
-                    <div className="w-full max-w-xs space-y-3">
-                        <div className="flex justify-between text-sm font-medium text-slate-500">
-                            <span>Taxable Value</span>
-                            <span className="text-slate-900">₹{invoice.taxable_amount}</span>
+                    {/* Declaration & Signature */}
+                    <div className="grid grid-cols-2 h-24">
+                        <div className="p-2 border-r border-black">
+                            <div className="text-[9px] text-slate-600 italic">Declaration</div>
+                            <div className="text-[9px] mt-1 italic">{company.declaration}</div>
                         </div>
-                        <div className="flex justify-between text-sm font-medium text-slate-500">
-                            <span>CGST (9%)</span>
-                            <span className="text-slate-900">₹{invoice.cgst}</span>
-                        </div>
-                        <div className="flex justify-between text-sm font-medium text-slate-500">
-                            <span>SGST (9%)</span>
-                            <span className="text-slate-900">₹{invoice.sgst}</span>
-                        </div>
-                        <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
-                            <span className="text-xs font-black uppercase tracking-[0.1em] text-slate-400">Total (Incl. Tax)</span>
-                            <span className="text-3xl font-black text-primary">₹{invoice.amount}</span>
+                        <div className="p-2 flex flex-col justify-between items-end">
+                            <div className="text-[9px] italic">for <span className="font-bold uppercase">{company.company_name}</span></div>
+                            <div className="text-[9px] font-bold mt-8 uppercase">Authorised Signatory</div>
                         </div>
                     </div>
-                </div>
 
-                {/* Footer Section */}
-                <div className="px-12 py-8 bg-slate-50/50 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="flex items-center gap-2 text-green-600">
-                        <ShieldCheck className="size-5" />
-                        <span className="text-xs font-black uppercase tracking-widest">Digitally Verified Invoice</span>
-                    </div>
-                    <div className="text-[10px] text-slate-400 font-medium text-center md:text-right italic">
-                        This is a computer generated invoice and does not require a physical signature.
+                    {/* Footer */}
+                    <div className="flex justify-center py-1 border-t border-black bg-slate-50 print:bg-white">
+                        <div className="text-[9px] text-slate-500 italic">This is a Computer Generated Invoice</div>
                     </div>
                 </div>
-            </div>
-
-            {/* Extra Info */}
-            <div className="max-w-[800px] mx-auto mt-8 text-center text-[10px] text-slate-400 font-medium uppercase tracking-[0.2em] print:hidden">
-                Thank you for choosing Learn Syntax Academy
             </div>
         </div>
     );

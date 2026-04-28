@@ -45,6 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('payments', [App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('admin.payments.index');
         Route::get('payments/gst-report', [App\Http\Controllers\Admin\PaymentController::class, 'gstReport'])->name('admin.payments.gst-report');
         Route::get('invoices/{invoice}', [App\Http\Controllers\Admin\PaymentController::class, 'showInvoice'])->name('admin.invoices.show');
+        Route::post('payments/{payment}/generate-invoice', [App\Http\Controllers\Admin\PaymentController::class, 'generateInvoice'])->name('admin.payments.generate-invoice');
         
         // Student Management
         Route::get('students', [App\Http\Controllers\Admin\StudentController::class, 'index'])->name('admin.students.index');
@@ -75,6 +76,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('exam', [App\Http\Controllers\Student\AcademicController::class, 'exam'])->name('student.academic.exam');
         Route::post('exam', [App\Http\Controllers\Student\AcademicController::class, 'submitExam'])->name('student.academic.submit-exam');
         Route::get('certificate', [App\Http\Controllers\Student\AcademicController::class, 'certificate'])->name('student.academic.certificate');
+        // Settings
+        Route::get('settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('admin.settings.index');
+        Route::post('settings', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('admin.settings.update');
     });
 });
 
