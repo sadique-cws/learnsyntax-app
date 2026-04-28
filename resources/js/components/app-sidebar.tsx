@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid, Book, Users, CreditCard, ShoppingBag, Home, GraduationCap, Trophy } from 'lucide-react';
+import { BookOpen, FolderGit2, LayoutGrid, Book, Users, CreditCard, ShoppingBag, Home, GraduationCap, Trophy, Receipt } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -12,17 +12,19 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    useSidebar,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 
 export function AppSidebar() {
     const { auth } = usePage().props as any;
+    const { setOpenMobile } = useSidebar();
     const user = auth?.user;
     const isAdmin = user?.is_admin;
 
     const mainNavItems: NavItem[] = [];
-
+// ... (mainNavItems logic remains same)
     if (user) {
         mainNavItems.push({
             title: 'Dashboard',
@@ -51,6 +53,11 @@ export function AppSidebar() {
                     title: 'All Payments',
                     href: '/admin/payments',
                     icon: CreditCard,
+                },
+                {
+                    title: 'GST Reports',
+                    href: '/admin/payments/gst-report',
+                    icon: Receipt,
                 },
                 {
                     title: 'Manage Assignments',
@@ -100,7 +107,11 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard().url} prefetch>
+                            <Link 
+                                href={dashboard().url} 
+                                prefetch 
+                                onClick={() => setOpenMobile(false)}
+                            >
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>

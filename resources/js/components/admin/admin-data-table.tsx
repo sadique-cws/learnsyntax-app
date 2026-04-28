@@ -150,11 +150,11 @@ export function AdminDataTable<T extends { id: number | string }>({
             {(title || onAdd) && (
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
                     <div>
-                        {title && <h1 className="text-2xl font-black tracking-tight uppercase text-foreground">{title}</h1>}
-                        {subtitle && <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest mt-1">{subtitle}</p>}
+                        {title && <h1 className="text-2xl font-medium tracking-tight text-foreground">{title}</h1>}
+                        {subtitle && <p className="text-muted-foreground text-xs font-medium tracking-tight mt-1">{subtitle}</p>}
                     </div>
                     {onAdd && (
-                        <Button onClick={onAdd} className="rounded font-bold tracking-widest uppercase text-xs h-10 px-6">
+                        <Button onClick={onAdd} className="rounded font-medium tracking-tight text-[11px] h-10 px-6">
                             {addLabel}
                         </Button>
                     )}
@@ -166,7 +166,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                     <Input 
                         placeholder={searchPlaceholder} 
-                        className="pl-10 h-10 rounded border-border bg-card"
+                        className="pl-10 h-10 rounded border-border bg-card text-sm"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
@@ -176,7 +176,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className={cn(
-                                "rounded h-10 px-4 font-bold text-xs uppercase tracking-widest border-border bg-card",
+                                "rounded h-10 px-4 font-medium text-[11px] tracking-tight border-border bg-card",
                                 hasActiveFilters && "border-primary text-primary"
                             )}>
                                 <Filter className="size-4 mr-2" />
@@ -189,17 +189,17 @@ export function AdminDataTable<T extends { id: number | string }>({
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56 rounded border-border">
-                            <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-widest">Filter By</DropdownMenuLabel>
+                            <DropdownMenuLabel className="text-[11px] font-medium tracking-tight">Filter By</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             {filterableColumns.map(filter => (
                                 <div key={filter.key}>
-                                    <DropdownMenuLabel className="text-[9px] font-bold uppercase text-muted-foreground px-2 py-1.5">{filter.label}</DropdownMenuLabel>
+                                    <DropdownMenuLabel className="text-[10px] font-medium text-muted-foreground px-2 py-1.5">{filter.label}</DropdownMenuLabel>
                                     {filter.options.map(option => (
                                         <DropdownMenuCheckboxItem
                                             key={String(option.value)}
                                             checked={(activeFilters[filter.key] || []).includes(option.value)}
                                             onCheckedChange={() => toggleFilter(filter.key, option.value)}
-                                            className="text-xs font-bold uppercase tracking-tight"
+                                            className="text-xs font-medium"
                                         >
                                             {option.label}
                                         </DropdownMenuCheckboxItem>
@@ -210,7 +210,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                             {hasActiveFilters && (
                                 <DropdownMenuItem 
                                     onClick={clearFilters}
-                                    className="text-xs font-black uppercase tracking-widest text-destructive justify-center"
+                                    className="text-xs font-medium tracking-tight text-destructive justify-center"
                                 >
                                     Clear All Filters
                                 </DropdownMenuItem>
@@ -228,7 +228,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                         return values.map(val => {
                             const option = filterDef?.options.find(o => o.value === val);
                             return (
-                                <div key={`${key}-${val}`} className="flex items-center gap-1.5 px-2 py-1 bg-primary/10 border border-primary/20 rounded text-[9px] font-black uppercase tracking-widest text-primary">
+                                <div key={`${key}-${val}`} className="flex items-center gap-1.5 px-2 py-1 bg-primary/10 border border-primary/20 rounded text-[10px] font-medium tracking-tight text-primary">
                                     {filterDef?.label}: {option?.label || val}
                                     <X className="size-3 cursor-pointer" onClick={() => toggleFilter(key, val)} />
                                 </div>
@@ -247,7 +247,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                                     <th 
                                         key={String(col.key)}
                                         className={cn(
-                                            "px-4 py-3 text-[10px] font-black uppercase tracking-widest transition-colors",
+                                            "px-4 py-3 text-[11px] font-medium tracking-tight transition-colors text-muted-foreground",
                                             col.sortable && "cursor-pointer hover:bg-muted/50",
                                             col.align === 'right' && "text-right",
                                             col.align === 'center' && "text-center"
@@ -264,7 +264,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                                         </div>
                                     </th>
                                 ))}
-                                {actions && <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-right">Actions</th>}
+                                {actions && <th className="px-4 py-3 text-[11px] font-medium tracking-tight text-right text-muted-foreground">Actions</th>}
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
@@ -274,7 +274,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                                         <td 
                                             key={String(col.key)} 
                                             className={cn(
-                                                "px-4 py-4 text-sm",
+                                                "px-4 py-4 text-sm font-medium tracking-tight",
                                                 col.align === 'right' && "text-right",
                                                 col.align === 'center' && "text-center"
                                             )}
@@ -292,7 +292,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                             {filteredAndSortedData.length === 0 && (
                                 <tr>
                                     <td colSpan={columns.length + (actions ? 1 : 0)} className="px-4 py-12 text-center text-muted-foreground">
-                                        <div className="text-xs font-black uppercase tracking-widest opacity-50">No matching records found</div>
+                                        <div className="text-xs font-medium tracking-tight opacity-50">No matching records found</div>
                                     </td>
                                 </tr>
                             )}

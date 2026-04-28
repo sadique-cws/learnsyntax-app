@@ -33,12 +33,12 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
             sortable: true,
             render: (course) => (
                 <div className="flex items-center gap-3">
-                    <div className="size-10 rounded bg-primary/5 border border-primary/10 flex items-center justify-center font-black text-primary text-xs shrink-0 uppercase">
+                    <div className="size-10 rounded bg-primary/5 border border-primary/10 flex items-center justify-center font-medium text-primary text-xs shrink-0">
                         <Trophy className="size-4" />
                     </div>
                     <div>
-                        <div className="font-bold text-sm text-foreground">{course.title}</div>
-                        <div className="text-[10px] text-muted-foreground font-black uppercase tracking-tight">
+                        <div className="font-medium text-sm text-foreground">{course.title}</div>
+                        <div className="text-[10px] text-muted-foreground font-medium tracking-tight">
                             {course.exam ? course.exam.title : 'Setup Pending'}
                         </div>
                     </div>
@@ -50,7 +50,7 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
             label: 'Weightage',
             sortable: false,
             render: (course) => (
-                <div className="px-2 py-0.5 bg-muted rounded text-[10px] font-black uppercase tracking-tight inline-block">
+                <div className="px-2 py-0.5 bg-muted rounded text-[10px] font-medium tracking-tight inline-block">
                     {course.exam ? `${course.exam.total_marks} Marks` : 'N/A'}
                 </div>
             )
@@ -81,20 +81,20 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
                                 }
                             }}>
                                 <DialogTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="h-8 px-3 rounded font-black uppercase text-[10px] tracking-widest hover:bg-primary/10 hover:text-primary transition-colors">
+                                    <Button variant="ghost" size="sm" className="h-8 px-3 rounded font-medium text-[10px] tracking-tight hover:bg-primary/10 hover:text-primary transition-colors">
                                         <Settings className="size-3 mr-2" /> {course.exam ? 'Config' : 'Setup'}
                                     </Button>
                                 </DialogTrigger>
                                 <DialogContent className="rounded border border-border max-w-md">
                                     <form onSubmit={submit} className="space-y-6">
                                         <DialogHeader>
-                                            <DialogTitle className="text-xl font-black uppercase tracking-tight">Configure Exam</DialogTitle>
-                                            <p className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest">For {course.title}</p>
+                                            <DialogTitle className="text-xl font-medium tracking-tight">Configure Exam</DialogTitle>
+                                            <p className="text-muted-foreground text-[10px] font-medium tracking-tight">For {course.title}</p>
                                         </DialogHeader>
                                         
                                         <div className="space-y-4">
                                             <div className="space-y-2">
-                                                <Label className="text-[10px] font-black uppercase tracking-widest">Exam Title</Label>
+                                                <Label className="text-[10px] font-medium tracking-tight">Exam Title</Label>
                                                 <Input 
                                                     required 
                                                     className="rounded bg-card border-border h-10"
@@ -103,7 +103,7 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
                                                 />
                                             </div>
                                             <div className="space-y-2">
-                                                <Label className="text-[10px] font-black uppercase tracking-widest">Total Marks</Label>
+                                                <Label className="text-[10px] font-medium tracking-tight">Total Marks</Label>
                                                 <Input 
                                                     type="number" 
                                                     required 
@@ -114,7 +114,7 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
                                             </div>
                                         </div>
 
-                                        <Button type="submit" disabled={processing} className="w-full h-11 rounded font-black uppercase tracking-widest text-xs">
+                                        <Button type="submit" disabled={processing} className="w-full h-11 rounded font-medium tracking-tight text-xs">
                                             {processing ? 'Configuring...' : 'Save Configuration'}
                                         </Button>
                                     </form>
@@ -122,11 +122,18 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
                             </Dialog>
 
                             {course.exam && (
-                                <Button asChild variant="outline" size="sm" className="h-8 px-3 rounded font-black uppercase text-[10px] tracking-widest border-border bg-card">
-                                    <Link href={`/admin/academic/exams/${course.exam.id}/results`}>
-                                        Results <ChevronRight className="size-3 ml-1" />
-                                    </Link>
-                                </Button>
+                                <>
+                                    <Button asChild variant="outline" size="sm" className="h-8 px-3 rounded font-medium text-[10px] tracking-tight border-border bg-card">
+                                        <Link href={`/admin/academic/exams/${course.exam.id}/questions`}>
+                                            Questions
+                                        </Link>
+                                    </Button>
+                                    <Button asChild variant="outline" size="sm" className="h-8 px-3 rounded font-medium text-[10px] tracking-tight border-border bg-card">
+                                        <Link href={`/admin/academic/exams/${course.exam.id}/results`}>
+                                            Results <ChevronRight className="size-3 ml-1" />
+                                        </Link>
+                                    </Button>
+                                </>
                             )}
                         </div>
                     )}

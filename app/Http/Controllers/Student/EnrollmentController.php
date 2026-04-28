@@ -98,11 +98,23 @@ class EnrollmentController extends Controller
             'currency' => 'INR',
         ]);
 
+        // Calculate GST (18%)
+        $totalAmount = $payment->amount;
+        $taxRate = 0.18;
+        $taxableAmount = round($totalAmount / (1 + $taxRate), 2);
+        $totalGst = $totalAmount - $taxableAmount;
+        $halfGst = round($totalGst / 2, 2);
+
         Invoice::create([
             'payment_id' => $payment->id,
             'invoice_number' => 'INV-' . date('Ymd') . '-' . $payment->id,
             'issued_at' => now(),
-            'amount' => $payment->amount,
+            'amount' => $totalAmount,
+            'taxable_amount' => $taxableAmount,
+            'cgst' => $halfGst,
+            'sgst' => $halfGst,
+            'igst' => 0,
+            'gst_number' => $request->gst_number, // Capture GSTIN if provided
         ]);
 
         return redirect()->route('student.enrollments.batch', $enrollment);

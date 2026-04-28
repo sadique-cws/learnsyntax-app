@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('invoices', function (Blueprint $table) {
+            $table->decimal('taxable_amount', 10, 2)->after('amount')->nullable();
+            $table->decimal('cgst', 10, 2)->after('taxable_amount')->default(0);
+            $table->decimal('sgst', 10, 2)->after('cgst')->default(0);
+            $table->decimal('igst', 10, 2)->after('sgst')->default(0);
+            $table->string('gst_number')->after('igst')->nullable();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('invoices', function (Blueprint $table) {
+            //
+        });
+    }
+};

@@ -41,6 +41,33 @@ class ExamController extends Controller
         ]);
     }
 
+    public function questions(Exam $exam)
+    {
+        return inertia('admin/exams/questions', [
+            'exam' => $exam->load(['course', 'questions']),
+        ]);
+    }
+
+    public function storeQuestion(Request $request, Exam $exam)
+    {
+        $request->validate([
+            'question_text' => 'required|string',
+            'options' => 'nullable|array',
+            'correct_answer' => 'nullable|string',
+            'marks' => 'required|integer|min:1',
+        ]);
+
+        $exam->questions()->create($request->all());
+
+        return back()->with('success', 'Question added successfully.');
+    }
+
+    public function destroyQuestion(\App\Models\Question $question)
+    {
+        $question->delete();
+        return back()->with('success', 'Question deleted.');
+    }
+
     public function updateResult(Request $request, ExamAttempt $attempt)
     {
         $request->validate([

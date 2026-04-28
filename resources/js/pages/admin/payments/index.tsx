@@ -4,6 +4,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Receipt, User, CreditCard } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { AdminDataTable, Column } from '@/components/admin/admin-data-table';
+import { Link } from '@inertiajs/react';
 
 export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
     const [mounted, setMounted] = useState(false);
@@ -18,12 +19,17 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
             sortable: true,
             render: (payment) => (
                 <div className="flex items-center gap-3">
-                    <div className="size-10 rounded bg-primary/5 border border-primary/10 flex items-center justify-center font-black text-primary text-xs shrink-0">
+                    <div className="size-10 rounded bg-primary/5 border border-primary/10 flex items-center justify-center font-medium text-primary text-xs shrink-0">
                         <CreditCard className="size-4" />
                     </div>
                     <div>
-                        <div className="font-mono text-[10px] font-bold text-primary">{payment.transaction_id}</div>
-                        <div className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">{payment.payment_method}</div>
+                        <div className="font-mono text-[10px] font-medium text-primary">{payment.transaction_id}</div>
+                        <div className="flex items-center gap-2">
+                            <div className="text-[10px] text-muted-foreground font-medium tracking-tight">{payment.payment_method}</div>
+                            {payment.invoice?.gst_number && (
+                                <div className="text-[9px] bg-primary/10 text-primary px-1.5 rounded border border-primary/20 font-medium">GST: {payment.invoice.gst_number}</div>
+                            )}
+                        </div>
                     </div>
                 </div>
             )
@@ -37,7 +43,7 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
                     <div className="size-8 rounded-full bg-muted flex items-center justify-center">
                         <User className="size-4 text-muted-foreground" />
                     </div>
-                    <div className="text-sm font-bold text-foreground">{payment.enrollment.user.name}</div>
+                    <div className="text-sm font-medium text-foreground">{payment.enrollment.user.name}</div>
                 </div>
             )
         },
@@ -47,8 +53,8 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
             sortable: false,
             render: (payment) => (
                 <div>
-                    <div className="text-sm font-bold text-foreground">{payment.enrollment.course.title}</div>
-                    <div className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">Paid on {formatDate(payment.created_at)}</div>
+                    <div className="text-sm font-medium text-foreground">{payment.enrollment.course.title}</div>
+                    <div className="text-[10px] text-muted-foreground font-medium tracking-tight">Paid on {formatDate(payment.created_at)}</div>
                 </div>
             )
         },
@@ -58,8 +64,8 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
             sortable: true,
             render: (payment) => (
                 <div>
-                    <div className="font-black text-sm">₹{payment.amount}</div>
-                    <div className="text-[10px] text-green-600 font-black uppercase tracking-widest">{payment.status}</div>
+                    <div className="font-medium text-sm">₹{payment.amount}</div>
+                    <div className="text-[10px] text-green-600 font-medium tracking-tight">{payment.status}</div>
                 </div>
             )
         }
@@ -70,9 +76,19 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
             <Head title="Payments & Revenue" />
             
             <div className="w-full p-4 lg:p-6">
+                <div className="flex justify-between items-center mb-6">
+                    <div>
+                        <h1 className="text-2xl font-medium tracking-tight">Financial Ledger</h1>
+                        <p className="text-muted-foreground text-xs font-medium tracking-tight mt-1">Track all student transactions and generated invoices</p>
+                    </div>
+                    <div className="flex gap-2">
+                        <Button asChild variant="outline" className="rounded h-10 px-6 font-medium text-xs border-border bg-card">
+                            <Link href="/admin/payments/gst-report">GST Report</Link>
+                        </Button>
+                    </div>
+                </div>
+
                 <AdminDataTable 
-                    title="Financial Ledger"
-                    subtitle="Track all student transactions and generated invoices"
                     data={payments}
                     columns={columns}
                     filterableColumns={[
@@ -89,7 +105,7 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
                     searchPlaceholder="Search transactions..."
                     actions={(payment) => (
                         <div className="flex items-center justify-end">
-                            <Button variant="outline" size="sm" className="rounded h-8 text-[10px] font-black uppercase tracking-widest px-3 border-border bg-card">
+                            <Button variant="outline" size="sm" className="rounded h-8 text-[10px] font-medium tracking-tight px-3 border-border bg-card">
                                 <Receipt className="size-3 mr-2" />
                                 {payment.invoice?.invoice_number || 'No Invoice'}
                             </Button>

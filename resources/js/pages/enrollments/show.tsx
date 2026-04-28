@@ -21,6 +21,7 @@ export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_orde
     const { post, processing } = useForm();
     const [isPaying, setIsPaying] = useState(false);
     const [scriptLoaded, setScriptLoaded] = useState(false);
+    const [gstNumber, setGstNumber] = useState('');
 
     useEffect(() => {
         const script = document.createElement('script');
@@ -51,6 +52,7 @@ export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_orde
                     razorpay_payment_id: response.razorpay_payment_id,
                     razorpay_order_id: response.razorpay_order_id,
                     razorpay_signature: response.razorpay_signature,
+                    gst_number: gstNumber, // Pass GST number
                 }, {
                     onFinish: () => setIsPaying(false),
                 });
@@ -120,13 +122,28 @@ export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_orde
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-3">
+                        <div className="space-y-4">
                             <div className="flex items-center gap-3 p-4 rounded-xl border border-border bg-muted/20">
                                 <ShieldCheck className="size-5 text-green-600" />
                                 <div className="text-[11px] leading-snug">
                                     <span className="font-bold block">100% Secure Payment</span>
                                     <span className="text-muted-foreground">Your transaction is protected with 256-bit encryption</span>
                                 </div>
+                            </div>
+                            
+                            <div className="p-5 rounded-2xl border border-border/50 bg-card">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <Receipt className="size-4 text-primary" />
+                                    <span className="text-xs font-bold uppercase tracking-wider">GST Information <span className="text-[10px] text-muted-foreground">(Optional)</span></span>
+                                </div>
+                                <input 
+                                    type="text" 
+                                    placeholder="Enter GSTIN for B2B Invoice"
+                                    className="w-full h-11 rounded-xl bg-muted/50 border-border text-sm px-4 focus:ring-2 focus:ring-primary/20 outline-none transition-all font-medium"
+                                    value={gstNumber}
+                                    onChange={(e) => setGstNumber(e.target.value.toUpperCase())}
+                                />
+                                <p className="text-[9px] text-muted-foreground mt-2 px-1">Provide your GSTIN if you require a business invoice with tax credit.</p>
                             </div>
                         </div>
                     </CardContent>

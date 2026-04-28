@@ -79,12 +79,12 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
             sortable: true,
             render: (batch) => (
                 <div className="flex items-center gap-3">
-                    <div className="size-10 rounded bg-primary/5 border border-primary/10 flex items-center justify-center font-black text-primary text-xs shrink-0 uppercase">
+                    <div className="size-10 rounded bg-primary/5 border border-primary/10 flex items-center justify-center font-bold text-primary text-xs shrink-0 uppercase">
                         {batch.type === 'online' ? <Globe className="size-4" /> : <MapPin className="size-4" />}
                     </div>
                     <div>
                         <div className="font-bold text-sm text-foreground">{batch.name}</div>
-                        <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-tight">{batch.course.title}</div>
+                        <div className="text-[11px] text-muted-foreground font-medium tracking-tight">{batch.course.title}</div>
                     </div>
                 </div>
             )
@@ -94,7 +94,7 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
             label: 'Type',
             sortable: true,
             render: (batch) => (
-                <div className="px-2 py-0.5 bg-muted rounded text-[10px] font-black uppercase tracking-tight inline-block">
+                <div className="px-2 py-0.5 bg-muted rounded text-[10px] font-bold uppercase tracking-wider inline-block text-muted-foreground">
                     {batch.type}
                 </div>
             )
@@ -104,7 +104,7 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
             label: 'Starts',
             sortable: true,
             render: (batch) => (
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase">
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
                     <Calendar className="size-3" />
                     {formatDate(batch.start_date)}
                 </div>
@@ -115,7 +115,7 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
             label: 'Seats',
             sortable: true,
             render: (batch) => (
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase">
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
                     <Users className="size-3" />
                     {batch.capacity} Max
                 </div>
@@ -127,7 +127,7 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
             sortable: true,
             render: (batch) => (
                 <div className={cn(
-                    "px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-tight inline-block",
+                    "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider inline-block",
                     batch.is_active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
                 )}>
                     {batch.is_active ? 'Active' : 'Inactive'}
