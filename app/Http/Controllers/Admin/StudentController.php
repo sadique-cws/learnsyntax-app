@@ -23,8 +23,13 @@ class StudentController extends Controller
 
     public function show(User $student)
     {
-        $student->load(['enrollments.course', 'enrollments.batch', 'enrollments.payment']);
+        $student->load(['enrollments.course', 'enrollments.batch', 'enrollments.payment', 'enrollments.certificate']);
         
+        // Appending computed attributes for the view
+        foreach ($student->enrollments as $enrollment) {
+            $enrollment->append(['assignment_average', 'exam_score', 'overall_average']);
+        }
+
         return inertia('admin/students/show', [
             'student' => $student,
             'available_batches' => Batch::with('course')->get()->groupBy('course_id'),
@@ -42,5 +47,22 @@ class StudentController extends Controller
         ]);
 
         return back()->with('success', 'Student batch updated successfully.');
+    }
+
+    public function generateCertificate(Enrollment $enrollment)
+    {
+        if (!$enrollment->isEligibleForCertificate()) {
+            return back()->with('error', 'Student is not yet eligible for a certificate. Requires 60% average.');
+        }
+
+        \App\Models\Certificate::firstOrCreate(
+            ['enrollment_id' => $enrollment->id],
+            [
+                'certificate_number' => 'LS-' . strtoupper(str()->random(8)),
+                'issued_at' => now()
+            ]
+        );
+
+        return back()->with('success', 'Certificate generated successfully!');
     }
 }

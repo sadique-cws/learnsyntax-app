@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Exam extends Model
 {
-    protected $fillable = ['course_id', 'title', 'total_marks', 'is_active'];
+    protected $fillable = ['course_id', 'title', 'passcode', 'total_marks', 'is_active'];
 
     public function course()
     {

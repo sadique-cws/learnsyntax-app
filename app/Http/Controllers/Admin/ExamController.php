@@ -23,12 +23,13 @@ class ExamController extends Controller
         $request->validate([
             'course_id' => 'required|exists:courses,id',
             'title' => 'required|string|max:255',
+            'passcode' => 'nullable|string|max:20',
             'total_marks' => 'required|integer|min:1',
         ]);
 
         Exam::updateOrCreate(
             ['course_id' => $request->course_id],
-            ['title' => $request->title, 'total_marks' => $request->total_marks]
+            ['title' => $request->title, 'passcode' => $request->passcode, 'total_marks' => $request->total_marks]
         );
 
         return back()->with('success', 'Exam configured successfully.');

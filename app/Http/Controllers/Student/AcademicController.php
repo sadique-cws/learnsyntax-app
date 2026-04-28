@@ -42,11 +42,36 @@ class AcademicController extends Controller
             ->where('user_id', auth()->id())
             ->first();
 
+        // Check if student has verified passcode in session for this exam
+        $isVerified = session("exam_verified_{$exam->id}", false);
+
         return inertia('student/academic/exam', [
             'enrollment' => $enrollment->load('course'),
             'exam' => $exam,
             'attempt' => $attempt,
+            'isVerified' => $isVerified
         ]);
+    }
+
+    public function verifyPasscode(Request $request, Enrollment $enrollment)
+    {
+        $this->authorizeAccess($enrollment);
+        
+        $exam = Exam::where('course_id', $enrollment->course_id)->firstOrFail();
+        
+        if (ExamAttempt::where('exam_id', $exam->id)->where('user_id', auth()->id())->exists()) {
+            return back()->with('error', 'You have already attempted this exam.');
+        }
+
+        $request->validate(['passcode' => 'required|string']);
+
+        if ($exam->passcode && $request->passcode !== $exam->passcode) {
+            return back()->with('error', 'Invalid passcode. Please check with your coordinator.');
+        }
+
+        session(["exam_verified_{$exam->id}" => true]);
+
+        return back()->with('success', 'Passcode verified! You can now start the exam.');
     }
 
     public function submitExam(Request $request, Enrollment $enrollment)
@@ -55,16 +80,28 @@ class AcademicController extends Controller
 
         $exam = Exam::where('course_id', $enrollment->course_id)->firstOrFail();
         
-        // Simulating 50 marks final exam logic
-        // In a real app, you'd calculate this based on answers
-        $marks = rand(25, 50); // Simulating an attempt
+        if (ExamAttempt::where('exam_id', $exam->id)->where('user_id', auth()->id())->exists()) {
+            return back()->with('error', 'You have already submitted this exam.');
+        }
 
-        ExamAttempt::updateOrCreate(
-            ['exam_id' => $exam->id, 'user_id' => auth()->id()],
-            ['marks_obtained' => $marks, 'completed_at' => now()]
-        );
+        if ($exam->passcode && !session("exam_verified_{$exam->id}")) {
+            return back()->with('error', 'Passcode verification required.');
+        }
 
-        return redirect()->route('student.academic.exam', $enrollment)->with('success', 'Exam submitted successfully!');
+        // Simulating final exam logic
+        $marks = rand(25, $exam->total_marks);
+
+        ExamAttempt::create([
+            'exam_id' => $exam->id, 
+            'user_id' => auth()->id(),
+            'marks_obtained' => $marks, 
+            'completed_at' => now()
+        ]);
+
+        // Clear verification session
+        session()->forget("exam_verified_{$exam->id}");
+
+        return redirect()->route('student.academic.exam', $enrollment)->with('success', 'Final Exam submitted successfully!');
     }
 
     public function certificate(Enrollment $enrollment)

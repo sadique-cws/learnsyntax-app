@@ -51,6 +51,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('students', [App\Http\Controllers\Admin\StudentController::class, 'index'])->name('admin.students.index');
         Route::get('students/{student}', [App\Http\Controllers\Admin\StudentController::class, 'show'])->name('admin.students.show');
         Route::patch('enrollments/{enrollment}/batch', [App\Http\Controllers\Admin\StudentController::class, 'updateBatch'])->name('admin.enrollments.update-batch');
+        Route::post('enrollments/{enrollment}/certificate', [App\Http\Controllers\Admin\StudentController::class, 'generateCertificate'])->name('admin.enrollments.generate-certificate');
 
         // Academic Management (Assignments & Exams)
         Route::prefix('academic')->group(function () {
@@ -68,6 +69,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('exams/{exam}/results', [App\Http\Controllers\Admin\ExamController::class, 'results'])->name('admin.exams.results');
             Route::patch('exam-attempts/{attempt}', [App\Http\Controllers\Admin\ExamController::class, 'updateResult'])->name('admin.exam-attempts.update');
         });
+
+        // Settings
+        Route::get('settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('admin.settings.index');
+        Route::post('settings', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('admin.settings.update');
     });
 
     // Student Academic Routes
@@ -76,9 +81,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('exam', [App\Http\Controllers\Student\AcademicController::class, 'exam'])->name('student.academic.exam');
         Route::post('exam', [App\Http\Controllers\Student\AcademicController::class, 'submitExam'])->name('student.academic.submit-exam');
         Route::get('certificate', [App\Http\Controllers\Student\AcademicController::class, 'certificate'])->name('student.academic.certificate');
-        // Settings
-        Route::get('settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('admin.settings.index');
-        Route::post('settings', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('admin.settings.update');
     });
 });
 
