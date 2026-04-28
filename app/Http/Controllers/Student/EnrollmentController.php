@@ -117,6 +117,21 @@ class EnrollmentController extends Controller
             'gst_number' => $request->gst_number, // Capture GSTIN if provided
         ]);
 
+        // Credit Teacher Wallet
+        $teacher = $enrollment->course->teacher;
+        if ($teacher) {
+            $commissionAmount = ($enrollment->course->price * $teacher->commission_percent) / 100;
+            
+            \App\Models\WalletTransaction::create([
+                'teacher_id' => $teacher->id,
+                'amount' => $commissionAmount,
+                'type' => 'credit',
+                'description' => 'Commission from course purchase: ' . $enrollment->course->title,
+            ]);
+
+            $teacher->increment('wallet_balance', $commissionAmount);
+        }
+
         return redirect()->route('student.enrollments.batch', $enrollment);
     }
 

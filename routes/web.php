@@ -47,6 +47,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('invoices/{invoice}', [App\Http\Controllers\Admin\PaymentController::class, 'showInvoice'])->name('admin.invoices.show');
         Route::post('payments/{payment}/generate-invoice', [App\Http\Controllers\Admin\PaymentController::class, 'generateInvoice'])->name('admin.payments.generate-invoice');
         
+        // Teachers Management
+        Route::resource('teachers', App\Http\Controllers\Admin\TeacherController::class)->names('admin.teachers');
+
         // Student Management
         Route::get('students', [App\Http\Controllers\Admin\StudentController::class, 'index'])->name('admin.students.index');
         Route::get('students/{student}', [App\Http\Controllers\Admin\StudentController::class, 'show'])->name('admin.students.show');
@@ -82,6 +85,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('exam', [App\Http\Controllers\Student\AcademicController::class, 'submitExam'])->name('student.academic.submit-exam');
         Route::get('certificate', [App\Http\Controllers\Student\AcademicController::class, 'certificate'])->name('student.academic.certificate');
     });
+
+    // Teacher Routes
+    Route::middleware(['can:teacher'])->prefix('teacher')->group(function () {
+        Route::get('dashboard', [App\Http\Controllers\Teacher\DashboardController::class, 'index'])->name('teacher.dashboard');
+        Route::resource('courses', App\Http\Controllers\Teacher\CourseController::class)->names('teacher.courses');
+        Route::get('wallet', [App\Http\Controllers\Teacher\WalletController::class, 'index'])->name('teacher.wallet');
+    });
+
 });
 
 require __DIR__.'/settings.php';
