@@ -12,7 +12,13 @@ class PaymentController extends Controller
     {
         $payments = \App\Models\Payment::with(['enrollment.user', 'enrollment.course', 'invoice'])
             ->latest()
-            ->get();
+            ->get()
+            ->map(function($p) {
+                $p->searchable_student = $p->enrollment->user->name;
+                $p->searchable_course = $p->enrollment->course->title;
+                $p->searchable_amount = (string)$p->amount;
+                return $p;
+            });
             
         return inertia('admin/payments/index', [
             'payments' => $payments
@@ -24,7 +30,12 @@ class PaymentController extends Controller
         $invoices = \App\Models\Invoice::with(['payment.enrollment.user', 'payment.enrollment.course'])
             ->whereNotNull('taxable_amount')
             ->latest()
-            ->get();
+            ->get()
+            ->map(function($i) {
+                $i->searchable_student = $i->payment->enrollment->user->name;
+                $i->searchable_course = $i->payment->enrollment->course->title;
+                return $i;
+            });
 
         return inertia('admin/payments/gst-report', [
             'invoices' => $invoices,

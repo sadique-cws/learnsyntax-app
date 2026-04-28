@@ -62,6 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('assignments', [App\Http\Controllers\Admin\AssignmentController::class, 'store'])->name('admin.assignments.store');
             Route::get('assignments/{assignment}', [App\Http\Controllers\Admin\AssignmentController::class, 'show'])->name('admin.assignments.show');
             Route::patch('submissions/{submission}/grade', [App\Http\Controllers\Admin\AssignmentController::class, 'grade'])->name('admin.submissions.grade');
+            Route::post('submissions/{submission}/comment', [App\Http\Controllers\Admin\AssignmentController::class, 'comment'])->name('admin.submissions.comment');
 
             Route::get('exams', [App\Http\Controllers\Admin\ExamController::class, 'index'])->name('admin.exams.index');
             Route::post('exams', [App\Http\Controllers\Admin\ExamController::class, 'store'])->name('admin.exams.store');

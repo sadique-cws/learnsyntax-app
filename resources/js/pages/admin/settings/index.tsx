@@ -32,74 +32,72 @@ export default function AdminSettings({ settings }: { settings: any }) {
         <>
             <Head title="Invoice Configuration" />
             
-            <div className="w-full p-4 lg:p-6">
-                <div className="flex justify-between items-center mb-8">
+            <div className="w-full p-4 lg:p-6 max-w-7xl mx-auto">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
-                        <h1 className="text-2xl font-medium tracking-tight">Invoice Configuration</h1>
-                        <p className="text-muted-foreground text-xs font-medium tracking-tight mt-1">Manage company details, tax compliance, and bank info</p>
+                        <h1 className="text-xl font-black uppercase tracking-tight text-foreground">Invoice Configuration</h1>
+                        <p className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest mt-0.5">Manage company details & tax compliance</p>
                     </div>
                     <div className="flex items-center gap-4">
                         {recentlySuccessful && (
-                            <div className="flex items-center gap-2 text-green-600 font-medium text-xs animate-in fade-in slide-in-from-right-4">
-                                <CheckCircle2 className="size-3.5" /> Changes Saved
+                            <div className="flex items-center gap-2 text-green-600 font-bold text-[10px] uppercase tracking-widest animate-in fade-in slide-in-from-right-2">
+                                <CheckCircle2 className="size-3" /> Saved
                             </div>
                         )}
                         <Button 
                             onClick={submit}
                             disabled={processing} 
-                            className="rounded-sm h-10 px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all"
+                            className="rounded-sm h-9 px-6 bg-primary shadow-lg shadow-primary/10 text-[10px] font-black uppercase tracking-widest transition-all"
                         >
                             {processing ? (
-                                <div className="size-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                                <div className="size-3 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
                             ) : (
-                                <Save className="size-4 mr-2" />
+                                <Save className="size-3.5 mr-2" />
                             )}
-                            Save Settings
+                            Update Configuration
                         </Button>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <div className="lg:col-span-8 space-y-8">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                    <div className="lg:col-span-8 space-y-5">
                         {/* Company Details */}
-                        <Card className="border-border rounded-sm shadow-none">
-                            <CardHeader className="py-4 px-6 border-b border-border/50">
-                                <div className="flex items-center gap-3">
-                                    <Building2 className="size-4 text-primary" />
-                                    <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Company Profile</CardTitle>
+                        <Card className="border-border rounded-sm shadow-none bg-background">
+                            <CardHeader className="py-3 px-5 border-b border-border/50 bg-muted/5">
+                                <div className="flex items-center gap-2">
+                                    <Building2 className="size-3.5 text-primary" />
+                                    <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Company Profile</CardTitle>
                                 </div>
                             </CardHeader>
-                            <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2 md:col-span-2">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Entity Name</Label>
+                            <CardContent className="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-1.5 md:col-span-2">
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Legal Entity Name</Label>
                                     <Input 
-                                        className="h-10 rounded-sm border-border bg-muted/20 text-sm focus:bg-background transition-colors"
+                                        className="h-9 rounded-sm border-border bg-muted/10 text-xs focus:bg-background transition-colors"
                                         value={data.company_name}
                                         onChange={e => setData('company_name', e.target.value)}
-                                        placeholder="e.g. Learn Syntax Academy"
                                     />
                                 </div>
-                                <div className="space-y-2 md:col-span-2">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Registered Address</Label>
+                                <div className="space-y-1.5 md:col-span-2">
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Registered Address</Label>
                                     <Textarea 
-                                        className="min-h-[100px] rounded-sm border-border bg-muted/20 text-sm focus:bg-background transition-colors"
+                                        className="min-h-[80px] rounded-sm border-border bg-muted/10 text-xs focus:bg-background transition-colors resize-none p-3"
                                         value={data.company_address}
                                         onChange={e => setData('company_address', e.target.value)}
-                                        placeholder="Full registered office address..."
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Email</Label>
+                                <div className="space-y-1.5">
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Support Email</Label>
                                     <Input 
-                                        className="h-10 rounded-sm border-border bg-muted/20 text-sm focus:bg-background transition-colors"
+                                        className="h-9 rounded-sm border-border bg-muted/10 text-xs focus:bg-background transition-colors"
                                         value={data.company_email}
                                         onChange={e => setData('company_email', e.target.value)}
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Phone</Label>
+                                <div className="space-y-1.5">
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Contact Phone</Label>
                                     <Input 
-                                        className="h-10 rounded-sm border-border bg-muted/20 text-sm focus:bg-background transition-colors"
+                                        className="h-9 rounded-sm border-border bg-muted/10 text-xs focus:bg-background transition-colors"
                                         value={data.company_phone}
                                         onChange={e => setData('company_phone', e.target.value)}
                                     />
@@ -108,42 +106,42 @@ export default function AdminSettings({ settings }: { settings: any }) {
                         </Card>
 
                         {/* Bank Details */}
-                        <Card className="border-border rounded-sm shadow-none">
-                            <CardHeader className="py-4 px-6 border-b border-border/50">
-                                <div className="flex items-center gap-3">
-                                    <Landmark className="size-4 text-primary" />
-                                    <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Bank Information</CardTitle>
+                        <Card className="border-border rounded-sm shadow-none bg-background">
+                            <CardHeader className="py-3 px-5 border-b border-border/50 bg-muted/5">
+                                <div className="flex items-center gap-2">
+                                    <Landmark className="size-3.5 text-primary" />
+                                    <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Settlement Info</CardTitle>
                                 </div>
                             </CardHeader>
-                            <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Bank Name</Label>
+                            <CardContent className="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-1.5">
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Bank Name</Label>
                                     <Input 
-                                        className="h-10 rounded-sm border-border bg-muted/20 text-sm focus:bg-background transition-colors"
+                                        className="h-9 rounded-sm border-border bg-muted/10 text-xs focus:bg-background transition-colors"
                                         value={data.bank_name}
                                         onChange={e => setData('bank_name', e.target.value)}
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Account Number</Label>
+                                <div className="space-y-1.5">
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Account Number</Label>
                                     <Input 
-                                        className="h-10 rounded-sm border-border bg-muted/20 text-sm font-mono focus:bg-background transition-colors"
+                                        className="h-9 rounded-sm border-border bg-muted/10 text-xs font-mono focus:bg-background transition-colors"
                                         value={data.bank_account_no}
                                         onChange={e => setData('bank_account_no', e.target.value)}
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">IFSC Code</Label>
+                                <div className="space-y-1.5">
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">IFSC / Swift</Label>
                                     <Input 
-                                        className="h-10 rounded-sm border-border bg-muted/20 text-sm font-mono uppercase focus:bg-background transition-colors"
+                                        className="h-9 rounded-sm border-border bg-muted/10 text-xs font-mono uppercase focus:bg-background transition-colors"
                                         value={data.bank_ifsc}
                                         onChange={e => setData('bank_ifsc', e.target.value)}
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Branch</Label>
+                                <div className="space-y-1.5">
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Branch Locality</Label>
                                     <Input 
-                                        className="h-10 rounded-sm border-border bg-muted/20 text-sm focus:bg-background transition-colors"
+                                        className="h-9 rounded-sm border-border bg-muted/10 text-xs focus:bg-background transition-colors"
                                         value={data.bank_branch}
                                         onChange={e => setData('bank_branch', e.target.value)}
                                     />
@@ -152,49 +150,46 @@ export default function AdminSettings({ settings }: { settings: any }) {
                         </Card>
                     </div>
 
-                    <div className="lg:col-span-4 space-y-8">
-                        {/* Tax & GST Details */}
-                        <Card className="border-border rounded-sm shadow-none">
-                            <CardHeader className="py-4 px-6 border-b border-border/50">
-                                <div className="flex items-center gap-3">
-                                    <FileText className="size-4 text-primary" />
-                                    <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Tax Compliance</CardTitle>
+                    <div className="lg:col-span-4 space-y-5">
+                        {/* Tax & Compliance */}
+                        <Card className="border-border rounded-sm shadow-none bg-background">
+                            <CardHeader className="py-3 px-5 border-b border-border/50 bg-muted/5">
+                                <div className="flex items-center gap-2">
+                                    <FileText className="size-3.5 text-primary" />
+                                    <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Compliance</CardTitle>
                                 </div>
                             </CardHeader>
-                            <CardContent className="p-6 space-y-6">
-                                <div className="space-y-2">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">GSTIN / UIN</Label>
+                            <CardContent className="p-5 space-y-5">
+                                <div className="space-y-1.5">
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">GSTIN Identification</Label>
                                     <Input 
-                                        className="h-10 rounded-sm border-border bg-muted/20 text-sm font-mono uppercase focus:bg-background transition-colors"
+                                        className="h-9 rounded-sm border-border bg-muted/10 text-xs font-mono uppercase focus:bg-background transition-colors"
                                         value={data.company_gstin}
                                         onChange={e => setData('company_gstin', e.target.value)}
-                                        placeholder="29AA... (15 digits)"
                                     />
                                 </div>
-                                <div className="grid grid-cols-1 gap-6">
-                                    <div className="space-y-2">
-                                        <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">State Name</Label>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">State</Label>
                                         <Input 
-                                            className="h-10 rounded-sm border-border bg-muted/20 text-sm focus:bg-background transition-colors"
+                                            className="h-9 rounded-sm border-border bg-muted/10 text-xs focus:bg-background transition-colors"
                                             value={data.company_state}
                                             onChange={e => setData('company_state', e.target.value)}
-                                            placeholder="e.g. Karnataka"
                                         />
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">State Code</Label>
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Code</Label>
                                         <Input 
-                                            className="h-10 rounded-sm border-border bg-muted/20 text-sm font-mono focus:bg-background transition-colors"
+                                            className="h-9 rounded-sm border-border bg-muted/10 text-xs font-mono focus:bg-background transition-colors"
                                             value={data.company_state_code}
                                             onChange={e => setData('company_state_code', e.target.value)}
-                                            placeholder="e.g. 29"
                                         />
                                     </div>
                                 </div>
-                                <div className="pt-6 border-t border-border/50">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Declaration Footer</Label>
+                                <div className="pt-4 border-t border-border/50">
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Invoice Footer Note</Label>
                                     <Textarea 
-                                        className="min-h-[120px] rounded-sm border-border bg-muted/20 text-[10px] mt-2 focus:bg-background transition-colors"
+                                        className="min-h-[100px] rounded-sm border-border bg-muted/10 text-[10px] mt-2 focus:bg-background transition-colors resize-none"
                                         value={data.declaration}
                                         onChange={e => setData('declaration', e.target.value)}
                                     />

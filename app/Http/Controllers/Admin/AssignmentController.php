@@ -87,4 +87,17 @@ class AssignmentController extends Controller
 
         return back()->with('success', 'Marks updated successfully.' . $penaltyMessage);
     }
+
+    public function comment(Request $request, AssignmentSubmission $submission)
+    {
+        $request->validate([
+            'comment' => 'required|string',
+        ]);
+
+        $submission->update([
+            'admin_comments' => $request->comment,
+        ]);
+
+        return back()->with('success', 'Comment posted successfully.');
+    }
 }

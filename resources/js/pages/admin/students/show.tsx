@@ -1,13 +1,36 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { User, Mail, Calendar, BookOpen, MapPin, Globe, CheckCircle2, ChevronLeft, Award, Trophy } from 'lucide-react';
+import { 
+    User, 
+    Mail, 
+    Calendar, 
+    BookOpen, 
+    MapPin, 
+    Globe, 
+    CheckCircle2, 
+    ChevronLeft, 
+    Award, 
+    Trophy,
+    CreditCard,
+    TrendingUp,
+    FileText,
+    ArrowUpRight,
+    Receipt,
+    Clock
+} from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Link } from '@inertiajs/react';
+import { useState } from 'react';
+import { AdminDataTable, Column } from '@/components/admin/admin-data-table';
 
-export default function AdminStudentShow({ student, available_batches }: { student: any, available_batches: any }) {
+function cn(...classes: any[]) {
+    return classes.filter(Boolean).join(' ');
+}
+
+export default function AdminStudentShow({ student, available_batches, stats }: { student: any, available_batches: any, stats: any }) {
     const { patch, processing } = useForm();
+    const [activeTab, setActiveTab] = useState<'academic' | 'payments' | 'enrollments'>('enrollments');
 
     const handleBatchChange = (enrollmentId: number, batchId: string) => {
         patch(`/admin/enrollments/${enrollmentId}/batch`, {
@@ -16,170 +39,317 @@ export default function AdminStudentShow({ student, available_batches }: { stude
         });
     };
 
+    const paymentColumns: Column<any>[] = [
+        {
+            key: 'transaction_id',
+            label: 'Transaction ID',
+            render: (payment) => <span className="font-mono text-[10px] text-primary">{payment.transaction_id}</span>
+        },
+        {
+            key: 'course',
+            label: 'Course',
+            render: (payment) => <span className="text-xs font-bold">{payment.enrollment.course.title}</span>
+        },
+        {
+            key: 'amount',
+            label: 'Amount',
+            render: (payment) => <span className="text-sm font-bold">₹{payment.amount}</span>
+        },
+        {
+            key: 'date',
+            label: 'Paid On',
+            render: (payment) => <span className="text-[10px] text-muted-foreground font-medium">{new Date(payment.created_at).toLocaleDateString()}</span>
+        },
+        {
+            key: 'actions',
+            label: 'Invoice',
+            render: (payment) => payment.invoice ? (
+                <Link href={`/admin/invoices/${payment.invoice.id}`} className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-primary hover:underline">
+                    <Receipt className="size-3" /> {payment.invoice.invoice_number}
+                </Link>
+            ) : <span className="text-[9px] text-muted-foreground uppercase font-black">N/A</span>
+        }
+    ];
+
     return (
         <>
-            <Head title={`Student: ${student.name}`} />
+            <Head title={`Student Profile: ${student.name}`} />
             
-            <div className="w-full p-4 lg:p-6 font-sans">
-                <div className="mb-8">
-                    <Link href="/admin/students" className="inline-flex items-center text-sm font-bold text-muted-foreground hover:text-primary transition-colors mb-6">
-                        <ChevronLeft className="size-4 mr-1" /> Back to Directory
+            <div className="w-full p-4 lg:p-8 bg-muted/5 min-h-screen">
+                {/* Header Section */}
+                <div className="max-w-7xl mx-auto mb-8">
+                    <Link href="/admin/students" className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground hover:text-primary transition-colors mb-6">
+                        <ChevronLeft className="size-3.5 mr-1" /> Student Directory
                     </Link>
-                    <div className="flex items-center gap-6">
-                        <div className="size-20 rounded-3xl bg-primary flex items-center justify-center text-white  ">
-                            <User className="size-10" />
+                    
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-background p-8 border border-border rounded-sm shadow-sm">
+                        <div className="flex items-center gap-6">
+                            <div className="size-20 rounded-sm bg-primary/5 border border-primary/10 flex items-center justify-center text-primary shrink-0">
+                                <User className="size-10" />
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-3 mb-2">
+                                    <h1 className="text-2xl font-black tracking-tight text-foreground uppercase">{student.name}</h1>
+                                    <div className="px-2 py-0.5 bg-primary/10 text-primary text-[9px] font-black uppercase tracking-widest rounded-sm border border-primary/20">
+                                        ID: ST-{student.id.toString().padStart(4, '0')}
+                                    </div>
+                                </div>
+                                <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                                    <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
+                                        <Mail className="size-3.5 text-primary/40" /> {student.email}
+                                    </div>
+                                    {student.phone && (
+                                        <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
+                                            <div className="size-1.5 rounded-full bg-primary/40" />
+                                            {student.phone}
+                                        </div>
+                                    )}
+                                    <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
+                                        <div className="size-1.5 rounded-full bg-primary/40" />
+                                        Joined {new Date(student.created_at).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <h1 className="text-3xl font-black tracking-tight uppercase leading-none mb-3">{student.name}</h1>
-                            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground font-bold">
-                                <div className="flex items-center gap-1.5"><Mail className="size-3.5" /> {student.email}</div>
-                                {student.phone && <div className="flex items-center gap-1.5 text-primary"><div className="size-3.5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] italic font-black">P</div> {student.phone}</div>}
-                                <div className="size-1.5 rounded-full bg-border" />
-                                <div className="uppercase tracking-widest">{student.gender || 'Unknown'}</div>
-                                <div className="size-1.5 rounded-full bg-border" />
-                                <div>Joined {new Date(student.created_at).toLocaleDateString()}</div>
-                            </div>
-                            <div className="mt-3 flex flex-wrap gap-2">
-                                {student.qualification && (
-                                    <div className="px-3 py-1 bg-muted rounded-lg text-[9px] font-black uppercase tracking-tight">
-                                        {student.qualification}
-                                    </div>
-                                )}
-                                {student.college && (
-                                    <div className="px-3 py-1 bg-muted rounded-lg text-[9px] font-black uppercase tracking-tight text-primary">
-                                        {student.college}
-                                    </div>
-                                )}
-                            </div>
+                        <div className="flex gap-3 shrink-0">
+                            <Button variant="outline" className="h-10 rounded-sm font-black uppercase tracking-widest text-[10px] border-border bg-card">
+                                Edit Profile
+                            </Button>
+                            <Button className="h-10 rounded-sm font-black uppercase tracking-widest text-[10px] bg-primary shadow-lg shadow-primary/10">
+                                Send Message
+                            </Button>
                         </div>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-8">
-                    <section>
-                        <h2 className="text-xl font-black uppercase tracking-tight mb-6 flex items-center gap-2">
-                            <BookOpen className="size-6 text-primary" />
-                            Enrollments & Batch Management
-                        </h2>
-                        
+                {/* Stats Row */}
+                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                    {[
+                        { label: 'Overall Progress', value: `${Math.round(stats.avg_performance)}%`, icon: TrendingUp, color: 'text-primary' },
+                        { label: 'Total Investment', value: `₹${stats.total_paid}`, icon: CreditCard, color: 'text-green-600' },
+                        { label: 'Courses Enrolled', value: stats.course_count, icon: BookOpen, color: 'text-blue-600' },
+                        { label: 'Qualification', value: student.qualification || 'N/A', icon: Award, color: 'text-orange-600' },
+                    ].map((stat, i) => (
+                        <div key={i} className="bg-background border border-border p-6 rounded-sm shadow-sm group hover:border-primary/20 transition-colors">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60">{stat.label}</span>
+                                <stat.icon className={cn("size-4 opacity-40 group-hover:opacity-100 transition-opacity", stat.color)} />
+                            </div>
+                            <div className="text-xl font-black text-foreground">{stat.value}</div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Main Content with Custom Tabs */}
+                <div className="max-w-7xl mx-auto space-y-6">
+                    {/* Tab Navigation */}
+                    <div className="flex border-b border-border mb-8 overflow-x-auto no-scrollbar">
+                        {[
+                            { id: 'enrollments', label: 'Course Enrollments', icon: BookOpen },
+                            { id: 'academic', label: 'Academic Performance', icon: Trophy },
+                            { id: 'payments', label: 'Financial Records', icon: CreditCard },
+                        ].map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id as any)}
+                                className={cn(
+                                    "flex items-center gap-2 px-8 py-4 text-[10px] font-black uppercase tracking-widest transition-all relative shrink-0",
+                                    activeTab === tab.id 
+                                        ? "text-primary border-b-2 border-primary" 
+                                        : "text-muted-foreground hover:text-foreground"
+                                )}
+                            >
+                                <tab.icon className="size-4" />
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Enrollments Tab */}
+                    {activeTab === 'enrollments' && (
                         <div className="grid grid-cols-1 gap-6">
                             {student.enrollments.map((enrollment: any) => (
-                                <Card key={enrollment.id} className="border-border  rounded-[2rem] overflow-hidden">
-                                    <CardContent className="p-0">
-                                        <div className="flex flex-col lg:flex-row">
-                                            <div className="p-8 lg:w-1/3 bg-muted/30 border-r border-border">
-                                                <div className="flex items-center justify-between mb-4">
-                                                    <span className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full ${enrollment.status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
-                                                        {enrollment.status}
-                                                    </span>
+                                <div key={enrollment.id} className="bg-background border border-border rounded-sm shadow-sm overflow-hidden flex flex-col lg:flex-row">
+                                    <div className="lg:w-1/3 p-8 border-r border-border bg-muted/5">
+                                        <div className={cn(
+                                            "inline-block px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest mb-4",
+                                            enrollment.status === 'paid' ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700"
+                                        )}>
+                                            {enrollment.status}
+                                        </div>
+                                        <h3 className="text-xl font-black text-foreground uppercase leading-tight mb-6">{enrollment.course.title}</h3>
+                                        <div className="space-y-4">
+                                            <div className="flex items-center justify-between text-xs font-bold text-muted-foreground">
+                                                <span>Batch Status</span>
+                                                <span className={enrollment.batch ? "text-foreground" : "text-red-500"}>
+                                                    {enrollment.batch ? enrollment.batch.name : 'Not Assigned'}
+                                                </span>
+                                            </div>
+                                            <div className="w-full bg-border h-1.5 rounded-full overflow-hidden">
+                                                <div className="bg-primary h-full" style={{ width: `${enrollment.overall_average}%` }} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="lg:w-2/3 p-8 flex flex-col justify-between">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                            <div className="space-y-3">
+                                                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Batch Assignment</label>
+                                                <Select 
+                                                    defaultValue={enrollment.batch_id?.toString()} 
+                                                    onValueChange={(val) => handleBatchChange(enrollment.id, val)}
+                                                    disabled={processing}
+                                                >
+                                                    <SelectTrigger className="h-11 rounded-sm border-border bg-muted/10 focus:ring-primary">
+                                                        <SelectValue placeholder="Assign a batch" />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="rounded-sm shadow-2xl">
+                                                        {(available_batches[enrollment.course_id] || []).map((batch: any) => (
+                                                            <SelectItem key={batch.id} value={batch.id.toString()} className="font-bold text-xs uppercase">
+                                                                {batch.name} ({batch.type})
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="p-3 bg-muted/30 border border-border rounded-sm">
+                                                    <div className="text-[8px] font-black text-muted-foreground uppercase tracking-widest mb-1">Assignments</div>
+                                                    <div className="text-sm font-black">{Math.round(enrollment.assignment_average)}%</div>
                                                 </div>
-                                                <h3 className="text-xl font-black uppercase tracking-tight leading-tight mb-4">{enrollment.course.title}</h3>
-                                                <div className="space-y-3">
-                                                    <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
-                                                        <Calendar className="size-4" />
-                                                        Enrolled: {new Date(enrollment.created_at).toLocaleDateString()}
-                                                    </div>
-                                                    {enrollment.payment && (
-                                                        <div className="flex items-center gap-2 text-xs font-bold text-green-600">
-                                                            <CheckCircle2 className="size-4" />
-                                                            Paid: ${enrollment.payment.amount} via {enrollment.payment.payment_method}
-                                                        </div>
-                                                    )}
+                                                <div className="p-3 bg-muted/30 border border-border rounded-sm">
+                                                    <div className="text-[8px] font-black text-muted-foreground uppercase tracking-widest mb-1">Final Exam</div>
+                                                    <div className="text-sm font-black">{Math.round(enrollment.exam_score)}%</div>
                                                 </div>
                                             </div>
-                                            
-                                            <div className="p-8 lg:w-2/3 flex flex-col justify-center border-b border-border lg:border-b-0">
-                                                 <div className="mb-6">
-                                                     <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 mb-3 block">Assigned Batch</Label>
-                                                     <div className="flex flex-col md:flex-row items-center gap-4">
-                                                         <div className="flex-1 w-full">
-                                                             <Select 
-                                                                 defaultValue={enrollment.batch_id?.toString()} 
-                                                                 onValueChange={(val) => handleBatchChange(enrollment.id, val)}
-                                                                 disabled={processing}
-                                                             >
-                                                                 <SelectTrigger className="h-12 rounded-xl  border-2 border-border focus:border-primary transition-all">
-                                                                     <SelectValue placeholder="No batch assigned" />
-                                                                 </SelectTrigger>
-                                                                 <SelectContent className="rounded-xl ">
-                                                                     {(available_batches[enrollment.course_id] || []).map((batch: any) => (
-                                                                         <SelectItem key={batch.id} value={batch.id.toString()} className="font-bold">
-                                                                             <div className="flex items-center gap-2">
-                                                                                 {batch.type === 'online' ? <Globe className="size-3.5" /> : <MapPin className="size-3.5" />}
-                                                                                 {batch.name} ({batch.type})
-                                                                             </div>
-                                                                         </SelectItem>
-                                                                     ))}
-                                                                 </SelectContent>
-                                                             </Select>
-                                                         </div>
-                                                         {enrollment.batch && (
-                                                             <div className="flex items-center gap-4 px-4 py-3 bg-primary/5 rounded-xl border border-primary/20 text-primary">
-                                                                 <div className="flex items-center gap-1.5 text-[10px] font-black uppercase">
-                                                                     <Calendar className="size-3.5" />
-                                                                     Starts {new Date(enrollment.batch.start_date).toLocaleDateString()}
-                                                                 </div>
-                                                             </div>
-                                                         )}
-                                                     </div>
-                                                 </div>
-                                                 
-                                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                                                     <div className="p-3 rounded-xl bg-muted/50 border border-border/50">
-                                                         <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Assignments</div>
-                                                         <div className="text-sm font-black">{Math.round(enrollment.assignment_average)}%</div>
-                                                     </div>
-                                                     <div className="p-3 rounded-xl bg-muted/50 border border-border/50">
-                                                         <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Final Exam</div>
-                                                         <div className="text-sm font-black">{Math.round(enrollment.exam_score)}%</div>
-                                                     </div>
-                                                     <div className={`p-3 rounded-xl border ${enrollment.overall_average >= 60 ? 'bg-green-50 border-green-200 text-green-700' : 'bg-orange-50 border-orange-200 text-orange-700'}`}>
-                                                         <div className="text-[9px] font-bold uppercase tracking-widest mb-1">Overall Avg</div>
-                                                         <div className="text-sm font-black">{Math.round(enrollment.overall_average)}%</div>
-                                                     </div>
-                                                 </div>
+                                        </div>
+                                        <div className="flex items-center justify-between pt-6 border-t border-border/50">
+                                            <div className="flex items-center gap-4">
+                                                <div className="flex flex-col">
+                                                    <span className="text-[8px] font-black text-muted-foreground uppercase tracking-widest">Enrolled Date</span>
+                                                    <span className="text-xs font-bold">{new Date(enrollment.created_at).toLocaleDateString()}</span>
+                                                </div>
+                                                {enrollment.certificate && (
+                                                    <div className="flex items-center gap-2 bg-primary/5 px-3 py-1.5 rounded-sm border border-primary/10 text-primary text-[9px] font-black uppercase tracking-widest">
+                                                        <Award className="size-3.5" /> Certificate Issued
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {!enrollment.certificate && (
+                                                <Button 
+                                                    onClick={() => patch(`/admin/enrollments/${enrollment.id}/certificate`, {}, { method: 'post' })}
+                                                    disabled={enrollment.overall_average < 60 || processing}
+                                                    className={cn(
+                                                        "h-10 rounded-sm font-black uppercase tracking-widest text-[9px] px-6 transition-all",
+                                                        enrollment.overall_average >= 60 ? "bg-primary shadow-lg shadow-primary/10" : "bg-muted text-muted-foreground cursor-not-allowed"
+                                                    )}
+                                                >
+                                                    Generate Certificate
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
 
-                                                 <div className="flex items-center justify-between gap-4 pt-4 border-t border-border/50">
-                                                     {enrollment.certificate ? (
-                                                         <div className="flex items-center gap-2 px-4 py-2 bg-primary/5 border border-primary/20 rounded-lg text-primary text-[10px] font-bold uppercase tracking-wider">
-                                                             <Award className="size-4" />
-                                                             Certificate Issued: {enrollment.certificate.certificate_number}
-                                                         </div>
-                                                     ) : (
-                                                         <div className="flex items-center gap-4 w-full">
-                                                             <Button 
-                                                                 onClick={() => patch(`/admin/enrollments/${enrollment.id}/certificate`, {}, { method: 'post' })}
-                                                                 disabled={enrollment.overall_average < 60 || processing}
-                                                                 className={`flex-1 h-11 rounded-xl font-bold uppercase tracking-widest text-[10px] ${enrollment.overall_average >= 60 ? 'bg-primary shadow-lg shadow-primary/20' : 'bg-muted text-muted-foreground cursor-not-allowed'}`}
-                                                             >
-                                                                 <Trophy className="size-4 mr-2" />
-                                                                 {enrollment.overall_average >= 60 ? 'Generate Certificate' : 'Not Eligible (Requires 60%)'}
-                                                             </Button>
-                                                         </div>
-                                                     )}
-                                                 </div>
-                                             </div>
+                    {/* Academic Performance Tab */}
+                    {activeTab === 'academic' && (
+                        <div className="space-y-6">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                {/* Recent Exam Attempts */}
+                                <Card className="border-border rounded-sm shadow-sm overflow-hidden bg-background">
+                                    <CardHeader className="p-6 border-b border-border bg-muted/5">
+                                        <div className="flex items-center justify-between">
+                                            <CardTitle className="text-[11px] font-black uppercase tracking-[0.2em] text-foreground">Recent Exam Attempts</CardTitle>
+                                            <Trophy className="size-4 text-primary/40" />
+                                        </div>
+                                    </CardHeader>
+                                    <CardContent className="p-0">
+                                        <div className="divide-y divide-border">
+                                            {student.exam_attempts?.map((attempt: any) => (
+                                                <div key={attempt.id} className="p-5 flex items-center justify-between hover:bg-muted/5 transition-colors">
+                                                    <div>
+                                                        <div className="text-xs font-black uppercase tracking-tight text-foreground">{attempt.exam.title}</div>
+                                                        <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1 flex items-center gap-2">
+                                                            <Clock className="size-3" /> {new Date(attempt.created_at).toLocaleDateString()}
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="text-right">
+                                                            <div className="text-sm font-black text-primary">{attempt.score}%</div>
+                                                            <div className="text-[8px] font-black text-muted-foreground uppercase tracking-widest">{attempt.status}</div>
+                                                        </div>
+                                                        <ChevronRight className="size-4 text-muted-foreground/30" />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            {(!student.exam_attempts || student.exam_attempts.length === 0) && (
+                                                <div className="p-10 text-center text-[10px] font-black uppercase tracking-widest text-muted-foreground/40 italic">
+                                                    No exam records found
+                                                </div>
+                                            )}
                                         </div>
                                     </CardContent>
                                 </Card>
-                            ))}
 
-                            {student.enrollments.length === 0 && (
-                                <div className="py-20 text-center border-2 border-dashed border-border rounded-[2rem]">
-                                    <BookOpen className="size-12 text-muted-foreground mx-auto mb-4 opacity-20" />
-                                    <p className="text-muted-foreground font-black uppercase tracking-widest text-xs">No active enrollments for this student</p>
-                                </div>
-                            )}
+                                {/* Assignment Submissions */}
+                                <Card className="border-border rounded-sm shadow-sm overflow-hidden bg-background">
+                                    <CardHeader className="p-6 border-b border-border bg-muted/5">
+                                        <div className="flex items-center justify-between">
+                                            <CardTitle className="text-[11px] font-black uppercase tracking-[0.2em] text-foreground">Assignment History</CardTitle>
+                                            <FileText className="size-4 text-primary/40" />
+                                        </div>
+                                    </CardHeader>
+                                    <CardContent className="p-0">
+                                        <div className="divide-y divide-border">
+                                            {student.assignment_submissions?.map((submission: any) => (
+                                                <div key={submission.id} className="p-5 flex items-center justify-between hover:bg-muted/5 transition-colors">
+                                                    <div>
+                                                        <div className="text-xs font-black uppercase tracking-tight text-foreground truncate max-w-[200px]">{submission.assignment.title}</div>
+                                                        <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1 flex items-center gap-2">
+                                                            <CheckCircle2 className="size-3 text-green-500/60" /> {new Date(submission.submitted_at || submission.created_at).toLocaleDateString()}
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="text-right">
+                                                            <div className="text-sm font-black text-foreground">{submission.marks_obtained || 0} / {submission.assignment.max_marks}</div>
+                                                            <div className={cn(
+                                                                "text-[8px] font-black uppercase tracking-widest",
+                                                                submission.status === 'graded' ? "text-green-600" : "text-orange-600"
+                                                            )}>{submission.status}</div>
+                                                        </div>
+                                                        <ChevronRight className="size-4 text-muted-foreground/30" />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            {(!student.assignment_submissions || student.assignment_submissions.length === 0) && (
+                                                <div className="p-10 text-center text-[10px] font-black uppercase tracking-widest text-muted-foreground/40 italic">
+                                                    No assignment submissions
+                                                </div>
+                                            )}
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </div>
                         </div>
-                    </section>
+                    )}
+
+                    {/* Payments Tab */}
+                    {activeTab === 'payments' && (
+                        <div className="bg-background border border-border rounded-sm shadow-sm overflow-hidden">
+                            <AdminDataTable 
+                                data={student.enrollments.map((e: any) => e.payment).filter(Boolean)}
+                                columns={paymentColumns}
+                                searchPlaceholder="Filter payments..."
+                                title="Transaction Ledger"
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
         </>
     );
-}
-
-function Label({ children, className }: { children: React.ReactNode, className?: string }) {
-    return <span className={className}>{children}</span>;
 }
 
 AdminStudentShow.layout = (page: React.ReactNode) => (

@@ -23,7 +23,14 @@ class StudentController extends Controller
 
     public function show(User $student)
     {
-        $student->load(['enrollments.course', 'enrollments.batch', 'enrollments.payment', 'enrollments.certificate']);
+        $student->load([
+            'enrollments.course', 
+            'enrollments.batch', 
+            'enrollments.payment.invoice', 
+            'enrollments.certificate',
+            'examAttempts.exam',
+            'assignmentSubmissions.assignment'
+        ]);
         
         // Appending computed attributes for the view
         foreach ($student->enrollments as $enrollment) {
@@ -33,6 +40,11 @@ class StudentController extends Controller
         return inertia('admin/students/show', [
             'student' => $student,
             'available_batches' => Batch::with('course')->get()->groupBy('course_id'),
+            'stats' => [
+                'total_paid' => $student->enrollments->sum(fn($e) => $e->payment ? $e->payment->amount : 0),
+                'course_count' => $student->enrollments->count(),
+                'avg_performance' => $student->enrollments->avg('overall_average') ?: 0,
+            ]
         ]);
     }
 

@@ -143,20 +143,45 @@ export default function AdminAssignmentIndex({ batches }: { batches: any[] }) {
                                 <Button variant="outline" size="sm" className="h-8 px-3 rounded font-medium text-[10px] tracking-tight border-border bg-card">
                                     Manage <ChevronRight className="size-3 ml-1" />
                                 </Button>
-                                <div className="absolute right-0 top-full mt-1 w-64 bg-card border border-border rounded shadow-xl opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all z-50 p-2 space-y-1">
-                                    <div className="px-3 py-1.5 text-[10px] font-medium tracking-tight text-muted-foreground border-b border-border/50 mb-1">Recent Tasks</div>
+                                <div className="absolute right-0 top-full mt-1 w-80 bg-card border border-border rounded-sm shadow-2xl opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all z-50 p-3 space-y-1">
+                                    <div className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground border-b border-border/50 mb-2 flex justify-between items-center">
+                                        <span>Recent Curriculum Tasks</span>
+                                        <span className="text-primary/50">{batch.assignments.length} Total</span>
+                                    </div>
                                     {batch.assignments.map((a: any) => (
                                         <Link 
                                             key={a.id} 
                                             href={`/admin/academic/assignments/${a.id}`}
-                                            className="flex items-center justify-between p-2 rounded hover:bg-primary/5 hover:text-primary transition-colors text-xs font-medium"
+                                            className="flex items-center justify-between p-3 rounded-sm hover:bg-primary/[0.03] border border-transparent hover:border-primary/10 transition-all"
                                         >
-                                            <span className="truncate">{a.title}</span>
-                                            <ChevronRight className="size-3 shrink-0" />
+                                            <div className="flex-1 min-w-0 pr-4">
+                                                <div className="text-xs font-bold text-foreground truncate">{a.title}</div>
+                                                <div className="flex items-center gap-3 mt-1.5">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[14px] font-black text-foreground leading-none">{a.handed_in_count}</span>
+                                                        <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-tight">Handed in</span>
+                                                    </div>
+                                                    <div className="w-px h-4 bg-border/50" />
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[14px] font-black text-foreground leading-none">{batch.enrollments_count}</span>
+                                                        <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-tight">Assigned</span>
+                                                    </div>
+                                                    <div className="w-px h-4 bg-border/50" />
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[14px] font-black text-foreground leading-none">{a.marked_count}</span>
+                                                        <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-tight">Marked</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="size-8 rounded-full bg-primary/5 flex items-center justify-center text-primary group-hover/link:bg-primary group-hover/link:text-white transition-colors">
+                                                <ChevronRight className="size-4" />
+                                            </div>
                                         </Link>
                                     ))}
                                     {batch.assignments.length === 0 && (
-                                        <div className="p-3 text-[10px] font-medium text-muted-foreground text-center italic">No tasks created</div>
+                                        <div className="p-6 text-[10px] font-black text-muted-foreground text-center italic uppercase tracking-widest bg-muted/20 rounded-sm">
+                                            No curriculum tasks created
+                                        </div>
                                     )}
                                 </div>
                             </div>
