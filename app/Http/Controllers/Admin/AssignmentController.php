@@ -13,8 +13,19 @@ class AssignmentController extends Controller
 {
     public function index()
     {
+        $batches = Batch::with(['course', 'assignments' => function($q) {
+            $q->withCount([
+                'submissions as handed_in_count' => function($q) {
+                    $q->where('status', 'submitted');
+                },
+                'submissions as marked_count' => function($q) {
+                    $q->where('status', 'graded');
+                }
+            ]);
+        }])->withCount('enrollments')->get();
+
         return inertia('admin/assignments/index', [
-            'batches' => Batch::with(['course', 'assignments'])->get(),
+            'batches' => $batches,
         ]);
     }
 
@@ -59,12 +70,21 @@ class AssignmentController extends Controller
             'admin_comments' => 'nullable|string',
         ]);
 
+        $finalMarks = $request->marks_obtained;
+        $isLate = $submission->is_late;
+        $penaltyMessage = '';
+
+        if ($isLate) {
+            $finalMarks = max(0, $finalMarks - 10);
+            $penaltyMessage = ' (10 marks late penalty applied)';
+        }
+
         $submission->update([
-            'marks_obtained' => $request->marks_obtained,
+            'marks_obtained' => $finalMarks,
             'status' => 'graded',
             'admin_comments' => $request->admin_comments,
         ]);
 
-        return back()->with('success', 'Marks updated successfully.');
+        return back()->with('success', 'Marks updated successfully.' . $penaltyMessage);
     }
 }

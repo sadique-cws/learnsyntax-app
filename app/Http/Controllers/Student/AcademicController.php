@@ -29,6 +29,35 @@ class AcademicController extends Controller
         ]);
     }
 
+    public function submitAssignment(Request $request, Enrollment $enrollment, Assignment $assignment)
+    {
+        $this->authorizeAccess($enrollment);
+
+        $request->validate([
+            'content' => 'nullable|string',
+            'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240', // 10MB max
+        ]);
+
+        $submission = AssignmentSubmission::updateOrCreate(
+            [
+                'assignment_id' => $assignment->id,
+                'user_id' => auth()->id(),
+            ],
+            [
+                'content' => $request->content,
+                'submitted_at' => now(),
+                'status' => 'submitted',
+            ]
+        );
+
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('submissions', 'public');
+            $submission->update(['file_path' => $path]);
+        }
+
+        return back()->with('success', 'Assignment submitted successfully!');
+    }
+
     public function exam(Enrollment $enrollment)
     {
         $this->authorizeAccess($enrollment);

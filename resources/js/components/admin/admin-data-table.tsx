@@ -168,7 +168,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                         {subtitle && <p className="text-muted-foreground text-xs font-medium tracking-tight mt-1">{subtitle}</p>}
                     </div>
                     {onAdd && (
-                        <Button onClick={onAdd} className="rounded font-medium tracking-tight text-[11px] h-10 px-6">
+                        <Button onClick={onAdd} className="rounded-sm font-medium tracking-tight text-[11px] h-10 px-6">
                             {addLabel}
                         </Button>
                     )}
@@ -180,14 +180,14 @@ export function AdminDataTable<T extends { id: number | string }>({
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                     <Input 
                         placeholder={searchPlaceholder} 
-                        className="pl-10 h-10 rounded border-border bg-card text-sm"
+                        className="pl-10 h-10 rounded-sm border-border bg-card text-sm"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
                 </div>
                 
                 {dateFilterKey && (
-                    <div className="flex items-center gap-3 p-1 px-4 rounded-full border border-border bg-muted/30 hover:border-primary/30 transition-colors group/range">
+                    <div className="flex items-center gap-3 p-1 px-4 rounded-sm border border-border bg-muted/30 hover:border-primary/30 transition-colors group/range">
                         <Calendar 
                             className="size-3.5 text-muted-foreground group-hover/range:text-primary transition-colors cursor-pointer" 
                             onClick={() => (document.getElementById('date-filter-start') as HTMLInputElement)?.showPicker?.()}
@@ -213,7 +213,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                         {(dateRange.start || dateRange.end) && (
                             <button 
                                 onClick={() => setDateRange({ start: '', end: '' })}
-                                className="p-1 hover:bg-background rounded-full transition-colors"
+                                className="p-1 hover:bg-background rounded-sm transition-colors"
                             >
                                 <X className="size-3 text-muted-foreground hover:text-destructive" />
                             </button>
@@ -227,7 +227,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className={cn(
-                                "rounded h-10 px-4 font-medium text-[11px] tracking-tight border-border bg-card",
+                                "rounded-sm h-10 px-4 font-medium text-[11px] tracking-tight border-border bg-card",
                                 hasActiveFilters && "border-primary text-primary"
                             )}>
                                 <Filter className="size-4 mr-2" />
@@ -239,7 +239,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                                 )}
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56 rounded border-border">
+                        <DropdownMenuContent align="end" className="w-56 rounded-sm border-border">
                             <DropdownMenuLabel className="text-[11px] font-medium tracking-tight">Filter By</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             {filterableColumns.map(filter => (
@@ -279,7 +279,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                         return values.map(val => {
                             const option = filterDef?.options.find(o => o.value === val);
                             return (
-                                <div key={`${key}-${val}`} className="flex items-center gap-1.5 px-2 py-1 bg-primary/10 border border-primary/20 rounded text-[10px] font-medium tracking-tight text-primary">
+                                <div key={`${key}-${val}`} className="flex items-center gap-1.5 px-2 py-1 bg-primary/10 border border-primary/20 rounded-sm text-[10px] font-medium tracking-tight text-primary">
                                     {filterDef?.label}: {option?.label || val}
                                     <X className="size-3 cursor-pointer" onClick={() => toggleFilter(key, val)} />
                                 </div>
@@ -289,7 +289,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                 </div>
             )}
 
-            <div className="border border-border rounded bg-card overflow-hidden">
+            <div className="border border-border rounded-sm bg-card overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>

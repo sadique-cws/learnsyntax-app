@@ -27,7 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         }
 
         return inertia('dashboard', [
-            'enrollments' => $user->enrollments()->with(['course', 'batch', 'payment.invoice'])->get()
+            'enrollments' => $user->enrollments()->with(['course', 'batch', 'payment.invoice', 'certificate'])->get()
         ]);
     })->name('dashboard');
 
@@ -81,7 +81,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Student Academic Routes
     Route::prefix('my-course/{enrollment}')->group(function () {
         Route::get('assignments', [App\Http\Controllers\Student\AcademicController::class, 'assignments'])->name('student.academic.assignments');
+        Route::post('assignments/{assignment}', [App\Http\Controllers\Student\AcademicController::class, 'submitAssignment'])->name('student.academic.submit-assignment');
         Route::get('exam', [App\Http\Controllers\Student\AcademicController::class, 'exam'])->name('student.academic.exam');
+        Route::post('exam/verify', [App\Http\Controllers\Student\AcademicController::class, 'verifyPasscode'])->name('student.academic.verify-passcode');
         Route::post('exam', [App\Http\Controllers\Student\AcademicController::class, 'submitExam'])->name('student.academic.submit-exam');
         Route::get('certificate', [App\Http\Controllers\Student\AcademicController::class, 'certificate'])->name('student.academic.certificate');
     });
