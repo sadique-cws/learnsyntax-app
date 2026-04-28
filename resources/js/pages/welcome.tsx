@@ -25,11 +25,11 @@ export default function Welcome({ courses = [] }: { courses?: any[] }) {
                 {/* Hero Section - Clean, Solid & Minimal */}
                 <section className="px-6 py-12 md:py-20 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
                     <div className="flex-1 space-y-6 md:space-y-8">
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary text-xs font-bold rounded-sm tracking-widest uppercase">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary text-xs font-bold rounded-sm  ">
                             <MonitorPlay className="size-4" />
                             <span>100% Online Learning</span>
                         </div>
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-foreground leading-[1.15]">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black  text-foreground leading-[1.15]">
                             Master Tech Skills <br className="hidden md:block" />
                             <span className="text-primary">At Your Own Pace</span>
                         </h1>
@@ -59,7 +59,7 @@ export default function Welcome({ courses = [] }: { courses?: any[] }) {
                                 </div>
                                 <div>
                                     <div className="font-bold text-sm">17k+ Learners</div>
-                                    <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Joined this month</div>
+                                    <div className="text-[10px] font-medium text-muted-foreground  tracking-wider">Joined this month</div>
                                 </div>
                             </div>
                         </div>
@@ -91,10 +91,10 @@ export default function Welcome({ courses = [] }: { courses?: any[] }) {
                 <section className="max-w-7xl mx-auto px-6">
                     <div className="flex items-center justify-between mb-6">
                         <div>
-                            <h2 className="text-xl md:text-2xl font-black tracking-tight text-foreground">Popular Courses</h2>
+                            <h2 className="text-xl md:text-2xl font-black  text-foreground">Popular Courses</h2>
                             <p className="text-sm text-muted-foreground mt-1">Start learning from our top-rated programs</p>
                         </div>
-                        <Link href="/courses" className="hidden sm:flex items-center gap-1 text-xs font-bold text-primary hover:underline uppercase tracking-wider">
+                        <Link href="/courses" className="hidden sm:flex items-center gap-1 text-xs font-bold text-primary hover:underline  tracking-wider">
                             View all <ArrowUpRight className="size-3.5" />
                         </Link>
                     </div>
@@ -114,7 +114,7 @@ export default function Welcome({ courses = [] }: { courses?: any[] }) {
                                             </div>
                                         </div>
                                         <div className="p-4 flex flex-col flex-1">
-                                            <div className="text-[10px] font-black text-primary uppercase tracking-widest mb-2">Programming</div>
+                                            <div className="text-[10px] font-black text-primary   mb-2">Programming</div>
                                             <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-4 leading-snug">
                                                 {course.title}
                                             </h3>

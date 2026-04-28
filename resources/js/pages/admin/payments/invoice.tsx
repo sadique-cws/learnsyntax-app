@@ -38,7 +38,7 @@ export default function InvoicePage({ invoice, company }: { invoice: any, compan
                     
                     {/* Header Section */}
                     <div className="flex justify-center py-1 border-b border-black">
-                        <h1 className="text-sm font-bold uppercase">Tax Invoice</h1>
+                        <h1 className="text-sm font-bold ">Tax Invoice</h1>
                     </div>
 
                     {/* Meta Section */}
@@ -75,7 +75,7 @@ export default function InvoicePage({ invoice, company }: { invoice: any, compan
                             </div>
                             <div className="p-2 border-r border-black">
                                 <div className="text-[9px] text-slate-600">Mode/Terms of Payment</div>
-                                <div className="font-bold uppercase tracking-wide">{invoice.payment.payment_method || 'Online'}</div>
+                                <div className="font-bold  tracking-wide">{invoice.payment.payment_method || 'Online'}</div>
                             </div>
                             <div className="p-2">
                                 <div className="text-[9px] text-slate-600">Reference / Order ID</div>
@@ -88,13 +88,13 @@ export default function InvoicePage({ invoice, company }: { invoice: any, compan
                     <div className="grid grid-cols-2 border-b border-black min-h-[80px]">
                         <div className="p-2 border-r border-black">
                             <div className="text-[9px] text-slate-600 italic">Consignee (Ship to)</div>
-                            <div className="font-bold mt-1 uppercase text-sm">{invoice.payment.enrollment.user.name}</div>
+                            <div className="font-bold mt-1  text-sm">{invoice.payment.enrollment.user.name}</div>
                             <div className="font-bold">{invoice.payment.enrollment.user.email}</div>
                             <div>Phone: {invoice.payment.enrollment.user.phone}</div>
                         </div>
                         <div className="p-2">
                             <div className="text-[9px] text-slate-600 italic">Buyer (Bill to)</div>
-                            <div className="font-bold mt-1 uppercase text-sm">{invoice.payment.enrollment.user.name}</div>
+                            <div className="font-bold mt-1  text-sm">{invoice.payment.enrollment.user.name}</div>
                             <div className="font-bold italic">{invoice.payment.enrollment.user.email}</div>
                             {invoice.gst_number && (
                                 <div className="mt-2 pt-1 border-t border-black/5 border-dashed">
@@ -121,7 +121,7 @@ export default function InvoicePage({ invoice, company }: { invoice: any, compan
                             <tr className="border-b border-black align-top min-h-[200px]">
                                 <td className="border-r border-black py-4 px-1 text-center">1</td>
                                 <td className="border-r border-black py-4 px-2 h-[200px]">
-                                    <div className="font-bold text-sm mb-1 uppercase">{invoice.payment.enrollment.course.title}</div>
+                                    <div className="font-bold text-sm mb-1 ">{invoice.payment.enrollment.course.title}</div>
                                     <div className="text-[10px] text-slate-600 italic font-medium">Educational Services - Online Course Access</div>
                                     
                                     <div className="mt-12 flex justify-end font-bold text-[10px]">
@@ -131,7 +131,7 @@ export default function InvoicePage({ invoice, company }: { invoice: any, compan
                                         </div>
                                     </div>
                                 </td>
-                                <td className="border-r border-black py-4 px-1 text-center font-bold text-sm tracking-widest">{invoice.sac_code || '9992'}</td>
+                                <td className="border-r border-black py-4 px-1 text-center font-bold text-sm ">{invoice.sac_code || '9992'}</td>
                                 <td className="border-r border-black py-4 px-1 text-center font-bold">1 No</td>
                                 <td className="border-r border-black py-4 px-1 text-center font-bold">{invoice.taxable_amount}</td>
                                 <td className="border-r border-black py-4 px-1 text-center font-bold">No</td>
@@ -146,7 +146,7 @@ export default function InvoicePage({ invoice, company }: { invoice: any, compan
                             {/* Totals Row */}
                             <tr className="border-b border-black font-black h-10 bg-slate-50/50 print:bg-white text-sm">
                                 <td className="border-r border-black"></td>
-                                <td className="border-r border-black text-right px-4 uppercase tracking-widest">Total</td>
+                                <td className="border-r border-black text-right px-4  ">Total</td>
                                 <td className="border-r border-black"></td>
                                 <td className="border-r border-black text-center">1 No</td>
                                 <td className="border-r border-black"></td>
@@ -158,15 +158,15 @@ export default function InvoicePage({ invoice, company }: { invoice: any, compan
 
                     {/* Summary Sections */}
                     <div className="p-3 border-b border-black bg-slate-50/20 print:bg-white">
-                        <div className="text-[9px] text-slate-500 mb-1 font-bold uppercase tracking-widest">Amount Chargeable (in words)</div>
-                        <div className="font-bold text-sm tracking-tight uppercase">{amountInWords(parseFloat(invoice.amount))}</div>
+                        <div className="text-[9px] text-slate-500 mb-1 font-bold  ">Amount Chargeable (in words)</div>
+                        <div className="font-bold text-sm  ">{amountInWords(parseFloat(invoice.amount))}</div>
                     </div>
 
                     {/* Tax Breakup Table */}
                     <div className="border-b border-black">
                         <table className="w-full border-collapse text-[9px]">
                             <thead>
-                                <tr className="border-b border-black font-bold bg-slate-50/50 print:bg-white uppercase tracking-tighter">
+                                <tr className="border-b border-black font-bold bg-slate-50/50 print:bg-white  tracking-tighter">
                                     <th className="border-r border-black py-1 px-2 text-left" rowSpan={2}>HSN/SAC</th>
                                     <th className="border-r border-black py-1 px-2 text-center" rowSpan={2}>Taxable Value</th>
                                     <th className="border-b border-black py-1 px-2 text-center" colSpan={2}>Central Tax</th>
@@ -190,7 +190,7 @@ export default function InvoicePage({ invoice, company }: { invoice: any, compan
                                     <td className="border-r border-black py-1.5 px-1 font-black">{invoice.sgst}</td>
                                     <td className="py-1.5 px-2 font-black">{parseFloat(invoice.cgst) + parseFloat(invoice.sgst)}</td>
                                 </tr>
-                                <tr className="font-black text-center bg-slate-50/50 print:bg-white uppercase tracking-tighter h-8">
+                                <tr className="font-black text-center bg-slate-50/50 print:bg-white  tracking-tighter h-8">
                                     <td className="border-r border-black py-1 px-4 text-right">Total</td>
                                     <td className="border-r border-black py-1 px-2">{invoice.taxable_amount}</td>
                                     <td className="border-r border-black py-1 px-1"></td>
@@ -206,16 +206,16 @@ export default function InvoicePage({ invoice, company }: { invoice: any, compan
                     {/* Declaration & Signature */}
                     <div className="grid grid-cols-2 h-32">
                         <div className="p-3 border-r border-black bg-slate-50/10 print:bg-white">
-                            <div className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1.5">Declaration</div>
+                            <div className="text-[9px] text-slate-500 font-bold   mb-1.5">Declaration</div>
                             <div className="text-[9px] leading-relaxed italic font-serif">{company.declaration}</div>
                         </div>
                         <div className="p-3 flex flex-col justify-between items-end">
-                            <div className="text-[9px] italic font-medium">for <span className="font-black uppercase tracking-wider">{company.company_name}</span></div>
+                            <div className="text-[9px] italic font-medium">for <span className="font-black  tracking-wider">{company.company_name}</span></div>
                             <div className="flex flex-col items-center">
                                 {company.authority_signature_path && (
                                     <img src={`/storage/${company.authority_signature_path}`} className="h-12 w-auto object-contain mb-1" />
                                 )}
-                                <div className="text-[9px] font-black uppercase tracking-[0.2em] pt-1 border-t border-black/20 w-32 text-center">Authorised Signatory</div>
+                                <div className="text-[9px] font-black   pt-1 border-t border-black/20 w-32 text-center">Authorised Signatory</div>
                             </div>
                         </div>
                     </div>

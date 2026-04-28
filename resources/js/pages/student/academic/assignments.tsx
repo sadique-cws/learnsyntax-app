@@ -27,9 +27,9 @@ export default function StudentAssignments({ enrollment, assignments }: { enroll
             
             <div className="w-full p-4 lg:p-6">
                 <div className="mb-10">
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-2 block">Program Curriculum</span>
-                    <h1 className="text-4xl font-medium tracking-tight text-foreground leading-none">{enrollment.course.title}</h1>
-                    <p className="text-xs font-medium text-muted-foreground tracking-tight mt-2">Manage your coursework and academic submissions.</p>
+                    <span className="text-[10px] font-black   text-primary mb-2 block">Program Curriculum</span>
+                    <h1 className="text-4xl font-medium  text-foreground leading-none">{enrollment.course.title}</h1>
+                    <p className="text-xs font-medium text-muted-foreground  mt-2">Manage your coursework and academic submissions.</p>
                 </div>
 
                 <div className="grid grid-cols-1 gap-8">
@@ -47,16 +47,16 @@ export default function StudentAssignments({ enrollment, assignments }: { enroll
                                                 <BookOpen className="size-6" />
                                             </div>
                                             <div>
-                                                <h3 className="text-xl font-bold tracking-tight text-foreground">{assignment.title}</h3>
+                                                <h3 className="text-xl font-bold  text-foreground">{assignment.title}</h3>
                                                 <div className="flex items-center gap-4 mt-1">
                                                     <div className={cn(
-                                                        "flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest",
+                                                        "flex items-center gap-1.5 text-[10px] font-black  ",
                                                         isLate && !submission ? "text-red-600" : "text-muted-foreground"
                                                     )}>
                                                         <Calendar className="size-3.5" />
                                                         Due {dueDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                                                     </div>
-                                                    <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-primary/70">
+                                                    <div className="flex items-center gap-1.5 text-[10px] font-black   text-primary/70">
                                                         <Info className="size-3.5" />
                                                         Max {assignment.max_marks} Points
                                                     </div>
@@ -71,7 +71,7 @@ export default function StudentAssignments({ enrollment, assignments }: { enroll
                                         {isLate && !submission && (
                                             <div className="flex items-center gap-3 p-3 bg-red-50 border border-red-100 rounded-sm text-red-700">
                                                 <AlertCircle className="size-4 shrink-0" />
-                                                <p className="text-[10px] font-black uppercase tracking-tight">Late Submission: 10 marks will be automatically deducted from your final score.</p>
+                                                <p className="text-[10px] font-black  tracking-tight">Late Submission: 10 marks will be automatically deducted from your final score.</p>
                                             </div>
                                         )}
                                     </div>
@@ -82,11 +82,11 @@ export default function StudentAssignments({ enrollment, assignments }: { enroll
                                     )}>
                                         {submission?.status === 'graded' ? (
                                             <div className="text-center space-y-4">
-                                                <div className="text-[10px] font-black uppercase tracking-[0.2em] text-green-600">Performance Result</div>
+                                                <div className="text-[10px] font-black   text-green-600">Performance Result</div>
                                                 <div className="text-5xl font-medium tracking-tighter text-green-600 leading-none">
                                                     {submission.marks_obtained} <span className="text-lg text-green-600/30">/ {assignment.max_marks}</span>
                                                 </div>
-                                                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-green-600 text-white rounded-sm text-[10px] font-black uppercase tracking-widest">
+                                                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-green-600 text-white rounded-sm text-[10px] font-black  ">
                                                     <CheckCircle2 className="size-3.5" /> Certified
                                                 </div>
                                                 {submission.admin_comments && (
@@ -102,8 +102,8 @@ export default function StudentAssignments({ enrollment, assignments }: { enroll
                                                 <div className="size-12 rounded-sm bg-orange-100 flex items-center justify-center text-orange-600 mx-auto">
                                                     <Clock className="size-6" />
                                                 </div>
-                                                <div className="text-[10px] font-black uppercase tracking-[0.2em] text-orange-600">Review Pending</div>
-                                                <p className="text-[11px] text-muted-foreground font-bold uppercase tracking-tight">Submitted on {new Date(submission.submitted_at).toLocaleDateString()}</p>
+                                                <div className="text-[10px] font-black   text-orange-600">Review Pending</div>
+                                                <p className="text-[11px] text-muted-foreground font-bold  tracking-tight">Submitted on {new Date(submission.submitted_at).toLocaleDateString()}</p>
                                                 <SubmissionModal enrollment={enrollment} assignment={assignment} submission={submission} />
                                             </div>
                                         ) : (
@@ -112,8 +112,8 @@ export default function StudentAssignments({ enrollment, assignments }: { enroll
                                                     <FileText className="size-8" />
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <div className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Not Submitted</div>
-                                                    <p className="text-[11px] text-muted-foreground/60 font-medium uppercase tracking-tight">Pending Action</p>
+                                                    <div className="text-[10px] font-black   text-muted-foreground">Not Submitted</div>
+                                                    <p className="text-[11px] text-muted-foreground/60 font-medium  tracking-tight">Pending Action</p>
                                                 </div>
                                                 <SubmissionModal enrollment={enrollment} assignment={assignment} />
                                             </div>
@@ -127,7 +127,7 @@ export default function StudentAssignments({ enrollment, assignments }: { enroll
                     {assignments.length === 0 && (
                         <div className="py-24 text-center border border-dashed border-border rounded-sm bg-muted/[0.02]">
                             <BookOpen className="size-16 text-muted-foreground/10 mx-auto mb-6" />
-                            <p className="text-muted-foreground font-black uppercase tracking-widest text-[11px]">No assignments published for this batch</p>
+                            <p className="text-muted-foreground font-black   text-[11px]">No assignments published for this batch</p>
                         </div>
                     )}
                 </div>
@@ -154,22 +154,22 @@ function SubmissionModal({ enrollment, assignment, submission = null }: { enroll
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="w-full rounded-sm h-11 font-black uppercase tracking-widest text-[10px] bg-primary shadow-lg shadow-primary/10">
+                <Button className="w-full rounded-sm h-11 font-black   text-[10px] bg-primary shadow-lg shadow-primary/10">
                     {submission ? 'Update Submission' : 'Submit Now'}
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px] rounded-sm p-0 overflow-hidden border-none shadow-2xl">
                 <form onSubmit={submit}>
                     <div className="p-8 bg-primary text-white">
-                        <h2 className="text-2xl font-bold tracking-tight uppercase">{assignment.title}</h2>
-                        <p className="text-primary-foreground/70 text-xs font-medium tracking-tight mt-1">
+                        <h2 className="text-2xl font-bold  ">{assignment.title}</h2>
+                        <p className="text-primary-foreground/70 text-xs font-medium  mt-1">
                             Write your answer below or upload a supporting document (PDF, JPG, PNG).
                         </p>
                     </div>
                     
                     <div className="p-8 space-y-8">
                         <div className="space-y-3">
-                            <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                            <Label className="text-[10px] font-black   text-muted-foreground flex items-center gap-2">
                                 <FileText className="size-3.5 text-primary" />
                                 Written Response
                             </Label>
@@ -179,11 +179,11 @@ function SubmissionModal({ enrollment, assignment, submission = null }: { enroll
                                 value={data.content}
                                 onChange={e => setData('content', e.target.value)}
                             />
-                            {errors.content && <div className="text-[10px] font-bold text-red-600 uppercase tracking-tight">{errors.content}</div>}
+                            {errors.content && <div className="text-[10px] font-bold text-red-600  tracking-tight">{errors.content}</div>}
                         </div>
 
                         <div className="space-y-3">
-                            <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                            <Label className="text-[10px] font-black   text-muted-foreground flex items-center gap-2">
                                 <Paperclip className="size-3.5 text-primary" />
                                 Attachment (PDF / Image)
                             </Label>
@@ -201,15 +201,15 @@ function SubmissionModal({ enrollment, assignment, submission = null }: { enroll
                                     </span>
                                 </div>
                             </div>
-                            <p className="text-[9px] font-bold text-muted-foreground/60 uppercase tracking-tight">Max size: 10MB • PDF, JPG, PNG supported</p>
-                            {errors.file && <div className="text-[10px] font-bold text-red-600 uppercase tracking-tight">{errors.file}</div>}
+                            <p className="text-[9px] font-bold text-muted-foreground/60  tracking-tight">Max size: 10MB • PDF, JPG, PNG supported</p>
+                            {errors.file && <div className="text-[10px] font-bold text-red-600  tracking-tight">{errors.file}</div>}
                         </div>
 
                         {assignment.due_date && new Date() > new Date(assignment.due_date) && !submission && (
                             <div className="p-4 bg-red-50 border border-red-100 rounded-sm">
                                 <div className="flex items-center gap-2 text-red-700 mb-1">
                                     <AlertCircle className="size-4" />
-                                    <span className="text-[10px] font-black uppercase tracking-widest">Late Deduction Warning</span>
+                                    <span className="text-[10px] font-black  ">Late Deduction Warning</span>
                                 </div>
                                 <p className="text-[10px] text-red-600/80 font-bold tracking-tight">This assignment is past its due date. A 10-point deduction will be applied to your grade automatically.</p>
                             </div>
@@ -221,13 +221,13 @@ function SubmissionModal({ enrollment, assignment, submission = null }: { enroll
                             type="button" 
                             variant="ghost" 
                             onClick={() => setOpen(false)}
-                            className="rounded-sm font-black uppercase tracking-widest text-[10px] h-11 px-6"
+                            className="rounded-sm font-black   text-[10px] h-11 px-6"
                         >
                             Cancel
                         </Button>
                         <Button 
                             disabled={processing}
-                            className="rounded-sm font-black uppercase tracking-widest text-[10px] h-11 px-8 bg-primary shadow-lg shadow-primary/10"
+                            className="rounded-sm font-black   text-[10px] h-11 px-8 bg-primary shadow-lg shadow-primary/10"
                         >
                             {processing ? 'Processing...' : (
                                 <span className="flex items-center gap-2">

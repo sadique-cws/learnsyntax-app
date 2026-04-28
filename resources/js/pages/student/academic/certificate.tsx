@@ -16,8 +16,8 @@ export default function StudentCertificate({ enrollment, certificate }: { enroll
             <div className="w-full p-4 lg:p-6">
                 <div className="max-w-4xl mx-auto space-y-8">
                     <div className="text-center">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-primary mb-2 block">Academic Verification</span>
-                        <h1 className="text-3xl font-black tracking-tight uppercase leading-none">Certification Status</h1>
+                        <span className="text-[10px] font-black   text-primary mb-2 block">Academic Verification</span>
+                        <h1 className="text-3xl font-black   leading-none">Certification Status</h1>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -50,8 +50,8 @@ export default function StudentCertificate({ enrollment, certificate }: { enroll
                                 </div>
                                 
                                 <div>
-                                    <h2 className="text-3xl font-black uppercase tracking-tight mb-3">Certified: {enrollment.user.name}</h2>
-                                    <p className="text-[10px] text-muted-foreground font-black uppercase tracking-widest max-w-lg mx-auto">
+                                    <h2 className="text-3xl font-black   mb-3">Certified: {enrollment.user.name}</h2>
+                                    <p className="text-[10px] text-muted-foreground font-black   max-w-lg mx-auto">
                                         Verified professional certification for {enrollment.course.title}
                                     </p>
                                 </div>
@@ -59,16 +59,16 @@ export default function StudentCertificate({ enrollment, certificate }: { enroll
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-xl mx-auto text-left">
                                     <div className="flex items-center gap-3 p-4 rounded bg-card border border-border">
                                         <ShieldCheck className="size-4 text-primary" />
-                                        <div className="text-[10px] font-bold uppercase text-muted-foreground tracking-tight">Ref: <span className="text-foreground font-black">{certificate?.certificate_number}</span></div>
+                                        <div className="text-[10px] font-bold  text-muted-foreground tracking-tight">Ref: <span className="text-foreground font-black">{certificate?.certificate_number}</span></div>
                                     </div>
                                     <div className="flex items-center gap-3 p-4 rounded bg-card border border-border">
                                         <CheckCircle2 className="size-4 text-green-600" />
-                                        <div className="text-[10px] font-bold uppercase text-muted-foreground tracking-tight">Status: <span className="text-foreground font-black text-green-600 uppercase">Authenticated</span></div>
+                                        <div className="text-[10px] font-bold  text-muted-foreground tracking-tight">Status: <span className="text-foreground font-black text-green-600 ">Authenticated</span></div>
                                     </div>
                                 </div>
 
                                 <div className="pt-4">
-                                    <Button size="lg" className="h-14 px-10 rounded bg-primary hover:bg-primary/90 font-black uppercase tracking-widest text-xs transition-all">
+                                    <Button size="lg" className="h-14 px-10 rounded bg-primary hover:bg-primary/90 font-black   text-xs transition-all">
                                         <Download className="mr-3 size-4" /> Download Certificate
                                     </Button>
                                 </div>
@@ -81,13 +81,13 @@ export default function StudentCertificate({ enrollment, certificate }: { enroll
                                     <XCircle className="size-10" />
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-black uppercase tracking-tight mb-2">Requirement Not Met</h2>
-                                    <p className="text-[10px] text-muted-foreground font-black uppercase tracking-widest max-w-md mx-auto">
+                                    <h2 className="text-2xl font-black   mb-2">Requirement Not Met</h2>
+                                    <p className="text-[10px] text-muted-foreground font-black   max-w-md mx-auto">
                                         An overall average of 60% is required to earn the professional certificate.
                                     </p>
                                 </div>
                                 <div className="pt-4">
-                                    <Button asChild variant="outline" className="rounded h-11 px-8 font-black uppercase tracking-widest text-[10px] border-border bg-card">
+                                    <Button asChild variant="outline" className="rounded h-11 px-8 font-black   text-[10px] border-border bg-card">
                                         <Link href={`/my-course/${enrollment.id}/assignments`}>Review Performance</Link>
                                     </Button>
                                 </div>
@@ -108,11 +108,11 @@ function StatsCard({ title, value, icon: Icon, status, highlight = false }: any)
                     <div className={`size-8 rounded flex items-center justify-center ${highlight ? 'bg-primary text-white' : 'bg-muted border border-border text-muted-foreground'}`}>
                         <Icon className="size-4" />
                     </div>
-                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded ${status === 'PASS' || status === 'QUALIFIED' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                    <span className={`text-[9px] font-black   px-2 py-0.5 rounded ${status === 'PASS' || status === 'QUALIFIED' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                         {status}
                     </span>
                 </div>
-                <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 mb-1">{title}</div>
+                <div className="text-[10px] font-black   text-muted-foreground/60 mb-1">{title}</div>
                 <div className={`text-2xl font-black ${highlight ? 'text-primary' : 'text-foreground'}`}>{value}</div>
             </CardContent>
         </Card>

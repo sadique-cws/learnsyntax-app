@@ -43,6 +43,15 @@ export default function AdminStudentShow({ student, available_batches, stats, al
     const { patch, post, processing } = useForm();
     const [activeTab, setActiveTab] = useState<'academic' | 'payments' | 'enrollments'>('enrollments');
     const [showEnrollModal, setShowEnrollModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+
+    const editForm = useForm({
+        name: student.name,
+        email: student.email,
+        phone: student.phone || '',
+        qualification: student.qualification || '',
+        college: student.college || ''
+    });
 
     const enrollmentForm = useForm({
         course_id: '',
@@ -53,6 +62,13 @@ export default function AdminStudentShow({ student, available_batches, stats, al
     });
 
     const selectedCourse = all_courses.find(c => c.id.toString() === enrollmentForm.data.course_id);
+
+    const handleEditProfile = (e: React.FormEvent) => {
+        e.preventDefault();
+        editForm.patch(`/admin/students/${student.id}`, {
+            onSuccess: () => setShowEditModal(false)
+        });
+    };
 
     const handleManualEnroll = (e: React.FormEvent) => {
         e.preventDefault();
@@ -80,7 +96,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
         {
             key: 'course',
             label: 'Course',
-            render: (payment) => <span className="text-xs font-bold">{payment.enrollment.course.title}</span>
+            render: (payment) => <span className="text-xs font-bold">{payment.enrollment?.course?.title || 'Unknown Course'}</span>
         },
         {
             key: 'amount',
@@ -96,10 +112,10 @@ export default function AdminStudentShow({ student, available_batches, stats, al
             key: 'actions',
             label: 'Invoice',
             render: (payment) => payment.invoice ? (
-                <Link href={`/admin/invoices/${payment.invoice.id}`} className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-primary hover:underline">
+                <Link href={`/admin/invoices/${payment.invoice.id}`} className="inline-flex items-center gap-1 text-[9px] font-black ry hover:underline">
                     <Receipt className="size-3" /> {payment.invoice.invoice_number}
                 </Link>
-            ) : <span className="text-[9px] text-muted-foreground uppercase font-black">N/A</span>
+            ) : <span className="text-[9px] text-muted-foreground 
         }
     ];
 
@@ -107,10 +123,10 @@ export default function AdminStudentShow({ student, available_batches, stats, al
         <>
             <Head title={`Student Profile: ${student.name}`} />
             
-            <div className="w-full p-4 lg:p-8 bg-muted/5 min-h-screen">
+            <div className="w-full p-4  lg:p-6 bg-muted/5 min-h-screen">
                 {/* Header Section */}
                 <div className="max-w-7xl mx-auto mb-8">
-                    <Link href="/admin/students" className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground hover:text-primary transition-colors mb-6">
+                    <Link href="/admin/students" className="inline-flex items-center text-[10px] font-black d-foreground hover:text-primary transition-colors mb-6">
                         <ChevronLeft className="size-3.5 mr-1" /> Student Directory
                     </Link>
                     
@@ -121,8 +137,8 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                             </div>
                             <div>
                                 <div className="flex items-center gap-3 mb-2">
-                                    <h1 className="text-2xl font-black tracking-tight text-foreground uppercase">{student.name}</h1>
-                                    <div className="px-2 py-0.5 bg-primary/10 text-primary text-[9px] font-black uppercase tracking-widest rounded-sm border border-primary/20">
+                                    <h1 className="text-2xl font-black  text-foreground 
+                                    <div className="px-2 py-0.5 bg-primary/10 text-primary text-[9px] font-black  border border-primary/20">
                                         ID: ST-{student.id.toString().padStart(4, '0')}
                                     </div>
                                 </div>
@@ -144,18 +160,114 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                             </div>
                         </div>
                         <div className="flex gap-3 shrink-0">
-                            <Button variant="outline" className="h-10 rounded-sm font-black uppercase tracking-widest text-[10px] border-border bg-card">
+                            <Button 
+                                onClick={() => setShowEditModal(true)}
+                                variant="outline" 
+                                className="h-10 rounded-sm font-black uppercase  text-[10px] border-border bg-card"
+                            >
                                 Edit Profile
                             </Button>
                             <Button 
                                 onClick={() => setShowEnrollModal(true)}
-                                className="h-10 rounded-sm font-black uppercase tracking-widest text-[10px] bg-primary shadow-lg shadow-primary/10"
+                                className="h-10 rounded-sm font-black uppercase  text-[10px] bg-primary shadow-lg shadow-primary/10"
                             >
                                 <BookOpen className="size-3.5 mr-2" /> Add Course
                             </Button>
                         </div>
                     </div>
                 </div>
+
+                {/* Edit Profile Modal */}
+                <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
+                    <DialogContent className="sm:max-w-[500px] rounded-sm p-0 overflow-hidden border-none shadow-2xl">
+                        <DialogHeader className="p-6 bg-muted/5 border-b border-border">
+                            <div className="flex items-center gap-3">
+                                <div className="size-10 rounded-sm bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                                    <User className="size-5" />
+                                </div>
+                                <div>
+                                    <DialogTitle className="text-sm font-black uppercase tracking-tight">Edit Student Profile</DialogTitle>
+                                    <DialogDescription className="text-[10px] font-bold uppercase  text-muted-foreground mt-0.5">
+                                        Update student personal and academic details
+                                    </DialogDescription>
+                                </div>
+                            </div>
+                        </DialogHeader>
+                        
+                        <form onSubmit={handleEditProfile} className="p-6 space-y-4 bg-background">
+                            <div className="grid grid-cols-1 gap-4">
+                                <div className="space-y-1.5">
+                                    <Label className="text-[9px] font-black uppercase  text-muted-foreground/50">Full Name</Label>
+                                    <Input 
+                                        className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold"
+                                        value={editForm.data.name}
+                                        onChange={e => editForm.setData('name', e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[9px] font-black uppercase  text-muted-foreground/50">Email Address</Label>
+                                        <Input 
+                                            type="email"
+                                            className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold"
+                                            value={editForm.data.email}
+                                            onChange={e => editForm.setData('email', e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[9px] font-black uppercase  text-muted-foreground/50">Phone Number</Label>
+                                        <Input 
+                                            className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold"
+                                            value={editForm.data.phone}
+                                            onChange={e => editForm.setData('phone', e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[9px] font-black uppercase  text-muted-foreground/50">Qualification</Label>
+                                        <Input 
+                                            className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold"
+                                            value={editForm.data.qualification}
+                                            onChange={e => editForm.setData('qualification', e.target.value)}
+                                            placeholder="e.g. B.Tech, MCA"
+                                        />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[9px] font-black uppercase  text-muted-foreground/50">College / Institution</Label>
+                                        <Input 
+                                            className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold"
+                                            value={editForm.data.college}
+                                            onChange={e => editForm.setData('college', e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <DialogFooter className="pt-6 mt-6 border-t border-border flex flex-row gap-2 sm:justify-end">
+                                <Button 
+                                    type="button" 
+                                    variant="ghost" 
+                                    onClick={() => setShowEditModal(false)}
+                                    className="h-10 rounded-sm font-black uppercase  text-[9px] px-6"
+                                >
+                                    Cancel
+                                </Button>
+                                <Button 
+                                    type="submit"
+                                    disabled={editForm.processing}
+                                    className="h-10 rounded-sm font-black uppercase  text-[9px] px-8 bg-primary shadow-lg shadow-primary/10"
+                                >
+                                    {editForm.processing ? 'Saving...' : 'Save Changes'}
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </Dialog>
 
                 {/* Manual Enrollment Modal */}
                 <Dialog open={showEnrollModal} onOpenChange={setShowEnrollModal}>
@@ -166,8 +278,8 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                     <BookOpen className="size-5" />
                                 </div>
                                 <div>
-                                    <DialogTitle className="text-sm font-black uppercase tracking-tight">Manual Course Enrollment</DialogTitle>
-                                    <DialogDescription className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-0.5">
+                                    <DialogTitle className="text-sm font-black rse Enrollment</DialogTitle>
+                                    <DialogDescription className="text-[10px] font-bold -foreground mt-0.5">
                                         Assign a new course and record payment
                                     </DialogDescription>
                                 </div>
@@ -177,7 +289,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                         <form onSubmit={handleManualEnroll} className="p-6 space-y-4 bg-background">
                             <div className="grid grid-cols-1 gap-4">
                                 <div className="space-y-1.5">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Select Course</Label>
+                                    <Label className="text-[9px] font-black -foreground/50">Select Course</Label>
                                     <Select 
                                         value={enrollmentForm.data.course_id} 
                                         onValueChange={(val) => {
@@ -189,12 +301,12 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                             }));
                                         }}
                                     >
-                                        <SelectTrigger className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold uppercase tracking-tight">
+                                        <SelectTrigger className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold 
                                             <SelectValue placeholder="Choose a course" />
                                         </SelectTrigger>
                                         <SelectContent className="rounded-sm">
                                             {all_courses.map(course => (
-                                                <SelectItem key={course.id} value={course.id.toString()} className="text-[10px] font-black uppercase">
+                                                <SelectItem key={course.id} value={course.id.toString()} className="text-[10px] font-black 
                                                     {course.title} (₹{course.price})
                                                 </SelectItem>
                                             ))}
@@ -203,18 +315,18 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                 </div>
 
                                 <div className="space-y-1.5">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Select Batch</Label>
+                                    <Label className="text-[9px] font-black -foreground/50">Select Batch</Label>
                                     <Select 
                                         value={enrollmentForm.data.batch_id} 
                                         onValueChange={(val) => enrollmentForm.setData('batch_id', val)}
                                         disabled={!enrollmentForm.data.course_id}
                                     >
-                                        <SelectTrigger className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold uppercase tracking-tight">
+                                        <SelectTrigger className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold 
                                             <SelectValue placeholder={enrollmentForm.data.course_id ? "Choose a batch" : "Select a course first"} />
                                         </SelectTrigger>
                                         <SelectContent className="rounded-sm">
                                             {(selectedCourse?.batches || []).map((batch: any) => (
-                                                <SelectItem key={batch.id} value={batch.id.toString()} className="text-[10px] font-black uppercase">
+                                                <SelectItem key={batch.id} value={batch.id.toString()} className="text-[10px] font-black 
                                                     {batch.name} - {batch.type}
                                                 </SelectItem>
                                             ))}
@@ -224,7 +336,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-1.5">
-                                        <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Amount Paid (₹)</Label>
+                                        <Label className="text-[9px] font-black -foreground/50">Amount Paid (₹)</Label>
                                         <Input 
                                             type="number"
                                             className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold"
@@ -233,25 +345,25 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                         />
                                     </div>
                                     <div className="space-y-1.5">
-                                        <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Payment Method</Label>
+                                        <Label className="text-[9px] font-black -foreground/50">Payment Method</Label>
                                         <Select 
                                             value={enrollmentForm.data.payment_method} 
                                             onValueChange={(val) => enrollmentForm.setData('payment_method', val)}
                                         >
-                                            <SelectTrigger className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold uppercase tracking-tight">
+                                            <SelectTrigger className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold 
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent className="rounded-sm">
-                                                <SelectItem value="cash" className="text-[10px] font-black uppercase">Cash</SelectItem>
-                                                <SelectItem value="bank_transfer" className="text-[10px] font-black uppercase">Bank Transfer</SelectItem>
-                                                <SelectItem value="other" className="text-[10px] font-black uppercase">Other</SelectItem>
+                                                <SelectItem value="cash" className="text-[10px] font-black 
+                                                <SelectItem value="bank_transfer" className="text-[10px] font-black >
+                                                <SelectItem value="other" className="text-[10px] font-black 
                                             </SelectContent>
                                         </Select>
                                     </div>
                                 </div>
 
                                 <div className="space-y-1.5">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Transaction ID (Optional)</Label>
+                                    <Label className="text-[9px] font-black -foreground/50">Transaction ID (Optional)</Label>
                                     <Input 
                                         className="h-10 rounded-sm border-border bg-muted/10 text-xs font-mono"
                                         placeholder="e.g. CASH-123456"
@@ -266,14 +378,14 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                     type="button" 
                                     variant="ghost" 
                                     onClick={() => setShowEnrollModal(false)}
-                                    className="h-10 rounded-sm font-black uppercase tracking-widest text-[9px] px-6"
+                                    className="h-10 rounded-sm font-black  px-6"
                                 >
                                     Cancel
                                 </Button>
                                 <Button 
                                     type="submit"
                                     disabled={enrollmentForm.processing || !enrollmentForm.data.batch_id}
-                                    className="h-10 rounded-sm font-black uppercase tracking-widest text-[9px] px-8 bg-primary shadow-lg shadow-primary/10"
+                                    className="h-10 rounded-sm font-black  px-8 bg-primary shadow-lg shadow-primary/10"
                                 >
                                     {enrollmentForm.processing ? 'Enrolling...' : 'Confirm Enrollment'}
                                 </Button>
@@ -292,7 +404,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                     ].map((stat, i) => (
                         <div key={i} className="bg-background border border-border p-5 rounded-sm shadow-sm group hover:border-primary/20 transition-colors">
                             <div className="flex items-center justify-between mb-1.5">
-                                <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60">{stat.label}</span>
+                                <span className="text-[9px] font-black -foreground/60">{stat.label}</span>
                                 <stat.icon className={cn("size-3.5 opacity-40 group-hover:opacity-100 transition-opacity", stat.color)} />
                             </div>
                             <div className="text-xl font-black text-foreground">{stat.value}</div>
@@ -313,7 +425,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id as any)}
                                 className={cn(
-                                    "flex items-center gap-2 px-6 py-3 text-[10px] font-black uppercase tracking-widest transition-all relative shrink-0",
+                                    "flex items-center gap-2 px-6 py-3 text-[10px] font-black -all relative shrink-0",
                                     activeTab === tab.id 
                                         ? "text-primary border-b-2 border-primary" 
                                         : "text-muted-foreground hover:text-foreground"
@@ -332,12 +444,12 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                 <div key={enrollment.id} className="bg-background border border-border rounded-sm shadow-sm overflow-hidden flex flex-col lg:flex-row">
                                     <div className="lg:w-1/3 p-8 border-r border-border bg-muted/5">
                                         <div className={cn(
-                                            "inline-block px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest mb-4",
+                                            "inline-block px-3 py-1 rounded-full text-[9px] font-black 
                                             enrollment.status === 'paid' ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700"
                                         )}>
                                             {enrollment.status}
                                         </div>
-                                        <h3 className="text-xl font-black text-foreground uppercase leading-tight mb-6">{enrollment.course.title}</h3>
+                                        <h3 className="text-xl font-black text-foreground lment.course.title}</h3>
                                         <div className="space-y-4">
                                             <div className="flex items-center justify-between text-xs font-bold text-muted-foreground">
                                                 <span>Batch Status</span>
@@ -353,7 +465,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                     <div className="lg:w-2/3 p-8 flex flex-col justify-between">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                                             <div className="space-y-3">
-                                                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Batch Assignment</label>
+                                                <label className="text-[10px] font-black -foreground/60">Batch Assignment</label>
                                                 <Select 
                                                     defaultValue={enrollment.batch_id?.toString()} 
                                                     onValueChange={(val) => handleBatchChange(enrollment.id, val)}
@@ -364,7 +476,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                                     </SelectTrigger>
                                                     <SelectContent className="rounded-sm shadow-2xl">
                                                         {(available_batches[enrollment.course_id] || []).map((batch: any) => (
-                                                            <SelectItem key={batch.id} value={batch.id.toString()} className="font-bold text-xs uppercase">
+                                                            <SelectItem key={batch.id} value={batch.id.toString()} className="font-bold text-xs 
                                                                 {batch.name} ({batch.type})
                                                             </SelectItem>
                                                         ))}
@@ -373,11 +485,11 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                             </div>
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div className="p-3 bg-muted/30 border border-border rounded-sm">
-                                                    <div className="text-[8px] font-black text-muted-foreground uppercase tracking-widest mb-1">Assignments</div>
+                                                    <div className="text-[8px] font-black text-muted-foreground gnments</div>
                                                     <div className="text-sm font-black">{Math.round(enrollment.assignment_average)}%</div>
                                                 </div>
                                                 <div className="p-3 bg-muted/30 border border-border rounded-sm">
-                                                    <div className="text-[8px] font-black text-muted-foreground uppercase tracking-widest mb-1">Final Exam</div>
+                                                    <div className="text-[8px] font-black text-muted-foreground l Exam</div>
                                                     <div className="text-sm font-black">{Math.round(enrollment.exam_score)}%</div>
                                                 </div>
                                             </div>
@@ -385,11 +497,11 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                         <div className="flex items-center justify-between pt-6 border-t border-border/50">
                                             <div className="flex items-center gap-4">
                                                 <div className="flex flex-col">
-                                                    <span className="text-[8px] font-black text-muted-foreground uppercase tracking-widest">Enrolled Date</span>
+                                                    <span className="text-[8px] font-black text-muted-foreground Date</span>
                                                     <span className="text-xs font-bold">{new Date(enrollment.created_at).toLocaleDateString()}</span>
                                                 </div>
                                                 {enrollment.certificate && (
-                                                    <div className="flex items-center gap-2 bg-primary/5 px-3 py-1.5 rounded-sm border border-primary/10 text-primary text-[9px] font-black uppercase tracking-widest">
+                                                    <div className="flex items-center gap-2 bg-primary/5 px-3 py-1.5 rounded-sm border border-primary/10 text-primary text-[9px] font-black 
                                                         <Award className="size-3.5" /> Certificate Issued
                                                     </div>
                                                 )}
@@ -399,7 +511,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                                     onClick={() => patch(`/admin/enrollments/${enrollment.id}/certificate`, {}, { method: 'post' })}
                                                     disabled={enrollment.overall_average < 60 || processing}
                                                     className={cn(
-                                                        "h-10 rounded-sm font-black uppercase tracking-widest text-[9px] px-6 transition-all",
+                                                        "h-10 rounded-sm font-black  px-6 transition-all",
                                                         enrollment.overall_average >= 60 ? "bg-primary shadow-lg shadow-primary/10" : "bg-muted text-muted-foreground cursor-not-allowed"
                                                     )}
                                                 >
@@ -421,9 +533,9 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                 <Card className="border-border rounded-sm shadow-sm bg-background p-6">
                                     <div className="flex flex-col h-full justify-between">
                                         <div>
-                                            <div className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60 mb-2">Academic Growth</div>
+                                            <div className="text-[9px] font-black -foreground/60 mb-2">Academic Growth</div>
                                             <div className="text-2xl font-black text-foreground mb-1">+{Math.round(stats.avg_performance / 1.2)}%</div>
-                                            <div className="text-[10px] font-bold text-green-600 uppercase tracking-tight">Improving Velocity</div>
+                                            <div className="text-[10px] font-bold text-green-600 Velocity</div>
                                         </div>
                                         <div className="mt-6 flex items-end gap-1 h-12">
                                             {[30, 45, 40, 60, 75, 85].map((h, i) => (
@@ -433,11 +545,11 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                     </div>
                                 </Card>
                                 <Card className="border-border rounded-sm shadow-sm bg-background p-6">
-                                    <div className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60 mb-2">Consistency Score</div>
+                                    <div className="text-[9px] font-black -foreground/60 mb-2">Consistency Score</div>
                                     <div className="text-2xl font-black text-foreground mb-1">High</div>
-                                    <div className="text-[10px] font-bold text-blue-600 uppercase tracking-tight">8.5/10 Rating</div>
+                                    <div className="text-[10px] font-bold text-blue-600 ing</div>
                                     <div className="mt-6 space-y-2">
-                                        <div className="flex justify-between text-[8px] font-black uppercase tracking-widest text-muted-foreground/40">
+                                        <div className="flex justify-between text-[8px] font-black -foreground/40">
                                             <span>Accuracy</span>
                                             <span>{Math.round(stats.avg_performance)}%</span>
                                         </div>
@@ -447,9 +559,9 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                     </div>
                                 </Card>
                                 <Card className="border-border rounded-sm shadow-sm bg-background p-6">
-                                    <div className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60 mb-2">Exam Readiness</div>
+                                    <div className="text-[9px] font-black -foreground/60 mb-2">Exam Readiness</div>
                                     <div className="text-2xl font-black text-foreground mb-1">Expert</div>
-                                    <div className="text-[10px] font-bold text-orange-600 uppercase tracking-tight">Ready for Final</div>
+                                    <div className="text-[10px] font-bold text-orange-600 Final</div>
                                     <div className="mt-6 flex gap-2">
                                         <div className="size-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
                                         <div className="text-[9px] font-bold text-muted-foreground leading-tight">Analyzing historical<br/>attempt data...</div>
@@ -462,7 +574,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                 <Card className="border-border rounded-sm shadow-sm overflow-hidden bg-background">
                                     <CardHeader className="p-6 border-b border-border bg-muted/5">
                                         <div className="flex items-center justify-between">
-                                            <CardTitle className="text-[11px] font-black uppercase tracking-[0.2em] text-foreground">Recent Exam Attempts</CardTitle>
+                                            <CardTitle className="text-[11px] font-black ground">Recent Exam Attempts</CardTitle>
                                             <Trophy className="size-4 text-primary/40" />
                                         </div>
                                     </CardHeader>
@@ -471,22 +583,22 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                             {student.exam_attempts?.map((attempt: any) => (
                                                 <div key={attempt.id} className="p-5 flex items-center justify-between hover:bg-muted/5 transition-colors">
                                                     <div>
-                                                        <div className="text-xs font-black uppercase tracking-tight text-foreground">{attempt.exam.title}</div>
-                                                        <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1 flex items-center gap-2">
+                                                        <div className="text-xs font-black ound">{attempt.exam.title}</div>
+                                                        <div className="text-[9px] font-bold text-muted-foreground items-center gap-2">
                                                             <Clock className="size-3" /> {new Date(attempt.created_at).toLocaleDateString()}
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center gap-4">
                                                         <div className="text-right">
                                                             <div className="text-sm font-black text-primary">{attempt.score}%</div>
-                                                            <div className="text-[8px] font-black text-muted-foreground uppercase tracking-widest">{attempt.status}</div>
+                                                            <div className="text-[8px] font-black text-muted-foreground status}</div>
                                                         </div>
                                                         <ChevronRight className="size-4 text-muted-foreground/30" />
                                                     </div>
                                                 </div>
                                             ))}
                                             {(!student.exam_attempts || student.exam_attempts.length === 0) && (
-                                                <div className="p-10 text-center text-[10px] font-black uppercase tracking-widest text-muted-foreground/40 italic">
+                                                <div className="p-10 text-center text-[10px] font-black -foreground/40 italic">
                                                     No exam records found
                                                 </div>
                                             )}
@@ -498,7 +610,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                 <Card className="border-border rounded-sm shadow-sm overflow-hidden bg-background">
                                     <CardHeader className="p-6 border-b border-border bg-muted/5">
                                         <div className="flex items-center justify-between">
-                                            <CardTitle className="text-[11px] font-black uppercase tracking-[0.2em] text-foreground">Assignment History</CardTitle>
+                                            <CardTitle className="text-[11px] font-black ground">Assignment History</CardTitle>
                                             <FileText className="size-4 text-primary/40" />
                                         </div>
                                     </CardHeader>
@@ -507,8 +619,8 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                             {student.assignment_submissions?.map((submission: any) => (
                                                 <div key={submission.id} className="p-5 flex items-center justify-between hover:bg-muted/5 transition-colors">
                                                     <div>
-                                                        <div className="text-xs font-black uppercase tracking-tight text-foreground truncate max-w-[200px]">{submission.assignment.title}</div>
-                                                        <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1 flex items-center gap-2">
+                                                        <div className="text-xs font-black ound truncate max-w-[200px]">{submission.assignment.title}</div>
+                                                        <div className="text-[9px] font-bold text-muted-foreground items-center gap-2">
                                                             <CheckCircle2 className="size-3 text-green-500/60" /> {new Date(submission.submitted_at || submission.created_at).toLocaleDateString()}
                                                         </div>
                                                     </div>
@@ -516,7 +628,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                                         <div className="text-right">
                                                             <div className="text-sm font-black text-foreground">{submission.marks_obtained || 0} / {submission.assignment.max_marks}</div>
                                                             <div className={cn(
-                                                                "text-[8px] font-black uppercase tracking-widest",
+                                                                "text-[8px] font-black 
                                                                 submission.status === 'graded' ? "text-green-600" : "text-orange-600"
                                                             )}>{submission.status}</div>
                                                         </div>
@@ -525,7 +637,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                                 </div>
                                             ))}
                                             {(!student.assignment_submissions || student.assignment_submissions.length === 0) && (
-                                                <div className="p-10 text-center text-[10px] font-black uppercase tracking-widest text-muted-foreground/40 italic">
+                                                <div className="p-10 text-center text-[10px] font-black -foreground/40 italic">
                                                     No assignment submissions
                                                 </div>
                                             )}
@@ -538,9 +650,11 @@ export default function AdminStudentShow({ student, available_batches, stats, al
 
                     {/* Payments Tab */}
                     {activeTab === 'payments' && (
-                        <div className="bg-background border border-border rounded-sm shadow-sm overflow-hidden">
+                        <div className="bg-background overflow-hidden">
                             <AdminDataTable 
-                                data={student.enrollments.map((e: any) => e.payment).filter(Boolean)}
+                                data={student.enrollments
+                                    .filter((e: any) => e.payment)
+                                    .map((e: any) => ({ ...e.payment, enrollment: e }))}
                                 columns={paymentColumns}
                                 searchPlaceholder="Filter payments..."
                                 title="Transaction Ledger"

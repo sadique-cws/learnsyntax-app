@@ -87,9 +87,9 @@ export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_orde
                             <div className="size-10 rounded-xl bg-primary flex items-center justify-center text-white">
                                 <Zap className="size-5 fill-current" />
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Secure Checkout</span>
+                            <span className="text-[10px] font-black   text-primary">Secure Checkout</span>
                         </div>
-                        <CardTitle className="text-3xl font-black tracking-tight leading-none">Confirm Enrollment</CardTitle>
+                        <CardTitle className="text-3xl font-black  leading-none">Confirm Enrollment</CardTitle>
                     </CardHeader>
                     
                     <CardContent className="p-8 space-y-8">
@@ -103,7 +103,7 @@ export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_orde
                             </div>
                             <div className="flex-1">
                                 <h3 className="font-bold text-lg leading-tight">{enrollment.course.title}</h3>
-                                <p className="text-xs text-muted-foreground uppercase font-medium tracking-wider mt-1">Professional Certification</p>
+                                <p className="text-xs text-muted-foreground  font-medium tracking-wider mt-1">Professional Certification</p>
                             </div>
                         </div>
 
@@ -117,7 +117,7 @@ export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_orde
                                 <span className="text-green-600">INCLUDED</span>
                             </div>
                             <div className="pt-4 border-t border-border flex items-center justify-between">
-                                <span className="font-black text-lg uppercase tracking-tight">Total Amount</span>
+                                <span className="font-black text-lg  tracking-tight">Total Amount</span>
                                 <span className="text-3xl font-black text-primary">₹{enrollment.course.price}</span>
                             </div>
                         </div>
@@ -134,7 +134,7 @@ export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_orde
                             <div className="p-5 rounded-2xl border border-border/50 bg-card">
                                 <div className="flex items-center gap-2 mb-3">
                                     <Receipt className="size-4 text-primary" />
-                                    <span className="text-xs font-bold uppercase tracking-wider">GST Information <span className="text-[10px] text-muted-foreground">(Optional)</span></span>
+                                    <span className="text-xs font-bold  tracking-wider">GST Information <span className="text-[10px] text-muted-foreground">(Optional)</span></span>
                                 </div>
                                 <input 
                                     type="text" 
@@ -151,7 +151,7 @@ export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_orde
                     <CardFooter className="p-8 pt-0 flex flex-col gap-4">
                         <Button 
                             size="lg" 
-                            className="w-full rounded-2xl h-14 font-black  bg-primary hover:bg-primary/90 text-white uppercase tracking-widest text-sm" 
+                            className="w-full rounded-2xl h-14 font-black  bg-primary hover:bg-primary/90 text-white   text-sm" 
                             onClick={handlePayment}
                             disabled={isPaying || processing || !scriptLoaded}
                         >
@@ -162,7 +162,7 @@ export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_orde
                             )}
                         </Button>
                         {!scriptLoaded && (
-                            <p className="text-[10px] text-center font-bold text-muted-foreground uppercase animate-pulse">Initializing Gateway...</p>
+                            <p className="text-[10px] text-center font-bold text-muted-foreground  animate-pulse">Initializing Gateway...</p>
                         )}
                         <div className="flex items-center justify-center gap-6 opacity-40">
                             <CreditCard className="size-6" />
@@ -172,7 +172,7 @@ export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_orde
                     </CardFooter>
                 </Card>
 
-                <p className="text-center text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
+                <p className="text-center text-[10px] text-muted-foreground font-bold  ">
                     Secured by Razorpay • India's Leading Payment Gateway
                 </p>
             </div>

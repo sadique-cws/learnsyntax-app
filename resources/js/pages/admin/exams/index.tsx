@@ -50,7 +50,7 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
             label: 'Weightage',
             sortable: false,
             render: (course) => (
-                <div className="px-2 py-0.5 bg-muted rounded text-[10px] font-medium tracking-tight inline-block">
+                <div className="px-2 py-0.5 bg-muted rounded text-[10px] font-medium  inline-block">
                     {course.exam ? `${course.exam.total_marks} Marks` : 'N/A'}
                 </div>
             )
@@ -81,7 +81,7 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
                                 }
                             }}>
                                 <DialogTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="h-8 px-3 rounded font-medium text-[10px] tracking-tight hover:bg-primary/10 hover:text-primary transition-colors">
+                                    <Button variant="ghost" size="sm" className="h-8 px-3 rounded font-medium text-[10px]  hover:bg-primary/10 hover:text-primary transition-colors">
                                         <Settings className="size-3 mr-2" /> {course.exam ? 'Config' : 'Setup'}
                                     </Button>
                                 </DialogTrigger>
@@ -114,7 +114,7 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
                                             </div>
                                         </div>
 
-                                        <Button type="submit" disabled={processing} className="w-full h-11 rounded font-medium tracking-tight text-xs">
+                                        <Button type="submit" disabled={processing} className="w-full h-11 rounded font-medium  text-xs">
                                             {processing ? 'Configuring...' : 'Save Configuration'}
                                         </Button>
                                     </form>
@@ -123,12 +123,12 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
 
                             {course.exam && (
                                 <>
-                                    <Button asChild variant="outline" size="sm" className="h-8 px-3 rounded font-medium text-[10px] tracking-tight border-border bg-card">
+                                    <Button asChild variant="outline" size="sm" className="h-8 px-3 rounded font-medium text-[10px]  border-border bg-card">
                                         <Link href={`/admin/academic/exams/${course.exam.id}/questions`}>
                                             Questions
                                         </Link>
                                     </Button>
-                                    <Button asChild variant="outline" size="sm" className="h-8 px-3 rounded font-medium text-[10px] tracking-tight border-border bg-card">
+                                    <Button asChild variant="outline" size="sm" className="h-8 px-3 rounded font-medium text-[10px]  border-border bg-card">
                                         <Link href={`/admin/academic/exams/${course.exam.id}/results`}>
                                             Results <ChevronRight className="size-3 ml-1" />
                                         </Link>

@@ -34,7 +34,7 @@ export default function Login({
                     <>
                         <div className="grid gap-5">
                             <div className="grid gap-2">
-                                <Label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">Email address</Label>
+                                <Label htmlFor="email" className="text-xs font-bold  tracking-wider text-muted-foreground ml-1">Email address</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -51,7 +51,7 @@ export default function Login({
 
                             <div className="grid gap-2">
                                 <div className="flex items-center justify-between ml-1">
-                                    <Label htmlFor="password" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Password</Label>
+                                    <Label htmlFor="password" className="text-xs font-bold  tracking-wider text-muted-foreground">Password</Label>
                                     {canResetPassword && (
                                         <Link
                                             href={request().url}
@@ -107,18 +107,18 @@ export default function Login({
 
                         {/* Demo Access Section - More styled */}
                         <div className="mt-2 rounded-2xl border border-dashed border-border bg-muted/30 p-4">
-                            <h4 className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 text-center">Demo Environment</h4>
+                            <h4 className="mb-4 text-[10px] font-black   text-muted-foreground/60 text-center">Demo Environment</h4>
                             <div className="grid grid-cols-1 gap-3">
                                 <div className="flex items-center justify-between p-2 rounded-lg bg-background border border-border/50">
                                     <div className="flex flex-col">
-                                        <span className="text-[9px] font-black uppercase text-primary mb-0.5">Admin Account</span>
+                                        <span className="text-[9px] font-black  text-primary mb-0.5">Admin Account</span>
                                         <span className="text-[10px] font-mono text-foreground leading-none">admin@learnsyntax.com</span>
                                     </div>
                                     <div className="px-2 py-1 bg-muted rounded text-[9px] font-mono text-muted-foreground">password</div>
                                 </div>
                                 <div className="flex items-center justify-between p-2 rounded-lg bg-background border border-border/50">
                                     <div className="flex flex-col">
-                                        <span className="text-[9px] font-black uppercase text-accent mb-0.5">Student Account</span>
+                                        <span className="text-[9px] font-black  text-accent mb-0.5">Student Account</span>
                                         <span className="text-[10px] font-mono text-foreground leading-none">student@learnsyntax.com</span>
                                     </div>
                                     <div className="px-2 py-1 bg-muted rounded text-[9px] font-mono text-muted-foreground">password</div>

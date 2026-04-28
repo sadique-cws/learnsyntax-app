@@ -12,12 +12,12 @@ export default function AdminStudentIndex({ students }: { students: any[] }) {
             sortable: true,
             render: (student) => (
                 <div className="flex items-center gap-3">
-                    <div className="size-10 rounded bg-primary/5 border border-primary/10 flex items-center justify-center font-black text-primary text-xs shrink-0 uppercase">
+                    <div className="size-10 rounded bg-primary/5 border border-primary/10 flex items-center justify-center font-black text-primary text-xs shrink-0 ">
                         <User className="size-4" />
                     </div>
                     <div>
                         <div className="font-bold text-sm text-foreground">{student.name}</div>
-                        <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-tight">{student.email}</div>
+                        <div className="text-[10px] text-muted-foreground font-bold  tracking-tight">{student.email}</div>
                     </div>
                 </div>
             )

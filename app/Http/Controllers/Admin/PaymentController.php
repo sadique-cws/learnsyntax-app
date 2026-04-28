@@ -99,19 +99,19 @@ class PaymentController extends Controller
 
     public function exportGstr1()
     {
-        $invoices = Invoice::with(['payment.enrollment.user'])
-            ->latest()
-            ->get();
-
+        \Log::info('GSTR-1 Export requested');
+        
         $filename = 'GSTR1_Report_'.now()->format('Y_m_d').'.csv';
 
-        $callback = function () {
+        return response()->streamDownload(function () {
             $invoices = Invoice::with(['payment.enrollment.user'])
+                ->whereNotNull('taxable_amount')
                 ->latest()
                 ->get();
 
             $handle = fopen('php://output', 'w');
 
+            // GSTR-1 Headers
             fputcsv($handle, [
                 'Invoice Number',
                 'Invoice Date',
@@ -143,13 +143,10 @@ class PaymentController extends Controller
             }
 
             fclose($handle);
-        };
-
-        return response()->stream($callback, 200, [
-            'Content-type' => 'text/csv',
-            'Content-Disposition' => "attachment; filename=$filename",
+        }, $filename, [
+            'Content-Type' => 'text/csv',
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
             'Pragma' => 'no-cache',
-            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
             'Expires' => '0',
         ]);
     }

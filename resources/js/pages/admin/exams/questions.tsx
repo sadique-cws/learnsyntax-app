@@ -65,15 +65,15 @@ export default function AdminExamQuestions({ exam }: { exam: any }) {
             
             <div className="w-full p-4 lg:p-6 max-w-7xl mx-auto">
                 <div className="mb-8">
-                    <Link href="/admin/academic/exams" className="inline-flex items-center text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-primary transition-colors mb-6">
+                    <Link href="/admin/academic/exams" className="inline-flex items-center text-xs font-bold  tracking-wider text-muted-foreground hover:text-primary transition-colors mb-6">
                         <ChevronLeft className="size-3 mr-1" /> Back to Exams
                     </Link>
                     <div className="flex flex-col gap-6">
                         <div className="max-w-4xl">
-                            <div className="inline-flex items-center gap-2 px-2 py-0.5 rounded bg-primary/5 border border-primary/10 text-[10px] font-bold text-primary uppercase tracking-widest mb-3">
+                            <div className="inline-flex items-center gap-2 px-2 py-0.5 rounded bg-primary/5 border border-primary/10 text-[10px] font-bold text-primary   mb-3">
                                 <HelpCircle className="size-3" /> {exam.course.title}
                             </div>
-                            <h1 className="text-4xl font-medium tracking-tight text-foreground leading-tight mb-2">{exam.title}</h1>
+                            <h1 className="text-4xl font-medium  text-foreground leading-tight mb-2">{exam.title}</h1>
                             <p className="text-muted-foreground text-sm font-medium tracking-tight">Manage questions, bulk import from JSON, and structure your final assessment.</p>
                         </div>
                         
@@ -131,7 +131,7 @@ export default function AdminExamQuestions({ exam }: { exam: any }) {
                                 </Dialog>
                             </div>
                             <div className="h-11 px-6 rounded-xl bg-muted/50 border border-border/50 flex flex-col justify-center min-w-[120px]">
-                                <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Total Questions</div>
+                                <div className="text-[9px] font-bold text-muted-foreground  ">Total Questions</div>
                                 <div className="text-lg font-bold text-foreground leading-none">{exam.questions.length}</div>
                             </div>
                         </div>
@@ -209,7 +209,7 @@ export default function AdminExamQuestions({ exam }: { exam: any }) {
                         <div className="flex items-center justify-between ml-1">
                             <h2 className="text-sm font-medium text-muted-foreground">Exam Paper ({filteredQuestions.length})</h2>
                             {searchQuery && (
-                                <Button variant="ghost" size="sm" onClick={() => setSearchQuery('')} className="h-7 text-[10px] font-bold uppercase tracking-wider text-primary">
+                                <Button variant="ghost" size="sm" onClick={() => setSearchQuery('')} className="h-7 text-[10px] font-bold  tracking-wider text-primary">
                                     Clear Search
                                 </Button>
                             )}

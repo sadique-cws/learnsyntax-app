@@ -164,11 +164,11 @@ export function AdminDataTable<T extends { id: number | string }>({
             {(title || onAdd) && (
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
                     <div>
-                        {title && <h1 className="text-2xl font-medium tracking-tight text-foreground">{title}</h1>}
-                        {subtitle && <p className="text-muted-foreground text-xs font-medium tracking-tight mt-1">{subtitle}</p>}
+                        {title && <h1 className="text-2xl font-medium  text-foreground">{title}</h1>}
+                        {subtitle && <p className="text-muted-foreground text-xs font-medium  mt-1">{subtitle}</p>}
                     </div>
                     {onAdd && (
-                        <Button onClick={onAdd} className="rounded-sm font-medium tracking-tight text-[11px] h-10 px-6">
+                        <Button onClick={onAdd} className="rounded-sm font-medium  text-[11px] h-10 px-6">
                             {addLabel}
                         </Button>
                     )}
@@ -201,7 +201,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                                 onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
                                 onClick={(e) => e.currentTarget.showPicker?.()}
                             />
-                            <span className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-tighter">to</span>
+                            <span className="text-[10px] font-bold text-muted-foreground/50  tracking-tighter">to</span>
                             <Input 
                                 type="date" 
                                 className="h-8 border-none bg-transparent text-[11px] font-semibold focus-visible:ring-0 w-[100px] p-0 cursor-pointer"
@@ -227,7 +227,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className={cn(
-                                "rounded-sm h-10 px-4 font-medium text-[11px] tracking-tight border-border bg-card",
+                                "rounded-sm h-10 px-4 font-medium text-[11px]  border-border bg-card",
                                 hasActiveFilters && "border-primary text-primary"
                             )}>
                                 <Filter className="size-4 mr-2" />
@@ -261,7 +261,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                             {hasActiveFilters && (
                                 <DropdownMenuItem 
                                     onClick={clearFilters}
-                                    className="text-xs font-medium tracking-tight text-destructive justify-center"
+                                    className="text-xs font-medium  text-destructive justify-center"
                                 >
                                     Clear All Filters
                                 </DropdownMenuItem>
@@ -279,7 +279,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                         return values.map(val => {
                             const option = filterDef?.options.find(o => o.value === val);
                             return (
-                                <div key={`${key}-${val}`} className="flex items-center gap-1.5 px-2 py-1 bg-primary/10 border border-primary/20 rounded-sm text-[10px] font-medium tracking-tight text-primary">
+                                <div key={`${key}-${val}`} className="flex items-center gap-1.5 px-2 py-1 bg-primary/10 border border-primary/20 rounded-sm text-[10px] font-medium  text-primary">
                                     {filterDef?.label}: {option?.label || val}
                                     <X className="size-3 cursor-pointer" onClick={() => toggleFilter(key, val)} />
                                 </div>
@@ -298,7 +298,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                                     <th 
                                         key={String(col.key)}
                                         className={cn(
-                                            "px-4 py-3 text-[11px] font-medium tracking-tight transition-colors text-muted-foreground",
+                                            "px-4 py-3 text-[11px] font-medium  transition-colors text-muted-foreground",
                                             col.sortable && "cursor-pointer hover:bg-muted/50",
                                             col.align === 'right' && "text-right",
                                             col.align === 'center' && "text-center"
@@ -315,7 +315,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                                         </div>
                                     </th>
                                 ))}
-                                {actions && <th className="px-4 py-3 text-[11px] font-medium tracking-tight text-right text-muted-foreground">Actions</th>}
+                                {actions && <th className="px-4 py-3 text-[11px] font-medium  text-right text-muted-foreground">Actions</th>}
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
@@ -343,7 +343,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                             {filteredAndSortedData.length === 0 && (
                                 <tr>
                                     <td colSpan={columns.length + (actions ? 1 : 0)} className="px-4 py-12 text-center text-muted-foreground">
-                                        <div className="text-xs font-medium tracking-tight opacity-50">No matching records found</div>
+                                        <div className="text-xs font-medium  opacity-50">No matching records found</div>
                                     </td>
                                 </tr>
                             )}

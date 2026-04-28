@@ -19,7 +19,7 @@ export default function CourseIndex({ courses }: { courses: any[] }) {
             
             <div className="w-full p-4 lg:p-6 max-w-7xl mx-auto">
                 <div className="mb-10">
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-foreground leading-[1.15] mb-2">Our Courses</h1>
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-black  text-foreground leading-[1.15] mb-2">Our Courses</h1>
                     <p className="text-base md:text-lg text-muted-foreground leading-relaxed">Master your skills with our industry-leading programming courses.</p>
                 </div>
 
@@ -50,7 +50,7 @@ export default function CourseIndex({ courses }: { courses: any[] }) {
                                         </div>
                                     </div>
                                     <div className="p-4 flex flex-col flex-1">
-                                        <div className="text-[10px] font-black text-primary uppercase tracking-widest mb-2">Programming</div>
+                                        <div className="text-[10px] font-black text-primary   mb-2">Programming</div>
                                         <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-4 leading-snug">
                                             {course.title}
                                         </h3>

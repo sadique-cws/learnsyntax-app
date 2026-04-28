@@ -16,6 +16,8 @@ export default function ExamResults({ exam }: { exam: any }) {
 
     const handleUpdateMarks = (e: React.FormEvent) => {
         e.preventDefault();
+        if (!selectedAttempt) return;
+        
         patch(`/admin/academic/exam-attempts/${selectedAttempt.id}`, {
             onSuccess: () => setSelectedAttempt(null),
             preserveScroll: true
@@ -32,7 +34,7 @@ export default function ExamResults({ exam }: { exam: any }) {
                         <User className="size-4" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-xs font-black uppercase tracking-tight">{attempt.user.name}</span>
+                        <span className="text-xs font-black  tracking-tight">{attempt.user.name}</span>
                         <span className="text-[9px] text-muted-foreground font-bold lowercase">{attempt.user.email}</span>
                     </div>
                 </div>
@@ -42,7 +44,7 @@ export default function ExamResults({ exam }: { exam: any }) {
             key: 'date',
             label: 'Attempted On',
             render: (attempt) => (
-                <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase">
+                <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground ">
                     <Clock className="size-3" />
                     {new Date(attempt.created_at).toLocaleString()}
                 </div>
@@ -56,7 +58,7 @@ export default function ExamResults({ exam }: { exam: any }) {
                     <div className="px-2 py-0.5 bg-muted rounded-sm text-xs font-black">
                         {attempt.marks_obtained} / {exam.total_marks}
                     </div>
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase">
+                    <span className="text-[10px] font-bold text-muted-foreground ">
                         ({Math.round((attempt.marks_obtained / exam.total_marks) * 100)}%)
                     </span>
                 </div>
@@ -69,7 +71,7 @@ export default function ExamResults({ exam }: { exam: any }) {
                 const percentage = (attempt.marks_obtained / exam.total_marks) * 100;
                 const passed = percentage >= 40;
                 return (
-                    <div className={`flex items-center gap-1.5 px-2 py-1 rounded-sm text-[9px] font-black uppercase tracking-widest ${
+                    <div className={`flex items-center gap-1.5 px-2 py-1 rounded-sm text-[9px] font-black   ${
                         passed ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
                     }`}>
                         {passed ? <CheckCircle2 className="size-3" /> : <AlertCircle className="size-3" />}
@@ -99,21 +101,21 @@ export default function ExamResults({ exam }: { exam: any }) {
     return (
         <>
             <Head title={`Results: ${exam.title}`} />
-            <div className="p-4 lg:p-8 max-w-7xl mx-auto">
+            <div className="p-4  lg:p-6 w-full mx-auto">
                 <div className="flex items-center justify-between mb-8">
                     <div>
                         <div className="flex items-center gap-2 mb-1">
-                            <Link href="/admin/academic/exams" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">Manage Exams</Link>
+                            <Link href="/admin/academic/exams" className="text-[10px] font-black   text-muted-foreground hover:text-primary transition-colors">Manage Exams</Link>
                             <span className="text-muted-foreground/30">/</span>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-primary">Results</span>
+                            <span className="text-[10px] font-black   text-primary">Results</span>
                         </div>
-                        <h1 className="text-2xl font-black uppercase tracking-tight text-foreground">{exam.title}</h1>
+                        <h1 className="text-2xl font-black   text-foreground">{exam.title}</h1>
                         <div className="flex items-center gap-4 mt-2">
-                            <div className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground uppercase">
+                            <div className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground ">
                                 <BookOpen className="size-3.5 text-primary/40" /> {exam.course.title}
                             </div>
                             <div className="size-1.5 rounded-full bg-border" />
-                            <div className="text-xs font-bold text-muted-foreground uppercase">
+                            <div className="text-xs font-bold text-muted-foreground ">
                                 Total Marks: <span className="text-foreground">{exam.total_marks}</span>
                             </div>
                         </div>
@@ -123,7 +125,7 @@ export default function ExamResults({ exam }: { exam: any }) {
                     </div>
                 </div>
 
-                <div className="bg-background border border-border rounded-sm shadow-sm overflow-hidden">
+                <div className="bg-background overflow-hidden">
                     <AdminDataTable 
                         data={exam.attempts} 
                         columns={columns} 
@@ -136,17 +138,17 @@ export default function ExamResults({ exam }: { exam: any }) {
             <Dialog open={!!selectedAttempt} onOpenChange={(open) => !open && setSelectedAttempt(null)}>
                 <DialogContent className="rounded-sm max-w-md">
                     <DialogHeader>
-                        <DialogTitle className="text-sm font-black uppercase tracking-widest">Update Exam Marks</DialogTitle>
+                        <DialogTitle className="text-sm font-black  ">Update Exam Marks</DialogTitle>
                     </DialogHeader>
                     <form onSubmit={handleUpdateMarks} className="space-y-4 py-4">
                         <div className="space-y-1.5">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50">Student</label>
-                            <div className="p-3 bg-muted/20 border border-border rounded-sm text-xs font-bold uppercase">
+                            <label className="text-[10px] font-black   text-muted-foreground/50">Student</label>
+                            <div className="p-3 bg-muted/20 border border-border rounded-sm text-xs font-bold ">
                                 {selectedAttempt?.user?.name}
                             </div>
                         </div>
                         <div className="space-y-1.5">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50">Marks Obtained (Max: {exam.total_marks})</label>
+                            <label className="text-[10px] font-black   text-muted-foreground/50">Marks Obtained (Max: {exam.total_marks})</label>
                             <Input 
                                 type="number"
                                 className="h-10 rounded-sm border-border bg-muted/10 text-sm font-bold focus:bg-background"
@@ -161,14 +163,14 @@ export default function ExamResults({ exam }: { exam: any }) {
                                 type="button" 
                                 variant="outline" 
                                 onClick={() => setSelectedAttempt(null)}
-                                className="rounded-sm text-[10px] font-black uppercase tracking-widest"
+                                className="rounded-sm text-[10px] font-black  "
                             >
                                 Cancel
                             </Button>
                             <Button 
                                 type="submit" 
                                 disabled={processing}
-                                className="rounded-sm bg-primary text-[10px] font-black uppercase tracking-widest px-8 shadow-lg shadow-primary/10"
+                                className="rounded-sm bg-primary text-[10px] font-black   px-8 shadow-lg shadow-primary/10"
                             >
                                 Save Changes
                             </Button>

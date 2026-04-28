@@ -81,6 +81,21 @@ class StudentController extends Controller
         return back()->with('success', 'Certificate generated successfully!');
     }
 
+    public function update(Request $request, User $student)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,'.$student->id,
+            'phone' => 'nullable|string|max:20',
+            'qualification' => 'nullable|string|max:255',
+            'college' => 'nullable|string|max:255',
+        ]);
+
+        $student->update($request->all());
+
+        return back()->with('success', 'Student profile updated successfully.');
+    }
+
     public function manualEnroll(Request $request, User $student)
     {
         $request->validate([

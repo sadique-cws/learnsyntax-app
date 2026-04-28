@@ -19,12 +19,14 @@ class TestDataSeeder extends Seeder
         // 1. Create a few more students
         $students = [];
         for ($i = 1; $i <= 5; $i++) {
-            $students[] = User::create([
-                'name' => "Student $i",
-                'email' => "student$i@example.com",
-                'password' => Hash::make('password'),
-                'is_admin' => false,
-            ]);
+            $students[] = User::updateOrCreate(
+                ['email' => "student$i@example.com"],
+                [
+                    'name' => "Student $i",
+                    'password' => Hash::make('password'),
+                    'is_admin' => false,
+                ]
+            );
         }
 
         // 2. Get existing courses and batches (created by CourseSeeder)
@@ -80,12 +82,30 @@ class TestDataSeeder extends Seeder
                     ]);
 
                     // 6. Create Payments for these enrollments
-                    Payment::create([
+                    $payment = Payment::create([
                         'enrollment_id' => $enrollment->id,
                         'amount' => $course->price,
                         'status' => 'paid',
                         'payment_method' => 'card',
                         'transaction_id' => 'TXN_'.uniqid(),
+                        'currency' => 'INR',
+                    ]);
+
+                    // 7. Create Invoices for these payments (to populate GST report)
+                    $taxableAmount = round($payment->amount / 1.18, 2);
+                    $gstAmount = round($payment->amount - $taxableAmount, 2);
+                    $splitGst = round($gstAmount / 2, 2);
+
+                    $payment->invoice()->create([
+                        'invoice_number' => 'INV-'.strtoupper(str()->random(8)),
+                        'amount' => $payment->amount,
+                        'taxable_amount' => $taxableAmount,
+                        'cgst' => $splitGst,
+                        'sgst' => $splitGst,
+                        'igst' => 0,
+                        'sac_code' => '9992',
+                        'status' => 'paid',
+                        'issued_at' => now(),
                     ]);
                 }
             }

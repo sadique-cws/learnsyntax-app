@@ -71,7 +71,7 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
             render: (payment) => (
                 <div>
                     <div className="font-medium text-sm">₹{payment.amount}</div>
-                    <div className="text-[10px] text-green-600 font-medium tracking-tight uppercase tracking-widest text-[8px]">{payment.status}</div>
+                    <div className="text-[10px] text-green-600 font-medium    text-[8px]">{payment.status}</div>
                 </div>
             )
         }
@@ -85,7 +85,7 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
                 <div className="flex justify-between items-center mb-6">
                     <div>
                         <h1 className="text-2xl font-medium tracking-tight">Financial Ledger</h1>
-                        <p className="text-muted-foreground text-xs font-medium tracking-tight mt-1">Track all student transactions and generated invoices</p>
+                        <p className="text-muted-foreground text-xs font-medium  mt-1">Track all student transactions and generated invoices</p>
                     </div>
                     <div className="flex gap-2">
                         <Button asChild variant="outline" className="rounded h-10 px-6 font-medium text-xs border-border bg-card">
@@ -113,7 +113,7 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
                     actions={(payment) => (
                         <div className="flex items-center justify-end">
                             {payment.invoice ? (
-                                <Button asChild variant="outline" size="sm" className="rounded h-8 text-[10px] font-medium tracking-tight px-3 border-border bg-card">
+                                <Button asChild variant="outline" size="sm" className="rounded h-8 text-[10px] font-medium  px-3 border-border bg-card">
                                     <Link href={`/admin/invoices/${payment.invoice.id}`}>
                                         <Receipt className="size-3 mr-2" />
                                         {payment.invoice.invoice_number}
@@ -124,7 +124,7 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
                                     onClick={() => router.post(`/admin/payments/${payment.id}/generate-invoice`)}
                                     variant="outline" 
                                     size="sm" 
-                                    className="rounded h-8 text-[10px] font-bold uppercase tracking-wider px-3 border-primary text-primary hover:bg-primary/5"
+                                    className="rounded h-8 text-[10px] font-bold  tracking-wider px-3 border-primary text-primary hover:bg-primary/5"
                                 >
                                     Generate Invoice
                                 </Button>

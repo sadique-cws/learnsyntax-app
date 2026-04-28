@@ -38,7 +38,7 @@ export default function Register() {
                 <div className="space-y-6">
                     <div className="flex items-center gap-2 pb-2 border-b border-border/50">
                         <User className="size-4 text-primary" />
-                        <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Personal Details</h2>
+                        <h2 className="text-[10px] font-black   text-muted-foreground">Personal Details</h2>
                     </div>
                     
                     <div className="grid gap-5">
@@ -108,7 +108,7 @@ export default function Register() {
                 <div className="space-y-6">
                     <div className="flex items-center gap-2 pb-2 border-b border-border/50">
                         <GraduationCap className="size-4 text-primary" />
-                        <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Education</h2>
+                        <h2 className="text-[10px] font-black   text-muted-foreground">Education</h2>
                     </div>
                     
                     <div className="grid gap-5">
@@ -147,7 +147,7 @@ export default function Register() {
                 <div className="space-y-6">
                     <div className="flex items-center gap-2 pb-2 border-b border-border/50">
                         <Lock className="size-4 text-primary" />
-                        <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Security</h2>
+                        <h2 className="text-[10px] font-black   text-muted-foreground">Security</h2>
                     </div>
                     
                     <div className="grid gap-5">
@@ -182,7 +182,7 @@ export default function Register() {
                 <div className="space-y-4 pt-4">
                     <Button
                         type="submit"
-                        className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 font-black  uppercase tracking-widest text-xs transition-all active:scale-[0.98]"
+                        className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 font-black    text-xs transition-all active:scale-[0.98]"
                         disabled={processing}
                     >
                         {processing ? <Spinner className="mr-2" /> : <CheckCircle2 className="mr-2 size-4" />}

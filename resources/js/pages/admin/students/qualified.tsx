@@ -23,7 +23,7 @@ export default function QualifiedStudents({ qualified }: { qualified: any[] }) {
                         <User className="size-4" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-xs font-black uppercase tracking-tight">{enrollment.user.name}</span>
+                        <span className="text-xs font-black  tracking-tight">{enrollment.user.name}</span>
                         <span className="text-[9px] text-muted-foreground font-bold lowercase">{enrollment.user.email}</span>
                     </div>
                 </div>
@@ -35,7 +35,7 @@ export default function QualifiedStudents({ qualified }: { qualified: any[] }) {
             render: (enrollment) => (
                 <div className="flex items-center gap-2">
                     <BookOpen className="size-3.5 text-primary/40" />
-                    <span className="text-xs font-bold uppercase">{enrollment.course.title}</span>
+                    <span className="text-xs font-bold ">{enrollment.course.title}</span>
                 </div>
             )
         },
@@ -59,7 +59,7 @@ export default function QualifiedStudents({ qualified }: { qualified: any[] }) {
                     <Button 
                         onClick={() => handleGenerate(enrollment.id)}
                         disabled={processing}
-                        className="h-8 rounded-sm bg-primary text-[9px] font-black uppercase tracking-widest px-4 shadow-lg shadow-primary/10"
+                        className="h-8 rounded-sm bg-primary text-[9px] font-black   px-4 shadow-lg shadow-primary/10"
                     >
                         {processing ? <Loader2 className="size-3 animate-spin mr-2" /> : <Award className="size-3 mr-2" />}
                         Issue Certificate
@@ -77,11 +77,11 @@ export default function QualifiedStudents({ qualified }: { qualified: any[] }) {
     return (
         <>
             <Head title="Qualified Students" />
-            <div className="p-4 lg:p-8 w-full mx-auto">
+            <div className="p-4  lg:p-6 w-full mx-auto">
                 <div className="flex items-center justify-between mb-8">
                     <div>
-                        <h1 className="text-2xl font-black uppercase tracking-tight text-foreground">Qualified Students</h1>
-                        <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest mt-1">Students eligible for certification (Score &gt;= 60%)</p>
+                        <h1 className="text-2xl font-black   text-foreground">Qualified Students</h1>
+                        <p className="text-muted-foreground text-xs font-bold   mt-1">Students eligible for certification (Score &gt;= 60%)</p>
                     </div>
                     <div className="size-12 rounded-sm bg-green-50 border border-green-100 flex items-center justify-center text-green-600">
                         <CheckCircle2 className="size-6" />

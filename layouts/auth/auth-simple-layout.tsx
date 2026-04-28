@@ -21,7 +21,7 @@ export default function AuthSimpleLayout({
                                 <AppLogoIcon className="size-8 text-primary" />
                             </div>
                             <div className="flex flex-col items-center leading-none">
-                                <span className="font-black text-xl tracking-tighter uppercase">Learn <span className="text-primary">Syntax</span></span>
+                                <span className="font-black text-xl tracking-tighter ">Learn <span className="text-primary">Syntax</span></span>
                             </div>
                         </Link>
 
@@ -37,7 +37,7 @@ export default function AuthSimpleLayout({
                         {children}
                     </div>
 
-                    <p className="text-center text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
+                    <p className="text-center text-[10px] text-muted-foreground font-bold  ">
                         © {new Date().getFullYear()} Learn Syntax Platform
                     </p>
                 </div>

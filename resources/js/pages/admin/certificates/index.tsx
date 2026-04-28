@@ -20,7 +20,7 @@ export default function CertificateIndex({ certificates }: { certificates: any[]
                         <User className="size-3" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-xs font-bold uppercase">{cert.enrollment.user.name}</span>
+                        <span className="text-xs font-bold ">{cert.enrollment.user.name}</span>
                         <span className="text-[9px] text-muted-foreground font-medium lowercase italic">{cert.enrollment.user.email}</span>
                     </div>
                 </div>
@@ -32,7 +32,7 @@ export default function CertificateIndex({ certificates }: { certificates: any[]
             render: (cert) => (
                 <div className="flex items-center gap-2">
                     <BookOpen className="size-3 text-muted-foreground" />
-                    <span className="text-xs font-bold uppercase">{cert.enrollment.course.title}</span>
+                    <span className="text-xs font-bold ">{cert.enrollment.course.title}</span>
                 </div>
             )
         },
@@ -40,7 +40,7 @@ export default function CertificateIndex({ certificates }: { certificates: any[]
             key: 'issued_at',
             label: 'Issued Date',
             render: (cert) => (
-                <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase">
+                <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground ">
                     <Calendar className="size-3" />
                     {new Date(cert.issued_at).toLocaleDateString()}
                 </div>
@@ -67,11 +67,11 @@ export default function CertificateIndex({ certificates }: { certificates: any[]
     return (
         <>
             <Head title="Issued Certificates" />
-            <div className="p-4 lg:p-8 w-full mx-auto">
+            <div className="p-4  lg:p-6 w-full mx-auto">
                 <div className="flex items-center justify-between mb-8">
                     <div>
-                        <h1 className="text-2xl font-black uppercase tracking-tight text-foreground">Issued Certificates</h1>
-                        <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest mt-1">Official credentials issued to students</p>
+                        <h1 className="text-2xl font-black   text-foreground">Issued Certificates</h1>
+                        <p className="text-muted-foreground text-xs font-bold   mt-1">Official credentials issued to students</p>
                     </div>
                     <div className="size-12 rounded-sm bg-primary/5 border border-primary/10 flex items-center justify-center text-primary">
                         <Award className="size-6" />

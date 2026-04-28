@@ -37,12 +37,12 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                     <div className="mx-auto max-w-7xl px-4 sm:px-6">
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                             <div className="lg:col-span-7">
-                                <div className="flex items-center gap-2 text-primary text-[10px] font-black uppercase tracking-widest mb-4">
+                                <div className="flex items-center gap-2 text-primary text-[10px] font-black   mb-4">
                                     <Link href="/courses" className="hover:underline">Online Courses</Link>
                                     <span className="opacity-50">/</span>
                                     <span>Professional Certificate</span>
                                 </div>
-                                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-foreground leading-[1.15] mb-6">
+                                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black  text-foreground leading-[1.15] mb-6">
                                     {course.title}
                                 </h1>
                                 <p className="text-base lg:text-lg text-background/80 mb-8 max-w-2xl font-medium leading-relaxed">
@@ -58,7 +58,7 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                                                 </div>
                                             ))}
                                         </div>
-                                        <span className="text-[11px] font-bold uppercase tracking-widest text-background/70">1.2k+ Enrolled</span>
+                                        <span className="text-[11px] font-bold   text-background/70">1.2k+ Enrolled</span>
                                     </div>
                                     <div className="h-4 w-[1px] bg-background/20 hidden sm:block" />
                                     <div className="flex items-center gap-1.5">
@@ -70,13 +70,13 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                                 <div className="flex flex-col sm:flex-row gap-3">
                                     <Button 
                                         size="lg" 
-                                        className="h-12 px-8 rounded font-bold bg-primary hover:bg-primary/90 text-white tracking-widest uppercase text-xs w-full sm:w-auto"
+                                        className="h-12 px-8 rounded font-bold bg-primary hover:bg-primary/90 text-white   text-xs w-full sm:w-auto"
                                         onClick={handleEnroll}
                                         disabled={processing || is_enrolled}
                                     >
                                         {is_enrolled ? 'Already Enrolled' : `Enroll Now @ ₹${course.price}`}
                                     </Button>
-                                    <Button variant="outline" size="lg" className="h-12 px-8 rounded font-bold border-background/20 text-background bg-foreground hover:bg-background/10 hover:text-background tracking-widest uppercase text-xs w-full sm:w-auto">
+                                    <Button variant="outline" size="lg" className="h-12 px-8 rounded font-bold border-background/20 text-background bg-foreground hover:bg-background/10 hover:text-background   text-xs w-full sm:w-auto">
                                         Download Brochure
                                     </Button>
                                 </div>
@@ -97,7 +97,7 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                                     <div className="absolute bottom-4 left-4 right-4 p-3 bg-foreground/90 rounded border border-background/20 text-background">
                                         <div className="flex items-center gap-2">
                                             <div className="size-2 rounded-full bg-red-500 animate-pulse" />
-                                            <span className="text-[10px] font-bold uppercase tracking-widest">Next Batch: {formatDate(course.batches[0]?.start_date || '2026-05-01')}</span>
+                                            <span className="text-[10px] font-bold  ">Next Batch: {formatDate(course.batches[0]?.start_date || '2026-05-01')}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -124,10 +124,10 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                     <div className="mx-auto max-w-7xl px-4 sm:px-6">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                             <div>
-                                <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded text-[10px] font-bold uppercase tracking-widest mb-4">
+                                <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded text-[10px] font-bold   mb-4">
                                     Skill Development
                                 </div>
-                                <h2 className="text-xl md:text-2xl font-black tracking-tight text-foreground mb-8">
+                                <h2 className="text-xl md:text-2xl font-black  text-foreground mb-8">
                                     Become a job-ready <br /> 
                                     <span className="text-primary">{course.title} Expert</span>
                                 </h2>
@@ -145,8 +145,8 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                                         <CheckCircle2 className="size-5" />
                                     </div>
                                     <div>
-                                        <div className="font-bold text-sm uppercase tracking-tight">Verified Path</div>
-                                        <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest">Enroll to start your journey</div>
+                                        <div className="font-bold text-sm  tracking-tight">Verified Path</div>
+                                        <div className="text-[10px] font-medium text-muted-foreground  ">Enroll to start your journey</div>
                                     </div>
                                 </div>
                             </div>
@@ -158,7 +158,7 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                 <section className="py-12 md:py-20 bg-muted/10 border-b border-border">
                     <div className="mx-auto max-w-4xl px-4 sm:px-6">
                         <div className="text-center mb-10">
-                            <h2 className="text-xl md:text-2xl font-black tracking-tight text-foreground mb-2">Course Curriculum</h2>
+                            <h2 className="text-xl md:text-2xl font-black  text-foreground mb-2">Course Curriculum</h2>
                             <p className="text-sm text-muted-foreground">A structured path to mastery, broken down into modules.</p>
                         </div>
                         
@@ -169,7 +169,7 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                                         <div className="size-8 rounded bg-muted flex items-center justify-center font-bold text-xs text-muted-foreground">
                                             {String(i).padStart(2, '0')}
                                         </div>
-                                        <h3 className="font-bold text-sm uppercase tracking-wide">Module {i}: Core Concepts</h3>
+                                        <h3 className="font-bold text-sm  tracking-wide">Module {i}: Core Concepts</h3>
                                     </div>
                                     <ChevronDown className="size-4 text-muted-foreground" />
                                 </div>
@@ -183,7 +183,7 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                     <div className="mx-auto max-w-3xl px-4 sm:px-6">
                         <div className="flex items-center gap-2 mb-8">
                             <HelpCircle className="size-5 text-primary" />
-                            <h2 className="text-xl md:text-2xl font-black tracking-tight text-foreground">Frequently Asked Questions</h2>
+                            <h2 className="text-xl md:text-2xl font-black  text-foreground">Frequently Asked Questions</h2>
                         </div>
                         <div className="space-y-3">
                             <FaqItem question="Who is this course for?" answer="Designed for beginners and intermediate learners looking to master modern industry standards." />
@@ -203,9 +203,9 @@ function StatItem({ icon: Icon, label, value }: any) {
         <div className="flex flex-col items-center sm:items-start text-center sm:text-left p-3 rounded border border-border bg-background">
             <div className="flex items-center gap-2 mb-2">
                 <Icon className="size-3.5 text-primary" />
-                <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">{label}</span>
+                <span className="text-[9px] font-bold   text-muted-foreground">{label}</span>
             </div>
-            <div className="text-xs font-bold uppercase tracking-tight">{value}</div>
+            <div className="text-xs font-bold  tracking-tight">{value}</div>
         </div>
     );
 }
@@ -215,7 +215,7 @@ function HighlightItem({ title, desc }: any) {
         <div className="space-y-1 p-4 rounded border border-border bg-background">
             <div className="flex items-center gap-2">
                 <div className="size-1.5 rounded-full bg-primary" />
-                <h3 className="font-bold text-xs uppercase tracking-wide">{title}</h3>
+                <h3 className="font-bold text-xs  tracking-wide">{title}</h3>
             </div>
             <p className="text-[11px] font-medium text-muted-foreground leading-relaxed pl-3.5">{desc}</p>
         </div>
@@ -226,7 +226,7 @@ function FaqItem({ question, answer }: any) {
     return (
         <div className="rounded border border-border bg-background p-4 hover:border-primary transition-colors cursor-pointer">
             <div className="flex items-center justify-between mb-2">
-                <h3 className="font-bold text-sm uppercase tracking-wide text-foreground">{question}</h3>
+                <h3 className="font-bold text-sm  tracking-wide text-foreground">{question}</h3>
                 <ChevronDown className="size-4 text-muted-foreground" />
             </div>
             <p className="text-xs font-medium text-muted-foreground leading-relaxed">{answer}</p>

@@ -10,7 +10,7 @@ export default function WalletPage({ balance, transactions }: any) {
         <h1 className="text-3xl font-bold">My Earnings Wallet</h1>
         <Card className="border-0 shadow-lg bg-emerald-50">
           <CardContent className="p-8">
-            <p className="text-sm font-semibold text-emerald-800 uppercase tracking-widest">Available Balance</p>
+            <p className="text-sm font-semibold text-emerald-800  ">Available Balance</p>
             <h2 className="text-6xl font-black text-emerald-600">₹{balance}</h2>
           </CardContent>
         </Card>

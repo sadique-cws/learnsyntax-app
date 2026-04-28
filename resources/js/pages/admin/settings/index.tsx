@@ -34,22 +34,22 @@ export default function AdminSettings({ settings }: { settings: any }) {
         <>
             <Head title="Invoice Configuration" />
             
-            <div className="w-full p-4 lg:p-4 max-w-7xl mx-auto">
+            <div className="w-full p-4 lg:p-6 w-full mx-auto">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                     <div>
-                        <h1 className="text-xl font-black uppercase tracking-tight text-foreground leading-none">Invoice Configuration</h1>
-                        <p className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest mt-1">Manage company details & tax compliance</p>
+                        <h1 className="text-xl font-black   text-foreground leading-none">Invoice Configuration</h1>
+                        <p className="text-muted-foreground text-[10px] font-bold   mt-1">Manage company details & tax compliance</p>
                     </div>
                     <div className="flex items-center gap-4">
                         {recentlySuccessful && (
-                            <div className="flex items-center gap-2 text-green-600 font-bold text-[10px] uppercase tracking-widest animate-in fade-in slide-in-from-right-2">
+                            <div className="flex items-center gap-2 text-green-600 font-bold text-[10px]   animate-in fade-in slide-in-from-right-2">
                                 <CheckCircle2 className="size-3" /> Saved
                             </div>
                         )}
                         <Button 
                             onClick={submit}
                             disabled={processing} 
-                            className="rounded-sm h-9 px-6 bg-primary shadow-lg shadow-primary/10 text-[10px] font-black uppercase tracking-widest transition-all"
+                            className="rounded-sm h-9 px-6 bg-primary shadow-lg shadow-primary/10 text-[10px] font-black   transition-all"
                         >
                             {processing ? (
                                 <div className="size-3 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
@@ -68,12 +68,12 @@ export default function AdminSettings({ settings }: { settings: any }) {
                             <CardHeader className="py-2.5 px-4 border-b border-border/50 bg-muted/5">
                                 <div className="flex items-center gap-2">
                                     <Building2 className="size-3.5 text-primary" />
-                                    <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Company Profile</CardTitle>
+                                    <CardTitle className="text-[10px] font-black   text-muted-foreground">Company Profile</CardTitle>
                                 </div>
                             </CardHeader>
                             <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
                                 <div className="space-y-1.5 md:col-span-2">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Legal Entity Name</Label>
+                                    <Label className="text-[9px] font-black   text-muted-foreground/50">Legal Entity Name</Label>
                                     <Input 
                                         className="h-9 rounded-sm border-border bg-muted/10 text-xs focus:bg-background transition-colors"
                                         value={data.company_name}
@@ -81,7 +81,7 @@ export default function AdminSettings({ settings }: { settings: any }) {
                                     />
                                 </div>
                                 <div className="space-y-1.5 md:col-span-2">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Registered Address</Label>
+                                    <Label className="text-[9px] font-black   text-muted-foreground/50">Registered Address</Label>
                                     <Textarea 
                                         className="min-h-[80px] rounded-sm border-border bg-muted/10 text-xs focus:bg-background transition-colors resize-none p-3"
                                         value={data.company_address}
@@ -89,7 +89,7 @@ export default function AdminSettings({ settings }: { settings: any }) {
                                     />
                                 </div>
                                 <div className="space-y-1.5">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Support Email</Label>
+                                    <Label className="text-[9px] font-black   text-muted-foreground/50">Support Email</Label>
                                     <Input 
                                         className="h-9 rounded-sm border-border bg-muted/10 text-xs focus:bg-background transition-colors"
                                         value={data.company_email}
@@ -97,7 +97,7 @@ export default function AdminSettings({ settings }: { settings: any }) {
                                     />
                                 </div>
                                 <div className="space-y-1.5">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Contact Phone</Label>
+                                    <Label className="text-[9px] font-black   text-muted-foreground/50">Contact Phone</Label>
                                     <Input 
                                         className="h-9 rounded-sm border-border bg-muted/10 text-xs focus:bg-background transition-colors"
                                         value={data.company_phone}
@@ -112,12 +112,12 @@ export default function AdminSettings({ settings }: { settings: any }) {
                             <CardHeader className="py-2.5 px-4 border-b border-border/50 bg-muted/5">
                                 <div className="flex items-center gap-2">
                                     <Landmark className="size-3.5 text-primary" />
-                                    <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Settlement Info</CardTitle>
+                                    <CardTitle className="text-[10px] font-black   text-muted-foreground">Settlement Info</CardTitle>
                                 </div>
                             </CardHeader>
                             <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
                                 <div className="space-y-1.5">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Bank Name</Label>
+                                    <Label className="text-[9px] font-black   text-muted-foreground/50">Bank Name</Label>
                                     <Input 
                                         className="h-9 rounded-sm border-border bg-muted/10 text-xs focus:bg-background transition-colors"
                                         value={data.bank_name}
@@ -125,7 +125,7 @@ export default function AdminSettings({ settings }: { settings: any }) {
                                     />
                                 </div>
                                 <div className="space-y-1.5">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Account Number</Label>
+                                    <Label className="text-[9px] font-black   text-muted-foreground/50">Account Number</Label>
                                     <Input 
                                         className="h-9 rounded-sm border-border bg-muted/10 text-xs font-mono focus:bg-background transition-colors"
                                         value={data.bank_account_no}
@@ -133,15 +133,15 @@ export default function AdminSettings({ settings }: { settings: any }) {
                                     />
                                 </div>
                                 <div className="space-y-1.5">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">IFSC / Swift</Label>
+                                    <Label className="text-[9px] font-black   text-muted-foreground/50">IFSC / Swift</Label>
                                     <Input 
-                                        className="h-9 rounded-sm border-border bg-muted/10 text-xs font-mono uppercase focus:bg-background transition-colors"
+                                        className="h-9 rounded-sm border-border bg-muted/10 text-xs font-mono  focus:bg-background transition-colors"
                                         value={data.bank_ifsc}
                                         onChange={e => setData('bank_ifsc', e.target.value)}
                                     />
                                 </div>
                                 <div className="space-y-1.5">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Branch Locality</Label>
+                                    <Label className="text-[9px] font-black   text-muted-foreground/50">Branch Locality</Label>
                                     <Input 
                                         className="h-9 rounded-sm border-border bg-muted/10 text-xs focus:bg-background transition-colors"
                                         value={data.bank_branch}
@@ -158,12 +158,12 @@ export default function AdminSettings({ settings }: { settings: any }) {
                             <CardHeader className="py-2.5 px-4 border-b border-border/50 bg-muted/5">
                                 <div className="flex items-center gap-2">
                                     <Globe className="size-3.5 text-primary" />
-                                    <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Branding</CardTitle>
+                                    <CardTitle className="text-[10px] font-black   text-muted-foreground">Branding</CardTitle>
                                 </div>
                             </CardHeader>
                             <CardContent className="p-4 space-y-4">
                                 <div className="space-y-3">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Company Logo</Label>
+                                    <Label className="text-[9px] font-black   text-muted-foreground/50">Company Logo</Label>
                                     <div className="flex flex-col items-center gap-4 p-4 border border-dashed border-border rounded-sm bg-muted/5">
                                         {settings.logo_path ? (
                                             <img src={`/storage/${settings.logo_path}`} className="h-16 object-contain" />
@@ -179,7 +179,7 @@ export default function AdminSettings({ settings }: { settings: any }) {
                                     </div>
                                 </div>
                                 <div className="space-y-3">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Authorized Signature</Label>
+                                    <Label className="text-[9px] font-black   text-muted-foreground/50">Authorized Signature</Label>
                                     <div className="flex flex-col items-center gap-4 p-4 border border-dashed border-border rounded-sm bg-muted/5">
                                         {settings.authority_signature_path ? (
                                             <img src={`/storage/${settings.authority_signature_path}`} className="h-12 object-contain" />
@@ -202,21 +202,21 @@ export default function AdminSettings({ settings }: { settings: any }) {
                             <CardHeader className="py-2.5 px-4 border-b border-border/50 bg-muted/5">
                                 <div className="flex items-center gap-2">
                                     <FileText className="size-3.5 text-primary" />
-                                    <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Compliance</CardTitle>
+                                    <CardTitle className="text-[10px] font-black   text-muted-foreground">Compliance</CardTitle>
                                 </div>
                             </CardHeader>
                             <CardContent className="p-4 space-y-4">
                                 <div className="space-y-1.5">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">GSTIN Identification</Label>
+                                    <Label className="text-[9px] font-black   text-muted-foreground/50">GSTIN Identification</Label>
                                     <Input 
-                                        className="h-9 rounded-sm border-border bg-muted/10 text-xs font-mono uppercase focus:bg-background transition-colors"
+                                        className="h-9 rounded-sm border-border bg-muted/10 text-xs font-mono  focus:bg-background transition-colors"
                                         value={data.company_gstin}
                                         onChange={e => setData('company_gstin', e.target.value)}
                                     />
                                 </div>
                                 <div className="grid grid-cols-2 gap-3">
                                     <div className="space-y-1.5">
-                                        <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">State</Label>
+                                        <Label className="text-[9px] font-black   text-muted-foreground/50">State</Label>
                                         <Input 
                                             className="h-9 rounded-sm border-border bg-muted/10 text-xs focus:bg-background transition-colors"
                                             value={data.company_state}
@@ -224,7 +224,7 @@ export default function AdminSettings({ settings }: { settings: any }) {
                                         />
                                     </div>
                                     <div className="space-y-1.5">
-                                        <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Code</Label>
+                                        <Label className="text-[9px] font-black   text-muted-foreground/50">Code</Label>
                                         <Input 
                                             className="h-9 rounded-sm border-border bg-muted/10 text-xs font-mono focus:bg-background transition-colors"
                                             value={data.company_state_code}
@@ -233,7 +233,7 @@ export default function AdminSettings({ settings }: { settings: any }) {
                                     </div>
                                 </div>
                                 <div className="pt-4 border-t border-border/50">
-                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Invoice Footer Note</Label>
+                                    <Label className="text-[9px] font-black   text-muted-foreground/50">Invoice Footer Note</Label>
                                     <Textarea 
                                         className="min-h-[100px] rounded-sm border-border bg-muted/10 text-[10px] mt-2 focus:bg-background transition-colors resize-none"
                                         value={data.declaration}

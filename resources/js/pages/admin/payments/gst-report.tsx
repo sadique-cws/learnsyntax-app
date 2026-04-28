@@ -90,7 +90,7 @@ export default function AdminGSTReport({ invoices, stats }: { invoices: any[], s
                     </Link>
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                         <div>
-                            <h1 className="text-3xl font-medium tracking-tight leading-none mb-1">GST Compliance Report</h1>
+                            <h1 className="text-3xl font-medium  leading-none mb-1">GST Compliance Report</h1>
                             <p className="text-muted-foreground text-xs font-medium tracking-tight">Monthly tax summary and B2B invoice tracking</p>
                         </div>
                         <Button 
@@ -106,7 +106,7 @@ export default function AdminGSTReport({ invoices, stats }: { invoices: any[], s
                 <div className="grid gap-4 md:grid-cols-4 mb-8">
                     <Card className="border-border rounded bg-card">
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-[10px] font-medium text-muted-foreground uppercase">Total GST Collected</CardTitle>
+                            <CardTitle className="text-[10px] font-medium text-muted-foreground ">Total GST Collected</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-medium tracking-tight">₹{stats.total_gst.toFixed(2)}</div>
@@ -114,26 +114,26 @@ export default function AdminGSTReport({ invoices, stats }: { invoices: any[], s
                     </Card>
                     <Card className="border-border rounded bg-card">
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-[10px] font-medium text-muted-foreground uppercase">Total CGST (9%)</CardTitle>
+                            <CardTitle className="text-[10px] font-medium text-muted-foreground ">Total CGST (9%)</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-medium tracking-tight text-blue-600">₹{stats.total_cgst.toFixed(2)}</div>
+                            <div className="text-2xl font-medium  text-blue-600">₹{stats.total_cgst.toFixed(2)}</div>
                         </CardContent>
                     </Card>
                     <Card className="border-border rounded bg-card">
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-[10px] font-medium text-muted-foreground uppercase">Total SGST (9%)</CardTitle>
+                            <CardTitle className="text-[10px] font-medium text-muted-foreground ">Total SGST (9%)</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-medium tracking-tight text-green-600">₹{stats.total_sgst.toFixed(2)}</div>
+                            <div className="text-2xl font-medium  text-green-600">₹{stats.total_sgst.toFixed(2)}</div>
                         </CardContent>
                     </Card>
                     <Card className="border-border rounded bg-card">
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-[10px] font-medium text-muted-foreground uppercase">Total IGST (18%)</CardTitle>
+                            <CardTitle className="text-[10px] font-medium text-muted-foreground ">Total IGST (18%)</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-medium tracking-tight text-purple-600">₹{stats.total_igst.toFixed(2)}</div>
+                            <div className="text-2xl font-medium  text-purple-600">₹{stats.total_igst.toFixed(2)}</div>
                         </CardContent>
                     </Card>
                 </div>

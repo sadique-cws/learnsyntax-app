@@ -79,7 +79,7 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
             sortable: true,
             render: (batch) => (
                 <div className="flex items-center gap-3">
-                    <div className="size-10 rounded bg-primary/5 border border-primary/10 flex items-center justify-center font-bold text-primary text-xs shrink-0 uppercase">
+                    <div className="size-10 rounded bg-primary/5 border border-primary/10 flex items-center justify-center font-bold text-primary text-xs shrink-0 ">
                         {batch.type === 'online' ? <Globe className="size-4" /> : <MapPin className="size-4" />}
                     </div>
                     <div>
@@ -94,7 +94,7 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
             label: 'Type',
             sortable: true,
             render: (batch) => (
-                <div className="px-2 py-0.5 bg-muted rounded text-[10px] font-bold uppercase tracking-wider inline-block text-muted-foreground">
+                <div className="px-2 py-0.5 bg-muted rounded text-[10px] font-bold  tracking-wider inline-block text-muted-foreground">
                     {batch.type}
                 </div>
             )
@@ -127,7 +127,7 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
             sortable: true,
             render: (batch) => (
                 <div className={cn(
-                    "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider inline-block",
+                    "px-2 py-0.5 rounded text-[10px] font-bold  tracking-wider inline-block",
                     batch.is_active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
                 )}>
                     {batch.is_active ? 'Active' : 'Inactive'}
@@ -188,13 +188,13 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
                     <DialogContent className="sm:max-w-[425px] rounded border border-border">
                         <form onSubmit={submit} className="space-y-6">
                             <DialogHeader>
-                                <DialogTitle className="text-xl font-black tracking-tight uppercase">{editingBatch ? 'Edit Batch' : 'New Batch'}</DialogTitle>
+                                <DialogTitle className="text-xl font-black  ">{editingBatch ? 'Edit Batch' : 'New Batch'}</DialogTitle>
                             </DialogHeader>
                             
                             <div className="space-y-4">
                                 {!editingBatch && (
                                     <div className="space-y-2">
-                                        <Label className="text-[10px] font-black uppercase tracking-widest">Select Course</Label>
+                                        <Label className="text-[10px] font-black  ">Select Course</Label>
                                         <Select value={data.course_id} onValueChange={(v) => setData('course_id', v)}>
                                             <SelectTrigger className="rounded bg-card border-border h-10">
                                                 <SelectValue placeholder="Select a course" />
@@ -205,24 +205,24 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
                                                 ))}
                                             </SelectContent>
                                         </Select>
-                                        {errors.course_id && <p className="text-[10px] text-red-500 font-bold uppercase">{errors.course_id}</p>}
+                                        {errors.course_id && <p className="text-[10px] text-red-500 font-bold ">{errors.course_id}</p>}
                                     </div>
                                 )}
                                 
                                 <div className="space-y-2">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest">Batch Name</Label>
+                                    <Label className="text-[10px] font-black  ">Batch Name</Label>
                                     <Input 
                                         value={data.name} 
                                         onChange={e => setData('name', e.target.value)} 
                                         placeholder="e.g. July 2024 Evening" 
                                         className="rounded bg-card border-border h-10"
                                     />
-                                    {errors.name && <p className="text-[10px] text-red-500 font-bold uppercase">{errors.name}</p>}
+                                    {errors.name && <p className="text-[10px] text-red-500 font-bold ">{errors.name}</p>}
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <Label className="text-[10px] font-black uppercase tracking-widest">Type</Label>
+                                        <Label className="text-[10px] font-black  ">Type</Label>
                                         <Select value={data.type} onValueChange={(v) => setData('type', v)}>
                                             <SelectTrigger className="rounded bg-card border-border h-10">
                                                 <SelectValue />
@@ -234,7 +234,7 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
                                         </Select>
                                     </div>
                                     <div className="space-y-2">
-                                        <Label className="text-[10px] font-black uppercase tracking-widest">Capacity</Label>
+                                        <Label className="text-[10px] font-black  ">Capacity</Label>
                                         <Input 
                                             type="number" 
                                             value={data.capacity} 
@@ -245,19 +245,19 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label className="text-[10px] font-black uppercase tracking-widest">Start Date</Label>
+                                    <Label className="text-[10px] font-black  ">Start Date</Label>
                                     <Input 
                                         type="date" 
                                         value={data.start_date} 
                                         onChange={e => setData('start_date', e.target.value)} 
                                         className="rounded bg-card border-border h-10"
                                     />
-                                    {errors.start_date && <p className="text-[10px] text-red-500 font-bold uppercase">{errors.start_date}</p>}
+                                    {errors.start_date && <p className="text-[10px] text-red-500 font-bold ">{errors.start_date}</p>}
                                 </div>
                             </div>
 
                             <DialogFooter>
-                                <Button type="submit" className="rounded w-full h-11 font-black uppercase tracking-widest text-xs" disabled={processing}>
+                                <Button type="submit" className="rounded w-full h-11 font-black   text-xs" disabled={processing}>
                                     {editingBatch ? 'Save Changes' : 'Create Session'}
                                 </Button>
                             </DialogFooter>

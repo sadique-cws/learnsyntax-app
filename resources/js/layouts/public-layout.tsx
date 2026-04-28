@@ -28,9 +28,9 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                     <div className="flex items-center gap-6">
                         <Link href="/" className="flex items-center gap-2">
                             <AppLogoIcon className="size-6 text-primary" />
-                            <span className="text-lg font-black tracking-tight uppercase hidden sm:block">Learn Syntax</span>
+                            <span className="text-lg font-black   hidden sm:block">Learn Syntax</span>
                         </Link>
-                        <div className="hidden md:flex items-center gap-5 text-[13px] font-bold text-muted-foreground uppercase tracking-wide">
+                        <div className="hidden md:flex items-center gap-5 text-[13px] font-bold text-muted-foreground  tracking-wide">
                             <Link href="/" className="hover:text-primary transition-colors">Home</Link>
                             <Link href="/courses" className="hover:text-primary transition-colors">Courses</Link>
                             <Link href="#" className="hover:text-primary transition-colors">Internships</Link>
@@ -47,7 +47,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                             <div className="flex items-center gap-3 pl-3 ml-1 border-l border-border">
                                 <div className="text-right hidden sm:block">
                                     <div className="text-xs font-bold leading-none">{auth.user.name}</div>
-                                    <Link href={dashboard().url} className="text-[10px] text-muted-foreground hover:text-primary uppercase tracking-wider">Dashboard</Link>
+                                    <Link href={dashboard().url} className="text-[10px] text-muted-foreground hover:text-primary  tracking-wider">Dashboard</Link>
                                 </div>
                                 <div className="size-8 rounded bg-muted overflow-hidden border border-border">
                                     <img src={`https://ui-avatars.com/api/?name=${auth.user.name}&background=random`} alt={auth.user.name} className="size-full object-cover" />
@@ -77,14 +77,14 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                     <div className="col-span-1 md:col-span-2">
                         <div className="flex items-center gap-2 mb-4">
                             <AppLogoIcon className="size-6 text-primary" />
-                            <span className="text-lg font-black tracking-tight uppercase">Learn Syntax</span>
+                            <span className="text-lg font-black  ">Learn Syntax</span>
                         </div>
                         <p className="text-sm text-muted-foreground max-w-sm mb-6 leading-relaxed">
                             Empowering the next generation of developers with affordable, high-quality technical education and guaranteed placement support.
                         </p>
                     </div>
                     <div>
-                        <h4 className="font-black mb-4 text-sm uppercase tracking-wider">Platform</h4>
+                        <h4 className="font-black mb-4 text-sm  tracking-wider">Platform</h4>
                         <ul className="space-y-3 text-sm text-muted-foreground font-medium">
                             <li><Link href="/courses" className="hover:text-primary transition-colors">All Courses</Link></li>
                             <li><Link href="#" className="hover:text-primary transition-colors">Internships</Link></li>
@@ -92,7 +92,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                         </ul>
                     </div>
                     <div>
-                        <h4 className="font-black mb-4 text-sm uppercase tracking-wider">Company</h4>
+                        <h4 className="font-black mb-4 text-sm  tracking-wider">Company</h4>
                         <ul className="space-y-3 text-sm text-muted-foreground font-medium">
                             <li><Link href="#" className="hover:text-primary transition-colors">About Us</Link></li>
                             <li><Link href="#" className="hover:text-primary transition-colors">Contact</Link></li>
@@ -109,21 +109,21 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border flex items-center justify-around h-14 pb-safe">
                 <Link href="/" className="flex flex-col items-center justify-center w-full h-full text-foreground hover:bg-muted/50 transition-colors">
                     <Home className="size-[18px]" />
-                    <span className="text-[10px] font-bold mt-1 tracking-wider uppercase">Home</span>
+                    <span className="text-[10px] font-bold mt-1 tracking-wider ">Home</span>
                 </Link>
                 <Link href="/courses" className="flex flex-col items-center justify-center w-full h-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
                     <BookOpen className="size-[18px]" />
-                    <span className="text-[10px] font-bold mt-1 tracking-wider uppercase">Courses</span>
+                    <span className="text-[10px] font-bold mt-1 tracking-wider ">Courses</span>
                 </Link>
                 {auth.user ? (
                     <Link href={dashboard().url} className="flex flex-col items-center justify-center w-full h-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
                         <User className="size-[18px]" />
-                        <span className="text-[10px] font-bold mt-1 tracking-wider uppercase">Account</span>
+                        <span className="text-[10px] font-bold mt-1 tracking-wider ">Account</span>
                     </Link>
                 ) : (
                     <Link href={login().url} className="flex flex-col items-center justify-center w-full h-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
                         <LogIn className="size-[18px]" />
-                        <span className="text-[10px] font-bold mt-1 tracking-wider uppercase">Log in</span>
+                        <span className="text-[10px] font-bold mt-1 tracking-wider ">Log in</span>
                     </Link>
                 )}
             </nav>
