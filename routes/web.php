@@ -72,6 +72,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('students/qualified', [CertificateController::class, 'qualified'])->name('admin.students.qualified');
         Route::get('certificates', [CertificateController::class, 'index'])->name('admin.certificates.index');
         Route::get('students/{student}', [StudentController::class, 'show'])->name('admin.students.show');
+        Route::post('students/{student}/enroll', [StudentController::class, 'manualEnroll'])->name('admin.students.manual-enroll');
         Route::patch('enrollments/{enrollment}/batch', [StudentController::class, 'updateBatch'])->name('admin.enrollments.update-batch');
         Route::post('enrollments/{enrollment}/certificate', [StudentController::class, 'generateCertificate'])->name('admin.enrollments.generate-certificate');
 

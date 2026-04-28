@@ -99,7 +99,7 @@ export default function Welcome({ courses = [] }: { courses?: any[] }) {
                         </Link>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
                         {courses.map((course, idx) => {
                             const covers = ['/images/ai_cover.png', '/images/web_cover.png', '/images/python_cover.png'];
                             const cover = covers[idx % covers.length];

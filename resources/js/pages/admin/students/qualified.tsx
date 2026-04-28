@@ -77,7 +77,7 @@ export default function QualifiedStudents({ qualified }: { qualified: any[] }) {
     return (
         <>
             <Head title="Qualified Students" />
-            <div className="p-4 lg:p-8 max-w-7xl mx-auto">
+            <div className="p-4 lg:p-8 w-full mx-auto">
                 <div className="flex items-center justify-between mb-8">
                     <div>
                         <h1 className="text-2xl font-black uppercase tracking-tight text-foreground">Qualified Students</h1>
@@ -88,7 +88,7 @@ export default function QualifiedStudents({ qualified }: { qualified: any[] }) {
                     </div>
                 </div>
 
-                <div className="bg-background border border-border rounded-sm shadow-sm overflow-hidden">
+                <div className="bg-background overflow-hidden">
                     <AdminDataTable 
                         data={qualified} 
                         columns={columns} 

@@ -38,7 +38,7 @@
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600|plus-jakarta-sans:600,700" rel="stylesheet" />
 
         @viteReactRefresh
-        @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
+        @vite(['resources/css/app.css', 'resources/js/app.tsx'])
         <x-inertia::head>
             <title>{{ config('app.name', 'Laravel') }}</title>
         </x-inertia::head>

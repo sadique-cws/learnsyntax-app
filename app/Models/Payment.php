@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'enrollment_id',
         'razorpay_order_id',
@@ -13,6 +16,8 @@ class Payment extends Model
         'amount',
         'currency',
         'status',
+        'payment_method',
+        'transaction_id',
     ];
 
     public function enrollment()

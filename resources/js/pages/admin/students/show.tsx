@@ -24,14 +24,45 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useState } from 'react';
 import { AdminDataTable, Column } from '@/components/admin/admin-data-table';
+import { 
+    Dialog, 
+    DialogContent, 
+    DialogHeader, 
+    DialogTitle, 
+    DialogDescription,
+    DialogFooter
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 function cn(...classes: any[]) {
     return classes.filter(Boolean).join(' ');
 }
 
-export default function AdminStudentShow({ student, available_batches, stats }: { student: any, available_batches: any, stats: any }) {
-    const { patch, processing } = useForm();
+export default function AdminStudentShow({ student, available_batches, stats, all_courses }: { student: any, available_batches: any, stats: any, all_courses: any[] }) {
+    const { patch, post, processing } = useForm();
     const [activeTab, setActiveTab] = useState<'academic' | 'payments' | 'enrollments'>('enrollments');
+    const [showEnrollModal, setShowEnrollModal] = useState(false);
+
+    const enrollmentForm = useForm({
+        course_id: '',
+        batch_id: '',
+        amount: '',
+        payment_method: 'cash',
+        transaction_id: ''
+    });
+
+    const selectedCourse = all_courses.find(c => c.id.toString() === enrollmentForm.data.course_id);
+
+    const handleManualEnroll = (e: React.FormEvent) => {
+        e.preventDefault();
+        enrollmentForm.post(`/admin/students/${student.id}/enroll`, {
+            onSuccess: () => {
+                setShowEnrollModal(false);
+                enrollmentForm.reset();
+            }
+        });
+    };
 
     const handleBatchChange = (enrollmentId: number, batchId: string) => {
         patch(`/admin/enrollments/${enrollmentId}/batch`, {
@@ -116,12 +147,140 @@ export default function AdminStudentShow({ student, available_batches, stats }: 
                             <Button variant="outline" className="h-10 rounded-sm font-black uppercase tracking-widest text-[10px] border-border bg-card">
                                 Edit Profile
                             </Button>
-                            <Button className="h-10 rounded-sm font-black uppercase tracking-widest text-[10px] bg-primary shadow-lg shadow-primary/10">
-                                Send Message
+                            <Button 
+                                onClick={() => setShowEnrollModal(true)}
+                                className="h-10 rounded-sm font-black uppercase tracking-widest text-[10px] bg-primary shadow-lg shadow-primary/10"
+                            >
+                                <BookOpen className="size-3.5 mr-2" /> Add Course
                             </Button>
                         </div>
                     </div>
                 </div>
+
+                {/* Manual Enrollment Modal */}
+                <Dialog open={showEnrollModal} onOpenChange={setShowEnrollModal}>
+                    <DialogContent className="sm:max-w-[500px] rounded-sm p-0 overflow-hidden border-none shadow-2xl">
+                        <DialogHeader className="p-6 bg-muted/5 border-b border-border">
+                            <div className="flex items-center gap-3">
+                                <div className="size-10 rounded-sm bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                                    <BookOpen className="size-5" />
+                                </div>
+                                <div>
+                                    <DialogTitle className="text-sm font-black uppercase tracking-tight">Manual Course Enrollment</DialogTitle>
+                                    <DialogDescription className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-0.5">
+                                        Assign a new course and record payment
+                                    </DialogDescription>
+                                </div>
+                            </div>
+                        </DialogHeader>
+                        
+                        <form onSubmit={handleManualEnroll} className="p-6 space-y-4 bg-background">
+                            <div className="grid grid-cols-1 gap-4">
+                                <div className="space-y-1.5">
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Select Course</Label>
+                                    <Select 
+                                        value={enrollmentForm.data.course_id} 
+                                        onValueChange={(val) => {
+                                            enrollmentForm.setData(prev => ({
+                                                ...prev,
+                                                course_id: val,
+                                                amount: all_courses.find(c => c.id.toString() === val)?.price.toString() || '',
+                                                batch_id: ''
+                                            }));
+                                        }}
+                                    >
+                                        <SelectTrigger className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold uppercase tracking-tight">
+                                            <SelectValue placeholder="Choose a course" />
+                                        </SelectTrigger>
+                                        <SelectContent className="rounded-sm">
+                                            {all_courses.map(course => (
+                                                <SelectItem key={course.id} value={course.id.toString()} className="text-[10px] font-black uppercase">
+                                                    {course.title} (₹{course.price})
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="space-y-1.5">
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Select Batch</Label>
+                                    <Select 
+                                        value={enrollmentForm.data.batch_id} 
+                                        onValueChange={(val) => enrollmentForm.setData('batch_id', val)}
+                                        disabled={!enrollmentForm.data.course_id}
+                                    >
+                                        <SelectTrigger className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold uppercase tracking-tight">
+                                            <SelectValue placeholder={enrollmentForm.data.course_id ? "Choose a batch" : "Select a course first"} />
+                                        </SelectTrigger>
+                                        <SelectContent className="rounded-sm">
+                                            {(selectedCourse?.batches || []).map((batch: any) => (
+                                                <SelectItem key={batch.id} value={batch.id.toString()} className="text-[10px] font-black uppercase">
+                                                    {batch.name} - {batch.type}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Amount Paid (₹)</Label>
+                                        <Input 
+                                            type="number"
+                                            className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold"
+                                            value={enrollmentForm.data.amount}
+                                            onChange={e => enrollmentForm.setData('amount', e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Payment Method</Label>
+                                        <Select 
+                                            value={enrollmentForm.data.payment_method} 
+                                            onValueChange={(val) => enrollmentForm.setData('payment_method', val)}
+                                        >
+                                            <SelectTrigger className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold uppercase tracking-tight">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent className="rounded-sm">
+                                                <SelectItem value="cash" className="text-[10px] font-black uppercase">Cash</SelectItem>
+                                                <SelectItem value="bank_transfer" className="text-[10px] font-black uppercase">Bank Transfer</SelectItem>
+                                                <SelectItem value="other" className="text-[10px] font-black uppercase">Other</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-1.5">
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Transaction ID (Optional)</Label>
+                                    <Input 
+                                        className="h-10 rounded-sm border-border bg-muted/10 text-xs font-mono"
+                                        placeholder="e.g. CASH-123456"
+                                        value={enrollmentForm.data.transaction_id}
+                                        onChange={e => enrollmentForm.setData('transaction_id', e.target.value)}
+                                    />
+                                </div>
+                            </div>
+
+                            <DialogFooter className="pt-6 mt-6 border-t border-border flex flex-row gap-2 sm:justify-end">
+                                <Button 
+                                    type="button" 
+                                    variant="ghost" 
+                                    onClick={() => setShowEnrollModal(false)}
+                                    className="h-10 rounded-sm font-black uppercase tracking-widest text-[9px] px-6"
+                                >
+                                    Cancel
+                                </Button>
+                                <Button 
+                                    type="submit"
+                                    disabled={enrollmentForm.processing || !enrollmentForm.data.batch_id}
+                                    className="h-10 rounded-sm font-black uppercase tracking-widest text-[9px] px-8 bg-primary shadow-lg shadow-primary/10"
+                                >
+                                    {enrollmentForm.processing ? 'Enrolling...' : 'Confirm Enrollment'}
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </Dialog>
 
                 {/* Stats Row */}
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">

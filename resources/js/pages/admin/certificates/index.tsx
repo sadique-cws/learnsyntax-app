@@ -67,7 +67,7 @@ export default function CertificateIndex({ certificates }: { certificates: any[]
     return (
         <>
             <Head title="Issued Certificates" />
-            <div className="p-4 lg:p-8 max-w-7xl mx-auto">
+            <div className="p-4 lg:p-8 w-full mx-auto">
                 <div className="flex items-center justify-between mb-8">
                     <div>
                         <h1 className="text-2xl font-black uppercase tracking-tight text-foreground">Issued Certificates</h1>
@@ -78,7 +78,7 @@ export default function CertificateIndex({ certificates }: { certificates: any[]
                     </div>
                 </div>
 
-                <div className="bg-background border border-border rounded-sm shadow-sm overflow-hidden">
+                <div className="bg-background overflow-hidden">
                     <AdminDataTable 
                         data={certificates} 
                         columns={columns} 

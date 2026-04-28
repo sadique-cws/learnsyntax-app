@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Batch;
 use App\Models\Certificate;
+use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -41,6 +42,7 @@ class StudentController extends Controller
         return inertia('admin/students/show', [
             'student' => $student,
             'available_batches' => Batch::with('course')->get()->groupBy('course_id'),
+            'all_courses' => Course::where('is_active', true)->with('batches')->get(),
             'stats' => [
                 'total_paid' => $student->enrollments->sum(fn ($e) => $e->payment ? $e->payment->amount : 0),
                 'course_count' => $student->enrollments->count(),
@@ -77,5 +79,54 @@ class StudentController extends Controller
         );
 
         return back()->with('success', 'Certificate generated successfully!');
+    }
+
+    public function manualEnroll(Request $request, User $student)
+    {
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'batch_id' => 'required|exists:batches,id',
+            'amount' => 'required|numeric|min:0',
+            'payment_method' => 'required|string|in:cash,bank_transfer,other',
+            'transaction_id' => 'nullable|string',
+        ]);
+
+        // Check if already enrolled
+        if ($student->enrollments()->where('course_id', $request->course_id)->exists()) {
+            return back()->with('error', 'Student is already enrolled in this course.');
+        }
+
+        $enrollment = $student->enrollments()->create([
+            'course_id' => $request->course_id,
+            'batch_id' => $request->batch_id,
+            'status' => 'active',
+        ]);
+
+        $payment = $enrollment->payment()->create([
+            'amount' => $request->amount,
+            'status' => 'completed',
+            'payment_method' => $request->payment_method,
+            'transaction_id' => $request->transaction_id ?: 'CASH-'.strtoupper(str()->random(6)),
+            'currency' => 'INR',
+        ]);
+
+        // Auto-generate invoice
+        $taxableAmount = round($payment->amount / 1.18, 2);
+        $gstAmount = round($payment->amount - $taxableAmount, 2);
+        $splitGst = round($gstAmount / 2, 2);
+
+        $payment->invoice()->create([
+            'invoice_number' => 'INV-'.strtoupper(str()->random(8)),
+            'amount' => $payment->amount,
+            'taxable_amount' => $taxableAmount,
+            'cgst' => $splitGst,
+            'sgst' => $splitGst,
+            'igst' => 0,
+            'sac_code' => '9992',
+            'status' => 'paid',
+            'issued_at' => now(),
+        ]);
+
+        return back()->with('success', 'Student enrolled and payment recorded successfully!');
     }
 }
