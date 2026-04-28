@@ -90,4 +90,61 @@ class PaymentController extends Controller
 
         return back()->with('success', 'Invoice generated successfully.');
     }
+
+    public function exportGstr1()
+    {
+        $invoices = \App\Models\Invoice::with(['payment.enrollment.user'])
+            ->latest()
+            ->get();
+
+        $filename = "GSTR1_Report_" . now()->format('Y_m_d') . ".csv";
+        
+        $callback = function() {
+            $invoices = \App\Models\Invoice::with(['payment.enrollment.user'])
+                ->latest()
+                ->get();
+
+            $handle = fopen('php://output', 'w');
+            
+            fputcsv($handle, [
+                'Invoice Number',
+                'Invoice Date',
+                'Customer Name',
+                'Customer GSTIN',
+                'SAC Code',
+                'Taxable Value',
+                'CGST (9%)',
+                'SGST (9%)',
+                'IGST (18%)',
+                'Total Amount',
+                'Status'
+            ]);
+
+            foreach ($invoices as $invoice) {
+                fputcsv($handle, [
+                    $invoice->invoice_number,
+                    \Carbon\Carbon::parse($invoice->issued_at)->format('d-m-Y'),
+                    $invoice->payment->enrollment->user->name,
+                    $invoice->gst_number ?: 'Consumer',
+                    $invoice->sac_code ?: '9992',
+                    $invoice->taxable_amount,
+                    $invoice->cgst,
+                    $invoice->sgst,
+                    $invoice->igst,
+                    $invoice->amount,
+                    $invoice->status
+                ]);
+            }
+
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, [
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$filename",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        ]);
+    }
 }

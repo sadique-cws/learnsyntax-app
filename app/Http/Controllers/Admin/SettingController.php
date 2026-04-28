@@ -33,9 +33,20 @@ class SettingController extends Controller
             'bank_ifsc' => 'nullable|string',
             'bank_branch' => 'nullable|string',
             'declaration' => 'nullable|string',
+            'logo' => 'nullable|image|max:2048',
+            'signature' => 'nullable|image|max:1024',
         ]);
 
         $settings = Setting::first() ?: new Setting();
+        
+        if ($request->hasFile('logo')) {
+            $data['logo_path'] = $request->file('logo')->store('branding', 'public');
+        }
+        
+        if ($request->hasFile('signature')) {
+            $data['authority_signature_path'] = $request->file('signature')->store('branding', 'public');
+        }
+
         $settings->fill($data);
         $settings->save();
 

@@ -93,7 +93,11 @@ export default function AdminGSTReport({ invoices, stats }: { invoices: any[], s
                             <h1 className="text-3xl font-medium tracking-tight leading-none mb-1">GST Compliance Report</h1>
                             <p className="text-muted-foreground text-xs font-medium tracking-tight">Monthly tax summary and B2B invoice tracking</p>
                         </div>
-                        <Button variant="outline" className="rounded h-11 px-6 font-medium text-xs border-border bg-card">
+                        <Button 
+                            variant="outline" 
+                            className="rounded h-11 px-6 font-medium text-xs border-border bg-card"
+                            onClick={() => window.location.href = route('admin.payments.gst-export')}
+                        >
                             <Download className="size-4 mr-2" /> Export GSTR-1
                         </Button>
                     </div>

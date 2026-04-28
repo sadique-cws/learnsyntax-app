@@ -45,7 +45,7 @@ class Enrollment extends Model
             ->whereIn('assignment_id', $assignments->pluck('id'))
             ->sum('marks_obtained');
 
-        return $totalPossible > 0 ? ($totalObtained / totalPossible) * 100 : 100;
+        return $totalPossible > 0 ? ($totalObtained / $totalPossible) * 100 : 100;
     }
 
     public function getExamScoreAttribute()

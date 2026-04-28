@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid, Book, Users, CreditCard, ShoppingBag, Home, GraduationCap, Trophy, Receipt, Settings } from 'lucide-react';
+import { BookOpen, FolderGit2, LayoutGrid, Book, CheckCircle2 ,Users,Award, CreditCard, ShoppingBag, Home, GraduationCap, Trophy, Receipt, Settings } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -43,6 +43,16 @@ export function AppSidebar() {
                     title: 'Manage Students',
                     href: '/admin/students',
                     icon: Users,
+                },
+                {
+                    title: 'Qualified Students',
+                    href: '/admin/students/qualified',
+                    icon: CheckCircle2,
+                },
+                {
+                    title: 'Student Certificates',
+                    href: '/admin/certificates',
+                    icon: Award,
                 },
                 {
                     title: 'Manage Batches',

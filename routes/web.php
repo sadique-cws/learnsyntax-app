@@ -44,6 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('batches', App\Http\Controllers\Admin\BatchController::class)->names('admin.batches');
         Route::get('payments', [App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('admin.payments.index');
         Route::get('payments/gst-report', [App\Http\Controllers\Admin\PaymentController::class, 'gstReport'])->name('admin.payments.gst-report');
+        Route::get('payments/gst-report/export', [App\Http\Controllers\Admin\PaymentController::class, 'exportGstr1'])->name('admin.payments.gst-export');
         Route::get('invoices/{invoice}', [App\Http\Controllers\Admin\PaymentController::class, 'showInvoice'])->name('admin.invoices.show');
         Route::post('payments/{payment}/generate-invoice', [App\Http\Controllers\Admin\PaymentController::class, 'generateInvoice'])->name('admin.payments.generate-invoice');
         
@@ -52,6 +53,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Student Management
         Route::get('students', [App\Http\Controllers\Admin\StudentController::class, 'index'])->name('admin.students.index');
+        Route::get('students/qualified', [App\Http\Controllers\Admin\CertificateController::class, 'qualified'])->name('admin.students.qualified');
+        Route::get('certificates', [App\Http\Controllers\Admin\CertificateController::class, 'index'])->name('admin.certificates.index');
         Route::get('students/{student}', [App\Http\Controllers\Admin\StudentController::class, 'show'])->name('admin.students.show');
         Route::patch('enrollments/{enrollment}/batch', [App\Http\Controllers\Admin\StudentController::class, 'updateBatch'])->name('admin.enrollments.update-batch');
         Route::post('enrollments/{enrollment}/certificate', [App\Http\Controllers\Admin\StudentController::class, 'generateCertificate'])->name('admin.enrollments.generate-certificate');

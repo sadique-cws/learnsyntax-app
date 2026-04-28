@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Building2, Landmark, FileText, Save, CheckCircle2 } from 'lucide-react';
+import { Building2, Landmark, FileText, Save, CheckCircle2, Globe } from 'lucide-react';
 
 export default function AdminSettings({ settings }: { settings: any }) {
     const { data, setData, post, processing, recentlySuccessful } = useForm({
@@ -21,6 +21,8 @@ export default function AdminSettings({ settings }: { settings: any }) {
         bank_ifsc: settings.bank_ifsc || '',
         bank_branch: settings.bank_branch || '',
         declaration: settings.declaration || 'We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.',
+        logo: null as File | null,
+        signature: null as File | null,
     });
 
     const submit = (e: React.FormEvent) => {
@@ -151,6 +153,50 @@ export default function AdminSettings({ settings }: { settings: any }) {
                     </div>
 
                     <div className="lg:col-span-4 space-y-5">
+                        {/* Branding */}
+                        <Card className="border-border rounded-sm shadow-none bg-background">
+                            <CardHeader className="py-3 px-5 border-b border-border/50 bg-muted/5">
+                                <div className="flex items-center gap-2">
+                                    <Globe className="size-3.5 text-primary" />
+                                    <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Branding</CardTitle>
+                                </div>
+                            </CardHeader>
+                            <CardContent className="p-5 space-y-6">
+                                <div className="space-y-3">
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Company Logo</Label>
+                                    <div className="flex flex-col items-center gap-4 p-4 border border-dashed border-border rounded-sm bg-muted/5">
+                                        {settings.logo_path ? (
+                                            <img src={`/storage/${settings.logo_path}`} className="h-16 object-contain" />
+                                        ) : (
+                                            <div className="size-16 rounded-sm bg-muted flex items-center justify-center text-muted-foreground/20 italic text-[10px]">No Logo</div>
+                                        )}
+                                        <Input 
+                                            type="file" 
+                                            className="text-[10px] h-auto p-1" 
+                                            onChange={e => setData('logo', e.target.files?.[0] || null)}
+                                            accept="image/*"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-3">
+                                    <Label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/50">Authorized Signature</Label>
+                                    <div className="flex flex-col items-center gap-4 p-4 border border-dashed border-border rounded-sm bg-muted/5">
+                                        {settings.authority_signature_path ? (
+                                            <img src={`/storage/${settings.authority_signature_path}`} className="h-12 object-contain" />
+                                        ) : (
+                                            <div className="size-12 rounded-sm bg-muted flex items-center justify-center text-muted-foreground/20 italic text-[10px]">No Sign</div>
+                                        )}
+                                        <Input 
+                                            type="file" 
+                                            className="text-[10px] h-auto p-1" 
+                                            onChange={e => setData('signature', e.target.files?.[0] || null)}
+                                            accept="image/*"
+                                        />
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+
                         {/* Tax & Compliance */}
                         <Card className="border-border rounded-sm shadow-none bg-background">
                             <CardHeader className="py-3 px-5 border-b border-border/50 bg-muted/5">
