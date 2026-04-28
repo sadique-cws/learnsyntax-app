@@ -41,7 +41,7 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {courses.map((course) => (
-                        <Card key={course.id} className="border-border shadow-none rounded-[2rem] overflow-hidden">
+                        <Card key={course.id} className="border-border  rounded-[2rem] overflow-hidden">
                             <CardContent className="p-8">
                                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                                     <div className="flex items-center gap-4">
@@ -72,7 +72,7 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
                                                     <Settings className="size-3.5 mr-2" /> {course.exam ? 'Edit Config' : 'Setup Exam'}
                                                 </Button>
                                             </DialogTrigger>
-                                            <DialogContent className="rounded-3xl border-border shadow-2xl p-0 overflow-hidden max-w-md">
+                                            <DialogContent className="rounded-3xl border-border  p-0 overflow-hidden max-w-md">
                                                 <DialogHeader className="bg-primary p-6 text-white text-left">
                                                     <DialogTitle className="text-xl font-black uppercase tracking-tight">Configure Exam</DialogTitle>
                                                     <p className="text-white/70 text-xs font-medium">For {course.title}</p>

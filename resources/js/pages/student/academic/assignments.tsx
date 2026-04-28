@@ -18,7 +18,7 @@ export default function StudentAssignments({ enrollment, assignments }: { enroll
                     {assignments.map((assignment) => {
                         const submission = assignment.submissions[0];
                         return (
-                            <Card key={assignment.id} className="border-border shadow-none rounded-3xl overflow-hidden">
+                            <Card key={assignment.id} className="border-border  rounded-3xl overflow-hidden">
                                 <CardContent className="p-0 flex flex-col md:flex-row">
                                     <div className="p-8 md:w-2/3 space-y-4">
                                         <div className="flex items-center gap-3">

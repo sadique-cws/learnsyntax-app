@@ -41,7 +41,7 @@ export default function CourseIndex({ courses }: { courses: any[] }) {
                         const cover = covers[idx % covers.length];
 
                         return (
-                            <Card key={course.id} className="group flex flex-col overflow-hidden border-border bg-card rounded-xl shadow-none hover:border-primary transition-all duration-300">
+                            <Card key={course.id} className="group flex flex-col overflow-hidden border-border bg-card rounded-xl  hover:border-primary transition-all duration-300">
                                 <div className="relative aspect-video overflow-hidden">
                                     <img 
                                         src={cover} 
@@ -49,7 +49,7 @@ export default function CourseIndex({ courses }: { courses: any[] }) {
                                         className="size-full object-cover group-hover:scale-105 transition-transform duration-500"
                                     />
                                     <div className="absolute top-3 left-3 flex flex-col gap-2">
-                                        <span className="px-2 py-1 bg-background/95 backdrop-blur shadow-sm rounded text-[10px] font-bold text-foreground">
+                                        <span className="px-2 py-1 bg-background/95 backdrop-blur  rounded text-[10px] font-bold text-foreground">
                                             ${course.price}
                                         </span>
                                     </div>

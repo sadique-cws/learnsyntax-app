@@ -23,7 +23,7 @@ export default function AdminCourseIndex({ courses }: { courses: any[] }) {
                         <h1 className="text-2xl font-bold tracking-tight">Manage Courses</h1>
                         <p className="text-muted-foreground text-sm">Create and edit your programming courses.</p>
                     </div>
-                    <Button className="rounded-lg shadow-none">
+                    <Button className="rounded-lg ">
                         <Plus className="size-4 mr-2" />
                         Add Course
                     </Button>
@@ -31,7 +31,7 @@ export default function AdminCourseIndex({ courses }: { courses: any[] }) {
 
                 <div className="grid grid-cols-1 gap-4">
                     {courses.map((course) => (
-                        <Card key={course.id} className="border-border shadow-none rounded-xl overflow-hidden">
+                        <Card key={course.id} className="border-border  rounded-xl overflow-hidden">
                             <CardContent className="p-4 flex items-center justify-between">
                                 <div className="flex items-center gap-4">
                                     <div className="size-12 rounded-lg bg-muted flex items-center justify-center font-bold text-muted-foreground">

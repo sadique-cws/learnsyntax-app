@@ -20,7 +20,7 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
                     <p className="text-muted-foreground text-sm">Track all student transactions and generated invoices.</p>
                 </div>
 
-                <div className="bg-card border border-border rounded-xl overflow-hidden shadow-none">
+                <div className="bg-card border border-border rounded-xl overflow-hidden ">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
@@ -56,7 +56,7 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
                                             <div className="text-[10px] text-green-600 font-bold uppercase">{payment.status}</div>
                                         </td>
                                         <td className="p-4 text-right">
-                                            <Button variant="outline" size="sm" className="rounded-lg h-8 text-xs shadow-none">
+                                            <Button variant="outline" size="sm" className="rounded-lg h-8 text-xs ">
                                                 <Receipt className="size-3.5 mr-2" />
                                                 {payment.invoice?.invoice_number}
                                             </Button>

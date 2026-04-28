@@ -85,7 +85,7 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
                     
                     <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
                         <DialogTrigger asChild>
-                            <Button className="rounded-lg shadow-none" onClick={openCreateModal}>
+                            <Button className="rounded-lg " onClick={openCreateModal}>
                                 <Plus className="size-4 mr-2" />
                                 Create Batch
                             </Button>
@@ -100,10 +100,10 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
                                         <div className="grid gap-2">
                                             <Label htmlFor="course">Course</Label>
                                             <Select value={data.course_id} onValueChange={(v) => setData('course_id', v)}>
-                                                <SelectTrigger className="rounded-xl shadow-none">
+                                                <SelectTrigger className="rounded-xl ">
                                                     <SelectValue placeholder="Select a course" />
                                                 </SelectTrigger>
-                                                <SelectContent className="rounded-xl shadow-none">
+                                                <SelectContent className="rounded-xl ">
                                                     {courses.map(course => (
                                                         <SelectItem key={course.id} value={course.id.toString()}>{course.title}</SelectItem>
                                                     ))}
@@ -119,7 +119,7 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
                                             value={data.name} 
                                             onChange={e => setData('name', e.target.value)} 
                                             placeholder="e.g. July 2024 Evening Batch" 
-                                            className="rounded-xl shadow-none"
+                                            className="rounded-xl "
                                         />
                                         {errors.name && <p className="text-xs text-red-500">{errors.name}</p>}
                                     </div>
@@ -127,10 +127,10 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
                                         <div className="grid gap-2">
                                             <Label htmlFor="type">Type</Label>
                                             <Select value={data.type} onValueChange={(v) => setData('type', v)}>
-                                                <SelectTrigger className="rounded-xl shadow-none">
+                                                <SelectTrigger className="rounded-xl ">
                                                     <SelectValue />
                                                 </SelectTrigger>
-                                                <SelectContent className="rounded-xl shadow-none">
+                                                <SelectContent className="rounded-xl ">
                                                     <SelectItem value="online">Online</SelectItem>
                                                     <SelectItem value="offline">Offline</SelectItem>
                                                 </SelectContent>
@@ -143,7 +143,7 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
                                                 type="number" 
                                                 value={data.capacity} 
                                                 onChange={e => setData('capacity', parseInt(e.target.value))} 
-                                                className="rounded-xl shadow-none"
+                                                className="rounded-xl "
                                             />
                                         </div>
                                     </div>
@@ -154,13 +154,13 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
                                             type="date" 
                                             value={data.start_date} 
                                             onChange={e => setData('start_date', e.target.value)} 
-                                            className="rounded-xl shadow-none"
+                                            className="rounded-xl "
                                         />
                                         {errors.start_date && <p className="text-xs text-red-500">{errors.start_date}</p>}
                                     </div>
                                 </div>
                                 <DialogFooter>
-                                    <Button type="submit" className="rounded-xl w-full shadow-none" disabled={processing}>
+                                    <Button type="submit" className="rounded-xl w-full " disabled={processing}>
                                         {editingBatch ? 'Update Batch' : 'Create Batch'}
                                     </Button>
                                 </DialogFooter>
@@ -171,7 +171,7 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {batches.map((batch) => (
-                        <Card key={batch.id} className="group border-border shadow-none rounded-xl overflow-hidden hover:border-primary transition-all">
+                        <Card key={batch.id} className="group border-border  rounded-xl overflow-hidden hover:border-primary transition-all">
                             <CardContent className="p-5">
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="size-10 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -198,13 +198,13 @@ export default function AdminBatchIndex({ batches, courses }: { batches: any[], 
                                 </div>
 
                                 <div className="flex items-center gap-2">
-                                    <Button variant="secondary" className="flex-1 rounded-lg shadow-none text-xs">
+                                    <Button variant="secondary" className="flex-1 rounded-lg  text-xs">
                                         Manage Students
                                     </Button>
-                                    <Button variant="outline" size="icon" className="rounded-lg shadow-none" onClick={() => handleEdit(batch)}>
+                                    <Button variant="outline" size="icon" className="rounded-lg " onClick={() => handleEdit(batch)}>
                                         <Edit2 className="size-4" />
                                     </Button>
-                                    <Button variant="outline" size="icon" className="rounded-lg shadow-none text-destructive hover:bg-destructive/10" onClick={() => handleDelete(batch.id)}>
+                                    <Button variant="outline" size="icon" className="rounded-lg  text-destructive hover:bg-destructive/10" onClick={() => handleDelete(batch.id)}>
                                         <Trash2 className="size-4" />
                                     </Button>
                                 </div>

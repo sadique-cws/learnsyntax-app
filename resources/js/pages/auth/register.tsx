@@ -50,7 +50,7 @@ export default function Register() {
                                 required
                                 autoFocus
                                 placeholder="e.g. Rahul Sharma"
-                                className="rounded-xl border-border bg-background h-11 px-4 shadow-none focus-visible:ring-primary/20 transition-all font-medium"
+                                className="rounded-xl border-border bg-background h-11 px-4  focus-visible:ring-primary/20 transition-all font-medium"
                                 onChange={(e) => setData('name', e.target.value)}
                             />
                             <InputError message={errors.name} />
@@ -64,7 +64,7 @@ export default function Register() {
                                 value={data.email}
                                 required
                                 placeholder="rahul@example.com"
-                                className="rounded-xl border-border bg-background h-11 px-4 shadow-none focus-visible:ring-primary/20 transition-all font-medium"
+                                className="rounded-xl border-border bg-background h-11 px-4  focus-visible:ring-primary/20 transition-all font-medium"
                                 onChange={(e) => setData('email', e.target.value)}
                             />
                             <InputError message={errors.email} />
@@ -80,7 +80,7 @@ export default function Register() {
                                         value={data.phone}
                                         required
                                         placeholder="+91..."
-                                        className="rounded-xl border-border bg-background h-11 px-4 shadow-none focus-visible:ring-primary/20 transition-all font-medium"
+                                        className="rounded-xl border-border bg-background h-11 px-4  focus-visible:ring-primary/20 transition-all font-medium"
                                         onChange={(e) => setData('phone', e.target.value)}
                                     />
                                 </div>
@@ -89,10 +89,10 @@ export default function Register() {
                             <div className="grid gap-2">
                                 <Label htmlFor="gender" className="text-xs font-bold text-foreground ml-1">Gender</Label>
                                 <Select onValueChange={(val) => setData('gender', val)} value={data.gender}>
-                                    <SelectTrigger className="h-11 rounded-xl border-border bg-background px-4 shadow-none focus-visible:ring-primary/20 transition-all font-medium">
+                                    <SelectTrigger className="h-11 rounded-xl border-border bg-background px-4  focus-visible:ring-primary/20 transition-all font-medium">
                                         <SelectValue placeholder="Select" />
                                     </SelectTrigger>
-                                    <SelectContent className="rounded-xl border-border shadow-lg">
+                                    <SelectContent className="rounded-xl border-border ">
                                         <SelectItem value="male" className="font-medium">Male</SelectItem>
                                         <SelectItem value="female" className="font-medium">Female</SelectItem>
                                         <SelectItem value="other" className="font-medium">Other</SelectItem>
@@ -115,10 +115,10 @@ export default function Register() {
                         <div className="grid gap-2">
                             <Label htmlFor="qualification" className="text-xs font-bold text-foreground ml-1">Current Qualification</Label>
                             <Select onValueChange={(val) => setData('qualification', val)} value={data.qualification}>
-                                <SelectTrigger className="h-11 rounded-xl border-border bg-background px-4 shadow-none focus-visible:ring-primary/20 transition-all font-medium text-left">
+                                <SelectTrigger className="h-11 rounded-xl border-border bg-background px-4  focus-visible:ring-primary/20 transition-all font-medium text-left">
                                     <SelectValue placeholder="What is your highest degree?" />
                                 </SelectTrigger>
-                                <SelectContent className="rounded-xl border-border shadow-lg">
+                                <SelectContent className="rounded-xl border-border ">
                                     <SelectItem value="High School" className="font-medium">High School (10th/12th)</SelectItem>
                                     <SelectItem value="Bachelor's Degree" className="font-medium">Bachelor's Degree (B.Tech/BCA/etc)</SelectItem>
                                     <SelectItem value="Master's Degree" className="font-medium">Master's Degree (M.Tech/MCA/etc)</SelectItem>
@@ -135,7 +135,7 @@ export default function Register() {
                                 id="college"
                                 value={data.college}
                                 placeholder="Where did you study?"
-                                className="rounded-xl border-border bg-background h-11 px-4 shadow-none focus-visible:ring-primary/20 transition-all font-medium"
+                                className="rounded-xl border-border bg-background h-11 px-4  focus-visible:ring-primary/20 transition-all font-medium"
                                 onChange={(e) => setData('college', e.target.value)}
                             />
                             <InputError message={errors.college} />
@@ -158,7 +158,7 @@ export default function Register() {
                                 value={data.password}
                                 required
                                 placeholder="Choose a strong password"
-                                className="rounded-xl border-border bg-background h-11 px-4 shadow-none focus-visible:ring-primary/20 transition-all font-medium"
+                                className="rounded-xl border-border bg-background h-11 px-4  focus-visible:ring-primary/20 transition-all font-medium"
                                 onChange={(e) => setData('password', e.target.value)}
                             />
                             <InputError message={errors.password} />
@@ -171,7 +171,7 @@ export default function Register() {
                                 value={data.password_confirmation}
                                 required
                                 placeholder="Repeat your password"
-                                className="rounded-xl border-border bg-background h-11 px-4 shadow-none focus-visible:ring-primary/20 transition-all font-medium"
+                                className="rounded-xl border-border bg-background h-11 px-4  focus-visible:ring-primary/20 transition-all font-medium"
                                 onChange={(e) => setData('password_confirmation', e.target.value)}
                             />
                             <InputError message={errors.password_confirmation} />
@@ -182,7 +182,7 @@ export default function Register() {
                 <div className="space-y-4 pt-4">
                     <Button
                         type="submit"
-                        className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 font-black shadow-none uppercase tracking-widest text-xs transition-all active:scale-[0.98]"
+                        className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 font-black  uppercase tracking-widest text-xs transition-all active:scale-[0.98]"
                         disabled={processing}
                     >
                         {processing ? <Spinner className="mr-2" /> : <CheckCircle2 className="mr-2 size-4" />}

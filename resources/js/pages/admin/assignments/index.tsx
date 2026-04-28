@@ -44,7 +44,7 @@ export default function AdminAssignmentIndex({ batches }: { batches: any[] }) {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {batches.map((batch) => (
-                        <Card key={batch.id} className="border-border shadow-none rounded-[2rem] overflow-hidden group">
+                        <Card key={batch.id} className="border-border  rounded-[2rem] overflow-hidden group">
                             <CardHeader className="bg-muted/30 p-6 border-b border-border/50">
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-[10px] font-black uppercase tracking-widest text-primary bg-primary/10 px-2 py-0.5 rounded">
@@ -59,7 +59,7 @@ export default function AdminAssignmentIndex({ batches }: { batches: any[] }) {
                                                 <Plus className="size-3.5 mr-1" /> Add Task
                                             </Button>
                                         </DialogTrigger>
-                                        <DialogContent className="rounded-3xl border-border shadow-2xl p-0 overflow-hidden max-w-md">
+                                        <DialogContent className="rounded-3xl border-border  p-0 overflow-hidden max-w-md">
                                             <DialogHeader className="bg-primary p-6 text-white text-left">
                                                 <DialogTitle className="text-xl font-black uppercase tracking-tight">New Assignment</DialogTitle>
                                                 <p className="text-white/70 text-xs font-medium">Assigning to {batch.name}</p>

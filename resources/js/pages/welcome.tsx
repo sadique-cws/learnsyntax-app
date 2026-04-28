@@ -45,7 +45,7 @@ export default function Welcome({
                                     Unlock your potential by signing up with Learn Syntax - 
                                     The most affordable and quality-driven learning solution for modern developers.
                                 </p>
-                                <Button asChild size="lg" className="h-14 px-12 rounded-xl font-bold shadow-none bg-primary hover:bg-primary/90 text-white tracking-widest uppercase text-sm">
+                                <Button asChild size="lg" variant="accent" className="h-14 px-12 rounded-xl font-bold tracking-widest uppercase text-sm">
                                     <Link href={register().url}>Get Started</Link>
                                 </Button>
                                 
@@ -77,10 +77,10 @@ export default function Welcome({
                                 {/* Male Mentor Avatar */}
                                 <div className="absolute left-0 top-1/2 -translate-y-1/2 group">
                                     <div className="relative">
-                                        <div className="size-48 lg:size-64 rounded-full border-8 border-background shadow-2xl overflow-hidden z-20">
+                                        <div className="size-48 lg:size-64 rounded-full border-8 border-background  overflow-hidden z-20">
                                             <img src="/images/mentor.png" alt="Mentor" className="size-full object-cover" />
                                         </div>
-                                        <div className="absolute -right-8 top-4 bg-primary text-white text-xs font-bold px-5 py-4 rounded-xl rounded-bl-none shadow-xl max-w-[180px] animate-bounce-subtle z-30">
+                                        <div className="absolute -right-8 top-4 bg-primary text-white text-xs font-bold px-5 py-4 rounded-xl rounded-bl-none  max-w-[180px] animate-bounce-subtle z-30">
                                             Learn with love and grow with guidance
                                         </div>
                                     </div>
@@ -89,10 +89,10 @@ export default function Welcome({
                                 {/* Female Student Avatar */}
                                 <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4">
                                     <div className="relative">
-                                        <div className="size-40 lg:size-56 rounded-full border-8 border-background shadow-2xl overflow-hidden z-10">
+                                        <div className="size-40 lg:size-56 rounded-full border-8 border-background  overflow-hidden z-10">
                                             <img src="/images/student.png" alt="Student" className="size-full object-cover" />
                                         </div>
-                                        <div className="absolute -left-12 -top-12 bg-background border border-border text-foreground text-xs font-bold px-5 py-4 rounded-xl rounded-br-none shadow-xl z-30">
+                                        <div className="absolute -left-12 -top-12 bg-background border border-border text-foreground text-xs font-bold px-5 py-4 rounded-xl rounded-br-none  z-30">
                                             Best learning platform!
                                         </div>
                                     </div>
@@ -153,7 +153,7 @@ export default function Welcome({
                                 onClick={() => setSelectedCategory(cat.id)}
                                 className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold whitespace-nowrap transition-all border ${
                                     selectedCategory === cat.id
-                                        ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20'
+                                        ? 'bg-primary text-white border-primary  '
                                         : 'bg-muted/50 text-muted-foreground border-border hover:border-primary/50'
                                 }`}
                             >
@@ -182,7 +182,7 @@ export default function Welcome({
                             const cover = covers[idx % covers.length];
 
                             return (
-                                <Card key={course.id} className="group flex flex-col overflow-hidden border-border bg-card rounded-xl shadow-none hover:border-primary transition-all duration-300">
+                                <Card key={course.id} className="group flex flex-col overflow-hidden border-border bg-card rounded-xl hover:-translate-y-1 hover:border-accent hover:ring-1 hover:ring-accent transition-all duration-300">
                                     <div className="relative aspect-video overflow-hidden">
                                         <img 
                                             src={cover} 
@@ -190,7 +190,7 @@ export default function Welcome({
                                             className="size-full object-cover group-hover:scale-105 transition-transform duration-500"
                                         />
                                         <div className="absolute top-3 left-3 flex flex-col gap-2">
-                                            <span className="px-2 py-1 bg-background/95 backdrop-blur shadow-sm rounded text-[10px] font-bold text-foreground">
+                                            <span className="px-2 py-1 bg-background/95 backdrop-blur  rounded text-[10px] font-bold text-foreground">
                                                 ${course.price}
                                             </span>
                                         </div>
@@ -204,22 +204,22 @@ export default function Welcome({
                                             </div>
                                         </div>
 
-                                        <h3 className="text-lg font-bold mb-4 group-hover:text-primary transition-colors line-clamp-2 min-h-[3.5rem] leading-tight">
+                                        <h3 className="text-lg font-bold mb-4 group-hover:text-accent transition-colors line-clamp-2 min-h-[3.5rem] leading-tight">
                                             {course.title}
                                         </h3>
                                         
                                         <div className="mt-auto grid grid-cols-2 gap-4 pt-4 border-t border-border">
-                                            <div className="flex items-center gap-2 text-muted-foreground">
-                                                <Clock className="size-3.5 text-primary" />
+                                            <div className="flex items-center gap-2 text-muted-foreground group-hover:text-accent transition-colors">
+                                                <Clock className="size-3.5 text-accent" />
                                                 <span className="text-[11px] font-medium">24 Weeks</span>
                                             </div>
-                                            <div className="flex items-center gap-2 text-muted-foreground">
-                                                <Users className="size-3.5 text-primary" />
+                                            <div className="flex items-center gap-2 text-muted-foreground group-hover:text-accent transition-colors">
+                                                <Users className="size-3.5 text-accent" />
                                                 <span className="text-[11px] font-medium">1.2k+ Students</span>
                                             </div>
                                         </div>
 
-                                        <Button asChild variant="outline" className="mt-5 w-full rounded-lg border-border group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all font-bold text-xs h-10">
+                                        <Button asChild variant="outline" className="mt-5 w-full rounded-lg border-border group-hover:bg-gradient-to-br group-hover:from-purple-500 group-hover:to-accent group-hover:text-white group-hover:border-accent transition-all font-bold text-xs h-10">
                                             <Link href={`/courses/${course.slug}`}>View Details</Link>
                                         </Button>
                                     </CardContent>

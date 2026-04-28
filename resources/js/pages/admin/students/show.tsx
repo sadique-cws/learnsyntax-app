@@ -26,7 +26,7 @@ export default function AdminStudentShow({ student, available_batches }: { stude
                         <ChevronLeft className="size-4 mr-1" /> Back to Directory
                     </Link>
                     <div className="flex items-center gap-6">
-                        <div className="size-20 rounded-3xl bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                        <div className="size-20 rounded-3xl bg-primary flex items-center justify-center text-white  ">
                             <User className="size-10" />
                         </div>
                         <div>
@@ -64,7 +64,7 @@ export default function AdminStudentShow({ student, available_batches }: { stude
                         
                         <div className="grid grid-cols-1 gap-6">
                             {student.enrollments.map((enrollment: any) => (
-                                <Card key={enrollment.id} className="border-border shadow-none rounded-[2rem] overflow-hidden">
+                                <Card key={enrollment.id} className="border-border  rounded-[2rem] overflow-hidden">
                                     <CardContent className="p-0">
                                         <div className="flex flex-col lg:flex-row">
                                             <div className="p-8 lg:w-1/3 bg-muted/30 border-r border-border">
@@ -98,10 +98,10 @@ export default function AdminStudentShow({ student, available_batches }: { stude
                                                                 onValueChange={(val) => handleBatchChange(enrollment.id, val)}
                                                                 disabled={processing}
                                                             >
-                                                                <SelectTrigger className="h-12 rounded-xl shadow-none border-2 border-border focus:border-primary transition-all">
+                                                                <SelectTrigger className="h-12 rounded-xl  border-2 border-border focus:border-primary transition-all">
                                                                     <SelectValue placeholder="No batch assigned" />
                                                                 </SelectTrigger>
-                                                                <SelectContent className="rounded-xl shadow-none">
+                                                                <SelectContent className="rounded-xl ">
                                                                     {(available_batches[enrollment.course_id] || []).map((batch: any) => (
                                                                         <SelectItem key={batch.id} value={batch.id.toString()} className="font-bold">
                                                                             <div className="flex items-center gap-2">

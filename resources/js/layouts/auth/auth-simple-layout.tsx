@@ -33,7 +33,7 @@ export default function AuthSimpleLayout({
                         </div>
                     </div>
                     
-                    <div className="bg-card border border-border rounded-2xl p-6 shadow-sm shadow-black/[0.02]">
+                    <div className="bg-card border border-border rounded-2xl p-6  [0.02]">
                         {children}
                     </div>
 

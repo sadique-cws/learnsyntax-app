@@ -90,7 +90,7 @@ export default function EnrollmentBatch({ enrollment }: { enrollment: any }) {
                     <Button 
                         type="submit" 
                         size="lg" 
-                        className="w-full rounded-2xl h-14 font-black shadow-none bg-primary hover:bg-primary/90 text-white uppercase tracking-widest text-sm"
+                        className="w-full rounded-2xl h-14 font-black  bg-primary hover:bg-primary/90 text-white uppercase tracking-widest text-sm"
                         disabled={processing || !data.batch_id}
                     >
                         {processing ? 'Saving...' : 'Finish & Go to Dashboard'}

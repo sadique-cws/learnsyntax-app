@@ -47,9 +47,9 @@ export default function StudentCertificate({ enrollment, certificate }: { enroll
                     </div>
 
                     {overallAvg >= 60 ? (
-                        <Card className="border-border shadow-none rounded-[3rem] overflow-hidden bg-primary/5 border-2 border-primary/20 p-1">
+                        <Card className="border-border  rounded-[3rem] overflow-hidden bg-primary/5 border-2 border-primary/20 p-1">
                             <CardContent className="p-10 text-center space-y-8 bg-white rounded-[2.8rem]">
-                                <div className="size-24 rounded-[2rem] bg-primary flex items-center justify-center text-white mx-auto shadow-xl shadow-primary/30">
+                                <div className="size-24 rounded-[2rem] bg-primary flex items-center justify-center text-white mx-auto  ">
                                     <Award className="size-14" />
                                 </div>
                                 
@@ -72,14 +72,14 @@ export default function StudentCertificate({ enrollment, certificate }: { enroll
                                 </div>
 
                                 <div className="pt-4">
-                                    <Button size="lg" className="h-16 px-12 rounded-[2rem] bg-primary hover:bg-primary/90 font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/20 transition-all active:scale-95">
+                                    <Button size="lg" className="h-16 px-12 rounded-[2rem] bg-primary hover:bg-primary/90 font-black uppercase tracking-widest text-sm   transition-all active:scale-95">
                                         <Download className="mr-3 size-5" /> Download Professional Certificate
                                     </Button>
                                 </div>
                             </CardContent>
                         </Card>
                     ) : (
-                        <Card className="border-border shadow-none rounded-[3rem] overflow-hidden bg-red-500/[0.03] border-2 border-red-500/20 p-1">
+                        <Card className="border-border  rounded-[3rem] overflow-hidden bg-red-500/[0.03] border-2 border-red-500/20 p-1">
                             <CardContent className="p-12 text-center space-y-6 bg-white rounded-[2.8rem]">
                                 <div className="size-20 rounded-[2rem] bg-red-500/10 flex items-center justify-center text-red-600 mx-auto">
                                     <XCircle className="size-12" />
@@ -106,10 +106,10 @@ export default function StudentCertificate({ enrollment, certificate }: { enroll
 
 function StatsCard({ title, value, icon: Icon, status, highlight = false }: any) {
     return (
-        <Card className={`border-border shadow-none rounded-[2rem] ${highlight ? 'border-2 border-primary/20 bg-primary/5' : 'bg-muted/30 border border-border/50'}`}>
+        <Card className={`border-border  rounded-[2rem] ${highlight ? 'border-2 border-primary/20 bg-primary/5' : 'bg-muted/30 border border-border/50'}`}>
             <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                    <div className={`size-10 rounded-xl flex items-center justify-center ${highlight ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-background border border-border text-muted-foreground'}`}>
+                    <div className={`size-10 rounded-xl flex items-center justify-center ${highlight ? 'bg-primary text-white  ' : 'bg-background border border-border text-muted-foreground'}`}>
                         <Icon className="size-5" />
                     </div>
                     <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${status === 'PASS' || status === 'QUALIFIED' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>

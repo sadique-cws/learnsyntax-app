@@ -75,7 +75,7 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                                 <div className="flex flex-wrap gap-4">
                                     <Button 
                                         size="lg" 
-                                        className="h-14 px-10 rounded-xl font-black bg-primary hover:bg-primary/90 text-white tracking-widest uppercase text-xs shadow-2xl shadow-primary/30 transition-transform active:scale-95"
+                                        className="h-14 px-10 rounded-xl font-black bg-primary hover:bg-primary/90 text-white tracking-widest uppercase text-xs   transition-transform active:scale-95"
                                         onClick={handleEnroll}
                                         disabled={processing || is_enrolled}
                                     >
@@ -88,14 +88,14 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                             </div>
 
                             <div className="lg:col-span-5">
-                                <div className="relative group aspect-video lg:aspect-square rounded-3xl bg-slate-900 border-4 border-white/5 overflow-hidden shadow-2xl">
+                                <div className="relative group aspect-video lg:aspect-square rounded-3xl bg-slate-900 border-4 border-white/5 overflow-hidden ">
                                     <img 
                                         src="/images/ai_cover.png" 
                                         alt={course.title} 
                                         className="size-full object-cover opacity-60" 
                                     />
                                     <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="size-20 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white cursor-pointer hover:bg-primary transition-all group/play shadow-2xl ring-8 ring-white/5">
+                                        <div className="size-20 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white cursor-pointer hover:bg-primary transition-all group/play  ring-8 ring-white/5">
                                             <PlayCircle className="size-10 fill-current group-hover/play:scale-110 transition-transform" />
                                         </div>
                                     </div>
@@ -145,10 +145,10 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                             </div>
                             <div className="relative">
                                 <div className="absolute -inset-4 bg-primary/5 rounded-[3rem] -z-10" />
-                                <div className="rounded-3xl border border-slate-200 p-8 bg-white shadow-sm overflow-hidden relative group">
+                                <div className="rounded-3xl border border-slate-200 p-8 bg-white  overflow-hidden relative group">
                                     <img src="/images/mentor.png" alt="Learning" className="w-full h-[300px] object-cover rounded-2xl mb-8 group-hover:scale-105 transition-transform duration-700" />
                                     <div className="flex items-center gap-4">
-                                        <div className="size-12 rounded-xl bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/20">
+                                        <div className="size-12 rounded-xl bg-primary text-white flex items-center justify-center  ">
                                             <CheckCircle2 className="size-6" />
                                         </div>
                                         <div>
@@ -210,7 +210,7 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                             </div>
                             <div className="relative group">
                                 <div className="absolute -inset-4 bg-primary/20 rounded-[2rem] blur-2xl opacity-30 group-hover:opacity-50 transition-all" />
-                                <div className="relative rounded-2xl border-4 border-white/5 bg-white/5 backdrop-blur overflow-hidden shadow-2xl">
+                                <div className="relative rounded-2xl border-4 border-white/5 bg-white/5 backdrop-blur overflow-hidden ">
                                     <img src="/images/certificate.png" alt="Certificate" className="w-full h-auto opacity-90 group-hover:scale-105 transition-transform duration-700" />
                                 </div>
                             </div>

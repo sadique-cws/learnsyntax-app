@@ -79,7 +79,7 @@ export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_orde
             <Head title={`Checkout - ${enrollment.course.title}`} />
             
             <div className="max-w-xl mx-auto space-y-6">
-                <Card className="border-border shadow-none rounded-[2rem] overflow-hidden">
+                <Card className="border-border  rounded-[2rem] overflow-hidden">
                     <CardHeader className="bg-primary/5 p-8 border-b border-border/50">
                         <div className="flex items-center gap-3 mb-2">
                             <div className="size-10 rounded-xl bg-primary flex items-center justify-center text-white">
@@ -134,7 +134,7 @@ export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_orde
                     <CardFooter className="p-8 pt-0 flex flex-col gap-4">
                         <Button 
                             size="lg" 
-                            className="w-full rounded-2xl h-14 font-black shadow-none bg-primary hover:bg-primary/90 text-white uppercase tracking-widest text-sm" 
+                            className="w-full rounded-2xl h-14 font-black  bg-primary hover:bg-primary/90 text-white uppercase tracking-widest text-sm" 
                             onClick={handlePayment}
                             disabled={isPaying || processing || !scriptLoaded}
                         >

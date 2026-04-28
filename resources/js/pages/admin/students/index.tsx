@@ -19,7 +19,7 @@ export default function AdminStudentIndex({ students }: { students: any[] }) {
 
                 <div className="grid grid-cols-1 gap-4">
                     {students.map((student) => (
-                        <Card key={student.id} className="border-border shadow-none rounded-2xl hover:border-primary transition-all group overflow-hidden">
+                        <Card key={student.id} className="border-border  rounded-2xl hover:border-primary transition-all group overflow-hidden">
                             <CardContent className="p-0">
                                 <Link href={`/admin/students/${student.id}`} className="flex flex-col md:flex-row items-center gap-6 p-6">
                                     <div className="size-16 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">

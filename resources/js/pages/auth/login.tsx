@@ -44,7 +44,7 @@ export default function Login({
                                     tabIndex={1}
                                     autoComplete="email"
                                     placeholder="name@example.com"
-                                    className="rounded-xl border-border bg-background h-11 px-4 shadow-none focus-visible:ring-primary/20 transition-all"
+                                    className="rounded-xl border-border bg-background h-11 px-4  focus-visible:ring-primary/20 transition-all"
                                 />
                                 <InputError message={errors.email} />
                             </div>
@@ -69,7 +69,7 @@ export default function Login({
                                     tabIndex={2}
                                     autoComplete="current-password"
                                     placeholder="Enter your password"
-                                    className="rounded-xl border-border bg-background h-11 px-4 shadow-none focus-visible:ring-primary/20 transition-all"
+                                    className="rounded-xl border-border bg-background h-11 px-4  focus-visible:ring-primary/20 transition-all"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -79,14 +79,14 @@ export default function Login({
                                     id="remember"
                                     name="remember"
                                     tabIndex={3}
-                                    className="rounded shadow-none border-border"
+                                    className="rounded  border-border"
                                 />
                                 <Label htmlFor="remember" className="text-xs font-medium text-muted-foreground select-none">Remember me for 30 days</Label>
                             </div>
 
                             <Button
                                 type="submit"
-                                className="mt-2 w-full h-11 rounded-xl bg-primary hover:bg-primary/90 font-bold shadow-none tracking-wide"
+                                className="mt-2 w-full h-11 rounded-xl bg-primary hover:bg-primary/90 font-bold  tracking-wide"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"

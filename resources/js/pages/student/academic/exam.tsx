@@ -26,7 +26,7 @@ export default function StudentExam({ enrollment, exam, attempt }: { enrollment:
 
                 <div className="max-w-2xl mx-auto">
                     {!attempt ? (
-                        <Card className="border-border shadow-none rounded-[3rem] overflow-hidden border-2 border-primary/20">
+                        <Card className="border-border  rounded-[3rem] overflow-hidden border-2 border-primary/20">
                             <CardContent className="p-10 space-y-8">
                                 <div className="grid grid-cols-2 gap-6">
                                     <div className="p-6 rounded-[2rem] bg-muted/30 border border-border flex flex-col items-center text-center">
@@ -54,7 +54,7 @@ export default function StudentExam({ enrollment, exam, attempt }: { enrollment:
                                     onClick={startExam} 
                                     disabled={processing}
                                     size="lg" 
-                                    className="w-full h-16 rounded-[2rem] bg-primary hover:bg-primary/90 font-black uppercase tracking-[0.2em] text-sm shadow-xl shadow-primary/20 transition-all active:scale-95"
+                                    className="w-full h-16 rounded-[2rem] bg-primary hover:bg-primary/90 font-black uppercase tracking-[0.2em] text-sm   transition-all active:scale-95"
                                 >
                                     {processing ? 'Launching Assessment...' : 'Start Final Exam'}
                                     <Play className="ml-2 size-5 fill-current" />
@@ -62,9 +62,9 @@ export default function StudentExam({ enrollment, exam, attempt }: { enrollment:
                             </CardContent>
                         </Card>
                     ) : (
-                        <Card className="border-border shadow-none rounded-[3rem] overflow-hidden bg-green-500/[0.03] border-2 border-green-500/20">
+                        <Card className="border-border  rounded-[3rem] overflow-hidden bg-green-500/[0.03] border-2 border-green-500/20">
                             <CardContent className="p-12 text-center space-y-6">
-                                <div className="size-20 rounded-[2rem] bg-green-500 flex items-center justify-center text-white mx-auto shadow-lg shadow-green-500/30 animate-in zoom-in-50 duration-500">
+                                <div className="size-20 rounded-[2rem] bg-green-500 flex items-center justify-center text-white mx-auto   animate-in zoom-in-50 duration-500">
                                     <CheckCircle2 className="size-12" />
                                 </div>
                                 <div>
@@ -72,7 +72,7 @@ export default function StudentExam({ enrollment, exam, attempt }: { enrollment:
                                     <p className="text-muted-foreground font-medium max-w-sm mx-auto">Your performance has been recorded. Check your eligibility for the certificate below.</p>
                                 </div>
 
-                                <div className="p-8 rounded-[2.5rem] bg-white border border-green-500/20 shadow-sm inline-block">
+                                <div className="p-8 rounded-[2.5rem] bg-white border border-green-500/20  inline-block">
                                     <div className="text-[10px] font-black uppercase tracking-[0.2em] text-green-600 mb-2">Your Exam Score</div>
                                     <div className="text-6xl font-black text-foreground">
                                         {attempt.marks_obtained} <span className="text-xl text-muted-foreground">/ {exam.total_marks}</span>

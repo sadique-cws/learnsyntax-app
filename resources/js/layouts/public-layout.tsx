@@ -64,7 +64,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                                     <Button asChild variant="ghost" size="sm" className="hidden sm:flex rounded-xl">
                                         <Link href={login().url}>Log in</Link>
                                     </Button>
-                                    <Button asChild variant="default" size="sm" className="rounded-xl shadow-none bg-primary hover:bg-primary/90">
+                                    <Button asChild variant="default" size="sm" className="rounded-xl  bg-primary hover:bg-primary/90">
                                         <Link href={register().url}>Get Started</Link>
                                     </Button>
                                 </>

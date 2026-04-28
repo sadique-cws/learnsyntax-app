@@ -33,14 +33,14 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     tabIndex={1}
                                     autoComplete="email"
                                     placeholder="name@example.com"
-                                    className="rounded-xl border-border bg-background h-11 px-4 shadow-none focus-visible:ring-primary/20 transition-all"
+                                    className="rounded-xl border-border bg-background h-11 px-4  focus-visible:ring-primary/20 transition-all"
                                 />
                                 <InputError message={errors.email} />
                             </div>
 
                             <Button
                                 type="submit"
-                                className="mt-2 w-full h-11 rounded-xl bg-primary hover:bg-primary/90 font-bold shadow-none tracking-wide"
+                                className="mt-2 w-full h-11 rounded-xl bg-primary hover:bg-primary/90 font-bold  tracking-wide"
                                 tabIndex={2}
                                 disabled={processing}
                             >
