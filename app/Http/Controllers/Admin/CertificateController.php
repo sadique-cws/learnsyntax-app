@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Certificate;
 use App\Models\Enrollment;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CertificateController extends Controller
@@ -17,7 +16,7 @@ class CertificateController extends Controller
             ->get();
 
         return Inertia::render('admin/certificates/index', [
-            'certificates' => $certificates
+            'certificates' => $certificates,
         ]);
     }
 
@@ -27,11 +26,11 @@ class CertificateController extends Controller
         $qualified = Enrollment::with(['user', 'course'])
             ->whereDoesntHave('certificate')
             ->get()
-            ->filter(fn($e) => $e->overall_average >= 60)
+            ->filter(fn ($e) => $e->overall_average >= 60)
             ->values();
 
         return Inertia::render('admin/students/qualified', [
-            'qualified' => $qualified
+            'qualified' => $qualified,
         ]);
     }
 }

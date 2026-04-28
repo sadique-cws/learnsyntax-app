@@ -38,14 +38,14 @@ class TestDataSeeder extends Seeder
             // 3. Create Exams for each course
             $exam = Exam::create([
                 'course_id' => $course->id,
-                'title' => "Final Assessment for " . $course->title,
+                'title' => 'Final Assessment for '.$course->title,
                 'total_marks' => 100,
                 'is_active' => true,
             ]);
 
             $midterm = Exam::create([
                 'course_id' => $course->id,
-                'title' => "Midterm Quiz - " . $course->title,
+                'title' => 'Midterm Quiz - '.$course->title,
                 'total_marks' => 50,
                 'is_active' => true,
             ]);
@@ -55,16 +55,16 @@ class TestDataSeeder extends Seeder
                 // 4. Create Assignments for each batch
                 Assignment::create([
                     'batch_id' => $batch->id,
-                    'title' => "Basic Fundamentals - " . $batch->name,
-                    'description' => "Complete the basic exercises for " . $course->title,
+                    'title' => 'Basic Fundamentals - '.$batch->name,
+                    'description' => 'Complete the basic exercises for '.$course->title,
                     'max_marks' => 100,
                     'due_date' => now()->addDays(14),
                 ]);
 
                 Assignment::create([
                     'batch_id' => $batch->id,
-                    'title' => "Advanced Project - " . $batch->name,
-                    'description' => "Build a sample application using the concepts learned in " . $course->title,
+                    'title' => 'Advanced Project - '.$batch->name,
+                    'description' => 'Build a sample application using the concepts learned in '.$course->title,
                     'max_marks' => 100,
                     'due_date' => now()->addDays(30),
                 ]);
@@ -85,7 +85,7 @@ class TestDataSeeder extends Seeder
                         'amount' => $course->price,
                         'status' => 'paid',
                         'payment_method' => 'card',
-                        'transaction_id' => 'TXN_' . uniqid(),
+                        'transaction_id' => 'TXN_'.uniqid(),
                     ]);
                 }
             }

@@ -2,8 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Batch;
+use App\Models\Course;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class CourseSeeder extends Seeder
 {
@@ -37,10 +40,10 @@ class CourseSeeder extends Seeder
         ];
 
         foreach ($courses as $courseData) {
-            $course = \App\Models\Course::create($courseData);
+            $course = Course::create($courseData);
 
             // Online Batch
-            \App\Models\Batch::create([
+            Batch::create([
                 'course_id' => $course->id,
                 'name' => 'Online Evening Batch',
                 'type' => 'online',
@@ -49,7 +52,7 @@ class CourseSeeder extends Seeder
             ]);
 
             // Offline Batch
-            \App\Models\Batch::create([
+            Batch::create([
                 'course_id' => $course->id,
                 'name' => 'Offline Weekend Batch',
                 'type' => 'offline',
@@ -59,18 +62,18 @@ class CourseSeeder extends Seeder
         }
 
         // Create Admin User
-        \App\Models\User::create([
+        User::create([
             'name' => 'Admin User',
             'email' => 'admin@learnsyntax.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'password' => Hash::make('password'),
             'is_admin' => true,
         ]);
 
         // Create Student User
-        \App\Models\User::create([
+        User::create([
             'name' => 'Student User',
             'email' => 'student@learnsyntax.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'password' => Hash::make('password'),
             'is_admin' => false,
         ]);
     }

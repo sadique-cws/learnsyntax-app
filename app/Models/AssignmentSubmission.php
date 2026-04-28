@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class AssignmentSubmission extends Model
 {
     protected $fillable = [
-        'assignment_id', 
-        'user_id', 
-        'content', 
-        'file_path', 
-        'submitted_at', 
-        'marks_obtained', 
-        'status', 
-        'admin_comments'
+        'assignment_id',
+        'user_id',
+        'content',
+        'file_path',
+        'submitted_at',
+        'marks_obtained',
+        'status',
+        'admin_comments',
     ];
 
     protected $casts = [
@@ -25,7 +25,7 @@ class AssignmentSubmission extends Model
 
     public function getIsLateAttribute()
     {
-        if (!$this->submitted_at || !$this->assignment->due_date) {
+        if (! $this->submitted_at || ! $this->assignment->due_date) {
             return false;
         }
 

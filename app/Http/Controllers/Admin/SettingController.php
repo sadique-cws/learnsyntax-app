@@ -11,10 +11,10 @@ class SettingController extends Controller
 {
     public function index()
     {
-        $settings = Setting::first() ?: new Setting();
-        
+        $settings = Setting::first() ?: new Setting;
+
         return Inertia::render('admin/settings/index', [
-            'settings' => $settings
+            'settings' => $settings,
         ]);
     }
 
@@ -37,15 +37,18 @@ class SettingController extends Controller
             'signature' => 'nullable|image|max:1024',
         ]);
 
-        $settings = Setting::first() ?: new Setting();
-        
+        $settings = Setting::first() ?: new Setting;
+
         if ($request->hasFile('logo')) {
             $data['logo_path'] = $request->file('logo')->store('branding', 'public');
         }
-        
+
         if ($request->hasFile('signature')) {
             $data['authority_signature_path'] = $request->file('signature')->store('branding', 'public');
         }
+
+        // Remove the file objects from the data array before saving to DB
+        unset($data['logo'], $data['signature']);
 
         $settings->fill($data);
         $settings->save();

@@ -3,19 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
     public function index()
     {
-        $courses = \App\Models\Course::withCount('enrollments')->get();
+        $courses = Course::withCount('enrollments')->get();
+
         return inertia('admin/courses/index', [
-            'courses' => $courses
+            'courses' => $courses,
         ]);
     }
 
-    public function store(\Illuminate\Http\Request $request)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -25,12 +27,12 @@ class CourseController extends Controller
 
         $validated['slug'] = str($request->title)->slug();
 
-        \App\Models\Course::create($validated);
+        Course::create($validated);
 
         return back()->with('success', 'Course created successfully.');
     }
 
-    public function update(\Illuminate\Http\Request $request, \App\Models\Course $course)
+    public function update(Request $request, Course $course)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -44,9 +46,10 @@ class CourseController extends Controller
         return back()->with('success', 'Course updated successfully.');
     }
 
-    public function destroy(\App\Models\Course $course)
+    public function destroy(Course $course)
     {
         $course->delete();
+
         return back()->with('success', 'Course deleted successfully.');
     }
 }

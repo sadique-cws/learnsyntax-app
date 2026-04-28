@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\WalletTransaction;
 
 class DashboardController extends Controller
 {
@@ -12,14 +12,14 @@ class DashboardController extends Controller
         $teacher = auth()->user()->teacher;
         $coursesCount = $teacher->courses()->count();
         $walletBalance = $teacher->wallet_balance;
-        $totalSales = \App\Models\WalletTransaction::where('teacher_id', $teacher->id)->where('type', 'credit')->sum('amount');
+        $totalSales = WalletTransaction::where('teacher_id', $teacher->id)->where('type', 'credit')->sum('amount');
 
         return inertia('teacher/dashboard', [
             'stats' => [
                 'courses' => $coursesCount,
                 'wallet_balance' => $walletBalance,
                 'total_sales' => $totalSales,
-            ]
+            ],
         ]);
     }
 }

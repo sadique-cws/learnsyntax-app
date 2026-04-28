@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
+use App\Models\Enrollment;
+use App\Models\Invoice;
+use App\Models\Payment;
+use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
 use Razorpay\Api\Api;
-use App\Models\Enrollment;
-use App\Models\Payment;
-use App\Models\Invoice;
 
 class EnrollmentController extends Controller
 {
@@ -18,18 +20,19 @@ class EnrollmentController extends Controller
         $this->razorpay = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
     }
 
-    public function store(\App\Models\Course $course)
+    public function store(Course $course)
     {
         $user = auth()->user();
-        
+
         $existing = Enrollment::where('user_id', $user->id)
             ->where('course_id', $course->id)
             ->first();
-            
+
         if ($existing) {
-            if ($existing->status === 'paid' && !$existing->batch_id) {
+            if ($existing->status === 'paid' && ! $existing->batch_id) {
                 return redirect()->route('student.enrollments.batch', $existing);
             }
+
             return redirect()->route('student.enrollments.show', $existing);
         }
 
@@ -45,17 +48,18 @@ class EnrollmentController extends Controller
     public function show(Enrollment $enrollment)
     {
         if ($enrollment->status === 'paid') {
-            if (!$enrollment->batch_id) {
+            if (! $enrollment->batch_id) {
                 return redirect()->route('student.enrollments.batch', $enrollment);
             }
+
             return redirect()->route('dashboard');
         }
 
         // Create Razorpay Order
         $orderData = [
-            'receipt'         => 'rcpt_' . $enrollment->id,
-            'amount'          => $enrollment->course->price * 100, // in paise
-            'currency'        => 'INR',
+            'receipt' => 'rcpt_'.$enrollment->id,
+            'amount' => $enrollment->course->price * 100, // in paise
+            'currency' => 'INR',
         ];
 
         $razorpayOrder = $this->razorpay->order->create($orderData);
@@ -80,11 +84,11 @@ class EnrollmentController extends Controller
             $attributes = [
                 'razorpay_order_id' => $request->razorpay_order_id,
                 'razorpay_payment_id' => $request->razorpay_payment_id,
-                'razorpay_signature' => $request->razorpay_signature
+                'razorpay_signature' => $request->razorpay_signature,
             ];
             $this->razorpay->utility->verifyPaymentSignature($attributes);
         } catch (\Exception $e) {
-            return back()->with('error', 'Payment verification failed: ' . $e->getMessage());
+            return back()->with('error', 'Payment verification failed: '.$e->getMessage());
         }
 
         $enrollment->update(['status' => 'paid']);
@@ -107,7 +111,7 @@ class EnrollmentController extends Controller
 
         Invoice::create([
             'payment_id' => $payment->id,
-            'invoice_number' => 'INV-' . date('Ymd') . '-' . $payment->id,
+            'invoice_number' => 'INV-'.date('Ymd').'-'.$payment->id,
             'issued_at' => now(),
             'amount' => $totalAmount,
             'taxable_amount' => $taxableAmount,
@@ -121,12 +125,12 @@ class EnrollmentController extends Controller
         $teacher = $enrollment->course->teacher;
         if ($teacher) {
             $commissionAmount = ($enrollment->course->price * $teacher->commission_percent) / 100;
-            
-            \App\Models\WalletTransaction::create([
+
+            WalletTransaction::create([
                 'teacher_id' => $teacher->id,
                 'amount' => $commissionAmount,
                 'type' => 'credit',
-                'description' => 'Commission from course purchase: ' . $enrollment->course->title,
+                'description' => 'Commission from course purchase: '.$enrollment->course->title,
             ]);
 
             $teacher->increment('wallet_balance', $commissionAmount);

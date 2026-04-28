@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Model;
 
 #[Fillable(['user_id', 'course_id', 'batch_id', 'status', 'batch_type_preference'])]
 class Enrollment extends Model
@@ -35,10 +35,14 @@ class Enrollment extends Model
 
     public function getAssignmentAverageAttribute()
     {
-        if (!$this->batch_id) return 0;
+        if (! $this->batch_id) {
+            return 0;
+        }
 
         $assignments = Assignment::where('batch_id', $this->batch_id)->get();
-        if ($assignments->isEmpty()) return 100; // Assume 100 if no assignments yet
+        if ($assignments->isEmpty()) {
+            return 100;
+        } // Assume 100 if no assignments yet
 
         $totalPossible = $assignments->sum('max_marks');
         $totalObtained = AssignmentSubmission::where('user_id', $this->user_id)
@@ -51,7 +55,9 @@ class Enrollment extends Model
     public function getExamScoreAttribute()
     {
         $exam = Exam::where('course_id', $this->course_id)->first();
-        if (!$exam) return 0;
+        if (! $exam) {
+            return 0;
+        }
 
         $attempt = ExamAttempt::where('exam_id', $exam->id)
             ->where('user_id', $this->user_id)

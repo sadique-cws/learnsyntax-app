@@ -13,14 +13,14 @@ class AssignmentController extends Controller
 {
     public function index()
     {
-        $batches = Batch::with(['course', 'assignments' => function($q) {
+        $batches = Batch::with(['course', 'assignments' => function ($q) {
             $q->withCount([
-                'submissions as handed_in_count' => function($q) {
+                'submissions as handed_in_count' => function ($q) {
                     $q->where('status', 'submitted');
                 },
-                'submissions as marked_count' => function($q) {
+                'submissions as marked_count' => function ($q) {
                     $q->where('status', 'graded');
-                }
+                },
             ]);
         }])->withCount('enrollments')->get();
 
@@ -47,10 +47,10 @@ class AssignmentController extends Controller
     public function show(Assignment $assignment)
     {
         $assignment->load(['batch.course', 'submissions.user']);
-        
+
         // Ensure all enrolled students have a submission record for grading
         $enrolledUserIds = Enrollment::where('batch_id', $assignment->batch_id)->pluck('user_id');
-        
+
         foreach ($enrolledUserIds as $userId) {
             AssignmentSubmission::firstOrCreate([
                 'assignment_id' => $assignment->id,
@@ -66,7 +66,7 @@ class AssignmentController extends Controller
     public function grade(Request $request, AssignmentSubmission $submission)
     {
         $request->validate([
-            'marks_obtained' => 'required|integer|min:0|max:' . $submission->assignment->max_marks,
+            'marks_obtained' => 'required|integer|min:0|max:'.$submission->assignment->max_marks,
             'admin_comments' => 'nullable|string',
         ]);
 
@@ -85,7 +85,7 @@ class AssignmentController extends Controller
             'admin_comments' => $request->admin_comments,
         ]);
 
-        return back()->with('success', 'Marks updated successfully.' . $penaltyMessage);
+        return back()->with('success', 'Marks updated successfully.'.$penaltyMessage);
     }
 
     public function comment(Request $request, AssignmentSubmission $submission)

@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
-use App\Models\Enrollment;
 use App\Models\Assignment;
 use App\Models\AssignmentSubmission;
+use App\Models\Certificate;
+use App\Models\Enrollment;
 use App\Models\Exam;
 use App\Models\ExamAttempt;
-use App\Models\Certificate;
 use Illuminate\Http\Request;
 
 class AcademicController extends Controller
@@ -18,7 +18,7 @@ class AcademicController extends Controller
         $this->authorizeAccess($enrollment);
 
         $assignments = Assignment::where('batch_id', $enrollment->batch_id)
-            ->with(['submissions' => function($q) {
+            ->with(['submissions' => function ($q) {
                 $q->where('user_id', auth()->id());
             }])
             ->get();
@@ -63,7 +63,7 @@ class AcademicController extends Controller
         $this->authorizeAccess($enrollment);
 
         $exam = Exam::where('course_id', $enrollment->course_id)->first();
-        if (!$exam) {
+        if (! $exam) {
             return back()->with('error', 'Exam not scheduled yet.');
         }
 
@@ -78,16 +78,16 @@ class AcademicController extends Controller
             'enrollment' => $enrollment->load('course'),
             'exam' => $exam,
             'attempt' => $attempt,
-            'isVerified' => $isVerified
+            'isVerified' => $isVerified,
         ]);
     }
 
     public function verifyPasscode(Request $request, Enrollment $enrollment)
     {
         $this->authorizeAccess($enrollment);
-        
+
         $exam = Exam::where('course_id', $enrollment->course_id)->firstOrFail();
-        
+
         if (ExamAttempt::where('exam_id', $exam->id)->where('user_id', auth()->id())->exists()) {
             return back()->with('error', 'You have already attempted this exam.');
         }
@@ -108,12 +108,12 @@ class AcademicController extends Controller
         $this->authorizeAccess($enrollment);
 
         $exam = Exam::where('course_id', $enrollment->course_id)->firstOrFail();
-        
+
         if (ExamAttempt::where('exam_id', $exam->id)->where('user_id', auth()->id())->exists()) {
             return back()->with('error', 'You have already submitted this exam.');
         }
 
-        if ($exam->passcode && !session("exam_verified_{$exam->id}")) {
+        if ($exam->passcode && ! session("exam_verified_{$exam->id}")) {
             return back()->with('error', 'Passcode verification required.');
         }
 
@@ -121,10 +121,10 @@ class AcademicController extends Controller
         $marks = rand(25, $exam->total_marks);
 
         ExamAttempt::create([
-            'exam_id' => $exam->id, 
+            'exam_id' => $exam->id,
             'user_id' => auth()->id(),
-            'marks_obtained' => $marks, 
-            'completed_at' => now()
+            'marks_obtained' => $marks,
+            'completed_at' => now(),
         ]);
 
         // Clear verification session
@@ -137,15 +137,15 @@ class AcademicController extends Controller
     {
         $this->authorizeAccess($enrollment);
 
-        if (!$enrollment->isEligibleForCertificate()) {
+        if (! $enrollment->isEligibleForCertificate()) {
             return back()->with('error', 'You need an average of at least 60% in assignments and exam to download the certificate.');
         }
 
         $certificate = Certificate::firstOrCreate(
             ['enrollment_id' => $enrollment->id],
             [
-                'certificate_number' => 'LS-' . strtoupper(str()->random(8)),
-                'issued_at' => now()
+                'certificate_number' => 'LS-'.strtoupper(str()->random(8)),
+                'issued_at' => now(),
             ]
         );
 

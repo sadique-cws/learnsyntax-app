@@ -3,54 +3,60 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Invoice;
+use App\Models\Payment;
+use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 class PaymentController extends Controller
 {
     public function index()
     {
-        $payments = \App\Models\Payment::with(['enrollment.user', 'enrollment.course', 'invoice'])
+        $payments = Payment::with(['enrollment.user', 'enrollment.course', 'invoice'])
             ->latest()
             ->get()
-            ->map(function($p) {
-                $p->searchable_student = $p->enrollment->user->name;
-                $p->searchable_course = $p->enrollment->course->title;
-                $p->searchable_amount = (string)$p->amount;
+            ->map(function ($p) {
+                $p->searchable_student = $p->enrollment?->user?->name ?? 'Unknown';
+                $p->searchable_course = $p->enrollment?->course?->title ?? 'Unknown';
+                $p->searchable_amount = (string) $p->amount;
+
                 return $p;
             });
-            
+
         return inertia('admin/payments/index', [
-            'payments' => $payments
+            'payments' => $payments,
         ]);
     }
 
     public function gstReport()
     {
-        $invoices = \App\Models\Invoice::with(['payment.enrollment.user', 'payment.enrollment.course'])
+        \Log::info('GST Report accessed');
+        $invoices = Invoice::with(['payment.enrollment.user', 'payment.enrollment.course'])
             ->whereNotNull('taxable_amount')
             ->latest()
             ->get()
-            ->map(function($i) {
-                $i->searchable_student = $i->payment->enrollment->user->name;
-                $i->searchable_course = $i->payment->enrollment->course->title;
+            ->map(function ($i) {
+                $i->searchable_student = $i->payment?->enrollment?->user?->name ?? 'Unknown Student';
+                $i->searchable_course = $i->payment?->enrollment?->course?->title ?? 'Unknown Course';
+
                 return $i;
             });
 
         return inertia('admin/payments/gst-report', [
             'invoices' => $invoices,
             'stats' => [
-                'total_gst' => $invoices->sum(fn($i) => $i->cgst + $i->sgst + $i->igst),
-                'total_cgst' => $invoices->sum('cgst'),
-                'total_sgst' => $invoices->sum('sgst'),
-                'total_igst' => $invoices->sum('igst'),
-            ]
+                'total_gst' => (float) $invoices->sum(fn ($i) => (float) $i->cgst + (float) $i->sgst + (float) $i->igst),
+                'total_cgst' => (float) $invoices->sum('cgst'),
+                'total_sgst' => (float) $invoices->sum('sgst'),
+                'total_igst' => (float) $invoices->sum('igst'),
+            ],
         ]);
     }
 
-    public function showInvoice(\App\Models\Invoice $invoice)
+    public function showInvoice(Invoice $invoice)
     {
-        $settings = \App\Models\Setting::first() ?: new \App\Models\Setting([
+        $settings = Setting::first() ?: new Setting([
             'company_name' => 'Learn Syntax Academy',
             'company_address' => '123 Tech Park, Sector 62, Noida, UP - 201309',
             'company_gstin' => '09ABCDE1234F1Z5',
@@ -62,11 +68,11 @@ class PaymentController extends Controller
 
         return inertia('admin/payments/invoice', [
             'invoice' => $invoice->load(['payment.enrollment.user', 'payment.enrollment.course']),
-            'company' => $settings
+            'company' => $settings,
         ]);
     }
 
-    public function generateInvoice(\App\Models\Payment $payment)
+    public function generateInvoice(Payment $payment)
     {
         if ($payment->invoice) {
             return back()->with('error', 'Invoice already exists.');
@@ -77,7 +83,7 @@ class PaymentController extends Controller
         $splitGst = round($gstAmount / 2, 2);
 
         $payment->invoice()->create([
-            'invoice_number' => 'INV-' . strtoupper(Str::random(8)),
+            'invoice_number' => 'INV-'.strtoupper(Str::random(8)),
             'amount' => $payment->amount,
             'taxable_amount' => $taxableAmount,
             'cgst' => $splitGst,
@@ -93,19 +99,19 @@ class PaymentController extends Controller
 
     public function exportGstr1()
     {
-        $invoices = \App\Models\Invoice::with(['payment.enrollment.user'])
+        $invoices = Invoice::with(['payment.enrollment.user'])
             ->latest()
             ->get();
 
-        $filename = "GSTR1_Report_" . now()->format('Y_m_d') . ".csv";
-        
-        $callback = function() {
-            $invoices = \App\Models\Invoice::with(['payment.enrollment.user'])
+        $filename = 'GSTR1_Report_'.now()->format('Y_m_d').'.csv';
+
+        $callback = function () {
+            $invoices = Invoice::with(['payment.enrollment.user'])
                 ->latest()
                 ->get();
 
             $handle = fopen('php://output', 'w');
-            
+
             fputcsv($handle, [
                 'Invoice Number',
                 'Invoice Date',
@@ -117,14 +123,14 @@ class PaymentController extends Controller
                 'SGST (9%)',
                 'IGST (18%)',
                 'Total Amount',
-                'Status'
+                'Status',
             ]);
 
             foreach ($invoices as $invoice) {
                 fputcsv($handle, [
                     $invoice->invoice_number,
-                    \Carbon\Carbon::parse($invoice->issued_at)->format('d-m-Y'),
-                    $invoice->payment->enrollment->user->name,
+                    $invoice->issued_at ? Carbon::parse($invoice->issued_at)->format('d-m-Y') : 'N/A',
+                    $invoice->payment?->enrollment?->user?->name ?? 'Unknown',
                     $invoice->gst_number ?: 'Consumer',
                     $invoice->sac_code ?: '9992',
                     $invoice->taxable_amount,
@@ -132,7 +138,7 @@ class PaymentController extends Controller
                     $invoice->sgst,
                     $invoice->igst,
                     $invoice->amount,
-                    $invoice->status
+                    $invoice->status,
                 ]);
             }
 
@@ -140,11 +146,11 @@ class PaymentController extends Controller
         };
 
         return response()->stream($callback, 200, [
-            "Content-type"        => "text/csv",
-            "Content-Disposition" => "attachment; filename=$filename",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
+            'Content-type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=$filename",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
         ]);
     }
 }

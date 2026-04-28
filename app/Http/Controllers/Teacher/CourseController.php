@@ -13,9 +13,9 @@ class CourseController extends Controller
     {
         $teacher = auth()->user()->teacher;
         $courses = $teacher->courses()->get();
-        
+
         return inertia('teacher/courses/index', [
-            'courses' => $courses
+            'courses' => $courses,
         ]);
     }
 
@@ -32,7 +32,7 @@ class CourseController extends Controller
 
         $course = $teacher->courses()->create([
             'title' => $request->title,
-            'slug' => Str::slug($request->title) . '-' . uniqid(),
+            'slug' => Str::slug($request->title).'-'.uniqid(),
             'price' => $request->price,
             'description' => $request->description,
             'is_active' => true,

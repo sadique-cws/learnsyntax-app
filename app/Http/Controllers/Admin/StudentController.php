@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\Enrollment;
 use App\Models\Batch;
+use App\Models\Certificate;
+use App\Models\Enrollment;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -24,14 +25,14 @@ class StudentController extends Controller
     public function show(User $student)
     {
         $student->load([
-            'enrollments.course', 
-            'enrollments.batch', 
-            'enrollments.payment.invoice', 
+            'enrollments.course',
+            'enrollments.batch',
+            'enrollments.payment.invoice',
             'enrollments.certificate',
             'examAttempts.exam',
-            'assignmentSubmissions.assignment'
+            'assignmentSubmissions.assignment',
         ]);
-        
+
         // Appending computed attributes for the view
         foreach ($student->enrollments as $enrollment) {
             $enrollment->append(['assignment_average', 'exam_score', 'overall_average']);
@@ -41,10 +42,10 @@ class StudentController extends Controller
             'student' => $student,
             'available_batches' => Batch::with('course')->get()->groupBy('course_id'),
             'stats' => [
-                'total_paid' => $student->enrollments->sum(fn($e) => $e->payment ? $e->payment->amount : 0),
+                'total_paid' => $student->enrollments->sum(fn ($e) => $e->payment ? $e->payment->amount : 0),
                 'course_count' => $student->enrollments->count(),
                 'avg_performance' => $student->enrollments->avg('overall_average') ?: 0,
-            ]
+            ],
         ]);
     }
 
@@ -63,15 +64,15 @@ class StudentController extends Controller
 
     public function generateCertificate(Enrollment $enrollment)
     {
-        if (!$enrollment->isEligibleForCertificate()) {
+        if (! $enrollment->isEligibleForCertificate()) {
             return back()->with('error', 'Student is not yet eligible for a certificate. Requires 60% average.');
         }
 
-        \App\Models\Certificate::firstOrCreate(
+        Certificate::firstOrCreate(
             ['enrollment_id' => $enrollment->id],
             [
-                'certificate_number' => 'LS-' . strtoupper(str()->random(8)),
-                'issued_at' => now()
+                'certificate_number' => 'LS-'.strtoupper(str()->random(8)),
+                'issued_at' => now(),
             ]
         );
 

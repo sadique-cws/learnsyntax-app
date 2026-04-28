@@ -5,6 +5,7 @@ namespace App\Providers;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -19,11 +20,11 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
 
-        \Illuminate\Support\Facades\Gate::define('admin', function ($user) {
+        Gate::define('admin', function ($user) {
             return $user->is_admin;
         });
 
-        \Illuminate\Support\Facades\Gate::define('teacher', function ($user) {
+        Gate::define('teacher', function ($user) {
             return $user->is_teacher;
         });
     }

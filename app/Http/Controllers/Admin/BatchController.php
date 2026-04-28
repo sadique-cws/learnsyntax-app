@@ -3,21 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Batch;
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 class BatchController extends Controller
 {
     public function index()
     {
-        $batches = \App\Models\Batch::with('course')->get();
-        $courses = \App\Models\Course::all();
+        $batches = Batch::with('course')->get();
+        $courses = Course::all();
+
         return inertia('admin/batches/index', [
             'batches' => $batches,
-            'courses' => $courses
+            'courses' => $courses,
         ]);
     }
 
-    public function store(\Illuminate\Http\Request $request)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'course_id' => 'required|exists:courses,id',
@@ -27,12 +30,12 @@ class BatchController extends Controller
             'capacity' => 'required|integer|min:1',
         ]);
 
-        \App\Models\Batch::create($validated);
+        Batch::create($validated);
 
         return back()->with('success', 'Batch created successfully.');
     }
 
-    public function update(\Illuminate\Http\Request $request, \App\Models\Batch $batch)
+    public function update(Request $request, Batch $batch)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -47,9 +50,10 @@ class BatchController extends Controller
         return back()->with('success', 'Batch updated successfully.');
     }
 
-    public function destroy(\App\Models\Batch $batch)
+    public function destroy(Batch $batch)
     {
         $batch->delete();
+
         return back()->with('success', 'Batch deleted successfully.');
     }
 }

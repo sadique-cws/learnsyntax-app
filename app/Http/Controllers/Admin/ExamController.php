@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Exam;
 use App\Models\Course;
+use App\Models\Exam;
 use App\Models\ExamAttempt;
-use App\Models\User;
+use App\Models\Question;
 use Illuminate\Http\Request;
 
 class ExamController extends Controller
@@ -77,19 +77,20 @@ class ExamController extends Controller
             $exam->questions()->create($q);
         }
 
-        return back()->with('success', count($request->questions) . ' questions imported successfully.');
+        return back()->with('success', count($request->questions).' questions imported successfully.');
     }
 
-    public function destroyQuestion(\App\Models\Question $question)
+    public function destroyQuestion(Question $question)
     {
         $question->delete();
+
         return back()->with('success', 'Question deleted.');
     }
 
     public function updateResult(Request $request, ExamAttempt $attempt)
     {
         $request->validate([
-            'marks_obtained' => 'required|integer|min:0|max:' . $attempt->exam->total_marks,
+            'marks_obtained' => 'required|integer|min:0|max:'.$attempt->exam->total_marks,
         ]);
 
         $attempt->update(['marks_obtained' => $request->marks_obtained]);

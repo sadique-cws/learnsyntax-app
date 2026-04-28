@@ -14,10 +14,10 @@ class TeacherController extends Controller
         $teachers = Teacher::with('user')->get();
         // Get users who are not teachers yet so admin can easily assign them
         $users = User::where('is_teacher', false)->get();
-        
+
         return inertia('admin/teachers/index', [
             'teachers' => $teachers,
-            'users' => $users
+            'users' => $users,
         ]);
     }
 
