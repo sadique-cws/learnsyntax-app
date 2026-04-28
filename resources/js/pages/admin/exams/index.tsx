@@ -1,13 +1,12 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
-import { ClipboardList, Trophy, Settings, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { Trophy, Settings, ChevronRight } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useState } from 'react';
-import { Link } from '@inertiajs/react';
+import { AdminDataTable, Column } from '@/components/admin/admin-data-table';
 
 export default function AdminExamIndex({ courses }: { courses: any[] }) {
     const [isConfigOpen, setIsConfigOpen] = useState(false);
@@ -27,96 +26,111 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
         });
     };
 
+    const columns: Column<any>[] = [
+        {
+            key: 'title',
+            label: 'Program & Exam',
+            sortable: true,
+            render: (course) => (
+                <div className="flex items-center gap-3">
+                    <div className="size-10 rounded bg-primary/5 border border-primary/10 flex items-center justify-center font-black text-primary text-xs shrink-0 uppercase">
+                        <Trophy className="size-4" />
+                    </div>
+                    <div>
+                        <div className="font-bold text-sm text-foreground">{course.title}</div>
+                        <div className="text-[10px] text-muted-foreground font-black uppercase tracking-tight">
+                            {course.exam ? course.exam.title : 'Setup Pending'}
+                        </div>
+                    </div>
+                </div>
+            )
+        },
+        {
+            key: 'total_marks',
+            label: 'Weightage',
+            sortable: false,
+            render: (course) => (
+                <div className="px-2 py-0.5 bg-muted rounded text-[10px] font-black uppercase tracking-tight inline-block">
+                    {course.exam ? `${course.exam.total_marks} Marks` : 'N/A'}
+                </div>
+            )
+        }
+    ];
+
     return (
         <>
             <Head title="Manage Exams" />
             
-            <div className="w-full p-4 lg:p-6 font-sans">
-                <div className="flex items-center justify-between mb-8">
-                    <div>
-                        <h1 className="text-2xl font-black tracking-tight uppercase">Final Exams</h1>
-                        <p className="text-muted-foreground text-sm font-medium">Configure and manage certification exams for each course.</p>
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {courses.map((course) => (
-                        <Card key={course.id} className="border-border  rounded-[2rem] overflow-hidden">
-                            <CardContent className="p-8">
-                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                                    <div className="flex items-center gap-4">
-                                        <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
-                                            <Trophy className="size-8 text-primary" />
+            <div className="w-full p-4 lg:p-6">
+                <AdminDataTable 
+                    title="Examination Board"
+                    subtitle="Configure and manage certification exams for each course"
+                    data={courses}
+                    columns={columns}
+                    searchPlaceholder="Search programs..."
+                    actions={(course) => (
+                        <div className="flex items-center justify-end gap-2">
+                            <Dialog open={isConfigOpen && data.course_id === course.id.toString()} onOpenChange={(open) => {
+                                setIsConfigOpen(open);
+                                if (open) {
+                                    setData({
+                                        course_id: course.id.toString(),
+                                        title: course.exam?.title || 'Final Certification Exam',
+                                        total_marks: course.exam?.total_marks || 50
+                                    });
+                                }
+                            }}>
+                                <DialogTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="h-8 px-3 rounded font-black uppercase text-[10px] tracking-widest hover:bg-primary/10 hover:text-primary transition-colors">
+                                        <Settings className="size-3 mr-2" /> {course.exam ? 'Config' : 'Setup'}
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent className="rounded border border-border max-w-md">
+                                    <form onSubmit={submit} className="space-y-6">
+                                        <DialogHeader>
+                                            <DialogTitle className="text-xl font-black uppercase tracking-tight">Configure Exam</DialogTitle>
+                                            <p className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest">For {course.title}</p>
+                                        </DialogHeader>
+                                        
+                                        <div className="space-y-4">
+                                            <div className="space-y-2">
+                                                <Label className="text-[10px] font-black uppercase tracking-widest">Exam Title</Label>
+                                                <Input 
+                                                    required 
+                                                    className="rounded bg-card border-border h-10"
+                                                    value={data.title}
+                                                    onChange={e => setData('title', e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label className="text-[10px] font-black uppercase tracking-widest">Total Marks</Label>
+                                                <Input 
+                                                    type="number" 
+                                                    required 
+                                                    className="rounded bg-card border-border h-10"
+                                                    value={data.total_marks}
+                                                    onChange={e => setData('total_marks', parseInt(e.target.value))}
+                                                />
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h3 className="text-xl font-black uppercase tracking-tight leading-none mb-1">{course.title}</h3>
-                                            <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">
-                                                {course.exam ? `Status: ${course.exam.total_marks} Marks Final Exam` : 'Exam Not Configured'}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div className="flex items-center gap-3">
-                                        <Dialog open={isConfigOpen && data.course_id === course.id.toString()} onOpenChange={(open) => {
-                                            setIsConfigOpen(open);
-                                            if (open) {
-                                                setData({
-                                                    course_id: course.id.toString(),
-                                                    title: course.exam?.title || 'Final Certification Exam',
-                                                    total_marks: course.exam?.total_marks || 50
-                                                });
-                                            }
-                                        }}>
-                                            <DialogTrigger asChild>
-                                                <Button variant="outline" size="sm" className="h-10 px-4 rounded-xl font-black uppercase text-[10px] tracking-widest border-2">
-                                                    <Settings className="size-3.5 mr-2" /> {course.exam ? 'Edit Config' : 'Setup Exam'}
-                                                </Button>
-                                            </DialogTrigger>
-                                            <DialogContent className="rounded-3xl border-border  p-0 overflow-hidden max-w-md">
-                                                <DialogHeader className="bg-primary p-6 text-white text-left">
-                                                    <DialogTitle className="text-xl font-black uppercase tracking-tight">Configure Exam</DialogTitle>
-                                                    <p className="text-white/70 text-xs font-medium">For {course.title}</p>
-                                                </DialogHeader>
-                                                <form onSubmit={submit} className="p-6 space-y-5">
-                                                    <div className="grid gap-2">
-                                                        <Label className="text-[10px] font-black uppercase tracking-wider text-muted-foreground ml-1">Exam Title</Label>
-                                                        <Input 
-                                                            required 
-                                                            className="rounded-xl border-border h-11"
-                                                            value={data.title}
-                                                            onChange={e => setData('title', e.target.value)}
-                                                        />
-                                                    </div>
-                                                    <div className="grid gap-2">
-                                                        <Label className="text-[10px] font-black uppercase tracking-wider text-muted-foreground ml-1">Total Marks</Label>
-                                                        <Input 
-                                                            type="number" 
-                                                            required 
-                                                            className="rounded-xl border-border h-11"
-                                                            value={data.total_marks}
-                                                            onChange={e => setData('total_marks', parseInt(e.target.value))}
-                                                        />
-                                                    </div>
-                                                    <Button type="submit" disabled={processing} className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-xs">
-                                                        {processing ? 'Configuring...' : 'Save Configuration'}
-                                                    </Button>
-                                                </form>
-                                            </DialogContent>
-                                        </Dialog>
 
-                                        {course.exam && (
-                                            <Button asChild variant="default" size="sm" className="h-10 px-4 rounded-xl font-black uppercase text-[10px] tracking-widest">
-                                                <Link href={`/admin/academic/exams/${course.exam.id}/results`}>
-                                                    View Results <ChevronRight className="size-3.5 ml-1" />
-                                                </Link>
-                                            </Button>
-                                        )}
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
+                                        <Button type="submit" disabled={processing} className="w-full h-11 rounded font-black uppercase tracking-widest text-xs">
+                                            {processing ? 'Configuring...' : 'Save Configuration'}
+                                        </Button>
+                                    </form>
+                                </DialogContent>
+                            </Dialog>
+
+                            {course.exam && (
+                                <Button asChild variant="outline" size="sm" className="h-8 px-3 rounded font-black uppercase text-[10px] tracking-widest border-border bg-card">
+                                    <Link href={`/admin/academic/exams/${course.exam.id}/results`}>
+                                        Results <ChevronRight className="size-3 ml-1" />
+                                    </Link>
+                                </Button>
+                            )}
+                        </div>
+                    )}
+                />
             </div>
         </>
     );
