@@ -105,10 +105,16 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
                     searchPlaceholder="Search transactions..."
                     actions={(payment) => (
                         <div className="flex items-center justify-end">
-                            <Button variant="outline" size="sm" className="rounded h-8 text-[10px] font-medium tracking-tight px-3 border-border bg-card">
-                                <Receipt className="size-3 mr-2" />
-                                {payment.invoice?.invoice_number || 'No Invoice'}
-                            </Button>
+                            {payment.invoice ? (
+                                <Button asChild variant="outline" size="sm" className="rounded h-8 text-[10px] font-medium tracking-tight px-3 border-border bg-card">
+                                    <Link href={`/admin/invoices/${payment.invoice.id}`}>
+                                        <Receipt className="size-3 mr-2" />
+                                        {payment.invoice.invoice_number}
+                                    </Link>
+                                </Button>
+                            ) : (
+                                <span className="text-[10px] text-muted-foreground italic px-3">No Invoice</span>
+                            )}
                         </div>
                     )}
                 />

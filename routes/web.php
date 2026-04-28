@@ -44,6 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('batches', App\Http\Controllers\Admin\BatchController::class)->names('admin.batches');
         Route::get('payments', [App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('admin.payments.index');
         Route::get('payments/gst-report', [App\Http\Controllers\Admin\PaymentController::class, 'gstReport'])->name('admin.payments.gst-report');
+        Route::get('invoices/{invoice}', [App\Http\Controllers\Admin\PaymentController::class, 'showInvoice'])->name('admin.invoices.show');
         
         // Student Management
         Route::get('students', [App\Http\Controllers\Admin\StudentController::class, 'index'])->name('admin.students.index');
@@ -61,6 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('exams', [App\Http\Controllers\Admin\ExamController::class, 'store'])->name('admin.exams.store');
             Route::get('exams/{exam}/questions', [App\Http\Controllers\Admin\ExamController::class, 'questions'])->name('admin.exams.questions');
             Route::post('exams/{exam}/questions', [App\Http\Controllers\Admin\ExamController::class, 'storeQuestion'])->name('admin.exams.questions.store');
+            Route::post('exams/{exam}/questions/bulk', [App\Http\Controllers\Admin\ExamController::class, 'bulkStoreQuestions'])->name('admin.exams.questions.bulk');
             Route::delete('questions/{question}', [App\Http\Controllers\Admin\ExamController::class, 'destroyQuestion'])->name('admin.questions.destroy');
             Route::get('exams/{exam}/results', [App\Http\Controllers\Admin\ExamController::class, 'results'])->name('admin.exams.results');
             Route::patch('exam-attempts/{attempt}', [App\Http\Controllers\Admin\ExamController::class, 'updateResult'])->name('admin.exam-attempts.update');

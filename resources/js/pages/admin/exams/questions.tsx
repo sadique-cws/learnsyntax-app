@@ -4,9 +4,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
-import { Plus, Trash2, ChevronLeft, HelpCircle } from 'lucide-react';
+import { Plus, Trash2, ChevronLeft, HelpCircle, FileJson, Upload } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 
 export default function AdminExamQuestions({ exam }: { exam: any }) {
     const { data, setData, post, processing, reset, delete: destroy } = useForm({
@@ -16,11 +17,35 @@ export default function AdminExamQuestions({ exam }: { exam: any }) {
         correct_answer: '',
     });
 
+    const [isBulkOpen, setIsBulkOpen] = useState(false);
+    const [jsonInput, setJsonInput] = useState('');
+    const [bulkProcessing, setBulkProcessing] = useState(false);
+
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
         post(`/admin/academic/exams/${exam.id}/questions`, {
             onSuccess: () => reset(),
         });
+    };
+
+    const handleBulkSubmit = () => {
+        try {
+            const parsed = JSON.parse(jsonInput);
+            const questions = Array.isArray(parsed) ? parsed : [parsed];
+            
+            setBulkProcessing(true);
+            post(`/admin/academic/exams/${exam.id}/questions/bulk`, {
+                data: { questions },
+                onSuccess: () => {
+                    setIsBulkOpen(false);
+                    setJsonInput('');
+                    setBulkProcessing(false);
+                },
+                onError: () => setBulkProcessing(false),
+            });
+        } catch (e) {
+            alert('Invalid JSON format. Please check your input.');
+        }
     };
 
     const handleDelete = (id: number) => {
@@ -43,10 +68,53 @@ export default function AdminExamQuestions({ exam }: { exam: any }) {
                             <span className="text-[10px] font-medium text-primary mb-2 block">{exam.course.title}</span>
                             <h1 className="text-3xl font-medium tracking-tight leading-none">{exam.title}</h1>
                         </div>
-                        <div className="flex items-center gap-4 bg-muted/50 p-4 rounded border border-border/50">
-                            <div className="text-right">
-                                <div className="text-[9px] font-medium text-muted-foreground">Total Questions</div>
-                                <div className="text-xl font-medium text-foreground">{exam.questions.length}</div>
+                        <div className="flex items-center gap-4">
+                            <Dialog open={isBulkOpen} onOpenChange={setIsBulkOpen}>
+                                <DialogTrigger asChild>
+                                    <Button variant="outline" className="rounded border-border bg-card">
+                                        <FileJson className="size-4 mr-2" /> Bulk Import
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent className="max-w-2xl rounded-2xl">
+                                    <DialogHeader>
+                                        <DialogTitle className="text-xl font-medium">Bulk Question Import</DialogTitle>
+                                        <p className="text-xs text-muted-foreground mt-1">Paste a JSON array of questions to import them all at once.</p>
+                                    </DialogHeader>
+                                    <div className="space-y-4 py-4">
+                                        <div className="space-y-2">
+                                            <Label className="text-xs font-medium">JSON Data</Label>
+                                            <Textarea 
+                                                className="min-h-[300px] font-mono text-xs rounded-xl"
+                                                placeholder={`[
+  {
+    "question_text": "What is React?",
+    "options": ["Library", "Framework", "Language", "Database"],
+    "correct_answer": "Library",
+    "marks": 2
+  }
+]`}
+                                                value={jsonInput}
+                                                onChange={e => setJsonInput(e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
+                                    <DialogFooter>
+                                        <Button variant="ghost" onClick={() => setIsBulkOpen(false)} className="rounded-xl">Cancel</Button>
+                                        <Button 
+                                            onClick={handleBulkSubmit} 
+                                            disabled={bulkProcessing || !jsonInput}
+                                            className="rounded-xl px-8"
+                                        >
+                                            {bulkProcessing ? 'Importing...' : 'Start Import'}
+                                        </Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
+                            <div className="flex items-center gap-4 bg-muted/50 p-4 rounded border border-border/50">
+                                <div className="text-right">
+                                    <div className="text-[9px] font-medium text-muted-foreground">Total Questions</div>
+                                    <div className="text-xl font-medium text-foreground">{exam.questions.length}</div>
+                                </div>
                             </div>
                         </div>
                     </div>

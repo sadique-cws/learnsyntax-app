@@ -148,7 +148,7 @@ export default function AdminAssignmentIndex({ batches }: { batches: any[] }) {
                                     {batch.assignments.map((a: any) => (
                                         <Link 
                                             key={a.id} 
-                                            href={`/admin/assignments/${a.id}`}
+                                            href={`/admin/academic/assignments/${a.id}`}
                                             className="flex items-center justify-between p-2 rounded hover:bg-primary/5 hover:text-primary transition-colors text-xs font-medium"
                                         >
                                             <span className="truncate">{a.title}</span>

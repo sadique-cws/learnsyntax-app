@@ -35,4 +35,18 @@ class PaymentController extends Controller
             ]
         ]);
     }
+
+    public function showInvoice(\App\Models\Invoice $invoice)
+    {
+        return inertia('admin/payments/invoice', [
+            'invoice' => $invoice->load(['payment.enrollment.user', 'payment.enrollment.course']),
+            'company' => [
+                'name' => 'Learn Syntax Academy',
+                'address' => '123 Tech Park, Sector 62, Noida, UP - 201309',
+                'gstin' => '09ABCDE1234F1Z5',
+                'email' => 'billing@learnsyntax.com',
+                'phone' => '+91 98765 43210',
+            ]
+        ]);
+    }
 }

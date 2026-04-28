@@ -16,7 +16,7 @@ export default function AdminAssignmentShow({ assignment }: { assignment: any })
             
             <div className="w-full p-4 lg:p-6">
                 <div className="mb-8">
-                    <Link href="/admin/assignments" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors mb-6">
+                    <Link href="/admin/academic/assignments" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors mb-6">
                         <ChevronLeft className="size-4 mr-1" /> Back to Assignments
                     </Link>
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">

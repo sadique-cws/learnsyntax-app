@@ -48,6 +48,7 @@ interface AdminDataTableProps<T> {
     title?: string;
     subtitle?: string;
     actions?: (item: T) => ReactNode;
+    dateFilterKey?: string;
 }
 
 export function AdminDataTable<T extends { id: number | string }>({ 
@@ -60,11 +61,13 @@ export function AdminDataTable<T extends { id: number | string }>({
     addLabel = "Add New",
     title,
     subtitle,
-    actions
+    actions,
+    dateFilterKey
 }: AdminDataTableProps<T>) {
     const [search, setSearch] = useState('');
     const [activeFilters, setActiveFilters] = useState<Record<string, any[]>>({});
     const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' | null }>({ key: '', direction: null });
+    const [dateRange, setDateRange] = useState<{ start: string, end: string }>({ start: '', end: '' });
 
     const handleSort = (key: string) => {
         let direction: 'asc' | 'desc' = 'asc';

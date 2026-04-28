@@ -62,6 +62,23 @@ class ExamController extends Controller
         return back()->with('success', 'Question added successfully.');
     }
 
+    public function bulkStoreQuestions(Request $request, Exam $exam)
+    {
+        $request->validate([
+            'questions' => 'required|array',
+            'questions.*.question_text' => 'required|string',
+            'questions.*.options' => 'nullable|array',
+            'questions.*.correct_answer' => 'nullable|string',
+            'questions.*.marks' => 'required|integer|min:1',
+        ]);
+
+        foreach ($request->questions as $q) {
+            $exam->questions()->create($q);
+        }
+
+        return back()->with('success', count($request->questions) . ' questions imported successfully.');
+    }
+
     public function destroyQuestion(\App\Models\Question $question)
     {
         $question->delete();
