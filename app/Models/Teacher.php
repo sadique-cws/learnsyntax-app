@@ -27,4 +27,9 @@ class Teacher extends Model
     {
         return $this->hasMany(WalletTransaction::class);
     }
+
+    public function withdrawalRequests()
+    {
+        return $this->hasMany(WithdrawalRequest::class);
+    }
 }

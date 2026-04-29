@@ -112,10 +112,10 @@ export default function AdminStudentShow({ student, available_batches, stats, al
             key: 'actions',
             label: 'Invoice',
             render: (payment) => payment.invoice ? (
-                <Link href={`/admin/invoices/${payment.invoice.id}`} className="inline-flex items-center gap-1 text-[9px] font-black ry hover:underline">
+                <Link href={`/admin/invoices/${payment.invoice.id}`} className="inline-flex items-center gap-1 text-[9px] font-black hover:underline">
                     <Receipt className="size-3" /> {payment.invoice.invoice_number}
                 </Link>
-            ) : <span className="text-[9px] text-muted-foreground 
+            ) : <span className="text-[9px] text-muted-foreground">N/A</span>
         }
     ];
 
@@ -137,8 +137,8 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                             </div>
                             <div>
                                 <div className="flex items-center gap-3 mb-2">
-                                    <h1 className="text-2xl font-black  text-foreground 
-                                    <div className="px-2 py-0.5 bg-primary/10 text-primary text-[9px] font-black  border border-primary/20">
+                                    <h1 className="text-2xl font-black text-foreground">{student.name}</h1>
+                                    <div className="px-2 py-0.5 bg-primary/10 text-primary text-[9px] font-black border border-primary/20">
                                         ID: ST-{student.id.toString().padStart(4, '0')}
                                     </div>
                                 </div>
@@ -278,8 +278,8 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                     <BookOpen className="size-5" />
                                 </div>
                                 <div>
-                                    <DialogTitle className="text-sm font-black rse Enrollment</DialogTitle>
-                                    <DialogDescription className="text-[10px] font-bold -foreground mt-0.5">
+                                    <DialogTitle className="text-sm font-black uppercase tracking-tight">Manual Course Enrollment</DialogTitle>
+                                    <DialogDescription className="text-[10px] font-bold text-muted-foreground mt-0.5">
                                         Assign a new course and record payment
                                     </DialogDescription>
                                 </div>
@@ -289,7 +289,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                         <form onSubmit={handleManualEnroll} className="p-6 space-y-4 bg-background">
                             <div className="grid grid-cols-1 gap-4">
                                 <div className="space-y-1.5">
-                                    <Label className="text-[9px] font-black -foreground/50">Select Course</Label>
+                                    <Label className="text-[9px] font-black text-muted-foreground/50">Select Course</Label>
                                     <Select 
                                         value={enrollmentForm.data.course_id} 
                                         onValueChange={(val) => {
@@ -301,12 +301,12 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                             }));
                                         }}
                                     >
-                                        <SelectTrigger className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold 
+                                        <SelectTrigger className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold">
                                             <SelectValue placeholder="Choose a course" />
                                         </SelectTrigger>
                                         <SelectContent className="rounded-sm">
                                             {all_courses.map(course => (
-                                                <SelectItem key={course.id} value={course.id.toString()} className="text-[10px] font-black 
+                                                <SelectItem key={course.id} value={course.id.toString()} className="text-[10px] font-black">
                                                     {course.title} (₹{course.price})
                                                 </SelectItem>
                                             ))}
@@ -315,18 +315,18 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                 </div>
 
                                 <div className="space-y-1.5">
-                                    <Label className="text-[9px] font-black -foreground/50">Select Batch</Label>
+                                    <Label className="text-[9px] font-black text-muted-foreground/50">Select Batch</Label>
                                     <Select 
                                         value={enrollmentForm.data.batch_id} 
                                         onValueChange={(val) => enrollmentForm.setData('batch_id', val)}
                                         disabled={!enrollmentForm.data.course_id}
                                     >
-                                        <SelectTrigger className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold 
+                                        <SelectTrigger className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold">
                                             <SelectValue placeholder={enrollmentForm.data.course_id ? "Choose a batch" : "Select a course first"} />
                                         </SelectTrigger>
                                         <SelectContent className="rounded-sm">
                                             {(selectedCourse?.batches || []).map((batch: any) => (
-                                                <SelectItem key={batch.id} value={batch.id.toString()} className="text-[10px] font-black 
+                                                <SelectItem key={batch.id} value={batch.id.toString()} className="text-[10px] font-black">
                                                     {batch.name} - {batch.type}
                                                 </SelectItem>
                                             ))}
@@ -336,7 +336,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-1.5">
-                                        <Label className="text-[9px] font-black -foreground/50">Amount Paid (₹)</Label>
+                                        <Label className="text-[9px] font-black text-muted-foreground/50">Amount Paid (₹)</Label>
                                         <Input 
                                             type="number"
                                             className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold"
@@ -345,18 +345,18 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                         />
                                     </div>
                                     <div className="space-y-1.5">
-                                        <Label className="text-[9px] font-black -foreground/50">Payment Method</Label>
+                                        <Label className="text-[9px] font-black text-muted-foreground/50">Payment Method</Label>
                                         <Select 
                                             value={enrollmentForm.data.payment_method} 
                                             onValueChange={(val) => enrollmentForm.setData('payment_method', val)}
                                         >
-                                            <SelectTrigger className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold 
+                                            <SelectTrigger className="h-10 rounded-sm border-border bg-muted/10 text-xs font-bold">
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent className="rounded-sm">
-                                                <SelectItem value="cash" className="text-[10px] font-black 
-                                                <SelectItem value="bank_transfer" className="text-[10px] font-black >
-                                                <SelectItem value="other" className="text-[10px] font-black 
+                                                <SelectItem value="cash" className="text-[10px] font-black">Cash</SelectItem>
+                                                <SelectItem value="bank_transfer" className="text-[10px] font-black">Bank Transfer</SelectItem>
+                                                <SelectItem value="other" className="text-[10px] font-black">Other</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
@@ -444,12 +444,12 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                 <div key={enrollment.id} className="bg-background border border-border rounded-sm shadow-sm overflow-hidden flex flex-col lg:flex-row">
                                     <div className="lg:w-1/3 p-8 border-r border-border bg-muted/5">
                                         <div className={cn(
-                                            "inline-block px-3 py-1 rounded-full text-[9px] font-black 
+                                            "inline-block px-3 py-1 rounded-full text-[9px] font-black",
                                             enrollment.status === 'paid' ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700"
                                         )}>
                                             {enrollment.status}
                                         </div>
-                                        <h3 className="text-xl font-black text-foreground lment.course.title}</h3>
+                                        <h3 className="text-xl font-black text-foreground mt-2 mb-4">{enrollment.course.title}</h3>
                                         <div className="space-y-4">
                                             <div className="flex items-center justify-between text-xs font-bold text-muted-foreground">
                                                 <span>Batch Status</span>
@@ -465,7 +465,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                     <div className="lg:w-2/3 p-8 flex flex-col justify-between">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                                             <div className="space-y-3">
-                                                <label className="text-[10px] font-black -foreground/60">Batch Assignment</label>
+                                                <label className="text-[10px] font-black text-muted-foreground/60">Batch Assignment</label>
                                                 <Select 
                                                     defaultValue={enrollment.batch_id?.toString()} 
                                                     onValueChange={(val) => handleBatchChange(enrollment.id, val)}
@@ -476,7 +476,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                                     </SelectTrigger>
                                                     <SelectContent className="rounded-sm shadow-2xl">
                                                         {(available_batches[enrollment.course_id] || []).map((batch: any) => (
-                                                            <SelectItem key={batch.id} value={batch.id.toString()} className="font-bold text-xs 
+                                                            <SelectItem key={batch.id} value={batch.id.toString()} className="font-bold text-xs">
                                                                 {batch.name} ({batch.type})
                                                             </SelectItem>
                                                         ))}
@@ -485,11 +485,11 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                             </div>
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div className="p-3 bg-muted/30 border border-border rounded-sm">
-                                                    <div className="text-[8px] font-black text-muted-foreground gnments</div>
+                                                    <div className="text-[8px] font-black text-muted-foreground">Assignments</div>
                                                     <div className="text-sm font-black">{Math.round(enrollment.assignment_average)}%</div>
                                                 </div>
                                                 <div className="p-3 bg-muted/30 border border-border rounded-sm">
-                                                    <div className="text-[8px] font-black text-muted-foreground l Exam</div>
+                                                    <div className="text-[8px] font-black text-muted-foreground">Final Exam</div>
                                                     <div className="text-sm font-black">{Math.round(enrollment.exam_score)}%</div>
                                                 </div>
                                             </div>
@@ -497,11 +497,11 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                         <div className="flex items-center justify-between pt-6 border-t border-border/50">
                                             <div className="flex items-center gap-4">
                                                 <div className="flex flex-col">
-                                                    <span className="text-[8px] font-black text-muted-foreground Date</span>
+                                                    <span className="text-[8px] font-black text-muted-foreground">Enroll Date</span>
                                                     <span className="text-xs font-bold">{new Date(enrollment.created_at).toLocaleDateString()}</span>
                                                 </div>
                                                 {enrollment.certificate && (
-                                                    <div className="flex items-center gap-2 bg-primary/5 px-3 py-1.5 rounded-sm border border-primary/10 text-primary text-[9px] font-black 
+                                                    <div className="flex items-center gap-2 bg-primary/5 px-3 py-1.5 rounded-sm border border-primary/10 text-primary text-[9px] font-black">
                                                         <Award className="size-3.5" /> Certificate Issued
                                                     </div>
                                                 )}
@@ -533,9 +533,9 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                 <Card className="border-border rounded-sm shadow-sm bg-background p-6">
                                     <div className="flex flex-col h-full justify-between">
                                         <div>
-                                            <div className="text-[9px] font-black -foreground/60 mb-2">Academic Growth</div>
+                                            <div className="text-[9px] font-black text-muted-foreground/60 mb-2">Academic Growth</div>
                                             <div className="text-2xl font-black text-foreground mb-1">+{Math.round(stats.avg_performance / 1.2)}%</div>
-                                            <div className="text-[10px] font-bold text-green-600 Velocity</div>
+                                            <div className="text-[10px] font-bold text-green-600">Growth Velocity</div>
                                         </div>
                                         <div className="mt-6 flex items-end gap-1 h-12">
                                             {[30, 45, 40, 60, 75, 85].map((h, i) => (
@@ -545,11 +545,11 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                     </div>
                                 </Card>
                                 <Card className="border-border rounded-sm shadow-sm bg-background p-6">
-                                    <div className="text-[9px] font-black -foreground/60 mb-2">Consistency Score</div>
+                                    <div className="text-[9px] font-black text-muted-foreground/60 mb-2">Consistency Score</div>
                                     <div className="text-2xl font-black text-foreground mb-1">High</div>
-                                    <div className="text-[10px] font-bold text-blue-600 ing</div>
+                                    <div className="text-[10px] font-bold text-blue-600">Consistent Scoring</div>
                                     <div className="mt-6 space-y-2">
-                                        <div className="flex justify-between text-[8px] font-black -foreground/40">
+                                        <div className="flex justify-between text-[8px] font-black text-muted-foreground/40">
                                             <span>Accuracy</span>
                                             <span>{Math.round(stats.avg_performance)}%</span>
                                         </div>
@@ -559,9 +559,9 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                     </div>
                                 </Card>
                                 <Card className="border-border rounded-sm shadow-sm bg-background p-6">
-                                    <div className="text-[9px] font-black -foreground/60 mb-2">Exam Readiness</div>
+                                    <div className="text-[9px] font-black text-muted-foreground/60 mb-2">Exam Readiness</div>
                                     <div className="text-2xl font-black text-foreground mb-1">Expert</div>
-                                    <div className="text-[10px] font-bold text-orange-600 Final</div>
+                                    <div className="text-[10px] font-bold text-orange-600">Final Prep</div>
                                     <div className="mt-6 flex gap-2">
                                         <div className="size-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
                                         <div className="text-[9px] font-bold text-muted-foreground leading-tight">Analyzing historical<br/>attempt data...</div>
@@ -574,7 +574,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                 <Card className="border-border rounded-sm shadow-sm overflow-hidden bg-background">
                                     <CardHeader className="p-6 border-b border-border bg-muted/5">
                                         <div className="flex items-center justify-between">
-                                            <CardTitle className="text-[11px] font-black ground">Recent Exam Attempts</CardTitle>
+                                            <CardTitle className="text-[11px] font-black text-foreground">Recent Exam Attempts</CardTitle>
                                             <Trophy className="size-4 text-primary/40" />
                                         </div>
                                     </CardHeader>
@@ -583,15 +583,15 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                             {student.exam_attempts?.map((attempt: any) => (
                                                 <div key={attempt.id} className="p-5 flex items-center justify-between hover:bg-muted/5 transition-colors">
                                                     <div>
-                                                        <div className="text-xs font-black ound">{attempt.exam.title}</div>
-                                                        <div className="text-[9px] font-bold text-muted-foreground items-center gap-2">
+                                                        <div className="text-xs font-black text-foreground">{attempt.exam.title}</div>
+                                                        <div className="text-[9px] font-bold text-muted-foreground flex items-center gap-2">
                                                             <Clock className="size-3" /> {new Date(attempt.created_at).toLocaleDateString()}
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center gap-4">
                                                         <div className="text-right">
                                                             <div className="text-sm font-black text-primary">{attempt.score}%</div>
-                                                            <div className="text-[8px] font-black text-muted-foreground status}</div>
+                                                            <div className="text-[8px] font-black text-muted-foreground">{attempt.status}</div>
                                                         </div>
                                                         <ChevronRight className="size-4 text-muted-foreground/30" />
                                                     </div>
@@ -610,7 +610,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                 <Card className="border-border rounded-sm shadow-sm overflow-hidden bg-background">
                                     <CardHeader className="p-6 border-b border-border bg-muted/5">
                                         <div className="flex items-center justify-between">
-                                            <CardTitle className="text-[11px] font-black ground">Assignment History</CardTitle>
+                                            <CardTitle className="text-[11px] font-black text-foreground">Assignment History</CardTitle>
                                             <FileText className="size-4 text-primary/40" />
                                         </div>
                                     </CardHeader>
@@ -619,8 +619,8 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                             {student.assignment_submissions?.map((submission: any) => (
                                                 <div key={submission.id} className="p-5 flex items-center justify-between hover:bg-muted/5 transition-colors">
                                                     <div>
-                                                        <div className="text-xs font-black ound truncate max-w-[200px]">{submission.assignment.title}</div>
-                                                        <div className="text-[9px] font-bold text-muted-foreground items-center gap-2">
+                                                        <div className="text-xs font-black text-foreground truncate max-w-[200px]">{submission.assignment.title}</div>
+                                                        <div className="text-[9px] font-bold text-muted-foreground flex items-center gap-2">
                                                             <CheckCircle2 className="size-3 text-green-500/60" /> {new Date(submission.submitted_at || submission.created_at).toLocaleDateString()}
                                                         </div>
                                                     </div>
@@ -628,7 +628,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                                         <div className="text-right">
                                                             <div className="text-sm font-black text-foreground">{submission.marks_obtained || 0} / {submission.assignment.max_marks}</div>
                                                             <div className={cn(
-                                                                "text-[8px] font-black 
+                                                                "text-[8px] font-black",
                                                                 submission.status === 'graded' ? "text-green-600" : "text-orange-600"
                                                             )}>{submission.status}</div>
                                                         </div>
@@ -637,7 +637,7 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                                 </div>
                                             ))}
                                             {(!student.assignment_submissions || student.assignment_submissions.length === 0) && (
-                                                <div className="p-10 text-center text-[10px] font-black -foreground/40 italic">
+                                                <div className="p-10 text-center text-[10px] font-black text-muted-foreground/40 italic">
                                                     No assignment submissions
                                                 </div>
                                             )}

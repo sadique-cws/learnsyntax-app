@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, LayoutGrid, Wallet, LogOut } from 'lucide-react';
+import { BookOpen, LayoutGrid, Wallet, LogOut, Users } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -23,6 +23,11 @@ export function TeacherSidebar() {
             title: 'Instructor Dashboard',
             href: '/teacher/dashboard',
             icon: LayoutGrid,
+        },
+        {
+            title: 'Enrolled Students',
+            href: '/teacher/students',
+            icon: Users,
         },
         {
             title: 'Course Manager',

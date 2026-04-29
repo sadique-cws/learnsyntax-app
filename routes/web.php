@@ -126,8 +126,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Teacher Routes
     Route::middleware(['can:teacher'])->prefix('teacher')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('teacher.dashboard');
+        Route::get('students', [DashboardController::class, 'students'])->name('teacher.students');
         Route::resource('courses', App\Http\Controllers\Teacher\CourseController::class)->names('teacher.courses');
         Route::get('wallet', [WalletController::class, 'index'])->name('teacher.wallet');
+        Route::get('wallet/withdraw', [WalletController::class, 'withdraw'])->name('teacher.wallet.withdraw.page');
+        Route::post('wallet/withdraw', [WalletController::class, 'storeRequest'])->name('teacher.wallet.withdraw');
     });
 
 });
