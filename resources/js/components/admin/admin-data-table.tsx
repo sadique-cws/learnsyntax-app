@@ -167,10 +167,10 @@ export function AdminDataTable<T extends { id: number | string }>({
                         </div>
                     )}
                     <div className="relative flex-1 max-w-xs">
-                        <Search className="absolute left-2 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground/50" />
+                        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3 text-muted-foreground/40" />
                         <Input 
                             placeholder={searchPlaceholder} 
-                            className="pl-7 h-7 text-xs border-0 bg-transparent focus-visible:ring-0 focus-visible:bg-background placeholder:text-muted-foreground/40"
+                            className="pl-8 h-7 text-xs border border-border bg-background rounded-sm focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-muted-foreground/40"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
@@ -179,26 +179,26 @@ export function AdminDataTable<T extends { id: number | string }>({
 
                 <div className="flex items-center gap-1.5 shrink-0">
                     {dateFilterKey && (
-                        <div className="flex items-center gap-1 px-2 h-7 rounded-sm border border-border bg-background text-[10px]">
-                            <Calendar className="size-3 text-muted-foreground/50" />
+                        <div className="flex items-center gap-1.5 px-2 h-7 rounded-sm border border-border bg-background text-[10px]">
+                            <Calendar className="size-3 text-muted-foreground/40 shrink-0" />
                             <Input 
                                 id="date-filter-start"
                                 type="date" 
-                                className="h-5 border-none bg-transparent text-[10px] font-medium focus-visible:ring-0 w-[85px] p-0"
+                                className="h-5 border-none bg-transparent text-[10px] font-medium focus-visible:ring-0 w-[100px] p-0 appearance-none"
                                 value={dateRange.start}
                                 onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
                                 onClick={(e) => e.currentTarget.showPicker?.()}
                             />
-                            <span className="text-muted-foreground/30">–</span>
+                            <span className="text-muted-foreground/30 shrink-0">–</span>
                             <Input 
                                 type="date" 
-                                className="h-5 border-none bg-transparent text-[10px] font-medium focus-visible:ring-0 w-[85px] p-0"
+                                className="h-5 border-none bg-transparent text-[10px] font-medium focus-visible:ring-0 w-[100px] p-0 appearance-none"
                                 value={dateRange.end}
                                 onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
                                 onClick={(e) => e.currentTarget.showPicker?.()}
                             />
                             {(dateRange.start || dateRange.end) && (
-                                <button onClick={() => setDateRange({ start: '', end: '' })} className="p-0.5 hover:bg-muted rounded-sm">
+                                <button onClick={() => setDateRange({ start: '', end: '' })} className="p-0.5 hover:bg-muted rounded-sm shrink-0">
                                     <X className="size-2.5 text-muted-foreground hover:text-foreground" />
                                 </button>
                             )}
@@ -221,7 +221,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                                     )}
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-48 rounded-sm border-border p-1">
+                            <DropdownMenuContent align="end" className="w-48 rounded-sm border-border p-1 shadow-md">
                                 {filterableColumns.map(filter => (
                                     <div key={filter.key}>
                                         <DropdownMenuLabel className="text-[10px] font-semibold text-muted-foreground px-2 py-1">{filter.label}</DropdownMenuLabel>

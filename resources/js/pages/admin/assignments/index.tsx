@@ -95,23 +95,34 @@ export default function AdminAssignmentIndex({ batches }: { batches: any[] }) {
                                     </DialogContent>
                                 </Dialog>
                                 <div className="relative group/menu">
-                                    <Button variant="ghost" size="sm" className="h-7 px-2 rounded-sm text-xs font-medium text-muted-foreground hover:text-foreground">
+                                    <Button variant="ghost" size="sm" className="h-7 px-2 rounded-sm text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50">
                                         View <ChevronRight className="size-3 ml-0.5" />
                                     </Button>
-                                    <div className="absolute right-0 top-full mt-1 w-72 bg-background border border-border rounded-sm opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible z-50 p-1.5">
-                                        <div className="px-2 py-1 text-[10px] font-medium text-muted-foreground border-b border-border mb-1 flex justify-between">
-                                            <span>Assignments</span><span className="tabular-nums">{batch.assignments.length}</span>
+                                    <div className="absolute right-0 top-full mt-1 w-72 bg-background border border-border rounded-sm opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible z-50 p-1 shadow-md transition-all duration-200">
+                                        <div className="px-2 py-1.5 text-[10px] font-semibold text-muted-foreground/60 border-b border-border mb-1 flex justify-between items-center bg-muted/5">
+                                            <span className="uppercase tracking-wider">Assignments</span>
+                                            <span className="tabular-nums bg-muted px-1.5 py-0.5 rounded-sm">{batch.assignments.length}</span>
                                         </div>
-                                        {batch.assignments.map((a: any) => (
-                                            <Link key={a.id} href={`/admin/academic/assignments/${a.id}`} className="flex items-center justify-between p-2 rounded-sm hover:bg-muted/50 group/link">
-                                                <div className="flex-1 min-w-0 pr-2">
-                                                    <div className="text-xs font-medium text-foreground truncate">{a.title}</div>
-                                                    <div className="text-[10px] text-muted-foreground mt-0.5">{a.handed_in_count} submitted · {a.marked_count} graded</div>
+                                        <div className="max-h-[300px] overflow-y-auto">
+                                            {batch.assignments.map((a: any) => (
+                                                <Link key={a.id} href={`/admin/academic/assignments/${a.id}`} className="flex items-center justify-between p-2.5 rounded-sm hover:bg-muted/80 group/link transition-colors mb-0.5 last:mb-0">
+                                                    <div className="flex-1 min-w-0 pr-3">
+                                                        <div className="text-xs font-medium text-foreground truncate">{a.title}</div>
+                                                        <div className="text-[10px] text-muted-foreground mt-1 flex items-center gap-2">
+                                                            <span>{a.handed_in_count} submitted</span>
+                                                            <span className="size-1 rounded-full bg-border" />
+                                                            <span>{a.marked_count} graded</span>
+                                                        </div>
+                                                    </div>
+                                                    <ChevronRight className="size-3 text-muted-foreground/30 group-hover/link:text-foreground transition-transform group-hover/link:translate-x-0.5" />
+                                                </Link>
+                                            ))}
+                                            {batch.assignments.length === 0 && (
+                                                <div className="py-8 text-center">
+                                                    <div className="text-[10px] font-medium text-muted-foreground/40 uppercase tracking-widest">No assignments found</div>
                                                 </div>
-                                                <ChevronRight className="size-3 text-muted-foreground/30 group-hover/link:text-foreground" />
-                                            </Link>
-                                        ))}
-                                        {batch.assignments.length === 0 && <div className="p-3 text-xs text-muted-foreground/50 text-center">No assignments yet</div>}
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
