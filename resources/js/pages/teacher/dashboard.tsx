@@ -1,6 +1,6 @@
 import React from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { BookOpen, Wallet, IndianRupee, TrendingUp, ChevronRight, ArrowRight } from 'lucide-react';
+import { BookOpen, Wallet, IndianRupee, TrendingUp, ChevronRight, ArrowRight, GraduationCap, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import TeacherLayout from '@/layouts/teacher-layout';
 
@@ -82,11 +82,12 @@ export default function TeacherDashboard({ stats }: any) {
                     <div className="px-3 py-2 bg-muted/5 border-b border-border">
                         <h2 className="text-xs font-semibold text-foreground">Quick Actions</h2>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-border">
+                    <div className="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-border">
                         {[
-                            { href: '/teacher/courses', icon: BookOpen, label: 'Courses', desc: 'Manage your course catalog' },
-                            { href: '/teacher/students', icon: TrendingUp, label: 'Students', desc: 'View enrolled students' },
-                            { href: '/teacher/wallet', icon: Wallet, label: 'Earnings', desc: 'Track wallet & payouts' },
+                            { href: '/teacher/courses', icon: BookOpen, label: 'Courses', desc: 'Manage course parameters' },
+                            { href: '/teacher/assignments', icon: GraduationCap, label: 'Assignments', desc: 'Issue & grade tasks' },
+                            { href: '/teacher/wallet', icon: Wallet, label: 'Earnings', desc: 'Track wallet payouts' },
+                            { href: '/teacher/kyc', icon: CheckCircle2, label: 'Verification', desc: 'KYC status management' },
                         ].map(({ href, icon: Icon, label, desc }) => (
                             <Link key={href} href={href} className="flex items-center gap-3 px-4 py-3 hover:bg-muted/30 transition-colors group">
                                 <div className="size-8 rounded-sm bg-muted/30 border border-border flex items-center justify-center shrink-0">

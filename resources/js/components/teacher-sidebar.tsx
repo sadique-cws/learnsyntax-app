@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, LayoutGrid, Wallet, LogOut, Users } from 'lucide-react';
+import { BookOpen, LayoutGrid, Wallet, LogOut, Users, GraduationCap } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -25,19 +25,14 @@ export function TeacherSidebar() {
             icon: LayoutGrid,
         },
         {
-            title: 'Enrolled Students',
-            href: '/teacher/students',
-            icon: Users,
-        },
-        {
             title: 'Course Manager',
             href: '/teacher/courses',
             icon: BookOpen,
         },
         {
-            title: 'Learners Roster',
-            href: '/teacher/students',
-            icon: Users,
+            title: 'Assignments',
+            href: '/teacher/assignments',
+            icon: GraduationCap,
         },
         {
             title: 'Earnings Wallet',
