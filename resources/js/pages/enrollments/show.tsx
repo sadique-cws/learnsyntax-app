@@ -1,23 +1,12 @@
 import { Head, useForm, router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import PublicLayout from '@/layouts/public-layout';
 import { CreditCard, ShieldCheck, Zap, ArrowRight, Loader2, Receipt } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
-declare global {
-    interface Window {
-        Razorpay: any;
-    }
-}
+declare global { interface Window { Razorpay: any; } }
 
-interface RazorpayOrder {
-    id: string;
-    amount: number;
-    currency: string;
-}
-
-export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_order, auth }: { enrollment: any, razorpay_key: string, razorpay_order: RazorpayOrder, auth: any }) {
+export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_order, auth }: any) {
     const { post, processing } = useForm();
     const [isPaying, setIsPaying] = useState(false);
     const [scriptLoaded, setScriptLoaded] = useState(false);
@@ -32,13 +21,8 @@ export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_orde
     }, []);
 
     const handlePayment = () => {
-        if (!scriptLoaded || !window.Razorpay) {
-            alert('Razorpay SDK is still loading. Please try again in a moment.');
-            return;
-        }
-
+        if (!scriptLoaded || !window.Razorpay) { alert('Payment gateway is still loading. Please try again.'); return; }
         setIsPaying(true);
-
         const options = {
             key: razorpay_key,
             amount: razorpay_order.amount,
@@ -47,141 +31,122 @@ export default function EnrollmentShow({ enrollment, razorpay_key, razorpay_orde
             description: `Enrollment for ${enrollment.course.title}`,
             image: '/images/app_logo.png',
             order_id: razorpay_order.id,
-            handler: function (response: any) {
+            handler: (response: any) => {
                 router.post(`/enrollments/${enrollment.id}/payment`, {
                     razorpay_payment_id: response.razorpay_payment_id,
                     razorpay_order_id: response.razorpay_order_id,
                     razorpay_signature: response.razorpay_signature,
-                    gst_number: gstNumber, // Pass GST number
-                }, {
-                    onFinish: () => setIsPaying(false),
-                });
+                    gst_number: gstNumber,
+                }, { onFinish: () => setIsPaying(false) });
             },
-            prefill: {
-                name: auth.user.name,
-                email: auth.user.email,
-                contact: auth.user.phone || '',
-            },
-            theme: {
-                color: '#2563eb', // Using primary blue
-            },
-            modal: {
-                ondismiss: function () {
-                    setIsPaying(false);
-                }
-            }
+            prefill: { name: auth.user.name, email: auth.user.email, contact: auth.user.phone || '' },
+            theme: { color: '#2563eb' },
+            modal: { ondismiss: () => setIsPaying(false) }
         };
-
-        const rzp = new window.Razorpay(options);
-        rzp.open();
+        new window.Razorpay(options).open();
     };
 
     return (
-        <div className="w-full p-4 lg:p-6 font-sans selection:bg-primary/20">
+        <div className="w-full p-4 lg:p-6">
             <Head title={`Checkout - ${enrollment.course.title}`} />
-            
-            <div className="max-w-xl mx-auto space-y-6">
-                <Card className="border-border  rounded-[2rem] overflow-hidden">
-                    <CardHeader className="bg-primary/5 p-8 border-b border-border/50">
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="size-10 rounded-xl bg-primary flex items-center justify-center text-white">
-                                <Zap className="size-5 fill-current" />
-                            </div>
-                            <span className="text-[10px] font-black   text-primary">Secure Checkout</span>
-                        </div>
-                        <CardTitle className="text-3xl font-black  leading-none">Confirm Enrollment</CardTitle>
-                    </CardHeader>
-                    
-                    <CardContent className="p-8 space-y-8">
-                        <div className="flex items-center gap-4 p-4 rounded-2xl bg-muted/30 border border-border/50">
-                            <div className="size-16 rounded-xl bg-background border border-border flex items-center justify-center overflow-hidden">
-                                <img 
-                                    src="/images/ai_cover.png" 
-                                    alt={enrollment.course.title}
-                                    className="size-full object-cover opacity-80" 
-                                />
-                            </div>
-                            <div className="flex-1">
-                                <h3 className="font-bold text-lg leading-tight">{enrollment.course.title}</h3>
-                                <p className="text-xs text-muted-foreground  font-medium tracking-wider mt-1">Professional Certification</p>
-                            </div>
-                        </div>
 
-                        <div className="space-y-3">
-                            <div className="flex items-center justify-between text-sm font-medium">
-                                <span className="text-muted-foreground">Course Fee</span>
-                                <span>₹{enrollment.course.price}</span>
-                            </div>
-                            <div className="flex items-center justify-between text-sm font-medium">
-                                <span className="text-muted-foreground">Platform Taxes (GST)</span>
-                                <span className="text-green-600">INCLUDED</span>
-                            </div>
-                            <div className="pt-4 border-t border-border flex items-center justify-between">
-                                <span className="font-black text-lg  tracking-tight">Total Amount</span>
-                                <span className="text-3xl font-black text-primary">₹{enrollment.course.price}</span>
-                            </div>
-                        </div>
+            <div className="max-w-md mx-auto space-y-4">
+                {/* Header */}
+                <div className="flex items-center gap-2.5 pb-3 border-b border-border">
+                    <div className="size-8 rounded-sm bg-primary flex items-center justify-center text-white shrink-0">
+                        <Zap className="size-4 fill-current" />
+                    </div>
+                    <div>
+                        <h1 className="text-sm font-semibold text-foreground">Confirm Enrollment</h1>
+                        <p className="text-[10px] text-muted-foreground">Secure checkout powered by Razorpay</p>
+                    </div>
+                </div>
 
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3 p-4 rounded-xl border border-border bg-muted/20">
-                                <ShieldCheck className="size-5 text-green-600" />
-                                <div className="text-[11px] leading-snug">
-                                    <span className="font-bold block">100% Secure Payment</span>
-                                    <span className="text-muted-foreground">Your transaction is protected with 256-bit encryption</span>
-                                </div>
-                            </div>
-                            
-                            <div className="p-5 rounded-2xl border border-border/50 bg-card">
-                                <div className="flex items-center gap-2 mb-3">
-                                    <Receipt className="size-4 text-primary" />
-                                    <span className="text-xs font-bold  tracking-wider">GST Information <span className="text-[10px] text-muted-foreground">(Optional)</span></span>
-                                </div>
-                                <input 
-                                    type="text" 
-                                    placeholder="Enter GSTIN for B2B Invoice"
-                                    className="w-full h-11 rounded-xl bg-muted/50 border-border text-sm px-4 focus:ring-2 focus:ring-primary/20 outline-none transition-all font-medium"
-                                    value={gstNumber}
-                                    onChange={(e) => setGstNumber(e.target.value.toUpperCase())}
-                                />
-                                <p className="text-[9px] text-muted-foreground mt-2 px-1">Provide your GSTIN if you require a business invoice with tax credit.</p>
-                            </div>
-                        </div>
-                    </CardContent>
+                {/* Course Info */}
+                <div className="flex items-center gap-3 p-3 rounded-sm border border-border bg-muted/20">
+                    <div className="size-12 rounded-sm border border-border overflow-hidden shrink-0">
+                        <img src="/images/ai_cover.png" alt={enrollment.course.title} className="size-full object-cover opacity-80" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <h3 className="font-medium text-sm text-foreground truncate">{enrollment.course.title}</h3>
+                        <p className="text-[10px] text-muted-foreground mt-0.5">Professional Certification</p>
+                    </div>
+                </div>
 
-                    <CardFooter className="p-8 pt-0 flex flex-col gap-4">
-                        <Button 
-                            size="lg" 
-                            className="w-full rounded-2xl h-14 font-black  bg-primary hover:bg-primary/90 text-white   text-sm" 
-                            onClick={handlePayment}
-                            disabled={isPaying || processing || !scriptLoaded}
-                        >
-                            {isPaying ? (
-                                <span className="flex items-center gap-2"><Loader2 className="size-4 animate-spin" /> Verifying...</span>
-                            ) : (
-                                <span className="flex items-center gap-2">Pay Now <ArrowRight className="size-4" /></span>
-                            )}
-                        </Button>
-                        {!scriptLoaded && (
-                            <p className="text-[10px] text-center font-bold text-muted-foreground  animate-pulse">Initializing Gateway...</p>
-                        )}
-                        <div className="flex items-center justify-center gap-6 opacity-40">
-                            <CreditCard className="size-6" />
-                            <div className="font-black italic text-sm">RAZORPAY</div>
-                            <Zap className="size-6" />
+                {/* Pricing */}
+                <div className="rounded-sm border border-border overflow-hidden">
+                    <div className="px-3 py-2 bg-muted/5 border-b border-border">
+                        <span className="text-xs font-semibold">Order Summary</span>
+                    </div>
+                    <div className="p-3 space-y-2">
+                        <div className="flex items-center justify-between text-xs font-medium">
+                            <span className="text-muted-foreground">Course Fee</span>
+                            <span>₹{enrollment.course.price}</span>
                         </div>
-                    </CardFooter>
-                </Card>
+                        <div className="flex items-center justify-between text-xs font-medium">
+                            <span className="text-muted-foreground">GST</span>
+                            <span className="text-emerald-600 text-[10px] font-medium">Included</span>
+                        </div>
+                        <div className="pt-2 border-t border-border flex items-center justify-between">
+                            <span className="text-sm font-semibold">Total</span>
+                            <span className="text-lg font-semibold text-primary tabular-nums">₹{enrollment.course.price}</span>
+                        </div>
+                    </div>
+                </div>
 
-                <p className="text-center text-[10px] text-muted-foreground font-bold  ">
-                    Secured by Razorpay • India's Leading Payment Gateway
-                </p>
+                {/* Security notice */}
+                <div className="flex items-center gap-2 p-2.5 rounded-sm border border-border bg-muted/10">
+                    <ShieldCheck className="size-3.5 text-emerald-600 shrink-0" />
+                    <div className="text-[10px] text-muted-foreground leading-snug">
+                        <span className="font-medium text-foreground">100% Secure</span> — protected with 256-bit SSL encryption
+                    </div>
+                </div>
+
+                {/* GST Input */}
+                <div className="rounded-sm border border-border overflow-hidden">
+                    <div className="px-3 py-2 bg-muted/5 border-b border-border flex items-center gap-1.5">
+                        <Receipt className="size-3 text-muted-foreground" />
+                        <span className="text-xs font-medium text-muted-foreground">GST Number <span className="text-[10px] opacity-60">(Optional)</span></span>
+                    </div>
+                    <div className="p-3">
+                        <input
+                            type="text"
+                            placeholder="Enter GSTIN for B2B invoice"
+                            className="w-full h-8 rounded-sm bg-muted/20 border border-border text-xs px-3 focus:outline-none focus:ring-1 focus:ring-primary/30 font-medium"
+                            value={gstNumber}
+                            onChange={(e) => setGstNumber(e.target.value.toUpperCase())}
+                        />
+                        <p className="text-[9px] text-muted-foreground mt-1.5">Provide GSTIN if you require a business invoice with tax credit.</p>
+                    </div>
+                </div>
+
+                {/* CTA */}
+                <Button
+                    size="default"
+                    className="w-full h-9 rounded-sm shadow-none font-medium"
+                    onClick={handlePayment}
+                    disabled={isPaying || processing || !scriptLoaded}
+                >
+                    {isPaying
+                        ? <span className="flex items-center gap-2"><Loader2 className="size-3.5 animate-spin" /> Verifying...</span>
+                        : <span className="flex items-center gap-2">Pay Now <ArrowRight className="size-3.5" /></span>
+                    }
+                </Button>
+
+                {!scriptLoaded && (
+                    <p className="text-[10px] text-center text-muted-foreground animate-pulse">Initializing payment gateway...</p>
+                )}
+
+                <div className="flex items-center justify-center gap-4 opacity-30 pt-1">
+                    <CreditCard className="size-5" />
+                    <span className="text-xs font-medium">RAZORPAY</span>
+                    <Zap className="size-5" />
+                </div>
             </div>
         </div>
     );
 }
 
 EnrollmentShow.layout = (page: any) => (
-    <PublicLayout>
-        {page}
-    </PublicLayout>
+    <PublicLayout>{page}</PublicLayout>
 );

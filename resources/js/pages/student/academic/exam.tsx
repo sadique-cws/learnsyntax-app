@@ -1,91 +1,83 @@
-import { Head, useForm, Link } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { Trophy, CheckCircle2, AlertCircle, Play, FileText, Timer } from 'lucide-react';
 
 export default function StudentExam({ enrollment, exam, attempt }: { enrollment: any, exam: any, attempt: any }) {
     const { post, processing } = useForm();
-
-    const startExam = () => {
-        post(`/my-course/${enrollment.id}/exam`);
-    };
+    const startExam = () => { post(`/my-course/${enrollment.id}/exam`); };
 
     return (
         <>
             <Head title={`Final Exam - ${enrollment.course.title}`} />
-            
-            <div className="w-full p-4 lg:p-6">
-                <div className="mb-10 text-center max-w-2xl mx-auto">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded text-[10px] font-black   mb-4">
-                        <Trophy className="size-3" /> Certification Pathway
-                    </div>
-                    <h1 className="text-3xl md:text-4xl font-black   leading-none mb-4">{enrollment.course.title}</h1>
-                    <p className="text-muted-foreground text-sm font-bold  tracking-tight">Final Professional Assessment</p>
+            <div className="w-full p-4 lg:p-6 space-y-4">
+                <div>
+                    <span className="text-[10px] font-medium text-primary block mb-0.5">Certification Pathway</span>
+                    <h1 className="text-lg font-semibold text-foreground">{enrollment.course.title}</h1>
+                    <p className="text-xs text-muted-foreground mt-0.5">Final Professional Assessment</p>
                 </div>
 
-                <div className="max-w-xl mx-auto">
+                <div className="max-w-md">
                     {!attempt ? (
-                        <Card className="border-border rounded overflow-hidden border border-primary/20 bg-card">
-                            <CardContent className="p-6 md:p-8 space-y-8">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="p-4 rounded bg-muted/30 border border-border flex flex-col items-center text-center">
-                                        <FileText className="size-6 text-primary mb-2" />
-                                        <div className="text-[10px] font-black   text-muted-foreground mb-1">Max Score</div>
-                                        <div className="text-xl font-black">{exam.total_marks}</div>
+                        <div className="border border-border rounded-sm overflow-hidden">
+                            {/* Info Header */}
+                            <div className="px-4 py-3 border-b border-border bg-muted/5 flex items-center gap-2">
+                                <Trophy className="size-3.5 text-primary" />
+                                <span className="text-xs font-semibold">Exam Details</span>
+                            </div>
+
+                            <div className="p-4 space-y-4">
+                                {/* Stats */}
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="p-3 rounded-sm bg-muted/20 border border-border flex flex-col items-center text-center">
+                                        <FileText className="size-4 text-primary mb-1.5" />
+                                        <div className="text-[10px] font-medium text-muted-foreground mb-0.5">Max Score</div>
+                                        <div className="text-lg font-semibold tabular-nums">{exam.total_marks}</div>
                                     </div>
-                                    <div className="p-4 rounded bg-muted/30 border border-border flex flex-col items-center text-center">
-                                        <Timer className="size-6 text-primary mb-2" />
-                                        <div className="text-[10px] font-black   text-muted-foreground mb-1">Time Limit</div>
-                                        <div className="text-xl font-black">60m</div>
+                                    <div className="p-3 rounded-sm bg-muted/20 border border-border flex flex-col items-center text-center">
+                                        <Timer className="size-4 text-primary mb-1.5" />
+                                        <div className="text-[10px] font-medium text-muted-foreground mb-0.5">Time Limit</div>
+                                        <div className="text-lg font-semibold">60m</div>
                                     </div>
                                 </div>
 
-                                <div className="space-y-4">
-                                    <div className="flex items-start gap-3 p-4 rounded bg-primary/5 text-primary border border-primary/10">
-                                        <AlertCircle className="size-4 shrink-0 mt-0.5" />
-                                        <p className="text-[10px] font-black  leading-relaxed tracking-tight">
-                                            Important: Passing requirement is 60% overall including assignments.
-                                        </p>
-                                    </div>
+                                {/* Warning */}
+                                <div className="flex items-start gap-2.5 p-3 rounded-sm bg-primary/5 border border-primary/15">
+                                    <AlertCircle className="size-3.5 text-primary shrink-0 mt-0.5" />
+                                    <p className="text-[10px] font-medium text-primary/80 leading-relaxed">
+                                        Passing requirement is 60% overall including assignments and this exam.
+                                    </p>
                                 </div>
 
-                                <Button 
-                                    onClick={startExam} 
+                                <Button
+                                    onClick={startExam}
                                     disabled={processing}
-                                    size="lg" 
-                                    className="w-full h-14 rounded bg-primary hover:bg-primary/90 font-black   text-xs transition-all"
+                                    className="w-full h-9 rounded-sm shadow-none font-medium text-sm"
                                 >
-                                    {processing ? 'Launching...' : 'Begin Assessment'}
-                                    <Play className="ml-2 size-4 fill-current" />
+                                    {processing ? 'Starting...' : <>Begin Assessment <Play className="ml-1.5 size-3.5 fill-current" /></>}
                                 </Button>
-                            </CardContent>
-                        </Card>
+                            </div>
+                        </div>
                     ) : (
-                        <Card className="border-border rounded overflow-hidden bg-green-500/[0.03] border border-green-500/20">
-                            <CardContent className="p-10 text-center space-y-6">
-                                <div className="size-16 rounded bg-green-500 flex items-center justify-center text-white mx-auto">
-                                    <CheckCircle2 className="size-8" />
+                        <div className="border border-emerald-200 rounded-sm bg-emerald-50/50 overflow-hidden">
+                            <div className="p-6 text-center space-y-4">
+                                <div className="size-12 rounded-sm bg-emerald-500 flex items-center justify-center text-white mx-auto">
+                                    <CheckCircle2 className="size-6" />
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-black   mb-2">Exam Completed</h2>
-                                    <p className="text-[10px] text-muted-foreground font-black  ">Submission Recorded Successfully</p>
+                                    <h2 className="text-sm font-semibold text-foreground">Exam Submitted</h2>
+                                    <p className="text-[10px] text-muted-foreground mt-0.5">Your answers have been recorded</p>
                                 </div>
 
-                                <div className="p-6 rounded bg-card border border-green-500/20 inline-block min-w-[200px]">
-                                    <div className="text-[10px] font-black  text-green-600 mb-2">Final Score</div>
-                                    <div className="text-5xl font-black text-foreground">
-                                        {attempt.marks_obtained} <span className="text-lg text-muted-foreground">/ {exam.total_marks}</span>
+                                <div className="inline-block p-4 rounded-sm bg-background border border-emerald-200 min-w-[160px]">
+                                    <div className="text-[10px] font-medium text-emerald-600 mb-1">Your Score</div>
+                                    <div className="text-3xl font-semibold text-foreground tabular-nums">
+                                        {attempt.marks_obtained}
+                                        <span className="text-sm text-muted-foreground ml-1">/ {exam.total_marks}</span>
                                     </div>
                                 </div>
-
-                                <div className="pt-6">
-                                    <Button asChild variant="outline" className="rounded h-11 px-8 font-black   text-[10px] border-border bg-card">
-                                        <Link href={`/my-course/${enrollment.id}/certificate`}>View Certificate Status</Link>
-                                    </Button>
-                                </div>
-                            </CardContent>
-                        </Card>
+                            </div>
+                        </div>
                     )}
                 </div>
             </div>
