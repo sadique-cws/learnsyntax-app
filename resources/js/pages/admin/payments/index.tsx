@@ -1,7 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
-import { Receipt, User, CreditCard } from 'lucide-react';
+import { Receipt, User, CreditCard, Banknote } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { AdminDataTable, Column } from '@/components/admin/admin-data-table';
 
@@ -9,7 +9,7 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
     
-    const formatDate = (date: string) => mounted ? new Date(date).toLocaleDateString() : '';
+    const formatDate = (date: string) => mounted ? new Date(date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
 
     const columns: Column<any>[] = [
         {
@@ -17,16 +17,16 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
             label: 'Transaction',
             sortable: true,
             render: (payment) => (
-                <div className="flex items-center gap-3">
-                    <div className="size-10 rounded bg-primary/5 border border-primary/10 flex items-center justify-center font-medium text-primary text-xs shrink-0">
-                        <CreditCard className="size-4" />
+                <div className="flex items-center gap-2.5 py-1">
+                    <div className="size-8 rounded-sm bg-primary/5 border border-primary/10 flex items-center justify-center font-black text-primary text-[10px] shrink-0">
+                        <CreditCard className="size-3" />
                     </div>
                     <div>
-                        <div className="font-mono text-[10px] font-medium text-primary">{payment.transaction_id}</div>
-                        <div className="flex items-center gap-2">
-                            <div className="text-[10px] text-muted-foreground font-medium tracking-tight">{payment.payment_method}</div>
+                        <div className="font-black text-[11px] text-primary uppercase tracking-wider">{payment.transaction_id}</div>
+                        <div className="flex items-center gap-2 mt-0.5">
+                            <div className="text-[9px] text-muted-foreground font-black uppercase tracking-widest">{payment.payment_method}</div>
                             {payment.invoice?.gst_number && (
-                                <div className="text-[9px] bg-primary/10 text-primary px-1.5 rounded border border-primary/20 font-medium">GST: {payment.invoice.gst_number}</div>
+                                <div className="text-[8px] bg-primary/10 text-primary px-1 py-0.5 rounded-sm border border-primary/20 font-black uppercase tracking-widest leading-none">GST: {payment.invoice.gst_number}</div>
                             )}
                         </div>
                     </div>
@@ -38,11 +38,11 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
             label: 'Student',
             sortable: false,
             render: (payment) => (
-                <div className="flex items-center gap-3">
-                    <div className="size-8 rounded-full bg-muted flex items-center justify-center">
-                        <User className="size-4 text-muted-foreground" />
+                <div className="flex items-center gap-2.5">
+                    <div className="size-7 rounded-sm bg-muted/50 border border-border flex items-center justify-center">
+                        <User className="size-3 text-muted-foreground" />
                     </div>
-                    <div className="text-sm font-medium text-foreground">{payment.enrollment.user.name}</div>
+                    <div className="text-[11px] font-black uppercase tracking-wider text-slate-900">{payment.enrollment.user.name}</div>
                 </div>
             )
         },
@@ -52,8 +52,8 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
             sortable: false,
             render: (payment) => (
                 <div>
-                    <div className="text-sm font-medium text-foreground">{payment.enrollment.course.title}</div>
-                    <div className="text-[10px] text-muted-foreground font-medium tracking-tight">Paid on {formatDate(payment.created_at)}</div>
+                    <div className="text-[11px] font-black uppercase tracking-wider text-slate-900">{payment.enrollment.course.title}</div>
+                    <div className="text-[9px] text-muted-foreground font-black uppercase tracking-widest mt-0.5 opacity-60">Paid on {formatDate(payment.created_at)}</div>
                 </div>
             )
         },
@@ -61,7 +61,7 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
             key: 'sac_code',
             label: 'SAC Code',
             render: (payment) => (
-                <div className="font-mono text-[10px] text-muted-foreground">{payment.invoice?.sac_code || '9992'}</div>
+                <div className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">{payment.invoice?.sac_code || '9992'}</div>
             )
         },
         {
@@ -70,8 +70,8 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
             sortable: true,
             render: (payment) => (
                 <div>
-                    <div className="font-medium text-sm">₹{payment.amount}</div>
-                    <div className="text-[10px] text-green-600 font-medium    text-[8px]">{payment.status}</div>
+                    <div className="font-black text-[12px] text-slate-900">₹{payment.amount}</div>
+                    <div className="text-[9px] text-green-600 font-black uppercase tracking-widest mt-0.5">{payment.status}</div>
                 </div>
             )
         }
@@ -81,57 +81,64 @@ export default function AdminPaymentIndex({ payments }: { payments: any[] }) {
         <>
             <Head title="Payments & Revenue" />
             
-            <div className="w-full p-4 lg:p-6">
-                <div className="flex justify-between items-center mb-6">
+            <div className="w-full p-4 space-y-4">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-border pb-4">
                     <div>
-                        <h1 className="text-2xl font-medium tracking-tight">Financial Ledger</h1>
-                        <p className="text-muted-foreground text-xs font-medium  mt-1">Track all student transactions and generated invoices</p>
+                        <div className="inline-flex items-center gap-2 px-2 py-0.5 rounded-sm bg-primary/10 text-primary text-[9px] font-black uppercase tracking-widest mb-1.5">
+                            <Banknote className="size-3" /> Core Registry
+                        </div>
+                        <h1 className="text-xl font-black text-slate-900 tracking-tighter uppercase leading-none">Financial Ledger</h1>
+                        <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-1 italic">Track transactions, reconcile payments, and generate tax invoices.</p>
                     </div>
-                    <div className="flex gap-2">
-                        <Button asChild variant="outline" className="rounded h-10 px-6 font-medium text-xs border-border bg-card">
-                            <Link href="/admin/payments/gst-report">GST Report</Link>
+                    <div className="flex gap-2 w-full md:w-auto">
+                        <Button asChild variant="outline" className="rounded-sm h-9 px-4 font-black uppercase tracking-widest text-[10px] border border-border bg-muted/5 hover:bg-muted/10 shadow-none w-full md:w-auto">
+                            <Link href="/admin/payments/gst-report">GST Output</Link>
                         </Button>
                     </div>
                 </div>
 
-                <AdminDataTable 
-                    data={payments}
-                    columns={columns}
-                    dateFilterKey="created_at"
-                    filterableColumns={[
-                        {
-                            key: 'status',
-                            label: 'Payment Status',
-                            options: [
-                                { label: 'Paid', value: 'paid' },
-                                { label: 'Pending', value: 'pending' },
-                                { label: 'Failed', value: 'failed' },
-                            ]
-                        }
-                    ]}
-                    searchPlaceholder="Search transactions..."
-                    actions={(payment) => (
-                        <div className="flex items-center justify-end">
-                            {payment.invoice ? (
-                                <Button asChild variant="outline" size="sm" className="rounded h-8 text-[10px] font-medium  px-3 border-border bg-card">
-                                    <Link href={`/admin/invoices/${payment.invoice.id}`}>
-                                        <Receipt className="size-3 mr-2" />
-                                        {payment.invoice.invoice_number}
-                                    </Link>
-                                </Button>
-                            ) : (
-                                <Button 
-                                    onClick={() => router.post(`/admin/payments/${payment.id}/generate-invoice`)}
-                                    variant="outline" 
-                                    size="sm" 
-                                    className="rounded h-8 text-[10px] font-bold  tracking-wider px-3 border-primary text-primary hover:bg-primary/5"
-                                >
-                                    Generate Invoice
-                                </Button>
-                            )}
-                        </div>
-                    )}
-                />
+                <div className="bg-background rounded-sm border border-border shadow-none overflow-hidden">
+                    <AdminDataTable 
+                        title="Transaction Board"
+                        subtitle="Centralized view of all processed payments"
+                        data={payments}
+                        columns={columns}
+                        dateFilterKey="created_at"
+                        filterableColumns={[
+                            {
+                                key: 'status',
+                                label: 'Payment Status',
+                                options: [
+                                    { label: 'Paid', value: 'paid' },
+                                    { label: 'Pending', value: 'pending' },
+                                    { label: 'Failed', value: 'failed' },
+                                ]
+                            }
+                        ]}
+                        searchPlaceholder="Filter transactions by metadata..."
+                        actions={(payment) => (
+                            <div className="flex items-center justify-end">
+                                {payment.invoice ? (
+                                    <Button asChild variant="outline" size="sm" className="rounded-sm h-7 text-[9px] font-black uppercase tracking-widest px-2.5 border border-border bg-muted/5 hover:bg-muted/10 shadow-none">
+                                        <Link href={`/admin/invoices/${payment.invoice.id}`} className="flex items-center">
+                                            <Receipt className="size-2.5 mr-1.5" />
+                                            {payment.invoice.invoice_number}
+                                        </Link>
+                                    </Button>
+                                ) : (
+                                    <Button 
+                                        onClick={() => router.post(`/admin/payments/${payment.id}/generate-invoice`)}
+                                        variant="outline" 
+                                        size="sm" 
+                                        className="rounded-sm h-7 text-[9px] font-black uppercase tracking-widest px-2.5 border border-primary/30 text-primary bg-primary/5 hover:bg-primary/10 shadow-none"
+                                    >
+                                        Deploy Invoice
+                                    </Button>
+                                )}
+                            </div>
+                        )}
+                    />
+                </div>
             </div>
         </>
     );

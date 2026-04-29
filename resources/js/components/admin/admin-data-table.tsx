@@ -123,7 +123,6 @@ export function AdminDataTable<T extends { id: number | string }>({
             if (values.length > 0) {
                 items = items.filter(item => {
                     const val = (item as any)[key];
-                    // Handle nested objects if necessary (simple one level)
                     return values.includes(val);
                 });
             }
@@ -161,43 +160,43 @@ export function AdminDataTable<T extends { id: number | string }>({
     const hasActiveFilters = Object.keys(activeFilters).length > 0;
 
     return (
-        <div className="space-y-5">
+        <div className="space-y-3">
             {(title || onAdd) && (
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-1">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-1">
                     <div>
                         {title && <h1 className="text-lg font-black text-slate-900 leading-none uppercase tracking-tight">{title}</h1>}
-                        {subtitle && <p className="text-[10px] font-bold text-muted-foreground/50 mt-1.5 uppercase tracking-wider italic leading-none">{subtitle}</p>}
+                        {subtitle && <p className="text-[10px] font-bold text-muted-foreground/50 mt-1 uppercase tracking-wider italic leading-none">{subtitle}</p>}
                     </div>
                     {onAdd && (
-                        <Button onClick={onAdd} className="bg-primary hover:bg-primary/90 text-white h-9 font-black uppercase tracking-[0.2em] px-5 rounded-lg text-[10px] shadow-none active:translate-y-px transition-all">
+                        <Button onClick={onAdd} className="bg-primary hover:bg-primary/90 text-white h-8 font-black uppercase tracking-[0.2em] px-4 rounded-sm text-[10px] shadow-none">
                             {addLabel}
                         </Button>
                     )}
                 </div>
             )}
 
-            <div className="flex flex-col lg:flex-row gap-3 items-start lg:items-center bg-background p-3 rounded-xl border border-border">
-                <div className="relative w-full lg:w-72 shrink-0">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground/60" />
+            <div className="flex flex-col lg:flex-row gap-2 items-start lg:items-center bg-background p-2 rounded-sm border border-border">
+                <div className="relative w-full lg:w-64 shrink-0">
+                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground/60" />
                     <Input 
                         placeholder={searchPlaceholder} 
-                        className="pl-9 h-9 rounded-lg border-border bg-muted/20 text-[11px] font-bold focus-visible:bg-background transition-all shadow-none placeholder:text-muted-foreground/40"
+                        className="pl-8 h-8 rounded-sm border-border bg-muted/20 text-xs font-bold focus-visible:bg-background shadow-none placeholder:text-muted-foreground/40"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
                 </div>
                 
                 {dateFilterKey && (
-                    <div className="flex items-center gap-2 p-1 px-3 rounded-lg border border-border bg-muted/5 hover:border-primary/30 transition-all group/range">
+                    <div className="flex items-center gap-1.5 p-1 px-2.5 rounded-sm border border-border bg-muted/5 hover:border-primary/30 transition-all group/range">
                         <Calendar 
                             className="size-3 text-muted-foreground/60 group-hover/range:text-primary transition-colors cursor-pointer" 
                             onClick={() => (document.getElementById('date-filter-start') as HTMLInputElement)?.showPicker?.()}
                         />
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1">
                             <Input 
                                 id="date-filter-start"
                                 type="date" 
-                                className="h-7 border-none bg-transparent text-[10px] font-black focus-visible:ring-0 w-[90px] p-0 cursor-pointer uppercase"
+                                className="h-6 border-none bg-transparent text-[10px] font-black focus-visible:ring-0 w-[90px] p-0 cursor-pointer uppercase"
                                 value={dateRange.start}
                                 onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
                                 onClick={(e) => e.currentTarget.showPicker?.()}
@@ -205,7 +204,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                             <span className="text-[8px] font-black text-muted-foreground/30 uppercase">to</span>
                             <Input 
                                 type="date" 
-                                className="h-8 border-none bg-transparent text-[10px] font-black focus-visible:ring-0 w-[90px] p-0 cursor-pointer uppercase"
+                                className="h-6 border-none bg-transparent text-[10px] font-black focus-visible:ring-0 w-[90px] p-0 cursor-pointer uppercase"
                                 value={dateRange.end}
                                 onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
                                 onClick={(e) => e.currentTarget.showPicker?.()}
@@ -214,7 +213,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                         {(dateRange.start || dateRange.end) && (
                             <button 
                                 onClick={() => setDateRange({ start: '', end: '' })}
-                                className="p-1 hover:bg-muted rounded transition-colors"
+                                className="p-0.5 hover:bg-muted rounded-sm transition-colors"
                             >
                                 <X className="size-3 text-muted-foreground hover:text-rose-500" />
                             </button>
@@ -228,43 +227,43 @@ export function AdminDataTable<T extends { id: number | string }>({
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className={cn(
-                                "rounded-lg h-9 px-4 font-black text-[10px] uppercase tracking-widest border-border bg-muted/5 hover:bg-muted/10 transition-all shadow-none",
+                                "rounded-sm h-8 px-3 font-black text-[10px] uppercase tracking-widest border-border bg-muted/5 hover:bg-muted/10 shadow-none",
                                 hasActiveFilters && "border-primary/50 text-primary bg-primary/5"
                             )}>
-                                <Filter className="size-3.5 mr-2" />
-                                Protocol Filter
+                                <Filter className="size-3 mr-1.5" />
+                                Filter
                                 {hasActiveFilters && (
-                                    <span className="ml-2 bg-primary text-white size-3.5 rounded flex items-center justify-center text-[8px]">
+                                    <span className="ml-1.5 bg-primary text-white size-3 rounded-sm flex items-center justify-center text-[8px]">
                                         {Object.values(activeFilters).flat().length}
                                     </span>
                                 )}
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56 rounded-xl border-border shadow-none">
-                            <DropdownMenuLabel className="text-[9px] font-black text-muted-foreground/40 tracking-[0.2em] uppercase px-3 py-2.5">Protocol Parameters</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
+                        <DropdownMenuContent align="end" className="w-52 rounded-sm border-border shadow-none p-1">
+                            <DropdownMenuLabel className="text-[9px] font-black text-muted-foreground/40 tracking-[0.2em] uppercase px-2 py-1.5">Parameters</DropdownMenuLabel>
+                            <DropdownMenuSeparator className="my-1" />
                             {filterableColumns.map(filter => (
                                 <div key={filter.key}>
-                                    <DropdownMenuLabel className="text-[8px] font-black text-slate-400 px-3 py-2 uppercase tracking-[0.1em]">{filter.label}</DropdownMenuLabel>
+                                    <DropdownMenuLabel className="text-[8px] font-black text-slate-400 px-2 py-1 uppercase tracking-[0.1em]">{filter.label}</DropdownMenuLabel>
                                     {filter.options.map(option => (
                                         <DropdownMenuCheckboxItem
                                             key={String(option.value)}
                                             checked={(activeFilters[filter.key] || []).includes(option.value)}
                                             onCheckedChange={() => toggleFilter(filter.key, option.value)}
-                                            className="text-[11px] font-bold py-2 px-3 focus:bg-primary/5 focus:text-primary transition-colors"
+                                            className="text-[10px] font-bold py-1.5 px-2 focus:bg-primary/5 focus:text-primary rounded-sm"
                                         >
                                             {option.label}
                                         </DropdownMenuCheckboxItem>
                                     ))}
-                                    <DropdownMenuSeparator />
+                                    <DropdownMenuSeparator className="my-1" />
                                 </div>
                             ))}
                             {hasActiveFilters && (
                                 <DropdownMenuItem 
                                     onClick={clearFilters}
-                                    className="text-[10px] font-black text-rose-500 focus:text-rose-600 focus:bg-rose-50 justify-center py-2.5 uppercase tracking-widest"
+                                    className="text-[9px] font-black text-rose-500 focus:text-rose-600 focus:bg-rose-50 justify-center py-1.5 uppercase tracking-widest rounded-sm"
                                 >
-                                    Reset Protocol
+                                    Reset
                                 </DropdownMenuItem>
                             )}
                         </DropdownMenuContent>
@@ -272,17 +271,16 @@ export function AdminDataTable<T extends { id: number | string }>({
                 )}
             </div>
 
-            {/* Filter Tags */}
             {hasActiveFilters && (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                     {Object.entries(activeFilters).map(([key, values]) => {
                         const filterDef = filterableColumns.find(f => f.key === key);
                         return values.map(val => {
                             const option = filterDef?.options.find(o => o.value === val);
                             return (
-                                <div key={`${key}-${val}`} className="flex items-center gap-2 px-2.5 py-1 bg-primary/5 border border-primary/10 rounded-md text-[9px] font-black text-primary uppercase tracking-widest">
+                                <div key={`${key}-${val}`} className="flex items-center gap-1.5 px-2 py-0.5 bg-primary/5 border border-primary/10 rounded-sm text-[9px] font-black text-primary uppercase tracking-widest">
                                     <span className="opacity-40">{filterDef?.label}:</span> {option?.label || val}
-                                    <X className="size-2.5 cursor-pointer hover:text-rose-500 transition-colors ml-1" onClick={() => toggleFilter(key, val)} />
+                                    <X className="size-2.5 cursor-pointer hover:text-rose-500 ml-1" onClick={() => toggleFilter(key, val)} />
                                 </div>
                             );
                         });
@@ -290,7 +288,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                 </div>
             )}
 
-            <Card className="border-border shadow-none overflow-hidden bg-card rounded-xl">
+            <Card className="border-border shadow-none overflow-hidden bg-card rounded-sm">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
@@ -299,7 +297,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                                     <th 
                                         key={String(col.key)}
                                         className={cn(
-                                            "px-4 py-3 text-[9px] font-black tracking-[0.2em] uppercase text-muted-foreground/60 transition-colors",
+                                            "px-3 py-2 text-[9px] font-black tracking-[0.2em] uppercase text-muted-foreground/60 transition-colors",
                                             col.sortable && "cursor-pointer hover:bg-muted/50 hover:text-primary",
                                             col.align === 'right' && "text-right",
                                             col.align === 'center' && "text-center"
@@ -316,7 +314,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                                         </div>
                                     </th>
                                 ))}
-                                {actions && <th className="px-4 py-3 text-[9px] font-black tracking-[0.2em] uppercase text-right text-muted-foreground/60">Cmd</th>}
+                                {actions && <th className="px-3 py-2 text-[9px] font-black tracking-[0.2em] uppercase text-right text-muted-foreground/60">Cmd</th>}
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
@@ -326,7 +324,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                                         <td 
                                             key={String(col.key)} 
                                             className={cn(
-                                                "px-4 py-3 text-[12px] font-bold text-slate-700",
+                                                "px-3 py-2 text-xs font-bold text-slate-700",
                                                 col.align === 'right' && "text-right",
                                                 col.align === 'center' && "text-center"
                                             )}
@@ -335,7 +333,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                                         </td>
                                     ))}
                                     {actions && (
-                                        <td className="px-4 py-3 text-right">
+                                        <td className="px-3 py-2 text-right">
                                             {actions(item)}
                                         </td>
                                     )}
@@ -343,10 +341,10 @@ export function AdminDataTable<T extends { id: number | string }>({
                             ))}
                             {filteredAndSortedData.length === 0 && (
                                 <tr>
-                                    <td colSpan={columns.length + (actions ? 1 : 0)} className="px-4 py-20 text-center text-muted-foreground">
-                                        <div className="flex flex-col items-center gap-3">
-                                            <div className="size-12 rounded-2xl bg-muted/30 flex items-center justify-center border border-dashed border-border">
-                                                <Search className="size-5 text-muted-foreground/30" />
+                                    <td colSpan={columns.length + (actions ? 1 : 0)} className="px-3 py-16 text-center text-muted-foreground">
+                                        <div className="flex flex-col items-center gap-2">
+                                            <div className="size-10 rounded-sm bg-muted/30 flex items-center justify-center border border-dashed border-border">
+                                                <Search className="size-4 text-muted-foreground/30" />
                                             </div>
                                             <div className="text-[10px] font-black opacity-30 uppercase tracking-[0.2em] italic">Null_Result_Set</div>
                                         </div>
