@@ -52,4 +52,54 @@ class TeacherController extends Controller
 
         return redirect()->back()->with('success', 'Commission updated successfully.');
     }
+
+    public function show(Teacher $teacher)
+    {
+        $teacher->load(['user', 'courses', 'walletTransactions', 'withdrawalRequests']);
+
+        return inertia('admin/teachers/show', [
+            'teacher' => $teacher,
+        ]);
+    }
+
+    public function withdrawals()
+    {
+        $withdrawals = \App\Models\WithdrawalRequest::with('teacher.user')->latest()->get();
+
+        return inertia('admin/withdrawals/index', [
+            'withdrawals' => $withdrawals,
+        ]);
+    }
+
+    public function updateWithdrawalStatus(Request $request, \App\Models\WithdrawalRequest $withdrawal)
+    {
+        $request->validate([
+            'status' => 'required|in:approved,rejected',
+            'admin_notes' => 'nullable|string',
+        ]);
+
+        // If approving, deduct from balance!
+        if ($request->status === 'approved' && $withdrawal->status === 'pending') {
+            $teacher = $withdrawal->teacher;
+            if ($teacher->wallet_balance < $withdrawal->amount) {
+                return back()->withErrors(['amount' => 'Insufficient balance in teacher wallet.']);
+            }
+            
+            $teacher->decrement('wallet_balance', $withdrawal->amount);
+
+            \App\Models\WalletTransaction::create([
+                'teacher_id' => $teacher->id,
+                'amount' => $withdrawal->amount,
+                'type' => 'debit',
+                'description' => 'Payout request approved.',
+            ]);
+        }
+
+        $withdrawal->update([
+            'status' => $request->status,
+            'admin_notes' => $request->admin_notes,
+        ]);
+
+        return redirect()->back()->with('success', 'Withdrawal status updated successfully.');
+    }
 }

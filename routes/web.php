@@ -78,6 +78,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('payments/{payment}/generate-invoice', [PaymentController::class, 'generateInvoice'])->name('admin.payments.generate-invoice');
 
         // Teachers Management
+        Route::get('withdrawals', [TeacherController::class, 'withdrawals'])->name('admin.withdrawals.index');
+        Route::post('withdrawals/{withdrawal}/status', [TeacherController::class, 'updateWithdrawalStatus'])->name('admin.withdrawals.status');
         Route::resource('teachers', TeacherController::class)->names('admin.teachers');
 
         // Student Management

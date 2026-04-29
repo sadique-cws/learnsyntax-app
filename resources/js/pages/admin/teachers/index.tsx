@@ -39,7 +39,7 @@ export default function AdminTeachers({ teachers, users }: any) {
                             {teacher.user.name.substring(0, 2).toUpperCase()}
                         </span>
                     </div>
-                    <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-0.5 border-2 border-white shadow-sm">
+                    <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-0.5 border-2 border-background shadow-sm">
                         <Sparkles className="size-2.5 text-white" />
                     </div>
                 </div>
@@ -61,7 +61,7 @@ export default function AdminTeachers({ teachers, users }: any) {
         sortable: true,
         render: (teacher) => (
             <div className="flex flex-col">
-                <div className="flex items-center gap-1.5 text-emerald-700">
+                <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-500">
                     <Wallet className="size-3.5" />
                     <span className="font-bold text-[15px]">₹{teacher.wallet_balance.toLocaleString()}</span>
                 </div>
@@ -87,11 +87,11 @@ export default function AdminTeachers({ teachers, users }: any) {
                         defaultValue={teacher.commission_percent} 
                         min="0" 
                         max="100" 
-                        className="w-[84px] h-9 text-sm font-bold pl-8 pr-2 rounded-lg border-indigo-100 bg-indigo-50/50 group-hover:bg-indigo-50 group-hover:border-indigo-200 focus-visible:ring-indigo-500/20 transition-all text-indigo-900" 
+                        className="w-[84px] h-9 text-sm font-bold pl-8 pr-2 rounded-lg border-border bg-muted/50 group-hover:bg-muted group-hover:border-indigo-500/50 focus-visible:ring-indigo-500/20 transition-all text-foreground" 
                     />
                     <Percent className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-indigo-400" />
                 </div>
-                <Button type="submit" size="sm" variant="ghost" className="h-9 px-3 text-[11px] font-bold text-indigo-600 hover:bg-indigo-100 hover:text-indigo-700 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button type="submit" size="sm" variant="ghost" className="h-9 px-3 text-[11px] font-bold text-indigo-600 hover:bg-indigo-500/10 hover:text-indigo-500 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
                     SAVE
                 </Button>
             </form>
@@ -105,19 +105,19 @@ export default function AdminTeachers({ teachers, users }: any) {
       <div className="w-full p-4 lg:p-8 space-y-8 max-w-7xl mx-auto">
         
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm relative overflow-hidden">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card p-6 rounded-2xl border border-border shadow-sm relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
             
             <div className="relative">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs font-semibold mb-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 text-xs font-semibold mb-3">
                     <Building2 className="size-3.5" />
                     <span>Faculty Management</span>
                 </div>
-                <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+                <h1 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">
                     Instructors Directory
                 </h1>
-                <p className="text-sm text-slate-500 mt-1 font-medium">
+                <p className="text-sm text-muted-foreground mt-1 font-medium">
                     Manage your teaching staff, monitor earnings, and set commission structures.
                 </p>
             </div>
@@ -134,19 +134,19 @@ export default function AdminTeachers({ teachers, users }: any) {
         </div>
 
         {showAddForm && (
-            <Card className="border border-indigo-100 shadow-xl shadow-indigo-900/5 bg-white relative overflow-hidden animate-in slide-in-from-top-4 fade-in duration-500">
+            <Card className="border border-border shadow-xl shadow-indigo-900/5 bg-card relative overflow-hidden animate-in slide-in-from-top-4 fade-in duration-500">
                 <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-indigo-500 to-purple-500" />
-                <CardHeader className="py-5 px-7 border-b border-slate-100 bg-slate-50/50 flex flex-row items-center justify-between">
+                <CardHeader className="py-5 px-7 border-b border-border bg-muted/20 flex flex-row items-center justify-between">
                     <div>
-                        <CardTitle className="text-base font-bold text-slate-800 flex items-center gap-2">
+                        <CardTitle className="text-base font-bold text-foreground flex items-center gap-2">
                             <Sparkles className="size-4 text-indigo-500" />
                             Onboard New Instructor
                         </CardTitle>
-                        <CardDescription className="text-xs mt-1 text-slate-500">
+                        <CardDescription className="text-xs mt-1 text-muted-foreground">
                             Select a registered user to grant them instructor privileges.
                         </CardDescription>
                     </div>
-                    <Button variant="ghost" size="icon" onClick={() => setShowAddForm(false)} className="text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 rounded-full size-8">
+                    <Button variant="ghost" size="icon" onClick={() => setShowAddForm(false)} className="text-muted-foreground hover:text-foreground hover:bg-muted rounded-full size-8">
                         <span className="sr-only">Close</span>
                         <svg className="size-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                     </Button>
@@ -154,20 +154,20 @@ export default function AdminTeachers({ teachers, users }: any) {
                 <CardContent className="p-7">
                     <form onSubmit={submit} className="flex flex-col lg:flex-row gap-6 items-start lg:items-end">
                         <div className="flex-1 space-y-2.5 w-full">
-                            <Label className="text-xs font-bold uppercase tracking-wider text-slate-500 ml-1">Select User Account</Label>
+                            <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">Select User Account</Label>
                             <div className="relative group">
                                 <select 
-                                    className="flex h-11 w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all hover:border-slate-300"
+                                    className="flex h-11 w-full appearance-none rounded-xl border border-border bg-background px-4 py-2 text-sm font-medium text-foreground focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all hover:border-muted-foreground/30"
                                     value={data.user_id} 
                                     onChange={e => setData('user_id', e.target.value)}
                                     required
                                 >
-                                    <option value="" disabled>Search and choose a user...</option>
+                                    <option value="" disabled className="bg-background">Search and choose a user...</option>
                                     {users.map((u: any) => (
-                                        <option key={u.id} value={u.id}>{u.name} — {u.email}</option>
+                                        <option key={u.id} value={u.id} className="bg-background">{u.name} — {u.email}</option>
                                     ))}
                                 </select>
-                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400 group-hover:text-slate-600">
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-muted-foreground">
                                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                                     </svg>
@@ -175,25 +175,25 @@ export default function AdminTeachers({ teachers, users }: any) {
                             </div>
                         </div>
                         <div className="w-full lg:w-48 space-y-2.5">
-                            <Label className="text-xs font-bold uppercase tracking-wider text-slate-500 ml-1">Platform Commission %</Label>
+                            <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">Platform Commission %</Label>
                             <div className="relative">
                                 <Input 
                                     type="number" 
                                     min="0" 
                                     max="100" 
-                                    className="h-11 pl-10 rounded-xl border-slate-200 bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 font-bold text-sm transition-all hover:border-slate-300" 
+                                    className="h-11 pl-10 rounded-xl border-border bg-background focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 font-bold text-sm transition-all" 
                                     value={data.commission_percent} 
                                     onChange={e => setData('commission_percent', e.target.value as any)} 
                                     required 
                                 />
-                                <Percent className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                                <Percent className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                             </div>
                         </div>
                         <div className="w-full lg:w-auto">
                             <Button 
                                 type="submit" 
                                 disabled={processing} 
-                                className="w-full lg:w-auto h-11 px-8 bg-slate-900 hover:bg-slate-800 text-white shadow-md shadow-slate-900/10 rounded-xl text-sm font-semibold transition-all hover:-translate-y-0.5"
+                                className="w-full lg:w-auto h-11 px-8 bg-primary hover:bg-primary/90 text-primary-foreground shadow-md rounded-xl text-sm font-semibold transition-all hover:-translate-y-0.5"
                             >
                                 Grant Instructor Access
                             </Button>
@@ -203,7 +203,7 @@ export default function AdminTeachers({ teachers, users }: any) {
             </Card>
         )}
 
-        <div className="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
+        <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
             <AdminDataTable 
                 title=""
                 subtitle=""
@@ -211,7 +211,7 @@ export default function AdminTeachers({ teachers, users }: any) {
                 columns={columns}
                 searchPlaceholder="Search faculty by name or email..."
                 actions={(teacher) => (
-                    <Button asChild variant="ghost" size="icon" className="size-9 rounded-xl text-slate-400 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                    <Button asChild variant="ghost" size="icon" className="size-9 rounded-xl text-muted-foreground hover:bg-indigo-500/10 hover:text-indigo-500 transition-colors">
                         <Link href={`/admin/teachers/${teacher.id}`}>
                             <ChevronRight className="size-4.5" />
                         </Link>

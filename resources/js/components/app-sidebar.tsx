@@ -58,6 +58,11 @@ export function AppSidebar() {
                     icon: GraduationCap,
                 },
                 {
+                    title: 'Payout Requests',
+                    href: '/admin/withdrawals',
+                    icon: CreditCard,
+                },
+                {
                     title: 'Qualified Students',
                     href: '/admin/students/qualified',
                     icon: CheckCircle2,
