@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/input-otp';
 import { OTP_MAX_LENGTH } from '@/hooks/use-two-factor-auth';
 import { store } from '@/routes/two-factor/login';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function TwoFactorChallenge() {
     const [showRecoveryInput, setShowRecoveryInput] = useState<boolean>(false);
@@ -27,18 +28,18 @@ export default function TwoFactorChallenge() {
     }>(() => {
         if (showRecoveryInput) {
             return {
-                title: 'Recovery code',
+                title: 'Recovery Code',
                 description:
                     'Please confirm access to your account by entering one of your emergency recovery codes.',
-                toggleText: 'login using an authentication code',
+                toggleText: 'Use authentication code',
             };
         }
 
         return {
-            title: 'Authentication code',
+            title: 'Authentication Code',
             description:
-                'Enter the authentication code provided by your authenticator application.',
-            toggleText: 'login using a recovery code',
+                'Enter the 6-digit code provided by your authenticator app.',
+            toggleText: 'Use a recovery code',
         };
     }, [showRecoveryInput]);
 
@@ -60,12 +61,12 @@ export default function TwoFactorChallenge() {
 
     return (
         <>
-            <Head title="Two-factor authentication" />
+            <Head title="Two-Factor Authentication" />
 
-            <div className="space-y-6">
-                <form onSubmit={submit} className="space-y-4">
+            <div className="flex flex-col gap-5">
+                <form onSubmit={submit} className="flex flex-col gap-5">
                     {showRecoveryInput ? (
-                        <>
+                        <div className="grid gap-1.5">
                             <Input
                                 name="recovery_code"
                                 value={data.recovery_code}
@@ -74,52 +75,50 @@ export default function TwoFactorChallenge() {
                                 placeholder="Enter recovery code"
                                 autoFocus={showRecoveryInput}
                                 required
+                                className="h-9 rounded-sm border-border bg-background px-3 text-sm font-medium focus-visible:ring-primary/20 transition-all shadow-none"
                             />
-                            <InputError
-                                message={errors.recovery_code}
-                            />
-                        </>
+                            <InputError message={errors.recovery_code} />
+                        </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center space-y-3 text-center">
-                            <div className="flex w-full items-center justify-center">
-                                <InputOTP
-                                    name="code"
-                                    maxLength={OTP_MAX_LENGTH}
-                                    value={data.code}
-                                    onChange={(value) => setData('code', value)}
-                                    disabled={processing}
-                                    pattern={REGEXP_ONLY_DIGITS}
-                                >
-                                    <InputOTPGroup>
-                                        {Array.from(
-                                            { length: OTP_MAX_LENGTH },
-                                            (_, index) => (
-                                                <InputOTPSlot
-                                                    key={index}
-                                                    index={index}
-                                                />
-                                            ),
-                                        )}
-                                    </InputOTPGroup>
-                                </InputOTP>
-                            </div>
+                        <div className="flex flex-col items-center justify-center gap-3">
+                            <InputOTP
+                                name="code"
+                                maxLength={OTP_MAX_LENGTH}
+                                value={data.code}
+                                onChange={(value) => setData('code', value)}
+                                disabled={processing}
+                                pattern={REGEXP_ONLY_DIGITS}
+                                className="gap-2"
+                            >
+                                <InputOTPGroup className="gap-1.5">
+                                    {Array.from(
+                                        { length: OTP_MAX_LENGTH },
+                                        (_, index) => (
+                                            <InputOTPSlot
+                                                key={index}
+                                                index={index}
+                                                className="h-10 w-10 rounded-sm border-border"
+                                            />
+                                        ),
+                                    )}
+                                </InputOTPGroup>
+                            </InputOTP>
                             <InputError message={errors.code} />
                         </div>
                     )}
 
                     <Button
                         type="submit"
-                        className="w-full"
+                        className="w-full h-9 rounded-sm bg-primary text-white hover:bg-primary/90 font-medium text-sm shadow-none transition-colors"
                         disabled={processing}
                     >
-                        Continue
+                        {processing ? <Spinner className="mr-2 h-4 w-4" /> : 'Continue'}
                     </Button>
 
-                    <div className="text-center text-sm text-muted-foreground">
-                        <span>or you can </span>
+                    <div className="text-center">
                         <button
                             type="button"
-                            className="cursor-pointer text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                            className="text-xs text-muted-foreground hover:text-foreground font-medium transition-colors underline underline-offset-4"
                             onClick={toggleRecoveryMode}
                         >
                             {authConfigContent.toggleText}

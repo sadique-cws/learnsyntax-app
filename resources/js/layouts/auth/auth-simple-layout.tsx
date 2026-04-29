@@ -9,36 +9,34 @@ export default function AuthSimpleLayout({
     description,
 }: AuthLayoutProps) {
     return (
-        <div className="flex min-h-svh flex-col items-center justify-center bg-background p-6 md:p-10 font-sans selection:bg-primary/20">
-            <div className="w-full max-w-sm">
-                <div className="flex flex-col gap-10">
-                    <div className="flex flex-col items-center gap-6">
+        <div className="flex min-h-svh flex-col items-center justify-center bg-background p-4 md:p-10 font-sans selection:bg-primary/20">
+            <div className="w-full max-w-[360px]">
+                <div className="flex flex-col gap-8">
+                    <div className="flex flex-col items-center gap-4">
                         <Link
                             href={home()}
-                            className="flex flex-col items-center gap-3 group"
+                            className="flex items-center gap-2.5 group"
                         >
-                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                                <AppLogoIcon className="size-8 text-primary" />
+                            <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-primary/5 border border-primary/10 group-hover:bg-primary/10 transition-colors">
+                                <AppLogoIcon className="size-5 text-primary" />
                             </div>
-                            <div className="flex flex-col items-center leading-none">
-                                <span className="font-black text-xl tracking-tighter  text-foreground">Learn <span className="text-primary">Syntax</span></span>
-                            </div>
+                            <span className="font-semibold text-lg tracking-tight text-foreground">Learn<span className="text-primary">Syntax</span></span>
                         </Link>
 
-                        <div className="space-y-1 text-center">
-                            <h1 className="text-2xl font-extrabold tracking-tight">{title}</h1>
-                            <p className="text-sm text-muted-foreground font-medium">
+                        <div className="space-y-0.5 text-center">
+                            <h1 className="text-lg font-semibold text-foreground tracking-tight">{title}</h1>
+                            <p className="text-xs text-muted-foreground font-medium">
                                 {description}
                             </p>
                         </div>
                     </div>
                     
-                    <div className="bg-card border border-border rounded-xl p-5 shadow-none">
+                    <div className="bg-card border border-border rounded-sm p-5 md:p-6 shadow-none">
                         {children}
                     </div>
 
-                    <p className="text-center text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em] opacity-50">
-                        © {new Date().getFullYear()} Learn Syntax Authority
+                    <p className="text-center text-[11px] text-muted-foreground/60 font-medium">
+                        &copy; {new Date().getFullYear()} Learn Syntax Education. All rights reserved.
                     </p>
                 </div>
             </div>

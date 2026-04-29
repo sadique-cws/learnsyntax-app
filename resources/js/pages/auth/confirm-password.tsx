@@ -20,32 +20,31 @@ export default function ConfirmPassword() {
 
     return (
         <>
-            <Head title="Confirm password" />
+            <Head title="Confirm Password" />
 
-            <form onSubmit={submit} className="space-y-6">
-                <div className="grid gap-2">
-                    <Label htmlFor="password">Password</Label>
-                    <PasswordInput
-                        id="password"
-                        name="password"
-                        value={data.password}
-                        onChange={e => setData('password', e.target.value)}
-                        placeholder="Password"
-                        autoComplete="current-password"
-                        autoFocus
-                    />
+            <form onSubmit={submit} className="flex flex-col gap-5">
+                <div className="grid gap-4">
+                    <div className="grid gap-1.5">
+                        <Label htmlFor="password" className="text-xs font-medium text-muted-foreground">Password</Label>
+                        <PasswordInput
+                            id="password"
+                            name="password"
+                            value={data.password}
+                            onChange={e => setData('password', e.target.value)}
+                            placeholder="••••••••"
+                            autoComplete="current-password"
+                            autoFocus
+                            className="h-9 rounded-sm border-border bg-background px-3 text-sm font-medium focus-visible:ring-primary/20 transition-all shadow-none"
+                        />
+                        <InputError message={errors.password} />
+                    </div>
 
-                    <InputError message={errors.password} />
-                </div>
-
-                <div className="flex items-center">
                     <Button
-                        className="w-full"
+                        type="submit"
+                        className="mt-1 w-full h-9 rounded-sm bg-primary text-white hover:bg-primary/90 font-medium text-sm shadow-none transition-colors"
                         disabled={processing}
-                        data-test="confirm-password-button"
                     >
-                        {processing && <Spinner />}
-                        Confirm password
+                        {processing ? <Spinner className="mr-2 h-4 w-4" /> : 'Confirm Password'}
                     </Button>
                 </div>
             </form>
@@ -54,7 +53,6 @@ export default function ConfirmPassword() {
 }
 
 ConfirmPassword.layout = {
-    title: 'Confirm your password',
-    description:
-        'This is a secure area of the application. Please confirm your password before continuing.',
+    title: 'Security Check',
+    description: 'This is a secure area of the application. Please confirm your password to continue.',
 };

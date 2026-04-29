@@ -29,75 +29,67 @@ export default function ResetPassword({ token, email }: Props) {
 
     return (
         <>
-            <Head title="Reset password" />
+            <Head title="Reset Password" />
 
-            <form onSubmit={submit} className="grid gap-6">
-                <div className="grid gap-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                        id="email"
-                        type="email"
-                        name="email"
-                        autoComplete="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        readOnly
-                    />
-                    <InputError
-                        message={errors.email}
-                        className="mt-2"
-                    />
+            <form onSubmit={submit} className="flex flex-col gap-5">
+                <div className="grid gap-4">
+                    <div className="grid gap-1.5">
+                        <Label htmlFor="email" className="text-xs font-medium text-muted-foreground">Email Address</Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            name="email"
+                            autoComplete="email"
+                            value={data.email}
+                            className="h-9 rounded-sm border-border bg-muted/30 px-3 text-sm font-medium opacity-70 cursor-not-allowed shadow-none"
+                            readOnly
+                        />
+                        <InputError message={errors.email} />
+                    </div>
+
+                    <div className="grid gap-1.5">
+                        <Label htmlFor="password" className="text-xs font-medium text-muted-foreground">New Password</Label>
+                        <PasswordInput
+                            id="password"
+                            name="password"
+                            value={data.password}
+                            onChange={e => setData('password', e.target.value)}
+                            autoComplete="new-password"
+                            className="h-9 rounded-sm border-border bg-background px-3 text-sm font-medium focus-visible:ring-primary/20 transition-all shadow-none"
+                            autoFocus
+                            placeholder="••••••••"
+                        />
+                        <InputError message={errors.password} />
+                    </div>
+
+                    <div className="grid gap-1.5">
+                        <Label htmlFor="password_confirmation" className="text-xs font-medium text-muted-foreground">Confirm New Password</Label>
+                        <PasswordInput
+                            id="password_confirmation"
+                            name="password_confirmation"
+                            value={data.password_confirmation}
+                            onChange={e => setData('password_confirmation', e.target.value)}
+                            autoComplete="new-password"
+                            className="h-9 rounded-sm border-border bg-background px-3 text-sm font-medium focus-visible:ring-primary/20 transition-all shadow-none"
+                            placeholder="••••••••"
+                        />
+                        <InputError message={errors.password_confirmation} />
+                    </div>
+
+                    <Button
+                        type="submit"
+                        className="mt-1 w-full h-9 rounded-sm bg-primary text-white hover:bg-primary/90 font-medium text-sm shadow-none transition-colors"
+                        disabled={processing}
+                    >
+                        {processing ? <Spinner className="mr-2 h-4 w-4" /> : 'Reset Password'}
+                    </Button>
                 </div>
-
-                <div className="grid gap-2">
-                    <Label htmlFor="password">Password</Label>
-                    <PasswordInput
-                        id="password"
-                        name="password"
-                        value={data.password}
-                        onChange={e => setData('password', e.target.value)}
-                        autoComplete="new-password"
-                        className="mt-1 block w-full"
-                        autoFocus
-                        placeholder="Password"
-                    />
-                    <InputError message={errors.password} />
-                </div>
-
-                <div className="grid gap-2">
-                    <Label htmlFor="password_confirmation">
-                        Confirm password
-                    </Label>
-                    <PasswordInput
-                        id="password_confirmation"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        onChange={e => setData('password_confirmation', e.target.value)}
-                        autoComplete="new-password"
-                        className="mt-1 block w-full"
-                        placeholder="Confirm password"
-                    />
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
-                    />
-                </div>
-
-                <Button
-                    type="submit"
-                    className="mt-4 w-full"
-                    disabled={processing}
-                    data-test="reset-password-button"
-                >
-                    {processing && <Spinner />}
-                    Reset password
-                </Button>
             </form>
         </>
     );
 }
 
 ResetPassword.layout = {
-    title: 'Reset password',
-    description: 'Please enter your new password below',
+    title: 'Reset Password',
+    description: 'Please choose a new secure password to regain access to your account.',
 };

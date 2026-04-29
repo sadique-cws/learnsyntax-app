@@ -13,6 +13,7 @@ use App\Http\Controllers\Student\AcademicController;
 use App\Http\Controllers\Student\CourseController;
 use App\Http\Controllers\Student\EnrollmentController;
 use App\Http\Controllers\Teacher\DashboardController;
+use App\Http\Controllers\Teacher\KycController;
 use App\Http\Controllers\Teacher\WalletController;
 use App\Models\Course;
 use App\Models\Enrollment;
@@ -89,6 +90,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('withdrawals/{withdrawal}/status', [TeacherController::class, 'updateWithdrawalStatus'])->name('admin.withdrawals.status');
         Route::resource('teachers', TeacherController::class)->names('admin.teachers');
         Route::post('teachers/{teacher}/login-as', [TeacherController::class, 'loginAs'])->name('admin.teachers.login-as');
+        // KYC Management
+        Route::get('kyc', [\App\Http\Controllers\Admin\TeacherController::class, 'kycIndex'])->name('admin.kyc.index');
+        Route::post('kyc/{teacher}/review', [\App\Http\Controllers\Admin\TeacherController::class, 'kycReview'])->name('admin.kyc.review');
 
         // User Management
         Route::resource('users', UserController::class)->names('admin.users');
@@ -145,6 +149,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('wallet', [WalletController::class, 'index'])->name('teacher.wallet');
         Route::get('wallet/withdraw', [WalletController::class, 'withdraw'])->name('teacher.wallet.withdraw.page');
         Route::post('wallet/withdraw', [WalletController::class, 'storeRequest'])->name('teacher.wallet.withdraw');
+        // KYC
+        Route::get('kyc', [KycController::class, 'show'])->name('teacher.kyc');
+        Route::post('kyc', [KycController::class, 'store'])->name('teacher.kyc.store');
     });
 
 });
