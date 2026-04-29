@@ -12,8 +12,12 @@ class WalletController extends Controller
         $transactions = $teacher->walletTransactions()->latest()->get();
         $withdrawalRequests = $teacher->withdrawalRequests()->latest()->get();
 
+        $pendingAmount = $teacher->withdrawalRequests()->where('status', 'pending')->sum('amount');
+        $availableBalance = $teacher->wallet_balance - $pendingAmount;
+
         return inertia('teacher/wallet/index', [
-            'balance' => $teacher->wallet_balance,
+            'balance' => $availableBalance,
+            'actual_balance' => $teacher->wallet_balance,
             'transactions' => $transactions,
             'withdrawalRequests' => $withdrawalRequests,
         ]);
@@ -22,8 +26,12 @@ class WalletController extends Controller
     public function withdraw()
     {
         $teacher = auth()->user()->teacher;
+        
+        $pendingAmount = $teacher->withdrawalRequests()->where('status', 'pending')->sum('amount');
+        $availableBalance = $teacher->wallet_balance - $pendingAmount;
+
         return inertia('teacher/wallet/withdraw', [
-            'balance' => $teacher->wallet_balance,
+            'balance' => $availableBalance,
         ]);
     }
 
@@ -31,8 +39,11 @@ class WalletController extends Controller
     {
         $teacher = auth()->user()->teacher;
         
+        $pendingAmount = $teacher->withdrawalRequests()->where('status', 'pending')->sum('amount');
+        $availableBalance = $teacher->wallet_balance - $pendingAmount;
+
         $request->validate([
-            'amount' => 'required|numeric|min:500|max:'.$teacher->wallet_balance,
+            'amount' => 'required|numeric|min:500|max:'.$availableBalance,
             'bank_name' => 'required|string|max:255',
             'account_number' => 'required|string|max:255',
             'ifsc_code' => 'required|string|max:255',
