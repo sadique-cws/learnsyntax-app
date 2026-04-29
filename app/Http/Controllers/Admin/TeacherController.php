@@ -102,4 +102,10 @@ class TeacherController extends Controller
 
         return redirect()->back()->with('success', 'Withdrawal status updated successfully.');
     }
+
+    public function loginAs(Teacher $teacher)
+    {
+        auth()->login($teacher->user);
+        return redirect()->route('teacher.dashboard');
+    }
 }

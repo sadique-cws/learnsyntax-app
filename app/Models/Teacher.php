@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable(['user_id', 'commission_percent', 'wallet_balance'])]
 class Teacher extends Model
 {
+    use HasFactory;
     protected $casts = [
         'commission_percent' => 'decimal:2',
         'wallet_balance' => 'decimal:2',
