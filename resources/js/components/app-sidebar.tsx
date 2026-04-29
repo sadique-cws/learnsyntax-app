@@ -1,6 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid, Book,  Shield, 
-    CheckCircle2 ,Users,Award, CreditCard, ShoppingBag, Home, GraduationCap, Trophy, Receipt, Settings } from 'lucide-react';
+import { BookOpen, FolderGit2, LayoutGrid, Book, Shield, 
+    CheckCircle2, Users, Award, CreditCard, ShoppingBag, Home, GraduationCap, Trophy, Receipt, Settings } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -25,7 +25,7 @@ export function AppSidebar() {
     const isAdmin = user?.is_admin;
 
     const mainNavItems: NavItem[] = [];
-// ... (mainNavItems logic remains same)
+
     if (user) {
         mainNavItems.push({
             title: 'Dashboard',
@@ -37,90 +37,34 @@ export function AppSidebar() {
             mainNavItems.push({
                 title: 'Instructor Panel',
                 href: '/teacher/dashboard',
-                icon: Award, // using Award icon for Instructor Panel
+                icon: Award,
             });
         }
 
         if (isAdmin) {
             mainNavItems.push(
-                {
-                    title: 'Manage Users',
-                    href: '/admin/users',
-                    icon: Shield,
-                },
-                {
-                    title: 'Manage Courses',
-                    href: '/admin/courses',
-                    icon: Book,
-                },
-                {
-                    title: 'Manage Students',
-                    href: '/admin/students',
-                    icon: Users,
-                },
-                {
-                    title: 'Manage Teachers',
-                    href: '/admin/teachers',
-                    icon: GraduationCap,
-                },
-                {
-                    title: 'Payout Requests',
-                    href: '/admin/withdrawals',
-                    icon: CreditCard,
-                },
-                {
-                    title: 'Qualified Students',
-                    href: '/admin/students/qualified',
-                    icon: CheckCircle2,
-                },
-                {
-                    title: 'Student Certificates',
-                    href: '/admin/certificates',
-                    icon: Award,
-                },
-                {
-                    title: 'Manage Batches',
-                    href: '/admin/batches',
-                    icon: FolderGit2,
-                },
-                {
-                    title: 'All Payments',
-                    href: '/admin/payments',
-                    icon: CreditCard,
-                },
-                {
-                    title: 'GST Reports',
-                    href: '/admin/payments/gst-report',
-                    icon: Receipt,
-                },
-                {
-                    title: 'Manage Assignments',
-                    href: '/admin/academic/assignments',
-                    icon: BookOpen,
-                },
-                {
-                    title: 'Manage Exams',
-                    href: '/admin/academic/exams',
-                    icon: Trophy,
-                },
-                {
-                    title: 'Invoice Settings',
-                    href: '/admin/settings',
-                    icon: Settings,
-                }
+                { title: 'Users', href: '/admin/users', icon: Shield },
+                { title: 'Courses', href: '/admin/courses', icon: Book },
+                { title: 'Students', href: '/admin/students', icon: Users },
+                { title: 'Teachers', href: '/admin/teachers', icon: GraduationCap },
+                { title: 'Payouts', href: '/admin/withdrawals', icon: CreditCard },
+                { title: 'Qualified', href: '/admin/students/qualified', icon: CheckCircle2 },
+                { title: 'Certificates', href: '/admin/certificates', icon: Award },
+                { title: 'Batches', href: '/admin/batches', icon: FolderGit2 },
+                { title: 'Payments', href: '/admin/payments', icon: CreditCard },
+                { title: 'GST Reports', href: '/admin/payments/gst-report', icon: Receipt },
+                { title: 'Assignments', href: '/admin/academic/assignments', icon: BookOpen },
+                { title: 'Exams', href: '/admin/academic/exams', icon: Trophy },
+                { title: 'Settings', href: '/admin/settings', icon: Settings },
             );
         } else {
             mainNavItems.push(
-                {
-                    title: 'Browse Courses',
-                    href: '/courses',
-                    icon: ShoppingBag,
-                }
+                { title: 'Browse Courses', href: '/courses', icon: ShoppingBag }
             );
 
             if (user.is_student) {
                 mainNavItems.push({
-                    title: 'My Learning Center',
+                    title: 'My Learning',
                     href: '/dashboard',
                     icon: GraduationCap,
                 });
@@ -134,16 +78,8 @@ export function AppSidebar() {
         }
     } else {
         mainNavItems.push(
-            {
-                title: 'Home',
-                href: '/',
-                icon: Home,
-            },
-            {
-                title: 'All Courses',
-                href: '/courses',
-                icon: ShoppingBag,
-            }
+            { title: 'Home', href: '/', icon: Home },
+            { title: 'All Courses', href: '/courses', icon: ShoppingBag },
         );
     }
 

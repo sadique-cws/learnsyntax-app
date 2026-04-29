@@ -54,7 +54,7 @@ export default function AdminAssignmentShow({ assignment }: { assignment: any })
                     </Link>
                     <div className="flex flex-col">
                         <h1 className="text-sm font-bold truncate max-w-[200px] leading-none">{assignment.title}</h1>
-                        <span className="text-[10px] text-muted-foreground font-black   mt-1">{assignment.batch.name}</span>
+                        <span className="text-[10px] text-muted-foreground font-medium mt-1">{assignment.batch.name}</span>
                     </div>
                 </div>
 
@@ -89,13 +89,13 @@ export default function AdminAssignmentShow({ assignment }: { assignment: any })
 
                     <div className="flex items-center gap-3 border-l border-border pl-6">
                         <div className="flex items-center gap-2">
-                             <span className="text-[10px] font-black   text-muted-foreground">Grade</span>
+                             <span className="text-[10px] font-medium text-muted-foreground">Grade</span>
                              <div className="flex items-center gap-1">
                                 <span className="text-sm font-bold text-foreground">{currentSubmission.marks_obtained || 0}</span>
                                 <span className="text-xs text-muted-foreground/50">/ {assignment.max_marks}</span>
                              </div>
                         </div>
-                        <Button className="h-9 px-6 rounded-sm bg-primary font-black   text-[10px] shadow-lg shadow-primary/10">
+                        <Button className="h-9 px-6 rounded-sm bg-primary font-medium text-[10px] shadow-none">
                             Return
                         </Button>
                     </div>
@@ -110,18 +110,18 @@ export default function AdminAssignmentShow({ assignment }: { assignment: any })
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <div className={cn(
-                                    "px-3 py-1 rounded-full text-[10px] font-black  ",
+                                    "px-3 py-1 rounded-sm text-[10px] font-medium",
                                     currentSubmission.status === 'graded' ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700"
                                 )}>
                                     {currentSubmission.status === 'graded' ? 'Marked' : 'Handed In'}
                                 </div>
                                 {currentSubmission.is_late && (
-                                    <div className="flex items-center gap-1.5 px-3 py-1 bg-red-50 text-red-600 rounded-full text-[10px] font-black   border border-red-100">
+                                    <div className="flex items-center gap-1.5 px-3 py-1 bg-red-50 text-red-600 rounded-sm text-[10px] font-medium border border-red-100">
                                         <Clock className="size-3" /> Late Submission
                                     </div>
                                 )}
                             </div>
-                            <div className="text-[10px] font-black   text-muted-foreground">
+                            <div className="text-[10px] font-medium text-muted-foreground">
                                 Submitted on {currentSubmission.submitted_at ? new Date(currentSubmission.submitted_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A'}
                             </div>
                         </div>
@@ -130,7 +130,7 @@ export default function AdminAssignmentShow({ assignment }: { assignment: any })
                         {currentSubmission.content ? (
                             <div className="bg-background border border-border rounded-sm shadow-sm overflow-hidden">
                                 <div className="p-4 border-b border-border bg-muted/5 flex items-center justify-between">
-                                    <div className="flex items-center gap-2 text-[10px] font-black   text-muted-foreground">
+                                    <div className="flex items-center gap-2 text-[10px] font-medium text-muted-foreground">
                                         <FileText className="size-4 text-primary" />
                                         Written Response
                                     </div>
@@ -147,7 +147,7 @@ export default function AdminAssignmentShow({ assignment }: { assignment: any })
                         ) : (
                             <div className="py-20 text-center border border-dashed border-border rounded-sm bg-background">
                                 <FileText className="size-12 text-muted-foreground/10 mx-auto mb-4" />
-                                <p className="text-[11px] font-black   text-muted-foreground/40">No written response provided</p>
+                                <p className="text-xs text-muted-foreground">No written response provided</p>
                             </div>
                         )}
 
@@ -155,12 +155,12 @@ export default function AdminAssignmentShow({ assignment }: { assignment: any })
                         {currentSubmission.file_path && (
                             <div className="bg-background border border-border rounded-sm shadow-sm overflow-hidden">
                                 <div className="p-4 border-b border-border bg-muted/5 flex items-center justify-between">
-                                    <div className="flex items-center gap-2 text-[10px] font-black   text-muted-foreground">
+                                    <div className="flex items-center gap-2 text-[10px] font-medium text-muted-foreground">
                                         <Paperclip className="size-4 text-primary" />
                                         Attached Document
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <Button variant="outline" size="sm" className="h-8 rounded-sm text-[10px] font-black  " asChild>
+                                        <Button variant="outline" size="sm" className="h-8 rounded-sm text-xs font-medium" asChild>
                                             <a href={`/storage/${currentSubmission.file_path}`} target="_blank">Download</a>
                                         </Button>
                                         <Button variant="ghost" size="icon" className="size-8 rounded-sm">
@@ -195,7 +195,7 @@ export default function AdminAssignmentShow({ assignment }: { assignment: any })
                     <div className="flex-1 overflow-y-auto p-6 space-y-8">
                         {/* Files List */}
                         <section className="space-y-4">
-                            <h3 className="text-[10px] font-black   text-muted-foreground">Submitted Files</h3>
+                            <h3 className="text-xs font-semibold text-muted-foreground">Submitted Files</h3>
                             <div className="space-y-2">
                                 {currentSubmission.file_path ? (
                                     <div className="flex items-center gap-3 p-3 border border-border rounded-sm hover:bg-muted/50 transition-colors cursor-pointer group">
@@ -218,13 +218,13 @@ export default function AdminAssignmentShow({ assignment }: { assignment: any })
 
                         {/* Private Comments */}
                         <section className="space-y-4">
-                            <h3 className="text-[10px] font-black   text-muted-foreground">Private Comments</h3>
+                            <h3 className="text-xs font-semibold text-muted-foreground">Private Comments</h3>
                             <div className="space-y-4">
                                 {currentSubmission.admin_comments && (
                                     <div className="bg-primary/5 border border-primary/10 rounded-sm p-4 relative group">
                                         <div className="flex items-center gap-2 mb-2">
                                             <div className="size-5 rounded-full bg-primary text-[9px] font-bold text-white flex items-center justify-center">A</div>
-                                            <span className="text-[9px] font-black   text-primary">Instructor Feedback</span>
+                                            <span className="text-[10px] font-medium text-primary">Instructor Feedback</span>
                                         </div>
                                         <p className="text-xs font-medium leading-relaxed text-foreground/80 italic">"{currentSubmission.admin_comments}"</p>
                                     </div>
@@ -240,7 +240,7 @@ export default function AdminAssignmentShow({ assignment }: { assignment: any })
                                             <Button variant="ghost" size="icon" className="size-8 rounded-sm">
                                                 <MoreVertical className="size-4" />
                                             </Button>
-                                            <Button size="icon" className="size-8 rounded-sm bg-primary shadow-lg shadow-primary/10">
+                                            <Button size="icon" className="size-8 rounded-sm bg-primary shadow-none">
                                                 <Send className="size-4" />
                                             </Button>
                                         </div>
@@ -252,7 +252,7 @@ export default function AdminAssignmentShow({ assignment }: { assignment: any })
                     </div>
 
                     <div className="p-6 border-t border-border bg-muted/10 shrink-0">
-                         <div className="flex items-center justify-between text-[10px] font-black   text-muted-foreground mb-4">
+                         <div className="flex items-center justify-between text-xs font-medium text-muted-foreground mb-4">
                             <span>Status Overview</span>
                             <span className="text-primary">{submissions.filter((s: any) => s.status === 'graded').length} / {submissions.length} Marked</span>
                          </div>
@@ -290,15 +290,15 @@ function GradingForm({ submission, maxMarks }: { submission: any, maxMarks: numb
     return (
         <section className="space-y-4">
             <div className="flex items-center justify-between">
-                <h3 className="text-[10px] font-black   text-muted-foreground">Marking</h3>
+                <h3 className="text-xs font-semibold text-muted-foreground">Marking</h3>
                 {submission.is_late && (
-                    <span className="text-[9px] font-black text-red-600  bg-red-50 px-2 py-0.5 rounded-sm border border-red-100">-10 Penalty Applied</span>
+                    <span className="text-[10px] font-medium text-red-600 bg-red-50 px-2 py-0.5 rounded-sm border border-red-100">-10 Penalty Applied</span>
                 )}
             </div>
             
             <form onSubmit={submit} className="space-y-6 bg-card border border-border rounded-sm p-5">
                 <div className="space-y-3">
-                    <Label className="text-[10px] font-black   text-muted-foreground">Score Achieved</Label>
+                    <Label className="text-xs font-medium text-muted-foreground">Score</Label>
                     <div className="flex items-center gap-3">
                         <Input 
                             type="number" 
@@ -312,7 +312,7 @@ function GradingForm({ submission, maxMarks }: { submission: any, maxMarks: numb
                 </div>
 
                 <div className="space-y-3">
-                    <Label className="text-[10px] font-black   text-muted-foreground">Grading Notes</Label>
+                    <Label className="text-xs font-medium text-muted-foreground">Grading Notes</Label>
                     <Textarea 
                         placeholder="Internal notes or public feedback..."
                         className="min-h-[80px] rounded-sm border-border bg-muted/10 text-xs"
@@ -325,8 +325,8 @@ function GradingForm({ submission, maxMarks }: { submission: any, maxMarks: numb
                     type="submit" 
                     disabled={processing}
                     className={cn(
-                        "w-full h-11 rounded-sm font-black   text-[10px] transition-all",
-                        isSaved ? "bg-green-600" : "bg-primary shadow-lg shadow-primary/10"
+                        "w-full h-10 rounded-sm font-medium text-xs transition-all shadow-none",
+                        isSaved ? "bg-green-600 text-white" : "bg-primary"
                     )}
                 >
                     {processing ? 'Saving...' : (isSaved ? <span className="flex items-center gap-2"><CheckCircle2 className="size-3.5" /> Grade Saved</span> : <span className="flex items-center gap-2"><Save className="size-3.5" /> Update Mark</span>)}

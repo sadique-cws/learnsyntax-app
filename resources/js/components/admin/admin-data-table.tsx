@@ -7,9 +7,6 @@ import {
     ArrowUpDown, 
     ArrowUp, 
     ArrowDown,
-    ChevronLeft,
-    ChevronRight,
-    MoreHorizontal,
     X,
     Calendar
 } from 'lucide-react';
@@ -23,7 +20,6 @@ import {
     DropdownMenuLabel,
     DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
-import { Card } from "@/components/ui/card";
 
 export interface Column<T> {
     key: keyof T | string;
@@ -153,134 +149,126 @@ export function AdminDataTable<T extends { id: number | string }>({
     }, [data, search, activeFilters, sortConfig, searchKey, dateRange, dateFilterKey]);
 
     const SortIcon = ({ column }: { column: string }) => {
-        if (sortConfig.key !== column) return <ArrowUpDown className="ml-2 h-3 w-3 opacity-30" />;
-        return sortConfig.direction === 'asc' ? <ArrowUp className="ml-2 h-3 w-3 text-primary" /> : <ArrowDown className="ml-2 h-3 w-3 text-primary" />;
+        if (sortConfig.key !== column) return <ArrowUpDown className="ml-1 size-3 opacity-20" />;
+        return sortConfig.direction === 'asc' ? <ArrowUp className="ml-1 size-3 text-foreground" /> : <ArrowDown className="ml-1 size-3 text-foreground" />;
     };
 
     const hasActiveFilters = Object.keys(activeFilters).length > 0;
 
     return (
-        <div className="space-y-3">
-            {(title || onAdd) && (
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-1">
-                    <div>
-                        {title && <h1 className="text-lg font-black text-slate-900 leading-none uppercase tracking-tight">{title}</h1>}
-                        {subtitle && <p className="text-[10px] font-bold text-muted-foreground/50 mt-1 uppercase tracking-wider italic leading-none">{subtitle}</p>}
-                    </div>
-                    {onAdd && (
-                        <Button onClick={onAdd} className="bg-primary hover:bg-primary/90 text-white h-8 font-black uppercase tracking-[0.2em] px-4 rounded-sm text-[10px] shadow-none">
-                            {addLabel}
-                        </Button>
+        <div>
+            {/* Toolbar */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 px-3 py-2 border-b border-border bg-muted/5">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                    {title && (
+                        <div className="hidden md:flex items-center gap-2 pr-3 mr-3 border-r border-border shrink-0">
+                            <h2 className="text-xs font-semibold text-foreground whitespace-nowrap">{title}</h2>
+                            <span className="text-[10px] text-muted-foreground tabular-nums">{filteredAndSortedData.length}</span>
+                        </div>
                     )}
-                </div>
-            )}
-
-            <div className="flex flex-col lg:flex-row gap-2 items-start lg:items-center bg-background p-2 rounded-sm border border-border">
-                <div className="relative w-full lg:w-64 shrink-0">
-                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground/60" />
-                    <Input 
-                        placeholder={searchPlaceholder} 
-                        className="pl-8 h-8 rounded-sm border-border bg-muted/20 text-xs font-bold focus-visible:bg-background shadow-none placeholder:text-muted-foreground/40"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                </div>
-                
-                {dateFilterKey && (
-                    <div className="flex items-center gap-1.5 p-1 px-2.5 rounded-sm border border-border bg-muted/5 hover:border-primary/30 transition-all group/range">
-                        <Calendar 
-                            className="size-3 text-muted-foreground/60 group-hover/range:text-primary transition-colors cursor-pointer" 
-                            onClick={() => (document.getElementById('date-filter-start') as HTMLInputElement)?.showPicker?.()}
+                    <div className="relative flex-1 max-w-xs">
+                        <Search className="absolute left-2 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground/50" />
+                        <Input 
+                            placeholder={searchPlaceholder} 
+                            className="pl-7 h-7 text-xs border-0 bg-transparent focus-visible:ring-0 focus-visible:bg-background placeholder:text-muted-foreground/40"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
                         />
-                        <div className="flex items-center gap-1">
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 shrink-0">
+                    {dateFilterKey && (
+                        <div className="flex items-center gap-1 px-2 h-7 rounded-sm border border-border bg-background text-[10px]">
+                            <Calendar className="size-3 text-muted-foreground/50" />
                             <Input 
                                 id="date-filter-start"
                                 type="date" 
-                                className="h-6 border-none bg-transparent text-[10px] font-black focus-visible:ring-0 w-[90px] p-0 cursor-pointer uppercase"
+                                className="h-5 border-none bg-transparent text-[10px] font-medium focus-visible:ring-0 w-[85px] p-0"
                                 value={dateRange.start}
                                 onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
                                 onClick={(e) => e.currentTarget.showPicker?.()}
                             />
-                            <span className="text-[8px] font-black text-muted-foreground/30 uppercase">to</span>
+                            <span className="text-muted-foreground/30">–</span>
                             <Input 
                                 type="date" 
-                                className="h-6 border-none bg-transparent text-[10px] font-black focus-visible:ring-0 w-[90px] p-0 cursor-pointer uppercase"
+                                className="h-5 border-none bg-transparent text-[10px] font-medium focus-visible:ring-0 w-[85px] p-0"
                                 value={dateRange.end}
                                 onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
                                 onClick={(e) => e.currentTarget.showPicker?.()}
                             />
-                        </div>
-                        {(dateRange.start || dateRange.end) && (
-                            <button 
-                                onClick={() => setDateRange({ start: '', end: '' })}
-                                className="p-0.5 hover:bg-muted rounded-sm transition-colors"
-                            >
-                                <X className="size-3 text-muted-foreground hover:text-rose-500" />
-                            </button>
-                        )}
-                    </div>
-                )}
-                
-                <div className="flex-1" />
-
-                {filterableColumns.length > 0 && (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" className={cn(
-                                "rounded-sm h-8 px-3 font-black text-[10px] uppercase tracking-widest border-border bg-muted/5 hover:bg-muted/10 shadow-none",
-                                hasActiveFilters && "border-primary/50 text-primary bg-primary/5"
-                            )}>
-                                <Filter className="size-3 mr-1.5" />
-                                Filter
-                                {hasActiveFilters && (
-                                    <span className="ml-1.5 bg-primary text-white size-3 rounded-sm flex items-center justify-center text-[8px]">
-                                        {Object.values(activeFilters).flat().length}
-                                    </span>
-                                )}
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-52 rounded-sm border-border shadow-none p-1">
-                            <DropdownMenuLabel className="text-[9px] font-black text-muted-foreground/40 tracking-[0.2em] uppercase px-2 py-1.5">Parameters</DropdownMenuLabel>
-                            <DropdownMenuSeparator className="my-1" />
-                            {filterableColumns.map(filter => (
-                                <div key={filter.key}>
-                                    <DropdownMenuLabel className="text-[8px] font-black text-slate-400 px-2 py-1 uppercase tracking-[0.1em]">{filter.label}</DropdownMenuLabel>
-                                    {filter.options.map(option => (
-                                        <DropdownMenuCheckboxItem
-                                            key={String(option.value)}
-                                            checked={(activeFilters[filter.key] || []).includes(option.value)}
-                                            onCheckedChange={() => toggleFilter(filter.key, option.value)}
-                                            className="text-[10px] font-bold py-1.5 px-2 focus:bg-primary/5 focus:text-primary rounded-sm"
-                                        >
-                                            {option.label}
-                                        </DropdownMenuCheckboxItem>
-                                    ))}
-                                    <DropdownMenuSeparator className="my-1" />
-                                </div>
-                            ))}
-                            {hasActiveFilters && (
-                                <DropdownMenuItem 
-                                    onClick={clearFilters}
-                                    className="text-[9px] font-black text-rose-500 focus:text-rose-600 focus:bg-rose-50 justify-center py-1.5 uppercase tracking-widest rounded-sm"
-                                >
-                                    Reset
-                                </DropdownMenuItem>
+                            {(dateRange.start || dateRange.end) && (
+                                <button onClick={() => setDateRange({ start: '', end: '' })} className="p-0.5 hover:bg-muted rounded-sm">
+                                    <X className="size-2.5 text-muted-foreground hover:text-foreground" />
+                                </button>
                             )}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                )}
+                        </div>
+                    )}
+
+                    {filterableColumns.length > 0 && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="sm" className={cn(
+                                    "h-7 px-2 text-xs font-medium gap-1",
+                                    hasActiveFilters && "text-primary"
+                                )}>
+                                    <Filter className="size-3" />
+                                    Filter
+                                    {hasActiveFilters && (
+                                        <span className="bg-primary text-white text-[9px] size-4 rounded-full flex items-center justify-center font-bold leading-none">
+                                            {Object.values(activeFilters).flat().length}
+                                        </span>
+                                    )}
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-48 rounded-sm border-border p-1">
+                                {filterableColumns.map(filter => (
+                                    <div key={filter.key}>
+                                        <DropdownMenuLabel className="text-[10px] font-semibold text-muted-foreground px-2 py-1">{filter.label}</DropdownMenuLabel>
+                                        {filter.options.map(option => (
+                                            <DropdownMenuCheckboxItem
+                                                key={String(option.value)}
+                                                checked={(activeFilters[filter.key] || []).includes(option.value)}
+                                                onCheckedChange={() => toggleFilter(filter.key, option.value)}
+                                                className="text-xs py-1 px-2 rounded-sm"
+                                            >
+                                                {option.label}
+                                            </DropdownMenuCheckboxItem>
+                                        ))}
+                                        <DropdownMenuSeparator className="my-0.5" />
+                                    </div>
+                                ))}
+                                {hasActiveFilters && (
+                                    <DropdownMenuItem 
+                                        onClick={clearFilters}
+                                        className="text-xs text-destructive justify-center py-1 rounded-sm font-medium"
+                                    >
+                                        Clear all
+                                    </DropdownMenuItem>
+                                )}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
+
+                    {onAdd && (
+                        <Button onClick={onAdd} size="sm" className="h-7 px-3 text-xs font-medium rounded-sm">
+                            {addLabel}
+                        </Button>
+                    )}
+                </div>
             </div>
 
+            {/* Active filter chips */}
             {hasActiveFilters && (
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-1 px-3 py-1.5 border-b border-border bg-muted/5">
                     {Object.entries(activeFilters).map(([key, values]) => {
                         const filterDef = filterableColumns.find(f => f.key === key);
                         return values.map(val => {
                             const option = filterDef?.options.find(o => o.value === val);
                             return (
-                                <div key={`${key}-${val}`} className="flex items-center gap-1.5 px-2 py-0.5 bg-primary/5 border border-primary/10 rounded-sm text-[9px] font-black text-primary uppercase tracking-widest">
-                                    <span className="opacity-40">{filterDef?.label}:</span> {option?.label || val}
-                                    <X className="size-2.5 cursor-pointer hover:text-rose-500 ml-1" onClick={() => toggleFilter(key, val)} />
+                                <div key={`${key}-${val}`} className="flex items-center gap-1 px-1.5 py-0.5 bg-primary/5 border border-primary/10 rounded-sm text-[10px] font-medium text-primary">
+                                    {option?.label || val}
+                                    <X className="size-2.5 cursor-pointer hover:text-destructive" onClick={() => toggleFilter(key, val)} />
                                 </div>
                             );
                         });
@@ -288,73 +276,75 @@ export function AdminDataTable<T extends { id: number | string }>({
                 </div>
             )}
 
-            <Card className="border-border shadow-none overflow-hidden bg-card rounded-sm">
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                        <thead>
-                            <tr className="bg-muted/30 border-b border-border">
+            {/* Table */}
+            <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                    <thead>
+                        <tr className="border-b border-border bg-muted/30">
+                            {columns.map((col) => (
+                                <th 
+                                    key={String(col.key)}
+                                    className={cn(
+                                        "px-3 py-2 text-[11px] font-semibold text-muted-foreground select-none",
+                                        col.sortable && "cursor-pointer hover:text-foreground",
+                                        col.align === 'right' && "text-right",
+                                        col.align === 'center' && "text-center"
+                                    )}
+                                    onClick={() => col.sortable && handleSort(String(col.key))}
+                                >
+                                    <div className={cn(
+                                        "flex items-center",
+                                        col.align === 'right' && "justify-end",
+                                        col.align === 'center' && "justify-center"
+                                    )}>
+                                        {col.label}
+                                        {col.sortable && <SortIcon column={String(col.key)} />}
+                                    </div>
+                                </th>
+                            ))}
+                            {actions && <th className="px-3 py-2 text-[11px] font-semibold text-right text-muted-foreground w-px whitespace-nowrap"></th>}
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                        {filteredAndSortedData.map((item) => (
+                            <tr key={item.id} className="hover:bg-muted/5 transition-colors">
                                 {columns.map((col) => (
-                                    <th 
-                                        key={String(col.key)}
+                                    <td 
+                                        key={String(col.key)} 
                                         className={cn(
-                                            "px-3 py-2 text-[9px] font-black tracking-[0.2em] uppercase text-muted-foreground/60 transition-colors",
-                                            col.sortable && "cursor-pointer hover:bg-muted/50 hover:text-primary",
+                                            "px-3 py-2 text-sm text-foreground",
                                             col.align === 'right' && "text-right",
                                             col.align === 'center' && "text-center"
                                         )}
-                                        onClick={() => col.sortable && handleSort(String(col.key))}
                                     >
-                                        <div className={cn(
-                                            "flex items-center gap-1.5",
-                                            col.align === 'right' && "justify-end",
-                                            col.align === 'center' && "justify-center"
-                                        )}>
-                                            {col.label}
-                                            {col.sortable && <SortIcon column={String(col.key)} />}
-                                        </div>
-                                    </th>
-                                ))}
-                                {actions && <th className="px-3 py-2 text-[9px] font-black tracking-[0.2em] uppercase text-right text-muted-foreground/60">Cmd</th>}
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-border">
-                            {filteredAndSortedData.map((item) => (
-                                <tr key={item.id} className="hover:bg-muted/10 transition-colors group">
-                                    {columns.map((col) => (
-                                        <td 
-                                            key={String(col.key)} 
-                                            className={cn(
-                                                "px-3 py-2 text-xs font-bold text-slate-700",
-                                                col.align === 'right' && "text-right",
-                                                col.align === 'center' && "text-center"
-                                            )}
-                                        >
-                                            {col.render ? col.render(item) : String((item as any)[col.key] || '')}
-                                        </td>
-                                    ))}
-                                    {actions && (
-                                        <td className="px-3 py-2 text-right">
-                                            {actions(item)}
-                                        </td>
-                                    )}
-                                </tr>
-                            ))}
-                            {filteredAndSortedData.length === 0 && (
-                                <tr>
-                                    <td colSpan={columns.length + (actions ? 1 : 0)} className="px-3 py-16 text-center text-muted-foreground">
-                                        <div className="flex flex-col items-center gap-2">
-                                            <div className="size-10 rounded-sm bg-muted/30 flex items-center justify-center border border-dashed border-border">
-                                                <Search className="size-4 text-muted-foreground/30" />
-                                            </div>
-                                            <div className="text-[10px] font-black opacity-30 uppercase tracking-[0.2em] italic">Null_Result_Set</div>
-                                        </div>
+                                        {col.render ? col.render(item) : String((item as any)[col.key] || '')}
                                     </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </Card>
+                                ))}
+                                {actions && (
+                                    <td className="px-3 py-2 text-right">
+                                        {actions(item)}
+                                    </td>
+                                )}
+                            </tr>
+                        ))}
+                        {filteredAndSortedData.length === 0 && (
+                            <tr>
+                                <td colSpan={columns.length + (actions ? 1 : 0)} className="px-3 py-12 text-center text-muted-foreground">
+                                    <div className="flex flex-col items-center gap-1.5">
+                                        <Search className="size-5 text-muted-foreground/20" />
+                                        <span className="text-xs text-muted-foreground/50">No results found</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Footer */}
+            <div className="px-3 py-1.5 border-t border-border bg-muted/5 flex items-center justify-between">
+                <span className="text-[10px] text-muted-foreground">{filteredAndSortedData.length} of {data.length} records</span>
+            </div>
         </div>
     );
 }

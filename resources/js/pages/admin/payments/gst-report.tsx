@@ -85,12 +85,12 @@ export default function AdminGSTReport({ invoices, stats }: { invoices: any[], s
             
             <div className="w-full p-4 lg:p-6">
                 <div className="mb-8">
-                    <Link href="/admin/payments" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors mb-6">
-                        <ChevronLeft className="size-4 mr-1" /> Back to Ledger
+                    <Link href="/admin/payments" className="inline-flex items-center text-xs font-medium text-muted-foreground hover:text-foreground transition-colors mb-4">
+                        <ChevronLeft className="size-3 mr-1" /> Back to Payments
                     </Link>
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                         <div>
-                            <h1 className="text-3xl font-medium  leading-none mb-1">GST Compliance Report</h1>
+                            <h1 className="text-lg font-semibold text-foreground mb-0.5">GST Compliance Report</h1>
                             <p className="text-muted-foreground text-xs font-medium tracking-tight">Monthly tax summary and B2B invoice tracking</p>
                         </div>
                         <Button 

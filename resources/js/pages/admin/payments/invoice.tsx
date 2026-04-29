@@ -20,14 +20,14 @@ export default function InvoicePage({ invoice, company }: { invoice: any, compan
             <div className="max-w-[850px] mx-auto print:max-w-none">
                 {/* Action Bar */}
                 <div className="flex justify-between items-center mb-6 print:hidden">
-                    <Link href="/admin/payments" className="flex items-center text-sm font-medium text-slate-600 hover:text-primary transition-colors">
-                        <ChevronLeft className="size-4 mr-1" /> Back to Ledger
+                    <Link href="/admin/payments" className="flex items-center text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">
+                        <ChevronLeft className="size-3 mr-1" /> Back to Payments
                     </Link>
                     <div className="flex gap-3">
                         <Button variant="outline" onClick={handlePrint} className="rounded border-slate-300 bg-white">
                             <Printer className="size-4 mr-2" /> Print
                         </Button>
-                        <Button onClick={handlePrint} className="rounded shadow-lg shadow-primary/20">
+                        <Button onClick={handlePrint} className="rounded shadow-none">
                             <Download className="size-4 mr-2" /> Download PDF
                         </Button>
                     </div>
