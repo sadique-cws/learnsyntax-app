@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Book, Receipt, Users, TrendingUp, Trophy, Award, CheckCircle2, ArrowRight } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 export default function Dashboard({ enrollments = [], stats = null }: { enrollments?: any[], stats?: any }) {
+    const is_student = !stats;
+
     if (stats) {
         return (
             <>
