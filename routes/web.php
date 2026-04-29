@@ -33,11 +33,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         $user = auth()->user();
         if ($user->is_admin) {
+            $recentUsers = \App\Models\User::with('enrollments')->latest()->take(5)->get()->map(function($u) {
+                return [
+                    'name' => $u->name,
+                    'email' => $u->email,
+                    'initials' => collect(explode(' ', $u->name))->map(fn($n) => mb_substr($n, 0, 1))->join(''),
+                    'role' => $u->is_admin ? 'ADMIN' : 'STUDENT',
+                    'active' => true,
+                    'color' => $u->is_admin ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
+                ];
+            });
+
             return inertia('dashboard', [
                 'stats' => [
                     'courses' => Course::count(),
                     'enrollments' => Enrollment::count(),
-                    'revenue' => Payment::where('status', 'completed')->sum('amount'),
+                    'revenue' => (float) Payment::where('status', 'completed')->sum('amount'),
+                    'signups_this_week' => Enrollment::where('created_at', '>=', now()->subDays(7))->count(),
+                    'recent_users' => $recentUsers,
                 ],
             ]);
         }

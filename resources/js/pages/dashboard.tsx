@@ -30,11 +30,11 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                             <CardContent className="p-5">
                                 <div className="flex justify-between items-start mb-2">
                                     <h3 className="text-xs font-semibold text-muted-foreground tracking-wider uppercase">Total Revenue</h3>
-                                    <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-sm">+12.4%</span>
+                                    <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-sm">+0.0%</span>
                                 </div>
                                 <div className="text-3xl font-bold tracking-tight mb-4">₹{stats.revenue.toLocaleString()}</div>
                                 <div className="h-1.5 w-full bg-muted/50 rounded-full overflow-hidden">
-                                    <div className="h-full bg-primary w-[65%]" />
+                                    <div className="h-full bg-primary w-[35%]" />
                                 </div>
                             </CardContent>
                         </Card>
@@ -45,14 +45,14 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                     <h3 className="text-xs font-semibold text-muted-foreground tracking-wider uppercase">New Signups</h3>
                                     <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">This Week</span>
                                 </div>
-                                <div className="text-3xl font-bold tracking-tight mb-4">{stats.enrollments}</div>
+                                <div className="text-3xl font-bold tracking-tight mb-4">{stats.signups_this_week ?? 0}</div>
                                 <div className="flex gap-1 h-6 items-end">
-                                    <div className="w-full bg-primary/10 h-[40%] rounded-sm" />
-                                    <div className="w-full bg-primary/20 h-[50%] rounded-sm" />
-                                    <div className="w-full bg-primary/10 h-[40%] rounded-sm" />
-                                    <div className="w-full bg-primary/30 h-[70%] rounded-sm" />
-                                    <div className="w-full bg-primary/20 h-[60%] rounded-sm" />
-                                    <div className="w-full bg-primary h-[100%] rounded-sm" />
+                                    <div className="w-full bg-primary/10 h-[20%] rounded-sm" />
+                                    <div className="w-full bg-primary/20 h-[30%] rounded-sm" />
+                                    <div className="w-full bg-primary/10 h-[20%] rounded-sm" />
+                                    <div className="w-full bg-primary/30 h-[50%] rounded-sm" />
+                                    <div className="w-full bg-primary/20 h-[40%] rounded-sm" />
+                                    <div className="w-full bg-primary h-[80%] rounded-sm" />
                                 </div>
                             </CardContent>
                         </Card>
@@ -60,14 +60,14 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                         <Card className="border-border shadow-sm">
                             <CardContent className="p-5">
                                 <div className="flex justify-between items-start mb-2">
-                                    <h3 className="text-xs font-semibold text-muted-foreground tracking-wider uppercase">Server Health</h3>
+                                    <h3 className="text-xs font-semibold text-muted-foreground tracking-wider uppercase">Active Courses</h3>
                                     <span className="text-[10px] font-bold text-green-600 flex items-center gap-1.5 uppercase">
-                                        <div className="size-1.5 bg-green-500 rounded-full animate-pulse" />
-                                        Operational
+                                        <div className="size-1.5 bg-green-500 rounded-full" />
+                                        Live
                                     </span>
                                 </div>
-                                <div className="text-3xl font-bold tracking-tight mb-4">99.98%</div>
-                                <p className="text-xs text-muted-foreground">Average latency: <span className="font-bold text-foreground">42ms</span></p>
+                                <div className="text-3xl font-bold tracking-tight mb-4">{stats.courses}</div>
+                                <p className="text-xs text-muted-foreground">Across <span className="font-bold text-foreground">{stats.enrollments}</span> total learners</p>
                             </CardContent>
                         </Card>
                     </div>
@@ -77,7 +77,9 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                             <Card className="border-border shadow-sm h-full">
                                 <CardHeader className="flex flex-row items-center justify-between py-4 px-5 border-b border-border/50">
                                     <CardTitle className="text-sm font-semibold">Recent User Activity</CardTitle>
-                                    <Button variant="ghost" size="sm" className="h-8 text-xs font-semibold text-primary hover:text-primary/80">VIEW ALL</Button>
+                                    <Button asChild variant="ghost" size="sm" className="h-8 text-xs font-semibold text-primary hover:text-primary/80">
+                                        <Link href="/admin/students">VIEW ALL</Link>
+                                    </Button>
                                 </CardHeader>
                                 <CardContent className="p-0">
                                     <div className="overflow-x-auto">
@@ -91,21 +93,16 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-border/50">
-                                                {[
-                                                    { name: 'Alex Stanford', email: 'alex.s@syntax.edu', initials: 'AS', role: 'TEACHER', active: true, color: 'bg-purple-100 text-purple-700' },
-                                                    { name: 'Maria Kova', email: 'm.kova@dev.io', initials: 'MK', role: 'STUDENT', active: true, color: 'bg-slate-100 text-slate-700' },
-                                                    { name: 'James Roland', email: 'james.r@syntax.edu', initials: 'JR', role: 'TEACHER', active: false, color: 'bg-slate-100 text-slate-700' },
-                                                    { name: 'Li Lin', email: 'li.lin@cloud.net', initials: 'LL', role: 'STUDENT', active: true, color: 'bg-slate-100 text-slate-700' },
-                                                ].map((user, i) => (
+                                                {(stats.recent_users ?? []).map((user: any, i: number) => (
                                                     <tr key={i} className="hover:bg-muted/10 transition-colors">
                                                         <td className="px-5 py-3">
                                                             <div className="flex items-center gap-3">
-                                                                <div className={`size-8 rounded-sm flex items-center justify-center font-bold text-xs ${user.color}`}>
+                                                                <div className={`size-8 rounded-sm flex items-center justify-center font-bold text-[10px] ${user.color}`}>
                                                                     {user.initials}
                                                                 </div>
                                                                 <div>
                                                                     <div className="font-medium text-foreground">{user.name}</div>
-                                                                    <div className="text-xs text-muted-foreground">{user.email}</div>
+                                                                    <div className="text-[11px] text-muted-foreground">{user.email}</div>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -123,8 +120,8 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                                             </div>
                                                         </td>
                                                         <td className="px-5 py-3 text-right">
-                                                            <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-foreground">
-                                                                <span className="tracking-widest leading-none font-bold">...</span>
+                                                            <Button asChild variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-foreground">
+                                                                <Link href={`/admin/students`}>...</Link>
                                                             </Button>
                                                         </td>
                                                     </tr>
