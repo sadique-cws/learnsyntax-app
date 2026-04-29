@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Head, useForm, router, Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { User, Wallet, Percent, Plus, ChevronRight } from 'lucide-react';
+import { User, Wallet, Percent, ChevronRight, UserPlus, Sparkles, Building2, Briefcase } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { AdminDataTable, Column } from '@/components/admin/admin-data-table';
 
@@ -18,7 +18,7 @@ export default function AdminTeachers({ teachers, users }: any) {
 
   const submit = (e: any) => {
     e.preventDefault();
-    post(route('admin.teachers.store'), {
+    post('/admin/teachers', {
       onSuccess: () => {
         reset();
         setShowAddForm(false);
@@ -29,39 +29,54 @@ export default function AdminTeachers({ teachers, users }: any) {
   const columns: Column<any>[] = [
     {
         key: 'name',
-        label: 'Teacher',
+        label: 'Instructor Profile',
         sortable: true,
         render: (teacher) => (
-            <div className="flex items-center gap-3">
-                <div className="size-10 rounded-md bg-primary/5 border border-primary/10 flex items-center justify-center text-primary shrink-0">
-                    <User className="size-5 opacity-70" />
+            <div className="flex items-center gap-4 py-1">
+                <div className="relative">
+                    <div className="size-11 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 shrink-0">
+                        <span className="font-bold text-sm tracking-wide">
+                            {teacher.user.name.substring(0, 2).toUpperCase()}
+                        </span>
+                    </div>
+                    <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-0.5 border-2 border-white shadow-sm">
+                        <Sparkles className="size-2.5 text-white" />
+                    </div>
                 </div>
                 <div>
-                    <div className="font-semibold text-sm text-foreground leading-tight">{teacher.user.name}</div>
-                    <div className="text-[11px] text-muted-foreground font-medium mt-0.5">{teacher.user.email}</div>
+                    <div className="font-semibold text-sm text-foreground leading-tight hover:text-indigo-600 transition-colors">
+                        {teacher.user.name}
+                    </div>
+                    <div className="text-[11px] text-muted-foreground font-medium flex items-center gap-1 mt-0.5">
+                        <Briefcase className="size-3" />
+                        {teacher.user.email}
+                    </div>
                 </div>
             </div>
         )
     },
     {
         key: 'wallet_balance',
-        label: 'Wallet',
+        label: 'Earnings',
         sortable: true,
         render: (teacher) => (
-            <div className="flex items-center gap-2">
-                <Wallet className="size-3.5 text-green-600/70" />
-                <span className="font-semibold text-sm text-green-700">₹{teacher.wallet_balance.toLocaleString()}</span>
+            <div className="flex flex-col">
+                <div className="flex items-center gap-1.5 text-emerald-700">
+                    <Wallet className="size-3.5" />
+                    <span className="font-bold text-[15px]">₹{teacher.wallet_balance.toLocaleString()}</span>
+                </div>
+                <span className="text-[10px] text-muted-foreground font-medium ml-5">Current Balance</span>
             </div>
         )
     },
     {
         key: 'commission_percent',
-        label: 'Commission',
+        label: 'Commission Rate',
         sortable: true,
         render: (teacher) => (
             <form onSubmit={(e) => {
                 e.preventDefault();
-                router.put(route('admin.teachers.update', teacher.id), {
+                router.put(`/admin/teachers/${teacher.id}`, {
                   commission_percent: (e.target as any).percent.value
                 })
               }} className="flex items-center gap-2 group">
@@ -72,11 +87,13 @@ export default function AdminTeachers({ teachers, users }: any) {
                         defaultValue={teacher.commission_percent} 
                         min="0" 
                         max="100" 
-                        className="w-20 h-8 text-xs font-bold pl-7 pr-1 rounded-md border-border/50 bg-muted/10 group-hover:bg-background transition-colors" 
+                        className="w-[84px] h-9 text-sm font-bold pl-8 pr-2 rounded-lg border-indigo-100 bg-indigo-50/50 group-hover:bg-indigo-50 group-hover:border-indigo-200 focus-visible:ring-indigo-500/20 transition-all text-indigo-900" 
                     />
-                    <Percent className="absolute left-2 top-1/2 -translate-y-1/2 size-3 text-muted-foreground/50" />
+                    <Percent className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-indigo-400" />
                 </div>
-                <Button type="submit" size="sm" variant="ghost" className="h-8 px-2 text-[10px] font-bold text-primary hover:bg-primary/5">SET</Button>
+                <Button type="submit" size="sm" variant="ghost" className="h-9 px-3 text-[11px] font-bold text-indigo-600 hover:bg-indigo-100 hover:text-indigo-700 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    SAVE
+                </Button>
             </form>
         )
     }
@@ -85,68 +102,123 @@ export default function AdminTeachers({ teachers, users }: any) {
   return (
     <>
       <Head title="Manage Teachers" />
-      <div className="w-full p-4 lg:p-6 space-y-6">
+      <div className="w-full p-4 lg:p-8 space-y-8 max-w-7xl mx-auto">
+        
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+            
+            <div className="relative">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs font-semibold mb-3">
+                    <Building2 className="size-3.5" />
+                    <span>Faculty Management</span>
+                </div>
+                <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Instructors Directory
+                </h1>
+                <p className="text-sm text-slate-500 mt-1 font-medium">
+                    Manage your teaching staff, monitor earnings, and set commission structures.
+                </p>
+            </div>
+
+            {!showAddForm && (
+                <Button 
+                    onClick={() => setShowAddForm(true)}
+                    className="relative shrink-0 shadow-lg shadow-indigo-500/25 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white border-0 h-11 px-6 rounded-xl font-semibold transition-all hover:scale-[1.02] hover:-translate-y-0.5"
+                >
+                    <UserPlus className="size-4 mr-2" />
+                    Onboard New Instructor
+                </Button>
+            )}
+        </div>
+
         {showAddForm && (
-            <Card className="border-border/50 shadow-sm bg-background animate-in fade-in slide-in-from-top-2 duration-300">
-                <CardHeader className="py-4 px-6 border-b border-border/50">
-                    <CardTitle className="text-sm font-semibold">Onboard New Teacher</CardTitle>
+            <Card className="border border-indigo-100 shadow-xl shadow-indigo-900/5 bg-white relative overflow-hidden animate-in slide-in-from-top-4 fade-in duration-500">
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-indigo-500 to-purple-500" />
+                <CardHeader className="py-5 px-7 border-b border-slate-100 bg-slate-50/50 flex flex-row items-center justify-between">
+                    <div>
+                        <CardTitle className="text-base font-bold text-slate-800 flex items-center gap-2">
+                            <Sparkles className="size-4 text-indigo-500" />
+                            Onboard New Instructor
+                        </CardTitle>
+                        <CardDescription className="text-xs mt-1 text-slate-500">
+                            Select a registered user to grant them instructor privileges.
+                        </CardDescription>
+                    </div>
+                    <Button variant="ghost" size="icon" onClick={() => setShowAddForm(false)} className="text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 rounded-full size-8">
+                        <span className="sr-only">Close</span>
+                        <svg className="size-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </Button>
                 </CardHeader>
-                <CardContent className="p-6">
-                    <form onSubmit={submit} className="flex flex-col md:flex-row gap-6 items-end">
-                        <div className="flex-1 space-y-2 w-full">
-                            <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Select User Account</Label>
-                            <select 
-                                className="flex h-10 w-full rounded-md border border-border/50 bg-muted/10 px-3 py-2 text-xs font-medium focus:bg-background outline-none focus:ring-1 focus:ring-primary/20 transition-all"
-                                value={data.user_id} 
-                                onChange={e => setData('user_id', e.target.value)}
-                                required
-                            >
-                                <option value="">Choose User...</option>
-                                {users.map((u: any) => (
-                                    <option key={u.id} value={u.id}>{u.name} ({u.email})</option>
-                                ))}
-                            </select>
+                <CardContent className="p-7">
+                    <form onSubmit={submit} className="flex flex-col lg:flex-row gap-6 items-start lg:items-end">
+                        <div className="flex-1 space-y-2.5 w-full">
+                            <Label className="text-xs font-bold uppercase tracking-wider text-slate-500 ml-1">Select User Account</Label>
+                            <div className="relative group">
+                                <select 
+                                    className="flex h-11 w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all hover:border-slate-300"
+                                    value={data.user_id} 
+                                    onChange={e => setData('user_id', e.target.value)}
+                                    required
+                                >
+                                    <option value="" disabled>Search and choose a user...</option>
+                                    {users.map((u: any) => (
+                                        <option key={u.id} value={u.id}>{u.name} — {u.email}</option>
+                                    ))}
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400 group-hover:text-slate-600">
+                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
-                        <div className="w-full md:w-40 space-y-2">
-                            <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Commission %</Label>
+                        <div className="w-full lg:w-48 space-y-2.5">
+                            <Label className="text-xs font-bold uppercase tracking-wider text-slate-500 ml-1">Platform Commission %</Label>
                             <div className="relative">
                                 <Input 
                                     type="number" 
                                     min="0" 
                                     max="100" 
-                                    className="h-10 pl-9 rounded-md border-border/50 bg-muted/10 focus:bg-background font-bold text-xs" 
+                                    className="h-11 pl-10 rounded-xl border-slate-200 bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 font-bold text-sm transition-all hover:border-slate-300" 
                                     value={data.commission_percent} 
                                     onChange={e => setData('commission_percent', e.target.value as any)} 
                                     required 
                                 />
-                                <Percent className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground/40" />
+                                <Percent className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
                             </div>
                         </div>
-                        <div className="flex gap-2 w-full md:w-auto">
-                            <Button type="button" variant="ghost" onClick={() => setShowAddForm(false)} className="flex-1 h-10 text-xs font-semibold">CANCEL</Button>
-                            <Button type="submit" disabled={processing} className="flex-1 h-10 px-6 bg-primary shadow-md shadow-primary/20 text-xs font-semibold">ADD TEACHER</Button>
+                        <div className="w-full lg:w-auto">
+                            <Button 
+                                type="submit" 
+                                disabled={processing} 
+                                className="w-full lg:w-auto h-11 px-8 bg-slate-900 hover:bg-slate-800 text-white shadow-md shadow-slate-900/10 rounded-xl text-sm font-semibold transition-all hover:-translate-y-0.5"
+                            >
+                                Grant Instructor Access
+                            </Button>
                         </div>
                     </form>
                 </CardContent>
             </Card>
         )}
 
-        <AdminDataTable 
-            title="Faculty Directory"
-            subtitle="Manage teacher accounts, earnings, and commission rates"
-            data={teachers}
-            columns={columns}
-            searchPlaceholder="Search faculty by name or email..."
-            onAdd={() => setShowAddForm(true)}
-            addLabel="Add Teacher"
-            actions={(teacher) => (
-                <Button asChild variant="ghost" size="icon" className="size-8 rounded-md hover:bg-primary/5 hover:text-primary transition-colors">
-                    <Link href={`/admin/teachers/${teacher.id}`}>
-                        <ChevronRight className="size-4" />
-                    </Link>
-                </Button>
-            )}
-        />
+        <div className="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
+            <AdminDataTable 
+                title=""
+                subtitle=""
+                data={teachers}
+                columns={columns}
+                searchPlaceholder="Search faculty by name or email..."
+                actions={(teacher) => (
+                    <Button asChild variant="ghost" size="icon" className="size-9 rounded-xl text-slate-400 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                        <Link href={`/admin/teachers/${teacher.id}`}>
+                            <ChevronRight className="size-4.5" />
+                        </Link>
+                    </Button>
+                )}
+            />
+        </div>
       </div>
     </>
   );

@@ -32,6 +32,14 @@ export function AppSidebar() {
             icon: LayoutGrid,
         });
 
+        if (user.is_teacher) {
+            mainNavItems.push({
+                title: 'Instructor Panel',
+                href: '/teacher/dashboard',
+                icon: Award, // using Award icon for Instructor Panel
+            });
+        }
+
         if (isAdmin) {
             mainNavItems.push(
                 {
@@ -43,6 +51,11 @@ export function AppSidebar() {
                     title: 'Manage Students',
                     href: '/admin/students',
                     icon: Users,
+                },
+                {
+                    title: 'Manage Teachers',
+                    href: '/admin/teachers',
+                    icon: GraduationCap,
                 },
                 {
                     title: 'Qualified Students',
@@ -57,7 +70,7 @@ export function AppSidebar() {
                 {
                     title: 'Manage Batches',
                     href: '/admin/batches',
-                    icon: GraduationCap,
+                    icon: FolderGit2,
                 },
                 {
                     title: 'All Payments',
