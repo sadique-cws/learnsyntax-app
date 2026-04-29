@@ -51,7 +51,7 @@ export default function AuthSplitLayout({
 
             {/* Form Side */}
             <div className="flex flex-col p-6 lg:p-12 min-h-svh justify-center bg-background">
-                <div className="mx-auto flex w-full max-w-[380px] flex-col justify-center gap-10">
+                <div className="mx-auto flex w-full max-w-[420px] flex-col justify-center gap-10">
                     <div className="flex flex-col items-center lg:items-start gap-4">
                         <Link
                             href={home()}
@@ -71,7 +71,7 @@ export default function AuthSplitLayout({
                         </div>
                     </div>
 
-                    <div className="relative">
+                    <div className="bg-card border border-border/60 rounded-sm p-8 md:p-10 shadow-none">
                         {children}
                     </div>
 

@@ -21,7 +21,7 @@ export default function AuthCardLayout({
 }>) {
     return (
         <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-4 md:p-10 font-sans selection:bg-primary/20">
-            <div className="flex w-full max-w-[400px] flex-col gap-6">
+            <div className="flex w-full max-w-[440px] flex-col gap-6">
                 <Link
                     href={home()}
                     className="flex items-center gap-2.5 self-center group"
@@ -33,11 +33,11 @@ export default function AuthCardLayout({
                 </Link>
 
                 <Card className="rounded-sm border-border shadow-none overflow-hidden">
-                    <CardHeader className="px-6 md:px-8 pt-6 md:pt-8 pb-0 text-center space-y-0.5">
-                        <CardTitle className="text-lg font-semibold tracking-tight">{title}</CardTitle>
-                        <CardDescription className="text-xs font-medium">{description}</CardDescription>
+                    <CardHeader className="px-8 md:px-10 pt-8 md:pt-10 pb-0 text-center space-y-1">
+                        <CardTitle className="text-2xl font-bold tracking-tight">{title}</CardTitle>
+                        <CardDescription className="text-sm font-medium">{description}</CardDescription>
                     </CardHeader>
-                    <CardContent className="px-6 md:px-8 py-6 md:py-8">
+                    <CardContent className="px-8 md:px-10 py-8 md:py-10">
                         {children}
                     </CardContent>
                 </Card>

@@ -10,7 +10,7 @@ export default function AuthSimpleLayout({
 }: AuthLayoutProps) {
     return (
         <div className="flex min-h-svh flex-col items-center justify-center bg-background p-4 md:p-10 font-sans selection:bg-primary/20">
-            <div className="w-full max-w-[360px]">
+            <div className="w-full max-w-[420px]">
                 <div className="flex flex-col gap-8">
                     <div className="flex flex-col items-center gap-4">
                         <Link
@@ -24,14 +24,14 @@ export default function AuthSimpleLayout({
                         </Link>
 
                         <div className="space-y-0.5 text-center">
-                            <h1 className="text-lg font-semibold text-foreground tracking-tight">{title}</h1>
-                            <p className="text-xs text-muted-foreground font-medium">
+                            <h1 className="text-2xl font-bold text-foreground tracking-tight">{title}</h1>
+                            <p className="text-sm text-muted-foreground font-medium">
                                 {description}
                             </p>
                         </div>
                     </div>
                     
-                    <div className="bg-card border border-border rounded-sm p-5 md:p-6 shadow-none">
+                    <div className="bg-card border border-border rounded-sm p-8 md:p-10 shadow-none">
                         {children}
                     </div>
 

@@ -21,42 +21,67 @@ export default function Welcome({ courses = [] }: { courses?: any[] }) {
         <PublicLayout>
             <Head title="Welcome to Learn Syntax" />
 
-            <div className="pb-24 bg-background">
+            <div className="pb-16 bg-background selection:bg-primary/20">
                 {/* Hero Section */}
-                <section className="px-6 py-10 md:py-16 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-10">
-                    <div className="flex-1 space-y-5">
-                        <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-primary/10 text-primary text-xs font-medium rounded-sm border border-primary/10">
-                            <MonitorPlay className="size-3.5" />
-                            <span>100% Online Learning</span>
-                        </div>
-                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
-                            Master Tech Skills <br className="hidden md:block" />
-                            <span className="text-primary">At Your Own Pace</span>
-                        </h1>
-                        <p className="text-sm text-muted-foreground leading-relaxed max-w-lg">
-                            Join India's most trusted educational platform. Quality courses, expert mentors, and guaranteed placement assistance for modern developers.
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
-                            <Button asChild size="default" className="rounded-sm font-medium text-sm h-9 px-6 shadow-none w-full sm:w-auto">
-                                <Link href={register().url}>Start Learning For Free</Link>
-                            </Button>
-                            <Button asChild size="default" variant="outline" className="rounded-sm font-medium text-sm h-9 px-6 w-full sm:w-auto shadow-none">
-                                <Link href="/courses">Browse Catalog</Link>
-                            </Button>
-                        </div>
-                    </div>
-
-                    {/* Hero Image */}
-                    <div className="flex-1 w-full">
-                        <div className="aspect-[4/3] bg-muted/30 border border-border rounded-sm overflow-hidden relative">
-                            <img src="/images/mentor.png" alt="Learn" className="w-full h-full object-cover" />
-                            <div className="absolute bottom-3 left-3 right-3 sm:right-auto bg-background border border-border p-2.5 rounded-sm flex items-center gap-2.5">
-                                <div className="size-8 bg-primary/10 rounded-sm flex items-center justify-center text-primary shrink-0">
-                                    <Users className="size-4" />
+                <section className="px-6 py-8 md:py-12 max-w-7xl mx-auto">
+                    <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
+                        <div className="flex-1 space-y-6 order-2 md:order-1 text-center md:text-left">
+                            <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-primary/5 text-primary text-[10px] font-bold uppercase tracking-widest rounded-sm border border-primary/10 mx-auto md:mx-0">
+                                <MonitorPlay className="size-3" />
+                                <span>The Future of Learning</span>
+                            </div>
+                            <div className="space-y-3">
+                                <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-foreground tracking-tight leading-[1.1]">
+                                    Master Code & <br />
+                                    <span className="text-primary italic">Intelligence.</span>
+                                </h1>
+                                <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-lg mx-auto md:mx-0 font-medium">
+                                    Accelerate your career with industry-led courses in Programming, AI, and modern Tech. Dense curriculum, practical projects, and a community of high-performers.
+                                </p>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-3 pt-2 justify-center md:justify-start">
+                                <Button asChild size="lg" className="rounded-sm font-bold text-xs h-10 px-8 shadow-none bg-primary hover:bg-primary/90 transition-all uppercase tracking-tight">
+                                    <Link href={register().url}>Join the Community</Link>
+                                </Button>
+                                <Button asChild size="lg" variant="outline" className="rounded-sm font-bold text-xs h-10 px-8 shadow-none border-border hover:bg-muted/50 transition-all uppercase tracking-tight">
+                                    <Link href="/courses">Explore Catalog</Link>
+                                </Button>
+                            </div>
+                            <div className="flex items-center justify-center md:justify-start gap-6 pt-4 text-muted-foreground/60">
+                                <div className="flex flex-col">
+                                    <span className="text-lg font-bold text-foreground leading-none">17k+</span>
+                                    <span className="text-[10px] font-semibold uppercase">Learners</span>
                                 </div>
-                                <div>
-                                    <div className="font-semibold text-sm">17k+ Learners</div>
-                                    <div className="text-[10px] font-medium text-muted-foreground">Joined this month</div>
+                                <div className="h-8 w-px bg-border/50" />
+                                <div className="flex flex-col">
+                                    <span className="text-lg font-bold text-foreground leading-none">4.9/5</span>
+                                    <span className="text-[10px] font-semibold uppercase">Rating</span>
+                                </div>
+                                <div className="h-8 w-px bg-border/50" />
+                                <div className="flex flex-col">
+                                    <span className="text-lg font-bold text-foreground leading-none">120+</span>
+                                    <span className="text-[10px] font-semibold uppercase">Courses</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Hero Image / Visual */}
+                        <div className="flex-1 w-full order-1 md:order-2">
+                            <div className="relative group">
+                                <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-primary/5 rounded-sm blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+                                <div className="relative aspect-[4/3] bg-zinc-900 border border-white/5 rounded-sm overflow-hidden shadow-2xl">
+                                    <img 
+                                        src="/assets/ai_coding_hero_1777463782874.png" 
+                                        alt="AI and Programming Learning" 
+                                        className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" 
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
+                                    <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+                                        <div className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-2 rounded-sm flex items-center gap-2">
+                                            <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                                            <span className="text-[10px] font-bold text-white uppercase tracking-tight">Active Workshop: Generative AI</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -64,17 +89,18 @@ export default function Welcome({ courses = [] }: { courses?: any[] }) {
                 </section>
 
                 {/* Category Chips */}
-                <section className="border-y border-border bg-muted/20 py-2.5 mb-8">
+                <section className="border-y border-border/40 bg-muted/10 py-3 mb-10">
                     <div className="max-w-7xl mx-auto px-6">
-                        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+                        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mr-2 shrink-0">Explore:</span>
                             {categories.map((cat) => (
                                 <button
                                     key={cat.id}
                                     onClick={() => setSelectedCategory(cat.id)}
-                                    className={`whitespace-nowrap px-3 py-1.5 rounded-sm text-xs font-medium transition-colors border ${
+                                    className={`whitespace-nowrap px-3.5 py-1.5 rounded-sm text-[11px] font-bold uppercase tracking-tight transition-all border ${
                                         selectedCategory === cat.id
-                                            ? 'bg-foreground text-background border-foreground'
-                                            : 'bg-background text-muted-foreground border-border hover:border-foreground hover:text-foreground'
+                                            ? 'bg-primary text-white border-primary shadow-sm'
+                                            : 'bg-background text-muted-foreground border-border hover:border-primary/30 hover:text-primary'
                                     }`}
                                 >
                                     {cat.name}
@@ -86,13 +112,16 @@ export default function Welcome({ courses = [] }: { courses?: any[] }) {
 
                 {/* Courses Grid */}
                 <section className="max-w-7xl mx-auto px-6">
-                    <div className="flex items-center justify-between mb-5">
-                        <div>
-                            <h2 className="text-lg font-semibold text-foreground">Popular Courses</h2>
-                            <p className="text-xs text-muted-foreground mt-0.5">Start learning from our top-rated programs</p>
+                    <div className="flex items-end justify-between mb-8">
+                        <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                                <div className="h-1 w-8 bg-primary rounded-full" />
+                                <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Trending Now</span>
+                            </div>
+                            <h2 className="text-2xl font-bold text-foreground tracking-tight">Popular Learning Paths</h2>
                         </div>
-                        <Link href="/courses" className="hidden sm:flex items-center gap-1 text-xs font-medium text-primary hover:underline transition-colors">
-                            View all <ArrowUpRight className="size-3" />
+                        <Link href="/courses" className="hidden sm:flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary/80 transition-all uppercase tracking-tight">
+                            View All <ArrowUpRight className="size-3.5" />
                         </Link>
                     </div>
 
