@@ -360,4 +360,3 @@ export function AdminDataTable<T extends { id: number | string }>({
         </div>
     );
 }
-}
