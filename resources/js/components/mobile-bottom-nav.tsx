@@ -51,7 +51,7 @@ export function MobileBottomNav() {
     ];
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-20 items-center justify-around border-t border-border bg-background px-2 lg:hidden pb-safe">
+        <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-border bg-background px-1 lg:hidden pb-safe shadow-none">
             {navItems.map((item) => {
                 const active = isCurrentUrl(item.href);
                 return (
@@ -59,20 +59,20 @@ export function MobileBottomNav() {
                         key={item.title}
                         href={item.href}
                         className={cn(
-                            'flex flex-col items-center justify-center space-y-1 relative min-w-[64px] h-full',
-                            active ? 'text-primary' : 'text-muted-foreground'
+                            'flex flex-col items-center justify-center relative min-w-[60px] h-full transition-all duration-200',
+                            active ? 'text-primary' : 'text-slate-400'
                         )}
                     >
-                        <div className={cn(
-                            "flex items-center justify-center w-16 h-8 rounded-full transition-colors duration-200",
-                            active ? "bg-primary/10" : "bg-transparent"
-                        )}>
-                            <item.icon className={cn('size-[22px]', active && 'fill-primary/20')} strokeWidth={active ? 2.5 : 2} />
+                        <div className="flex items-center justify-center h-8">
+                            <item.icon className={cn('size-5 transition-transform', active && 'scale-110')} strokeWidth={active ? 2.5 : 2} />
                         </div>
                         <span className={cn(
-                            "text-[11px] font-bold tracking-tight transition-all",
-                            active ? "opacity-100" : "opacity-80"
+                            "text-[8px] font-black uppercase tracking-[0.2em] transition-all",
+                            active ? "opacity-100" : "opacity-40"
                         )}>{item.title}</span>
+                        {active && (
+                            <div className="absolute top-0 w-8 h-0.5 bg-primary rounded-full" />
+                        )}
                     </Link>
                 );
             })}

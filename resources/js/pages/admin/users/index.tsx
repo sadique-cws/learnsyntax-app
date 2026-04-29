@@ -77,40 +77,40 @@ export default function AdminUserIndex({ users }: { users: any[] }) {
             label: 'Identity Profile',
             sortable: true,
             render: (user) => (
-                <div className="flex items-center gap-3 py-1">
+                <div className="flex items-center gap-2.5 py-1">
                     <div className={cn(
-                        "size-10 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 border",
-                        user.is_admin ? "bg-purple-50 text-purple-600 border-purple-100" : 
-                        user.is_teacher ? "bg-indigo-50 text-indigo-600 border-indigo-100" : 
-                        "bg-slate-50 text-slate-600 border-slate-100"
+                        "size-9 rounded-lg flex items-center justify-center font-black text-[10px] shrink-0 border uppercase tracking-tighter",
+                        user.is_admin ? "bg-primary/10 text-primary border-primary/20" : 
+                        user.is_teacher ? "bg-accent/10 text-accent border-accent/20" : 
+                        "bg-slate-50 text-slate-400 border-slate-200"
                     )}>
-                        {user.name.substring(0, 2).toUpperCase()}
+                        {user.name.substring(0, 2)}
                     </div>
                     <div>
-                        <div className="font-bold text-[13px] text-slate-900 leading-tight">{user.name}</div>
-                        <div className="text-[11px] text-slate-500 font-medium mt-0.5 lowercase">{user.email}</div>
+                        <div className="font-black text-[13px] text-slate-900 leading-tight uppercase tracking-tight">{user.name}</div>
+                        <div className="text-[10px] text-muted-foreground font-bold mt-0.5 lowercase italic opacity-60">{user.email}</div>
                     </div>
                 </div>
             )
         },
         {
             key: 'roles',
-            label: 'Authentication Roles',
+            label: 'Access Protocols',
             render: (user) => (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                     {user.is_admin && (
-                        <div className="px-2 py-0.5 rounded-lg bg-purple-50 text-purple-600 text-[10px] font-black uppercase tracking-wider border border-purple-100 flex items-center gap-1.5">
-                            <Shield className="size-3" /> Admin
+                        <div className="px-1.5 py-0.5 rounded bg-primary/5 text-primary text-[8px] font-black uppercase tracking-[0.15em] border border-primary/10 flex items-center gap-1">
+                            <Shield className="size-2.5" /> root
                         </div>
                     )}
                     {user.is_teacher && (
-                        <div className="px-2 py-0.5 rounded-lg bg-indigo-50 text-indigo-600 text-[10px] font-black uppercase tracking-wider border border-indigo-100 flex items-center gap-1.5">
-                            <GraduationCap className="size-3" /> Faculty
+                        <div className="px-1.5 py-0.5 rounded bg-accent/5 text-accent text-[8px] font-black uppercase tracking-[0.15em] border border-accent/10 flex items-center gap-1">
+                            <GraduationCap className="size-2.5" /> faculty
                         </div>
                     )}
                     {!user.is_admin && !user.is_teacher && (
-                        <div className="px-2 py-0.5 rounded-lg bg-slate-50 text-slate-400 text-[10px] font-black uppercase tracking-wider border border-slate-100">
-                            Subscriber
+                        <div className="px-1.5 py-0.5 rounded bg-slate-50 text-slate-300 text-[8px] font-black uppercase tracking-[0.15em] border border-slate-100">
+                            subscriber
                         </div>
                     )}
                 </div>
@@ -121,57 +121,60 @@ export default function AdminUserIndex({ users }: { users: any[] }) {
             label: 'Registry Date',
             sortable: true,
             render: (user) => (
-                <span className="text-[12px] font-bold text-slate-500">{new Date(user.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+                <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{new Date(user.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
             )
         }
     ];
 
     return (
         <>
-            <Head title="Manage Users" />
+            <Head title="Identity Management" />
             
-            <div className="w-full p-4 lg:p-8 space-y-8 max-w-7xl mx-auto">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="w-full p-4 lg:p-6 space-y-6">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-border pb-6">
                     <div>
-                        <h1 className="text-2xl font-black text-slate-900 tracking-tight">Identity Management</h1>
-                        <p className="text-slate-500 text-xs font-bold mt-1">Audit and manage global user authentication states</p>
+                        <div className="inline-flex items-center gap-2 px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest mb-2">
+                            <Shield className="size-3" /> Core Registry
+                        </div>
+                        <h1 className="text-2xl font-black text-slate-900 tracking-tighter uppercase leading-none">Identity Management</h1>
+                        <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-1.5 italic">Synchronizing global authentication states and role-based protocols.</p>
                     </div>
                 </div>
 
-                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div className="bg-background rounded-xl border border-border shadow-none overflow-hidden">
                     <AdminDataTable 
                         title="Universal User Registry"
                         subtitle="Managing synchronized identities and role-based access protocols"
                         data={users}
                         columns={columns}
-                        searchPlaceholder="Filter users by identity or protocol..."
+                        searchPlaceholder="Filter identity by metadata..."
                         actions={(user) => (
-                            <div className="flex items-center justify-end gap-2">
+                            <div className="flex items-center justify-end gap-1.5">
                                 {!user.is_teacher && !user.is_admin && (
                                     <Button 
                                         variant="ghost" 
                                         size="sm" 
-                                        className="h-8 px-3 rounded-lg font-black text-[9px] uppercase tracking-wider border border-indigo-100 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-all"
+                                        className="h-7 px-2.5 rounded-lg font-black text-[8px] uppercase tracking-widest border border-primary/20 bg-primary/5 text-primary hover:bg-primary/10 transition-all shadow-none"
                                         onClick={() => handlePromote(user)}
                                     >
-                                        <UserPlus className="size-3 mr-1.5" /> Assign Faculty
+                                        <UserPlus className="size-2.5 mr-1" /> Initialize Faculty
                                     </Button>
                                 )}
                                 <Button 
                                     variant="ghost" 
                                     size="icon" 
-                                    className="size-8 rounded-lg text-slate-400 hover:bg-slate-50 hover:text-indigo-600 transition-all"
+                                    className="size-7 rounded-lg text-slate-300 hover:bg-slate-50 hover:text-primary transition-all"
                                     onClick={() => handleEdit(user)}
                                 >
-                                    <Edit2 className="size-3.5" />
+                                    <Edit2 className="size-3" />
                                 </Button>
                                 <Button 
                                     variant="ghost" 
                                     size="icon" 
-                                    className="size-8 rounded-lg text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition-all"
+                                    className="size-7 rounded-lg text-slate-200 hover:bg-rose-50 hover:text-rose-600 transition-all"
                                     onClick={() => handleDelete(user.id)}
                                 >
-                                    <Trash2 className="size-3.5" />
+                                    <Trash2 className="size-3" />
                                 </Button>
                             </div>
                         )}
@@ -181,47 +184,48 @@ export default function AdminUserIndex({ users }: { users: any[] }) {
 
             {/* Edit User Modal */}
             <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-                <DialogContent className="max-w-md rounded-2xl p-0 overflow-hidden border-none shadow-2xl">
-                    <DialogHeader className="p-6 bg-slate-50 border-b border-slate-100">
-                        <DialogTitle className="text-lg font-black uppercase tracking-tight flex items-center gap-2">
-                            <Edit2 className="size-5 text-indigo-600" /> Modify Identity
+                <DialogContent className="max-w-md rounded-xl p-0 overflow-hidden border border-border shadow-none">
+                    <DialogHeader className="p-5 bg-muted/20 border-b border-border">
+                        <DialogTitle className="text-sm font-black uppercase tracking-[0.2em] flex items-center gap-2 text-slate-600">
+                            <Edit2 className="size-4 text-primary" /> Modify Identity
                         </DialogTitle>
                     </DialogHeader>
-                    <form onSubmit={submitEdit} className="p-6 space-y-4 bg-white">
+                    <form onSubmit={submitEdit} className="p-5 space-y-4 bg-background">
                         <div className="space-y-4">
                             <div className="space-y-1.5">
-                                <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Full Name</Label>
+                                <Label className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Profile Name</Label>
                                 <Input 
-                                    className="h-11 rounded-xl border-slate-200 font-bold text-sm"
+                                    className="h-10 rounded-lg border-border bg-muted/10 font-bold text-sm focus-visible:ring-primary/20 shadow-none"
                                     value={editForm.data.name}
                                     onChange={e => editForm.setData('name', e.target.value)}
                                     required
                                 />
                             </div>
                             <div className="space-y-1.5">
-                                <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Email Protocol</Label>
+                                <Label className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Email Protocol</Label>
                                 <Input 
-                                    className="h-11 rounded-xl border-slate-200 font-bold text-sm"
+                                    className="h-10 rounded-lg border-border bg-muted/10 font-bold text-sm focus-visible:ring-primary/20 shadow-none"
                                     type="email"
                                     value={editForm.data.email}
                                     onChange={e => editForm.setData('email', e.target.value)}
                                     required
                                 />
                             </div>
-                            <div className="flex items-center gap-3 p-4 bg-purple-50 rounded-xl border border-purple-100">
+                            <div className="flex items-center gap-3 p-3 bg-primary/5 rounded-lg border border-primary/10">
                                 <Checkbox 
                                     id="is_admin"
                                     checked={editForm.data.is_admin}
                                     onCheckedChange={(checked) => editForm.setData('is_admin', !!checked)}
+                                    className="rounded border-primary/30"
                                 />
-                                <Label htmlFor="is_admin" className="text-[11px] font-black uppercase tracking-wider text-purple-700 cursor-pointer flex items-center gap-2">
-                                    <ShieldAlert className="size-4" /> Grant Administrative Authority
+                                <Label htmlFor="is_admin" className="text-[10px] font-black uppercase tracking-widest text-primary cursor-pointer flex items-center gap-2">
+                                    <ShieldAlert className="size-3.5" /> Elevate to Administrative Root
                                 </Label>
                             </div>
                         </div>
-                        <DialogFooter className="pt-6 border-t border-slate-100 flex flex-row gap-3">
-                            <Button type="button" variant="ghost" onClick={() => setIsEditModalOpen(false)} className="flex-1 h-11 rounded-xl font-black uppercase tracking-widest text-[10px]">Abort</Button>
-                            <Button type="submit" disabled={editForm.processing} className="flex-1 h-11 rounded-xl font-black uppercase tracking-widest text-[10px] bg-indigo-600 hover:bg-indigo-700">Synchronize</Button>
+                        <DialogFooter className="pt-5 border-t border-border flex flex-row gap-2">
+                            <Button type="button" variant="ghost" onClick={() => setIsEditModalOpen(false)} className="flex-1 h-10 rounded-lg font-black uppercase tracking-widest text-[9px] border border-border">Abort</Button>
+                            <Button type="submit" disabled={editForm.processing} className="flex-1 h-10 rounded-lg font-black uppercase tracking-widest text-[9px] bg-primary text-white hover:bg-primary/90 shadow-none">Commit</Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>
@@ -229,44 +233,44 @@ export default function AdminUserIndex({ users }: { users: any[] }) {
 
             {/* Promote to Teacher Modal */}
             <Dialog open={isPromoteModalOpen} onOpenChange={setIsPromoteModalOpen}>
-                <DialogContent className="max-w-md rounded-2xl p-0 overflow-hidden border-none shadow-2xl">
-                    <DialogHeader className="p-6 bg-indigo-50 border-b border-indigo-100">
-                        <DialogTitle className="text-lg font-black uppercase tracking-tight flex items-center gap-2 text-indigo-700">
-                            <GraduationCap className="size-6" /> Promote to Faculty
+                <DialogContent className="max-w-md rounded-xl p-0 overflow-hidden border border-border shadow-none">
+                    <DialogHeader className="p-5 bg-primary/5 border-b border-primary/10">
+                        <DialogTitle className="text-sm font-black uppercase tracking-[0.2em] flex items-center gap-2 text-primary">
+                            <GraduationCap className="size-5" /> Initialize Faculty
                         </DialogTitle>
                     </DialogHeader>
-                    <form onSubmit={submitPromote} className="p-6 space-y-6 bg-white">
-                        <div className="space-y-6">
-                            <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                <div className="size-12 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-lg">
-                                    {selectedUser?.name.substring(0, 2).toUpperCase()}
+                    <form onSubmit={submitPromote} className="p-5 space-y-5 bg-background">
+                        <div className="space-y-5">
+                            <div className="flex items-center gap-3 p-3 bg-muted/10 rounded-lg border border-border">
+                                <div className="size-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-black text-xs uppercase border border-primary/10">
+                                    {selectedUser?.name.substring(0, 2)}
                                 </div>
                                 <div>
-                                    <div className="font-bold text-slate-900">{selectedUser?.name}</div>
-                                    <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-0.5">{selectedUser?.email}</div>
+                                    <div className="font-black text-slate-900 text-sm uppercase tracking-tight">{selectedUser?.name}</div>
+                                    <div className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/40 mt-0.5 lowercase italic">{selectedUser?.email}</div>
                                 </div>
                             </div>
 
-                            <div className="space-y-3">
-                                <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-1">Institutional Commission Rate (%)</Label>
+                            <div className="space-y-2">
+                                <Label className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Institutional Yield Rate (%)</Label>
                                 <div className="relative">
                                     <Input 
                                         type="number"
                                         min="0"
                                         max="100"
-                                        className="h-14 pl-14 rounded-2xl border-slate-200 bg-slate-50 font-black text-lg focus:bg-white transition-all shadow-inner"
+                                        className="h-12 pl-12 rounded-lg border-border bg-muted/10 font-black text-lg focus:bg-background transition-all shadow-none focus-visible:ring-primary/20"
                                         value={promoteForm.data.commission_percent}
                                         onChange={e => promoteForm.setData('commission_percent', parseInt(e.target.value))}
                                         required
                                     />
-                                    <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 font-black text-lg">%</div>
+                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 font-black text-lg">%</div>
                                 </div>
-                                <p className="text-[10px] font-bold text-slate-400 italic px-1 leading-relaxed">This percentage defines the instructor's share of revenue generated from their assigned batches and courses.</p>
+                                <p className="text-[9px] font-bold text-muted-foreground/40 italic px-1 leading-relaxed uppercase tracking-wider">Defines the faculty share of generated revenue protocols.</p>
                             </div>
                         </div>
-                        <DialogFooter className="pt-6 border-t border-slate-100 flex flex-row gap-3">
-                            <Button type="button" variant="ghost" onClick={() => setIsPromoteModalOpen(false)} className="flex-1 h-12 rounded-xl font-black uppercase tracking-widest text-[10px]">Cancel</Button>
-                            <Button type="submit" disabled={promoteForm.processing} className="flex-1 h-12 rounded-xl font-black uppercase tracking-widest text-[10px] bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-100">Grant Access</Button>
+                        <DialogFooter className="pt-5 border-t border-border flex flex-row gap-2">
+                            <Button type="button" variant="ghost" onClick={() => setIsPromoteModalOpen(false)} className="flex-1 h-11 rounded-lg font-black uppercase tracking-widest text-[9px] border border-border">Discard</Button>
+                            <Button type="submit" disabled={promoteForm.processing} className="flex-1 h-11 rounded-lg font-black uppercase tracking-widest text-[9px] bg-primary text-white hover:bg-primary/90 shadow-none">Verify & Authorize</Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>

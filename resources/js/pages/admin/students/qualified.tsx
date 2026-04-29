@@ -1,7 +1,7 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { AdminDataTable, Column } from '@/components/admin/admin-data-table';
-import { CheckCircle2, User, BookOpen, TrendingUp, Award, ChevronRight, Loader2 } from 'lucide-react';
+import { CheckCircle2, User, BookOpen, TrendingUp, Award, ChevronRight, Loader2, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function QualifiedStudents({ qualified }: { qualified: any[] }) {
@@ -16,59 +16,61 @@ export default function QualifiedStudents({ qualified }: { qualified: any[] }) {
     const columns: Column<any>[] = [
         {
             key: 'student',
-            label: 'Student',
+            label: 'NODE IDENTIFICATION',
             render: (enrollment) => (
-                <div className="flex items-center gap-3">
-                    <div className="size-8 rounded-sm bg-green-50 flex items-center justify-center text-green-600 border border-green-100">
-                        <User className="size-4" />
+                <div className="flex items-center gap-4 py-1">
+                    <div className="size-11 rounded-xl bg-muted/20 border border-border flex items-center justify-center text-primary/60 shrink-0">
+                        <User className="size-5.5" />
                     </div>
-                    <div className="flex flex-col">
-                        <span className="text-xs font-black  tracking-tight">{enrollment.user.name}</span>
-                        <span className="text-[9px] text-muted-foreground font-bold lowercase">{enrollment.user.email}</span>
+                    <div className="min-w-0">
+                        <div className="font-black text-[13px] text-foreground uppercase tracking-tight leading-tight truncate">{enrollment.user.name}</div>
+                        <div className="text-[10px] text-muted-foreground font-bold lowercase tracking-tight truncate mt-0.5">{enrollment.user.email}</div>
                     </div>
                 </div>
             )
         },
         {
             key: 'course',
-            label: 'Course',
+            label: 'TARGET PROTOCOL',
             render: (enrollment) => (
-                <div className="flex items-center gap-2">
-                    <BookOpen className="size-3.5 text-primary/40" />
-                    <span className="text-xs font-bold ">{enrollment.course.title}</span>
+                <div className="flex items-center gap-3">
+                    <div className="size-8 rounded-lg bg-muted/10 border border-border flex items-center justify-center shrink-0">
+                        <BookOpen className="size-3.5 text-muted-foreground/40" />
+                    </div>
+                    <span className="text-[11px] font-black uppercase tracking-tight">{enrollment.course.title}</span>
                 </div>
             )
         },
         {
             key: 'performance',
-            label: 'Score',
+            label: 'PRECISION METRIC',
             render: (enrollment) => (
                 <div className="flex items-center gap-2">
-                    <div className="px-2 py-0.5 bg-green-50 text-green-700 text-[10px] font-black rounded-sm border border-green-100">
+                    <div className="px-2 py-0.5 bg-primary/5 text-primary text-[10px] font-black rounded border border-primary/20 uppercase tracking-widest">
                         {Math.round(enrollment.overall_average)}%
                     </div>
-                    <TrendingUp className="size-3 text-green-500/50" />
+                    <TrendingUp className="size-3 text-primary/40" />
                 </div>
             )
         },
         {
             key: 'actions',
-            label: 'Action',
+            label: 'ISSUANCE PROTOCOL',
             render: (enrollment) => (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                     <Button 
                         onClick={() => handleGenerate(enrollment.id)}
                         disabled={processing}
-                        className="h-8 rounded-sm bg-primary text-[9px] font-black   px-4 shadow-lg shadow-primary/10"
+                        className="h-9 rounded-lg bg-primary text-white text-[9px] font-black uppercase tracking-widest px-5 shadow-none hover:bg-primary/90 transition-all border-0"
                     >
-                        {processing ? <Loader2 className="size-3 animate-spin mr-2" /> : <Award className="size-3 mr-2" />}
-                        Issue Certificate
+                        {processing ? <Loader2 className="size-3.5 animate-spin mr-2" /> : <Award className="size-3.5 mr-2" />}
+                        Generate Credential
                     </Button>
-                    <Link href={`/admin/students/${enrollment.user_id}`}>
-                        <Button variant="ghost" size="icon" className="size-8 rounded-sm">
+                    <Button asChild variant="ghost" size="icon" className="size-9 rounded-lg hover:bg-muted/30 border border-transparent hover:border-border transition-all">
+                        <Link href={`/admin/students/${enrollment.user_id}`}>
                             <ChevronRight className="size-4" />
-                        </Button>
-                    </Link>
+                        </Link>
+                    </Button>
                 </div>
             )
         }
@@ -76,23 +78,29 @@ export default function QualifiedStudents({ qualified }: { qualified: any[] }) {
 
     return (
         <>
-            <Head title="Qualified Students" />
-            <div className="p-4  lg:p-6 w-full mx-auto">
-                <div className="flex items-center justify-between mb-8">
-                    <div>
-                        <h1 className="text-2xl font-black   text-foreground">Qualified Students</h1>
-                        <p className="text-muted-foreground text-xs font-bold   mt-1">Students eligible for certification (Score &gt;= 60%)</p>
-                    </div>
-                    <div className="size-12 rounded-sm bg-green-50 border border-green-100 flex items-center justify-center text-green-600">
-                        <CheckCircle2 className="size-6" />
+            <Head title="NODE_REGISTRY: QUALIFIED" />
+            <div className="p-4 lg:p-6 w-full mx-auto space-y-6">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-card p-6 border border-border rounded-xl">
+                    <div className="flex items-center gap-5">
+                        <div className="size-16 rounded-xl bg-primary/5 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                            <ShieldCheck className="size-8" />
+                        </div>
+                        <div>
+                            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest bg-muted/10 border border-border text-muted-foreground/60 mb-2">
+                                <CheckCircle2 className="size-3" /> System Verified
+                            </div>
+                            <h1 className="text-2xl font-black text-foreground uppercase tracking-tight leading-none">Qualified Node Registry</h1>
+                            <p className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest mt-1.5 italic">Nodes eligible for credential generation (Threshold &gt;= 60%)</p>
+                        </div>
                     </div>
                 </div>
 
-                <div className="bg-background overflow-hidden">
+                <div className="bg-card border-none">
                     <AdminDataTable 
                         data={qualified} 
                         columns={columns} 
-                        searchPlaceholder="Filter by name, course, or score..."
+                        searchPlaceholder="Filter registry by identity, protocol, or metric..."
+                        title=""
                     />
                 </div>
             </div>
@@ -101,7 +109,7 @@ export default function QualifiedStudents({ qualified }: { qualified: any[] }) {
 }
 
 QualifiedStudents.layout = (page: React.ReactNode) => (
-    <AppLayout breadcrumbs={[{ title: 'Admin', href: '#' }, { title: 'Students', href: '/admin/students' }, { title: 'Qualified', href: '#' }]}>
+    <AppLayout breadcrumbs={[{ title: 'SYSTEM_CONTROL', href: '#' }, { title: 'NODE_REGISTRY', href: '/admin/students' }, { title: 'VERIFIED_NODES', href: '#' }]}>
         {page}
     </AppLayout>
 );

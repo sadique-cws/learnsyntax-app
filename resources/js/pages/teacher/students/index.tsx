@@ -24,30 +24,30 @@ export default function EnrolledStudentsPage({ enrollments, courses, filters }: 
 
   return (
     <>
-      <Head title="Enrolled Students" />
-      <div className="w-full max-w-6xl mx-auto p-4 lg:p-8 space-y-8">
+      <Head title="Subscriber Registry" />
+      <div className="w-full p-4 lg:p-6 space-y-6">
         
         {/* Header Area */}
-        <div className="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between border-b border-border pb-6">
             <div>
-                <h1 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight flex items-center gap-2">
-                    <Users className="size-8 text-indigo-500" />
-                    Enrolled Students
-                </h1>
-                <p className="text-sm text-muted-foreground mt-1 font-medium">Monitor student academic growth and course assignments.</p>
+                <div className="inline-flex items-center gap-2 px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest mb-2">
+                    <Users className="size-3" /> Core Registry
+                </div>
+                <h1 className="text-2xl font-black text-slate-900 tracking-tighter uppercase leading-none">Enrolled Students</h1>
+                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-1.5 italic">Synchronizing academic growth and course assignment protocols.</p>
             </div>
         </div>
 
         {/* Filters Row */}
-        <div className="flex flex-col md:flex-row gap-4 items-end bg-card border border-border rounded-2xl p-4 shadow-sm">
+        <div className="flex flex-col md:flex-row gap-3 items-end bg-background border border-border rounded-xl p-3 shadow-none">
             <div className="w-full md:w-1/3 space-y-1.5">
-                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider ml-1">Search Students</label>
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Identity Filter</label>
                 <div className="relative">
-                    <Search className="absolute left-3 top-3 size-4 text-muted-foreground/60" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground/60" />
                     <Input 
                         type="text" 
-                        placeholder="Search by name or email..." 
-                        className="h-10 pl-10 rounded-xl text-sm font-medium border-border bg-background/50 focus:bg-background"
+                        placeholder="SEARCH_BY_ID_OR_EMAIL..." 
+                        className="h-9 pl-10 rounded-lg text-[11px] font-bold border-border bg-muted/10 focus:bg-background shadow-none uppercase placeholder:text-muted-foreground/30"
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
                     />
@@ -55,15 +55,15 @@ export default function EnrolledStudentsPage({ enrollments, courses, filters }: 
             </div>
 
             <div className="w-full md:w-1/4 space-y-1.5">
-                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider ml-1">Filter By Course</label>
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-1">Sector Protocol</label>
                 <Select value={selectedCourse} onValueChange={handleCourseChange}>
-                    <SelectTrigger className="h-10 rounded-xl border-border bg-background/50 text-sm font-medium">
-                        <SelectValue placeholder="All Courses" />
+                    <SelectTrigger className="h-9 rounded-lg border-border bg-muted/10 text-[10px] font-black uppercase tracking-widest shadow-none">
+                        <SelectValue placeholder="All Sectors" />
                     </SelectTrigger>
-                    <SelectContent className="rounded-xl">
-                        <SelectItem value="all" className="text-xs font-medium">All Courses</SelectItem>
+                    <SelectContent className="rounded-xl border-border shadow-none">
+                        <SelectItem value="all" className="text-[10px] font-black uppercase tracking-widest py-2">All Sectors</SelectItem>
                         {courses.map((course: any) => (
-                            <SelectItem key={course.id} value={course.id.toString()} className="text-xs font-medium">
+                            <SelectItem key={course.id} value={course.id.toString()} className="text-[10px] font-black uppercase tracking-widest py-2">
                                 {course.title}
                             </SelectItem>
                         ))}
@@ -73,66 +73,69 @@ export default function EnrolledStudentsPage({ enrollments, courses, filters }: 
         </div>
 
         {/* Students List Grid/Table */}
-        <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden">
+        <div className="bg-background border border-border rounded-xl shadow-none overflow-hidden">
             <div className="overflow-x-auto">
                 <table className="w-full border-collapse text-left">
                     <thead>
-                        <tr className="bg-muted/40 border-b border-border text-xs font-bold text-muted-foreground tracking-wider uppercase">
-                            <th className="p-5 font-bold">Student</th>
-                            <th className="p-5 font-bold">Course & Batch</th>
-                            <th className="p-5 font-bold text-center">Performance</th>
-                            <th className="p-5 font-bold text-right">Enrolled</th>
+                        <tr className="bg-muted/30 border-b border-border">
+                            <th className="px-4 py-3 text-[9px] font-black tracking-[0.2em] uppercase text-muted-foreground/60">Node Identity</th>
+                            <th className="px-4 py-3 text-[9px] font-black tracking-[0.2em] uppercase text-muted-foreground/60">Deployment Module</th>
+                            <th className="px-4 py-3 text-[9px] font-black tracking-[0.2em] uppercase text-muted-foreground/60 text-center">Yield Analysis</th>
+                            <th className="px-4 py-3 text-[9px] font-black tracking-[0.2em] uppercase text-muted-foreground/60 text-right">Registry Date</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-border text-sm font-medium text-foreground">
+                    <tbody className="divide-y divide-border">
                         {filteredEnrollments.length === 0 ? (
                             <tr>
-                                <td colSpan={4} className="p-12 text-center text-muted-foreground">
-                                    <Users className="size-10 mx-auto text-muted-foreground/30 mb-3" />
-                                    <p className="font-semibold text-foreground">No active enrollments found</p>
-                                    <p className="text-xs mt-1">Try adjusting your search or filter queries.</p>
+                                <td colSpan={4} className="px-4 py-20 text-center text-muted-foreground">
+                                    <div className="flex flex-col items-center gap-3">
+                                        <div className="size-12 rounded-2xl bg-muted/30 flex items-center justify-center border border-dashed border-border">
+                                            <Users className="size-5 text-muted-foreground/30" />
+                                        </div>
+                                        <div className="text-[10px] font-black opacity-30 uppercase tracking-[0.2em] italic">Null_Result_Set</div>
+                                    </div>
                                 </td>
                             </tr>
                         ) : (
                             filteredEnrollments.map((enrollment: any) => (
-                                <tr key={enrollment.id} className="hover:bg-muted/20 transition-colors">
-                                    <td className="p-5">
-                                        <div className="flex items-center gap-3">
-                                            <div className="size-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-500 text-xs font-bold uppercase">
+                                <tr key={enrollment.id} className="hover:bg-muted/10 transition-colors group">
+                                    <td className="px-4 py-3">
+                                        <div className="flex items-center gap-2.5">
+                                            <div className="size-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary text-[10px] font-black uppercase tracking-tighter shrink-0">
                                                 {enrollment.student_name.substring(0, 2)}
                                             </div>
                                             <div>
-                                                <p className="font-bold text-foreground">{enrollment.student_name}</p>
-                                                <p className="text-xs text-muted-foreground mt-0.5">{enrollment.student_email}</p>
+                                                <p className="font-black text-slate-900 text-[13px] uppercase tracking-tight leading-tight">{enrollment.student_name}</p>
+                                                <p className="text-[10px] text-muted-foreground font-bold lowercase mt-0.5 opacity-60 italic">{enrollment.student_email}</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="p-5">
+                                    <td className="px-4 py-3">
                                         <div className="flex items-center gap-2">
-                                            <BookOpen className="size-4 text-indigo-500/60 shrink-0" />
+                                            <BookOpen className="size-3.5 text-primary/40 shrink-0" />
                                             <div>
-                                                <p className="font-bold text-foreground text-xs">{enrollment.course_title}</p>
-                                                <span className="inline-block text-[10px] font-bold text-muted-foreground mt-0.5">
-                                                    Batch: {enrollment.batch_name}
+                                                <p className="font-black text-slate-700 text-[11px] uppercase tracking-tight">{enrollment.course_title}</p>
+                                                <span className="inline-block text-[9px] font-black text-muted-foreground uppercase tracking-widest mt-1 opacity-50">
+                                                    Batch_ID: {enrollment.batch_name}
                                                 </span>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="p-5 text-center">
+                                    <td className="px-4 py-3 text-center">
                                         <div className="flex flex-col items-center justify-center gap-1">
-                                            <span className={`text-xs font-extrabold px-2.5 py-1 rounded-lg flex items-center gap-1 
-                                                ${enrollment.overall_average >= 75 ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20' : ''}
-                                                ${enrollment.overall_average >= 50 && enrollment.overall_average < 75 ? 'bg-indigo-500/10 text-indigo-600 border border-indigo-500/20' : ''}
-                                                ${enrollment.overall_average < 50 ? 'bg-amber-500/10 text-amber-600 border border-amber-500/20' : ''}
+                                            <span className={`text-[10px] font-black px-2 py-1 rounded border uppercase tracking-widest flex items-center gap-1.5 
+                                                ${enrollment.overall_average >= 75 ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : ''}
+                                                ${enrollment.overall_average >= 50 && enrollment.overall_average < 75 ? 'bg-primary/5 text-primary border-primary/10' : ''}
+                                                ${enrollment.overall_average < 50 ? 'bg-rose-50 text-rose-600 border-rose-200' : ''}
                                             `}>
-                                                <Star className="size-3 fill-current" />
-                                                {Math.round(enrollment.overall_average)}%
+                                                <Star className="size-2.5 fill-current" />
+                                                {Math.round(enrollment.overall_average)}% Yield
                                             </span>
                                         </div>
                                     </td>
-                                    <td className="p-5 text-right">
-                                        <div className="flex items-center justify-end gap-1.5 text-xs text-muted-foreground font-medium">
-                                            <Calendar className="size-3.5 opacity-60" />
+                                    <td className="px-4 py-3 text-right">
+                                        <div className="flex items-center justify-end gap-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                            <Calendar className="size-3 opacity-60" />
                                             {enrollment.enroll_date}
                                         </div>
                                     </td>
@@ -150,7 +153,7 @@ export default function EnrolledStudentsPage({ enrollments, courses, filters }: 
 }
 
 EnrolledStudentsPage.layout = (page: React.ReactNode) => (
-    <TeacherLayout breadcrumbs={[{ title: 'Instructor', href: '/teacher/dashboard' }, { title: 'Enrolled Students', href: '#' }]}>
+    <TeacherLayout breadcrumbs={[{ title: 'Core Protocol', href: '/teacher/dashboard' }, { title: 'Subscriber Registry', href: '#' }]}>
         {page}
     </TeacherLayout>
 );

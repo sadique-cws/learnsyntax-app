@@ -161,51 +161,51 @@ export function AdminDataTable<T extends { id: number | string }>({
     const hasActiveFilters = Object.keys(activeFilters).length > 0;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-5">
             {(title || onAdd) && (
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-1">
                     <div>
-                        {title && <h1 className="text-[20px] font-semibold text-foreground leading-tight tracking-tight">{title}</h1>}
-                        {subtitle && <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>}
+                        {title && <h1 className="text-lg font-black text-slate-900 leading-none uppercase tracking-tight">{title}</h1>}
+                        {subtitle && <p className="text-[10px] font-bold text-muted-foreground/50 mt-1.5 uppercase tracking-wider italic leading-none">{subtitle}</p>}
                     </div>
                     {onAdd && (
-                        <Button onClick={onAdd} className="bg-primary hover:bg-primary/90 text-primary-foreground h-10 font-medium px-6 shadow-md shadow-primary/20 rounded-md text-xs">
+                        <Button onClick={onAdd} className="bg-primary hover:bg-primary/90 text-white h-9 font-black uppercase tracking-[0.2em] px-5 rounded-lg text-[10px] shadow-none active:translate-y-px transition-all">
                             {addLabel}
                         </Button>
                     )}
                 </div>
             )}
 
-            <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center bg-background p-4 rounded-lg border border-border/50 shadow-sm">
-                <div className="relative w-full lg:w-80 shrink-0">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground/70" />
+            <div className="flex flex-col lg:flex-row gap-3 items-start lg:items-center bg-background p-3 rounded-xl border border-border">
+                <div className="relative w-full lg:w-72 shrink-0">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground/60" />
                     <Input 
                         placeholder={searchPlaceholder} 
-                        className="pl-10 h-10 rounded-md border-border bg-muted/20 text-xs font-medium focus-visible:bg-background transition-colors"
+                        className="pl-9 h-9 rounded-lg border-border bg-muted/20 text-[11px] font-bold focus-visible:bg-background transition-all shadow-none placeholder:text-muted-foreground/40"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
                 </div>
                 
                 {dateFilterKey && (
-                    <div className="flex items-center gap-3 p-1 px-4 rounded-md border border-border/50 bg-muted/10 hover:border-primary/20 transition-colors group/range">
+                    <div className="flex items-center gap-2 p-1 px-3 rounded-lg border border-border bg-muted/5 hover:border-primary/30 transition-all group/range">
                         <Calendar 
-                            className="size-3.5 text-muted-foreground group-hover/range:text-primary transition-colors cursor-pointer" 
+                            className="size-3 text-muted-foreground/60 group-hover/range:text-primary transition-colors cursor-pointer" 
                             onClick={() => (document.getElementById('date-filter-start') as HTMLInputElement)?.showPicker?.()}
                         />
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5">
                             <Input 
                                 id="date-filter-start"
                                 type="date" 
-                                className="h-8 border-none bg-transparent text-[11px] font-semibold focus-visible:ring-0 w-[100px] p-0 cursor-pointer"
+                                className="h-7 border-none bg-transparent text-[10px] font-black focus-visible:ring-0 w-[90px] p-0 cursor-pointer uppercase"
                                 value={dateRange.start}
                                 onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
                                 onClick={(e) => e.currentTarget.showPicker?.()}
                             />
-                            <span className="text-[10px] font-bold text-muted-foreground/40 lowercase">to</span>
+                            <span className="text-[8px] font-black text-muted-foreground/30 uppercase">to</span>
                             <Input 
                                 type="date" 
-                                className="h-8 border-none bg-transparent text-[11px] font-semibold focus-visible:ring-0 w-[100px] p-0 cursor-pointer"
+                                className="h-8 border-none bg-transparent text-[10px] font-black focus-visible:ring-0 w-[90px] p-0 cursor-pointer uppercase"
                                 value={dateRange.end}
                                 onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
                                 onClick={(e) => e.currentTarget.showPicker?.()}
@@ -214,9 +214,9 @@ export function AdminDataTable<T extends { id: number | string }>({
                         {(dateRange.start || dateRange.end) && (
                             <button 
                                 onClick={() => setDateRange({ start: '', end: '' })}
-                                className="p-1 hover:bg-background rounded-full transition-colors"
+                                className="p-1 hover:bg-muted rounded transition-colors"
                             >
-                                <X className="size-3 text-muted-foreground hover:text-destructive" />
+                                <X className="size-3 text-muted-foreground hover:text-rose-500" />
                             </button>
                         )}
                     </div>
@@ -228,30 +228,30 @@ export function AdminDataTable<T extends { id: number | string }>({
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className={cn(
-                                "rounded-md h-10 px-4 font-medium text-xs border-border/50 bg-muted/10 hover:bg-muted/20 transition-colors",
-                                hasActiveFilters && "border-primary/30 text-primary bg-primary/5"
+                                "rounded-lg h-9 px-4 font-black text-[10px] uppercase tracking-widest border-border bg-muted/5 hover:bg-muted/10 transition-all shadow-none",
+                                hasActiveFilters && "border-primary/50 text-primary bg-primary/5"
                             )}>
-                                <Filter className="size-4 mr-2" />
-                                Filter
+                                <Filter className="size-3.5 mr-2" />
+                                Protocol Filter
                                 {hasActiveFilters && (
-                                    <span className="ml-2 bg-primary text-white size-4 rounded-full flex items-center justify-center text-[9px]">
+                                    <span className="ml-2 bg-primary text-white size-3.5 rounded flex items-center justify-center text-[8px]">
                                         {Object.values(activeFilters).flat().length}
                                     </span>
                                 )}
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56 rounded-md border-border shadow-lg">
-                            <DropdownMenuLabel className="text-[11px] font-bold text-muted-foreground/60 tracking-wider uppercase px-2 py-2">Filter By</DropdownMenuLabel>
+                        <DropdownMenuContent align="end" className="w-56 rounded-xl border-border shadow-none">
+                            <DropdownMenuLabel className="text-[9px] font-black text-muted-foreground/40 tracking-[0.2em] uppercase px-3 py-2.5">Protocol Parameters</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             {filterableColumns.map(filter => (
                                 <div key={filter.key}>
-                                    <DropdownMenuLabel className="text-[10px] font-bold text-muted-foreground/40 px-2 py-1.5 uppercase tracking-widest">{filter.label}</DropdownMenuLabel>
+                                    <DropdownMenuLabel className="text-[8px] font-black text-slate-400 px-3 py-2 uppercase tracking-[0.1em]">{filter.label}</DropdownMenuLabel>
                                     {filter.options.map(option => (
                                         <DropdownMenuCheckboxItem
                                             key={String(option.value)}
                                             checked={(activeFilters[filter.key] || []).includes(option.value)}
                                             onCheckedChange={() => toggleFilter(filter.key, option.value)}
-                                            className="text-xs font-medium py-2"
+                                            className="text-[11px] font-bold py-2 px-3 focus:bg-primary/5 focus:text-primary transition-colors"
                                         >
                                             {option.label}
                                         </DropdownMenuCheckboxItem>
@@ -262,9 +262,9 @@ export function AdminDataTable<T extends { id: number | string }>({
                             {hasActiveFilters && (
                                 <DropdownMenuItem 
                                     onClick={clearFilters}
-                                    className="text-xs font-semibold text-destructive focus:text-destructive focus:bg-destructive/5 justify-center py-2"
+                                    className="text-[10px] font-black text-rose-500 focus:text-rose-600 focus:bg-rose-50 justify-center py-2.5 uppercase tracking-widest"
                                 >
-                                    Clear All Filters
+                                    Reset Protocol
                                 </DropdownMenuItem>
                             )}
                         </DropdownMenuContent>
@@ -280,9 +280,9 @@ export function AdminDataTable<T extends { id: number | string }>({
                         return values.map(val => {
                             const option = filterDef?.options.find(o => o.value === val);
                             return (
-                                <div key={`${key}-${val}`} className="flex items-center gap-2 px-3 py-1 bg-primary/5 border border-primary/20 rounded-full text-[10px] font-bold text-primary tracking-tight">
-                                    <span className="opacity-60">{filterDef?.label}:</span> {option?.label || val}
-                                    <X className="size-3 cursor-pointer hover:text-destructive transition-colors ml-1" onClick={() => toggleFilter(key, val)} />
+                                <div key={`${key}-${val}`} className="flex items-center gap-2 px-2.5 py-1 bg-primary/5 border border-primary/10 rounded-md text-[9px] font-black text-primary uppercase tracking-widest">
+                                    <span className="opacity-40">{filterDef?.label}:</span> {option?.label || val}
+                                    <X className="size-2.5 cursor-pointer hover:text-rose-500 transition-colors ml-1" onClick={() => toggleFilter(key, val)} />
                                 </div>
                             );
                         });
@@ -290,24 +290,24 @@ export function AdminDataTable<T extends { id: number | string }>({
                 </div>
             )}
 
-            <Card className="border-border/50 shadow-sm overflow-hidden bg-background">
+            <Card className="border-border shadow-none overflow-hidden bg-card rounded-xl">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="bg-muted/30 border-b border-border/50">
+                            <tr className="bg-muted/30 border-b border-border">
                                 {columns.map((col) => (
                                     <th 
                                         key={String(col.key)}
                                         className={cn(
-                                            "px-5 py-4 text-[11px] font-bold tracking-wider uppercase text-muted-foreground/60 transition-colors",
-                                            col.sortable && "cursor-pointer hover:bg-muted/50",
+                                            "px-4 py-3 text-[9px] font-black tracking-[0.2em] uppercase text-muted-foreground/60 transition-colors",
+                                            col.sortable && "cursor-pointer hover:bg-muted/50 hover:text-primary",
                                             col.align === 'right' && "text-right",
                                             col.align === 'center' && "text-center"
                                         )}
                                         onClick={() => col.sortable && handleSort(String(col.key))}
                                     >
                                         <div className={cn(
-                                            "flex items-center",
+                                            "flex items-center gap-1.5",
                                             col.align === 'right' && "justify-end",
                                             col.align === 'center' && "justify-center"
                                         )}>
@@ -316,17 +316,17 @@ export function AdminDataTable<T extends { id: number | string }>({
                                         </div>
                                     </th>
                                 ))}
-                                {actions && <th className="px-5 py-4 text-[11px] font-bold tracking-wider uppercase text-right text-muted-foreground/60">Actions</th>}
+                                {actions && <th className="px-4 py-3 text-[9px] font-black tracking-[0.2em] uppercase text-right text-muted-foreground/60">Cmd</th>}
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-border/50">
+                        <tbody className="divide-y divide-border">
                             {filteredAndSortedData.map((item) => (
                                 <tr key={item.id} className="hover:bg-muted/10 transition-colors group">
                                     {columns.map((col) => (
                                         <td 
                                             key={String(col.key)} 
                                             className={cn(
-                                                "px-5 py-4 text-[13px] font-medium text-foreground/80",
+                                                "px-4 py-3 text-[12px] font-bold text-slate-700",
                                                 col.align === 'right' && "text-right",
                                                 col.align === 'center' && "text-center"
                                             )}
@@ -335,7 +335,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                                         </td>
                                     ))}
                                     {actions && (
-                                        <td className="px-5 py-4 text-right">
+                                        <td className="px-4 py-3 text-right">
                                             {actions(item)}
                                         </td>
                                     )}
@@ -343,10 +343,12 @@ export function AdminDataTable<T extends { id: number | string }>({
                             ))}
                             {filteredAndSortedData.length === 0 && (
                                 <tr>
-                                    <td colSpan={columns.length + (actions ? 1 : 0)} className="px-5 py-20 text-center text-muted-foreground">
+                                    <td colSpan={columns.length + (actions ? 1 : 0)} className="px-4 py-20 text-center text-muted-foreground">
                                         <div className="flex flex-col items-center gap-3">
-                                            <Search className="size-8 text-muted-foreground/20" />
-                                            <div className="text-xs font-semibold opacity-60 uppercase tracking-widest">No matching records found</div>
+                                            <div className="size-12 rounded-2xl bg-muted/30 flex items-center justify-center border border-dashed border-border">
+                                                <Search className="size-5 text-muted-foreground/30" />
+                                            </div>
+                                            <div className="text-[10px] font-black opacity-30 uppercase tracking-[0.2em] italic">Null_Result_Set</div>
                                         </div>
                                     </td>
                                 </tr>
@@ -357,4 +359,5 @@ export function AdminDataTable<T extends { id: number | string }>({
             </Card>
         </div>
     );
+}
 }

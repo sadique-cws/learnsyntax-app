@@ -33,12 +33,12 @@ export default function AuthSimpleLayout({
                         </div>
                     </div>
                     
-                    <div className="bg-card border border-border rounded-2xl p-6  [0.02]">
+                    <div className="bg-card border border-border rounded-xl p-5 shadow-none">
                         {children}
                     </div>
 
-                    <p className="text-center text-[10px] text-muted-foreground font-bold  ">
-                        © {new Date().getFullYear()} Learn Syntax Platform
+                    <p className="text-center text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em] opacity-50">
+                        © {new Date().getFullYear()} Learn Syntax Authority
                     </p>
                 </div>
             </div>
