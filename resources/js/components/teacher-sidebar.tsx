@@ -35,6 +35,11 @@ export function TeacherSidebar() {
             icon: BookOpen,
         },
         {
+            title: 'Learners Roster',
+            href: '/teacher/students',
+            icon: Users,
+        },
+        {
             title: 'Earnings Wallet',
             href: '/teacher/wallet',
             icon: Wallet,

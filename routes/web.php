@@ -81,6 +81,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('withdrawals', [TeacherController::class, 'withdrawals'])->name('admin.withdrawals.index');
         Route::post('withdrawals/{withdrawal}/status', [TeacherController::class, 'updateWithdrawalStatus'])->name('admin.withdrawals.status');
         Route::resource('teachers', TeacherController::class)->names('admin.teachers');
+        Route::post('teachers/{teacher}/login-as', [TeacherController::class, 'loginAs'])->name('admin.teachers.login-as');
 
         // Student Management
         Route::get('students', [StudentController::class, 'index'])->name('admin.students.index');

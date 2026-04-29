@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
 use App\Models\WalletTransaction;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -23,7 +24,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function students(\Illuminate\Http\Request $request)
+    public function students(Request $request)
     {
         $teacher = auth()->user()->teacher;
         $courses = $teacher->courses()->get();
