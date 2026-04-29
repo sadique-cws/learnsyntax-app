@@ -48,7 +48,38 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
-        return redirect()->route('teacher.courses.index');
+        if ($course->teacher_id !== auth()->user()->teacher->id) {
+            abort(403);
+        }
+
+        $course->load(['batches.enrollments.user', 'batches.enrollments.payment']);
+        
+        return inertia('teacher/courses/show', [
+            'course' => $course,
+        ]);
+    }
+
+    public function storeBatch(Request $request, Course $course)
+    {
+        if ($course->teacher_id !== auth()->user()->teacher->id) {
+            abort(403);
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|in:online,offline',
+            'start_date' => 'required|date',
+            'capacity' => 'required|integer|min:1',
+        ]);
+
+        $course->batches()->create([
+            'name' => $request->name,
+            'type' => $request->type,
+            'start_date' => $request->start_date,
+            'capacity' => $request->capacity,
+        ]);
+
+        return redirect()->back()->with('success', 'Batch created successfully.');
     }
 
     public function update(Request $request, Course $course)

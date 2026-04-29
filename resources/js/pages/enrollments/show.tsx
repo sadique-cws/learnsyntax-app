@@ -2,7 +2,7 @@ import { Head, useForm, router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import PublicLayout from '@/layouts/public-layout';
-import { CreditCard, ShieldCheck, Zap, ArrowRight, Loader2 } from 'lucide-react';
+import { CreditCard, ShieldCheck, Zap, ArrowRight, Loader2, Receipt } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 declare global {

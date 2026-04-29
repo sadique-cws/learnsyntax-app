@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Head, useForm, router } from '@inertiajs/react';
+import { Head, useForm, router, Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -201,8 +201,10 @@ export default function CourseManagement({ courses }: any) {
                         <Users className="size-3.5" />
                         <span>{course.enrollments?.length || 0}</span>
                     </div>
-                    <Button variant="ghost" size="icon" className="size-7 rounded-lg text-muted-foreground group-hover:text-indigo-500 group-hover:bg-indigo-500/10 transition-colors">
-                        <ChevronRight className="size-4" />
+                    <Button asChild variant="ghost" className="h-8 px-3 text-xs font-bold text-indigo-600 hover:bg-indigo-500/10 hover:text-indigo-500 rounded-lg">
+                        <Link href={`/teacher/courses/${course.id}`} onClick={(e) => e.stopPropagation()}>
+                            Batches & Stats <ChevronRight className="size-3.5 ml-1" />
+                        </Link>
                     </Button>
                 </div>
               </div>
