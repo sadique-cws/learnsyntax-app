@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TeacherController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Student\AcademicController;
 use App\Http\Controllers\Student\CourseController;
 use App\Http\Controllers\Student\EnrollmentController;
@@ -88,6 +89,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('withdrawals/{withdrawal}/status', [TeacherController::class, 'updateWithdrawalStatus'])->name('admin.withdrawals.status');
         Route::resource('teachers', TeacherController::class)->names('admin.teachers');
         Route::post('teachers/{teacher}/login-as', [TeacherController::class, 'loginAs'])->name('admin.teachers.login-as');
+
+        // User Management
+        Route::resource('users', UserController::class)->names('admin.users');
 
         // Student Management
         Route::get('students', [StudentController::class, 'index'])->name('admin.students.index');
