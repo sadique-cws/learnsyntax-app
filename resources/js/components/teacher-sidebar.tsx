@@ -42,11 +42,11 @@ export function TeacherSidebar() {
     ];
 
     return (
-        <Sidebar collapsible="icon" variant="sidebar" className="bg-indigo-950 text-slate-100 border-r-indigo-900/50">
+        <Sidebar collapsible="icon" variant="sidebar">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild className="hover:bg-indigo-900/50">
+                        <SidebarMenuButton size="lg" asChild>
                             <Link 
                                 href="/teacher/dashboard" 
                                 prefetch 

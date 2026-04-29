@@ -12,7 +12,7 @@ class CourseController extends Controller
     public function index()
     {
         $teacher = auth()->user()->teacher;
-        $courses = $teacher->courses()->get();
+        $courses = $teacher->courses()->with(['enrollments.user', 'enrollments.payment'])->get();
 
         return inertia('teacher/courses/index', [
             'courses' => $courses,
@@ -44,6 +44,11 @@ class CourseController extends Controller
         }
 
         return redirect()->back()->with('success', 'Course created successfully. Content can be added later.');
+    }
+
+    public function show(Course $course)
+    {
+        return redirect()->route('teacher.courses.index');
     }
 
     public function update(Request $request, Course $course)

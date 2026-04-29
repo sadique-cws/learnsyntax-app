@@ -15,7 +15,7 @@ export default function TeacherLayout({
     return (
         <AppShell variant="sidebar">
             <TeacherSidebar />
-            <AppContent variant="sidebar" className="overflow-x-hidden pb-16 lg:pb-0 bg-slate-50">
+            <AppContent variant="sidebar" className="overflow-x-hidden pb-16 lg:pb-0">
                 <AppSidebarHeader breadcrumbs={breadcrumbs} />
                 {children}
                 <MobileBottomNav />
