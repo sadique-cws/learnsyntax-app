@@ -11,21 +11,24 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarGroup,
+    SidebarGroupLabel,
     useSidebar,
 } from '@/components/ui/sidebar';
 import type { NavItem } from '@/types';
+import { dashboard } from '@/routes';
 
 export function TeacherSidebar() {
     const { setOpenMobile } = useSidebar();
 
-    const mainNavItems: NavItem[] = [
+    const overviewItems: NavItem[] = [
         {
-            title: 'Instructor Dashboard',
+            title: 'Overview',
             href: '/teacher/dashboard',
             icon: LayoutGrid,
         },
         {
-            title: 'Course Manager',
+            title: 'My Courses',
             href: '/teacher/courses',
             icon: BookOpen,
         },
@@ -34,21 +37,32 @@ export function TeacherSidebar() {
             href: '/teacher/assignments',
             icon: GraduationCap,
         },
+    ];
+
+    const financeItems: NavItem[] = [
         {
-            title: 'Earnings Wallet',
+            title: 'Wallet & Payouts',
             href: '/teacher/wallet',
             icon: Wallet,
         },
+    ];
+
+    const settingItems: NavItem[] = [
         {
-            title: 'Exit to Student Portal',
-            href: '/dashboard',
+            title: 'KYC Verification',
+            href: '/teacher/kyc',
+            icon: ShieldCheck,
+        },
+        {
+            title: 'Switch to Student',
+            href: dashboard().url,
             icon: LogOut,
         }
     ];
 
     return (
-        <Sidebar collapsible="icon" variant="sidebar">
-            <SidebarHeader>
+        <Sidebar collapsible="icon" variant="sidebar" className="border-r border-border/50">
+            <SidebarHeader className="border-b border-border/50 py-4">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
@@ -64,11 +78,29 @@ export function TeacherSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
 
-            <SidebarContent>
-                <NavMain items={mainNavItems} />
+            <SidebarContent className="gap-0 py-2">
+                <SidebarGroup>
+                    <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 px-4 mb-2">Main</SidebarGroupLabel>
+                    <NavMain items={overviewItems} />
+                </SidebarGroup>
+
+                <SidebarGroup>
+                    <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 px-4 mb-2">Management</SidebarGroupLabel>
+                    <NavMain items={academicItems} />
+                </SidebarGroup>
+
+                <SidebarGroup>
+                    <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 px-4 mb-2">Financials</SidebarGroupLabel>
+                    <NavMain items={financeItems} />
+                </SidebarGroup>
+
+                <SidebarGroup>
+                    <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 px-4 mb-2">Account</SidebarGroupLabel>
+                    <NavMain items={settingItems} />
+                </SidebarGroup>
             </SidebarContent>
 
-            <SidebarFooter>
+            <SidebarFooter className="border-t border-border/50">
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

@@ -12,105 +12,114 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
     if (stats) {
         return (
             <>
-                <Head title="Dashboard" />
-                <div className="flex flex-1 flex-col gap-4 p-4 lg:p-6 bg-background min-h-screen">
+                <Head title="Admin Console" />
+                <div className="flex flex-1 flex-col gap-5 p-4 lg:p-6 bg-background">
                     {/* Header */}
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-end justify-between">
                         <div>
-                            <h1 className="text-lg font-semibold text-foreground">Dashboard</h1>
-                            <p className="text-xs text-muted-foreground mt-0.5">Platform overview and analytics</p>
+                            <h1 className="text-xl font-bold text-foreground tracking-tight">Admin Console</h1>
+                            <p className="text-xs text-muted-foreground mt-0.5 font-medium text-muted-foreground/60">Comprehensive platform overview and real-time analytics</p>
                         </div>
                     </div>
 
                     {/* Stats Grid */}
-                    <div className="grid gap-3 md:grid-cols-3">
-                        <div className="rounded-sm border border-border p-4">
-                            <div className="flex items-center justify-between mb-3">
-                                <span className="text-xs font-medium text-muted-foreground">Total Revenue</span>
-                                <IndianRupee className="size-4 text-muted-foreground/40" />
+                    <div className="grid gap-4 md:grid-cols-3">
+                        <div className="rounded-sm border border-border/80 bg-background p-5 shadow-sm group hover:border-primary/30 transition-all">
+                            <div className="flex items-center justify-between mb-4">
+                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Total Revenue</span>
+                                <div className="size-8 rounded-sm bg-primary/5 flex items-center justify-center text-primary border border-primary/10">
+                                    <IndianRupee className="size-4" />
+                                </div>
                             </div>
-                            <div className="text-2xl font-semibold text-foreground tabular-nums">₹{stats.revenue.toLocaleString()}</div>
-                            <div className="mt-3 h-1 w-full bg-muted/30 rounded-full overflow-hidden">
-                                <div className="h-full bg-primary w-[35%]" />
+                            <div className="text-3xl font-bold text-foreground tabular-nums tracking-tight">₹{stats.revenue.toLocaleString()}</div>
+                            <div className="mt-4 h-1.5 w-full bg-muted/30 rounded-full overflow-hidden">
+                                <div className="h-full bg-primary w-[35%] animate-pulse" />
                             </div>
+                            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter mt-3">+12.5% from last month</p>
                         </div>
 
-                        <div className="rounded-sm border border-border p-4">
-                            <div className="flex items-center justify-between mb-3">
-                                <span className="text-xs font-medium text-muted-foreground">New Users (This Week)</span>
-                                <Users className="size-4 text-muted-foreground/40" />
+                        <div className="rounded-sm border border-border/80 bg-background p-5 shadow-sm group hover:border-primary/30 transition-all">
+                            <div className="flex items-center justify-between mb-4">
+                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Weekly Signups</span>
+                                <div className="size-8 rounded-sm bg-primary/5 flex items-center justify-center text-primary border border-primary/10">
+                                    <Users className="size-4" />
+                                </div>
                             </div>
-                            <div className="text-2xl font-semibold text-foreground tabular-nums">{stats.signups_this_week ?? 0}</div>
-                            <div className="flex gap-0.5 h-5 items-end mt-3">
-                                {[20, 30, 20, 50, 40, 80, 60].map((h, i) => (
-                                    <div key={i} className="flex-1 bg-primary/15 rounded-t-sm" style={{ height: `${h}%` }} />
+                            <div className="text-3xl font-bold text-foreground tabular-nums tracking-tight">{stats.signups_this_week ?? 0}</div>
+                            <div className="flex gap-1 h-6 items-end mt-4">
+                                {[20, 30, 20, 50, 40, 80, 60, 40, 90, 70].map((h, i) => (
+                                    <div key={i} className="flex-1 bg-primary/20 rounded-t-[1px] group-hover:bg-primary transition-colors" style={{ height: `${h}%` }} />
                                 ))}
                             </div>
                         </div>
 
-                        <div className="rounded-sm border border-border p-4">
-                            <div className="flex items-center justify-between mb-3">
-                                <span className="text-xs font-medium text-muted-foreground">Active Courses</span>
-                                <BookOpen className="size-4 text-muted-foreground/40" />
+                        <div className="rounded-sm border border-border/80 bg-background p-5 shadow-sm group hover:border-primary/30 transition-all">
+                            <div className="flex items-center justify-between mb-4">
+                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Active Inventory</span>
+                                <div className="size-8 rounded-sm bg-primary/5 flex items-center justify-center text-primary border border-primary/10">
+                                    <BookOpen className="size-4" />
+                                </div>
                             </div>
-                            <div className="text-2xl font-semibold text-foreground tabular-nums">{stats.courses}</div>
-                            <p className="text-xs text-muted-foreground mt-3">{stats.enrollments} total enrollments</p>
+                            <div className="text-3xl font-bold text-foreground tabular-nums tracking-tight">{stats.courses}</div>
+                            <div className="flex items-center gap-2 mt-4 text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
+                                <span className="text-primary">{stats.enrollments}</span> Total Active Enrollments
+                            </div>
                         </div>
                     </div>
 
                     {/* Content Grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         {/* Recent Users Table */}
-                        <div className="lg:col-span-2 rounded-sm border border-border overflow-hidden">
-                            <div className="flex items-center justify-between px-3 py-2 border-b border-border bg-muted/5">
-                                <h2 className="text-xs font-semibold text-foreground">Recent Users</h2>
-                                <Button asChild variant="ghost" size="sm" className="h-7 px-2 text-xs font-medium text-primary hover:bg-primary/5 rounded-sm">
-                                    <Link href="/admin/students">View All</Link>
+                        <div className="lg:col-span-2 rounded-sm border border-border/80 bg-background overflow-hidden shadow-sm">
+                            <div className="flex items-center justify-between px-4 py-3 border-b border-border/80 bg-muted/5">
+                                <h2 className="text-[11px] font-bold text-foreground uppercase tracking-wider">User Activity Monitor</h2>
+                                <Button asChild variant="outline" size="sm" className="h-7 px-3 text-[10px] font-bold uppercase tracking-tight text-primary hover:bg-primary hover:text-white rounded-sm border-primary/10 transition-all shadow-none">
+                                    <Link href="/admin/students">View All Directory</Link>
                                 </Button>
                             </div>
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left">
                                     <thead>
-                                        <tr className="border-b border-border bg-muted/30">
-                                            <th className="px-3 py-2 text-[11px] font-semibold text-muted-foreground">User</th>
-                                            <th className="px-3 py-2 text-[11px] font-semibold text-muted-foreground">Role</th>
-                                            <th className="px-3 py-2 text-[11px] font-semibold text-muted-foreground">Status</th>
-                                            <th className="px-3 py-2 text-[11px] font-semibold text-muted-foreground text-right"></th>
+                                        <tr className="border-b border-border/60 bg-muted/20">
+                                            <th className="px-4 py-2.5 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Identify</th>
+                                            <th className="px-4 py-2.5 text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-center">Authorization</th>
+                                            <th className="px-4 py-2.5 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Availability</th>
+                                            <th className="px-4 py-2.5 text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-right">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-border">
+                                    <tbody className="divide-y divide-border/60">
                                         {(stats.recent_users ?? []).map((user: any, i: number) => (
-                                            <tr key={i} className="hover:bg-muted/5 transition-colors">
-                                                <td className="px-3 py-2.5">
-                                                    <div className="flex items-center gap-2.5">
+                                            <tr key={i} className="hover:bg-muted/5 transition-colors group">
+                                                <td className="px-4 py-3">
+                                                    <div className="flex items-center gap-3">
                                                         <div className={cn(
-                                                            "size-8 rounded-sm flex items-center justify-center text-xs font-semibold border",
+                                                            "size-9 rounded-sm flex items-center justify-center text-xs font-bold border shrink-0",
                                                             user.color?.includes('indigo') ? 'bg-indigo-50 text-indigo-600 border-indigo-100' : 'bg-slate-50 text-slate-500 border-slate-100'
                                                         )}>
                                                             {user.initials}
                                                         </div>
-                                                        <div>
-                                                            <div className="text-sm font-medium text-foreground">{user.name}</div>
-                                                            <div className="text-xs text-muted-foreground">{user.email}</div>
+                                                        <div className="min-w-0">
+                                                            <div className="text-sm font-bold text-foreground truncate">{user.name}</div>
+                                                            <div className="text-[10px] font-medium text-muted-foreground truncate">{user.email}</div>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td className="px-3 py-2.5">
-                                                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-sm bg-primary/5 text-primary text-[10px] font-medium border border-primary/10 capitalize">
+                                                <td className="px-4 py-3 text-center">
+                                                    <span className="inline-flex items-center px-2 py-0.5 rounded-sm bg-primary/5 text-primary text-[9px] font-bold border border-primary/10 uppercase tracking-tight">
                                                         {user.role}
                                                     </span>
                                                 </td>
-                                                <td className="px-3 py-2.5">
-                                                    <div className="flex items-center gap-1.5">
-                                                        <div className={cn("size-1.5 rounded-full", user.active ? 'bg-emerald-500' : 'bg-slate-300')} />
-                                                        <span className={cn("text-xs font-medium", user.active ? 'text-emerald-600' : 'text-muted-foreground')}>
-                                                            {user.active ? 'Active' : 'Inactive'}
+                                                <td className="px-4 py-3">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className={cn("size-2 rounded-full", user.active ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300')} />
+                                                        <span className={cn("text-[11px] font-bold uppercase tracking-tight", user.active ? 'text-emerald-600' : 'text-muted-foreground/60')}>
+                                                            {user.active ? 'Live' : 'Standby'}
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td className="px-3 py-2.5 text-right">
-                                                    <Button asChild variant="ghost" size="icon" className="size-7 rounded-sm text-muted-foreground/30 hover:text-foreground hover:bg-muted/50">
-                                                        <Link href="/admin/students"><ArrowRight className="size-3.5" /></Link>
+                                                <td className="px-4 py-3 text-right">
+                                                    <Button asChild variant="ghost" size="icon" className="size-8 rounded-sm text-muted-foreground/40 hover:text-primary hover:bg-primary/5 transition-all">
+                                                        <Link href="/admin/students"><ArrowRight className="size-4" /></Link>
                                                     </Button>
                                                 </td>
                                             </tr>
@@ -121,40 +130,42 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                         </div>
 
                         {/* Sidebar */}
-                        <div className="space-y-4">
-                            <div className="rounded-sm border border-border overflow-hidden">
-                                <div className="px-3 py-2 border-b border-border bg-muted/5">
-                                    <h2 className="text-xs font-semibold text-foreground">System Health</h2>
+                        <div className="space-y-6">
+                            <div className="rounded-sm border border-border/80 bg-background overflow-hidden shadow-sm">
+                                <div className="px-4 py-3 border-b border-border/80 bg-muted/5">
+                                    <h2 className="text-[11px] font-bold text-foreground uppercase tracking-wider">Node Performance</h2>
                                 </div>
-                                <div className="p-3 space-y-4">
+                                <div className="p-4 space-y-5">
                                     <div>
-                                        <div className="flex justify-between items-end mb-1.5">
-                                            <span className="text-xs font-medium text-muted-foreground">Server Load</span>
-                                            <span className="text-xs font-medium text-foreground tabular-nums">24%</span>
+                                        <div className="flex justify-between items-end mb-2">
+                                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Network Load</span>
+                                            <span className="text-xs font-bold text-foreground tabular-nums">24.8%</span>
                                         </div>
-                                        <div className="flex items-end gap-0.5 h-5">
-                                            {Array.from({ length: 24 }).map((_, i) => (
-                                                <div key={i} className="flex-1 bg-primary rounded-t-[1px]" style={{ height: `${Math.max(10, ((i * 31) % 90) + 10)}%` }} />
+                                        <div className="flex items-end gap-[1px] h-8 bg-muted/10 rounded-sm p-1">
+                                            {Array.from({ length: 32 }).map((_, i) => (
+                                                <div key={i} className="flex-1 bg-primary/60 hover:bg-primary transition-colors rounded-[1px]" style={{ height: `${Math.max(15, ((i * 37) % 85) + 10)}%` }} />
                                             ))}
                                         </div>
                                     </div>
+                                    
                                     <div>
-                                        <div className="flex justify-between items-end mb-1.5">
-                                            <span className="text-xs font-medium text-muted-foreground">Memory</span>
-                                            <span className="text-xs font-medium text-foreground tabular-nums">5.2 GB</span>
+                                        <div className="flex justify-between items-end mb-2">
+                                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Storage Array</span>
+                                            <span className="text-xs font-bold text-foreground tabular-nums text-muted-foreground/60"><span className="text-foreground font-bold">5.2 GB</span> / 10 GB</span>
                                         </div>
-                                        <div className="h-1 w-full bg-muted/30 rounded-full overflow-hidden">
-                                            <div className="h-full bg-primary w-[70%]" />
+                                        <div className="h-1.5 w-full bg-muted/30 rounded-full overflow-hidden">
+                                            <div className="h-full bg-primary w-[52%] transition-all duration-500" />
                                         </div>
                                     </div>
-                                    <div className="grid grid-cols-2 gap-2 pt-2">
-                                        <div className="p-2 rounded-sm bg-muted/5 border border-border">
-                                            <div className="text-[10px] text-muted-foreground mb-0.5">DB Connections</div>
-                                            <div className="text-sm font-semibold text-foreground tabular-nums">1,204</div>
+
+                                    <div className="grid grid-cols-2 gap-3 pt-2">
+                                        <div className="p-3 rounded-sm bg-muted/5 border border-border/60 hover:border-primary/20 transition-all">
+                                            <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1 text-muted-foreground/60">DB Cluster</div>
+                                            <div className="text-base font-bold text-foreground tabular-nums tracking-tight leading-none">1,204 <span className="text-[8px] text-emerald-500 font-bold uppercase tracking-tighter">IOPS</span></div>
                                         </div>
-                                        <div className="p-2 rounded-sm bg-muted/5 border border-border">
-                                            <div className="text-[10px] text-muted-foreground mb-0.5">Uptime</div>
-                                            <div className="text-sm font-semibold text-foreground tabular-nums">24D 12H</div>
+                                        <div className="p-3 rounded-sm bg-muted/5 border border-border/60 hover:border-primary/20 transition-all">
+                                            <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1 text-muted-foreground/60">Uptime</div>
+                                            <div className="text-base font-bold text-foreground tabular-nums tracking-tight leading-none">24D <span className="text-[8px] text-muted-foreground/40 font-bold uppercase tracking-tighter">12H</span></div>
                                         </div>
                                     </div>
                                 </div>
@@ -170,36 +181,54 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
     return (
         <>
             <Head title={is_student ? "Learning Portal" : "Dashboard"} />
-            <div className="w-full flex flex-1 flex-col gap-6 p-4 lg:p-6 bg-background">
-                <div>
-                    <h1 className="text-lg font-semibold text-foreground">
-                        {is_student ? "My Learning" : "Get Started"}
-                    </h1>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                        {is_student
-                            ? "Track your courses, assignments, and certifications."
-                            : "Browse courses to begin your learning journey."}
-                    </p>
+            <div className="w-full flex flex-1 flex-col gap-5 p-4 lg:p-6 bg-background">
+                <div className="flex items-end justify-between">
+                    <div>
+                        <h1 className="text-xl font-bold text-foreground tracking-tight">
+                            {is_student ? "Learning Portal" : "Welcome Back"}
+                        </h1>
+                        <p className="text-xs text-muted-foreground mt-0.5 font-medium">
+                            {is_student
+                                ? "Manage your courses, assignments, and professional certifications."
+                                : "Explore our catalog to start your learning journey today."}
+                        </p>
+                    </div>
+                    {is_student && (
+                        <div className="hidden md:flex items-center gap-4 text-xs font-semibold">
+                            <div className="flex flex-col items-end">
+                                <span className="text-muted-foreground/60 uppercase text-[9px] tracking-widest">Active Courses</span>
+                                <span className="text-foreground">{enrollments.length}</span>
+                            </div>
+                            <div className="h-6 w-px bg-border/50" />
+                            <div className="flex flex-col items-end">
+                                <span className="text-muted-foreground/60 uppercase text-[9px] tracking-widest">Certificates</span>
+                                <span className="text-foreground">{enrollments.filter((e: any) => e.certificate).length}</span>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Certificates Section */}
                 {enrollments.some((e: any) => e.certificate) && (
-                    <div className="rounded-sm border border-border overflow-hidden">
-                        <div className="px-3 py-2 border-b border-border bg-muted/5 flex items-center gap-2">
-                            <Trophy className="size-3.5 text-primary" />
-                            <h2 className="text-xs font-semibold text-foreground">Your Certificates</h2>
+                    <div className="rounded-sm border border-border/60 bg-muted/5 overflow-hidden shadow-sm">
+                        <div className="px-4 py-2.5 border-b border-border/60 flex items-center justify-between bg-card">
+                            <div className="flex items-center gap-2">
+                                <Trophy className="size-3.5 text-primary" />
+                                <h2 className="text-[11px] font-bold text-foreground uppercase tracking-wider">Professional Certifications</h2>
+                            </div>
                         </div>
-                        <div className="p-3 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                        <div className="p-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
                             {enrollments.filter((e: any) => e.certificate).map((enrollment: any) => (
-                                <div key={enrollment.id} className="flex items-center gap-3 p-3 rounded-sm border border-border hover:border-primary/30 transition-colors group">
-                                    <div className="size-10 rounded-sm bg-primary/5 flex items-center justify-center text-primary border border-primary/10 group-hover:bg-primary/10 transition-colors shrink-0">
-                                        <Award className="size-5" />
+                                <div key={enrollment.id} className="flex items-center gap-3.5 p-3 rounded-sm bg-background border border-border/80 hover:border-primary/40 transition-all group">
+                                    <div className="size-11 rounded-sm bg-primary/5 flex items-center justify-center text-primary border border-primary/10 group-hover:bg-primary/10 transition-colors shrink-0">
+                                        <Award className="size-6" strokeWidth={1.5} />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <div className="text-[10px] text-muted-foreground truncate">{enrollment.certificate.certificate_number}</div>
-                                        <div className="text-sm font-medium text-foreground truncate">{enrollment.course.title}</div>
+                                        <div className="text-[9px] font-bold text-primary uppercase tracking-tighter mb-0.5">{enrollment.certificate.certificate_number}</div>
+                                        <div className="text-[13px] font-bold text-foreground truncate leading-tight">{enrollment.course.title}</div>
+                                        <div className="text-[10px] font-medium text-muted-foreground mt-0.5 italic">Verified by Learn Syntax</div>
                                     </div>
-                                    <Button asChild size="sm" className="h-7 px-2 rounded-sm text-[10px] font-medium shadow-none shrink-0">
+                                    <Button asChild variant="outline" size="sm" className="h-7 px-3 rounded-sm text-[10px] font-bold uppercase tracking-tight shadow-none shrink-0 hover:bg-primary hover:text-white border-primary/20 transition-all">
                                         <Link href={`/my-course/${enrollment.id}/certificate`}>View</Link>
                                     </Button>
                                 </div>
@@ -210,39 +239,59 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     {/* Active Courses */}
-                    <div className="lg:col-span-8 space-y-3">
-                        <h2 className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5">
-                            <div className="size-1.5 rounded-full bg-primary animate-pulse" /> Active Courses
-                        </h2>
-                        <div className="grid gap-3 md:grid-cols-2">
+                    <div className="lg:col-span-8 space-y-4">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+                                <div className="size-2 rounded-full bg-primary animate-pulse" /> My Active Learning
+                            </h2>
+                        </div>
+                        <div className="grid gap-4 md:grid-cols-2">
                             {enrollments.length > 0 ? enrollments.map((enrollment: any) => (
-                                <div key={enrollment.id} className="rounded-sm border border-border p-4 hover:border-primary/30 transition-colors group">
-                                    <div className="flex items-center justify-between mb-3">
+                                <div key={enrollment.id} className="rounded-sm border border-border/80 bg-background p-5 hover:border-primary/40 transition-all group relative overflow-hidden flex flex-col shadow-sm">
+                                    <div className="absolute top-0 right-0 p-2">
                                         <span className={cn(
-                                            "inline-flex items-center px-1.5 py-0.5 rounded-sm text-[10px] font-medium border capitalize",
+                                            "inline-flex items-center px-2 py-0.5 rounded-sm text-[9px] font-bold uppercase tracking-tighter border",
                                             enrollment.status === 'paid' ? "bg-emerald-50 text-emerald-600 border-emerald-100" : "bg-amber-50 text-amber-600 border-amber-100"
                                         )}>
                                             {enrollment.status}
                                         </span>
-                                        <span className="text-[10px] text-muted-foreground">{enrollment.batch?.type ?? 'Standard'}</span>
                                     </div>
-                                    <h3 className="text-sm font-medium text-foreground mb-1 group-hover:text-primary transition-colors">{enrollment.course.title}</h3>
-                                    <p className="text-xs text-muted-foreground mb-4">{enrollment.batch?.name ?? 'Batch pending'}</p>
-                                    <div className="flex gap-2">
-                                        <Button asChild variant="outline" size="sm" className="flex-1 h-8 rounded-sm text-xs shadow-none">
-                                            <Link href={`/courses/${enrollment.course.slug}`}>Details</Link>
-                                        </Button>
-                                        <Button asChild size="sm" className="flex-1 h-8 rounded-sm text-xs shadow-none">
-                                            <Link href={`/my-course/${enrollment.id}/assignments`}>Continue <ArrowRight className="size-3 ml-1" /></Link>
-                                        </Button>
+                                    
+                                    <div className="mb-4">
+                                        <div className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1.5">{enrollment.batch?.type ?? 'Standard'} TRACK</div>
+                                        <h3 className="text-base font-bold text-foreground leading-snug group-hover:text-primary transition-colors">{enrollment.course.title}</h3>
+                                        <p className="text-xs font-medium text-muted-foreground mt-1">{enrollment.batch?.name ?? 'Batch assignment pending'}</p>
+                                    </div>
+
+                                    <div className="mt-auto space-y-4">
+                                        <div className="flex items-center gap-4 text-[10px] font-bold text-muted-foreground/80 uppercase tracking-tight">
+                                            <div className="flex items-center gap-1.5">
+                                                <BookOpen className="size-3.5" strokeWidth={2} />
+                                                <span>Curriculum</span>
+                                            </div>
+                                            <div className="flex items-center gap-1.5">
+                                                <Trophy className="size-3.5" strokeWidth={2} />
+                                                <span>Certificate</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex gap-2.5">
+                                            <Button asChild variant="outline" size="sm" className="flex-1 h-9 rounded-sm text-[11px] font-bold uppercase tracking-tight shadow-none border-border/80 hover:bg-muted/50 transition-all">
+                                                <Link href={`/courses/${enrollment.course.slug}`}>Details</Link>
+                                            </Button>
+                                            <Button asChild size="sm" className="flex-1 h-9 rounded-sm text-[11px] font-bold uppercase tracking-tight shadow-none bg-primary hover:bg-primary/90 transition-all">
+                                                <Link href={`/my-course/${enrollment.id}/assignments`}>Continue</Link>
+                                            </Button>
+                                        </div>
                                     </div>
                                 </div>
                             )) : (
-                                <div className="col-span-full py-12 text-center border border-dashed border-border rounded-sm">
-                                    <Book className="size-8 text-muted-foreground/20 mx-auto mb-2" />
-                                    <p className="text-xs text-muted-foreground mb-4">No active courses</p>
-                                    <Button asChild size="sm" className="h-8 px-4 rounded-sm text-xs shadow-none">
-                                        <Link href="/courses">Browse Courses</Link>
+                                <div className="col-span-full py-16 text-center border border-dashed border-border/80 rounded-sm bg-muted/5">
+                                    <Book className="size-10 text-muted-foreground/20 mx-auto mb-3" strokeWidth={1} />
+                                    <h3 className="text-sm font-bold text-foreground">No active enrollments</h3>
+                                    <p className="text-xs text-muted-foreground mb-6 max-w-[240px] mx-auto mt-1">Start your career journey by browsing our curated industry courses.</p>
+                                    <Button asChild size="sm" className="h-9 px-6 rounded-sm text-[11px] font-bold uppercase tracking-tight shadow-none">
+                                        <Link href="/courses">Browse Catalog</Link>
                                     </Button>
                                 </div>
                             )}
@@ -250,37 +299,37 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                     </div>
 
                     {/* Payment History Sidebar */}
-                    <div className="lg:col-span-4 space-y-3">
-                        <h2 className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5">
-                            <Receipt className="size-3.5" /> Payment History
+                    <div className="lg:col-span-4 space-y-4">
+                        <h2 className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+                            <Receipt className="size-4" /> Billing History
                         </h2>
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                             {enrollments.filter((e: any) => e.payment).length > 0 ? (
                                 enrollments.filter((e: any) => e.payment).map((enrollment: any) => (
-                                    <div key={enrollment.payment.id} className="p-3 rounded-sm border border-border hover:border-primary/30 transition-colors">
-                                        <div className="flex items-center gap-2.5 mb-2.5">
-                                            <div className="size-8 rounded-sm bg-muted/30 flex items-center justify-center border border-border shrink-0">
-                                                <Receipt className="size-4 text-muted-foreground/50" />
+                                    <div key={enrollment.payment.id} className="p-4 rounded-sm border border-border/80 bg-background hover:border-primary/40 transition-all group shadow-sm">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="size-9 rounded-sm bg-muted/30 flex items-center justify-center border border-border/60 shrink-0 group-hover:bg-primary/5 group-hover:border-primary/20 transition-all">
+                                                <Receipt className="size-4.5 text-muted-foreground/50 group-hover:text-primary transition-colors" />
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <div className="text-sm font-medium text-foreground truncate">{enrollment.course.title}</div>
-                                                <div className="text-[10px] text-muted-foreground truncate">{enrollment.payment.invoice?.invoice_number || 'Pending'}</div>
+                                                <div className="text-xs font-bold text-foreground truncate group-hover:text-primary transition-colors">{enrollment.course.title}</div>
+                                                <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter mt-0.5">{enrollment.payment.invoice?.invoice_number || 'INV-PENDING'}</div>
                                             </div>
                                         </div>
-                                        <div className="flex items-center justify-between pt-2.5 border-t border-border">
-                                            <div>
-                                                <div className="text-sm font-medium text-foreground tabular-nums">₹{enrollment.payment.amount}</div>
-                                                <div className="text-[10px] text-emerald-600 font-medium">Paid</div>
+                                        <div className="flex items-center justify-between pt-3 border-t border-border/60">
+                                            <div className="flex flex-col">
+                                                <span className="text-sm font-bold text-foreground tabular-nums">₹{enrollment.payment.amount}</span>
+                                                <span className="text-[10px] text-emerald-600 font-bold uppercase tracking-tighter">Status: Paid</span>
                                             </div>
-                                            <Button asChild variant="outline" size="sm" className="h-7 px-2 rounded-sm text-[10px] shadow-none">
+                                            <Button asChild variant="outline" size="sm" className="h-7 px-3 rounded-sm text-[10px] font-bold uppercase tracking-tight shadow-none border-primary/10 hover:bg-primary hover:text-white transition-all">
                                                 <Link href={enrollment.payment.invoice ? `/admin/invoices/${enrollment.payment.invoice.id}` : '#'}>Receipt</Link>
                                             </Button>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <div className="py-8 text-center border border-border rounded-sm">
-                                    <p className="text-xs text-muted-foreground">No payment history</p>
+                                <div className="py-12 text-center border border-border/80 rounded-sm bg-muted/5">
+                                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">No Transactions Found</p>
                                 </div>
                             )}
                         </div>

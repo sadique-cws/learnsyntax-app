@@ -15,51 +15,72 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
 
     return (
         <PublicLayout>
-            <Head title={course.title} />
-            <div className="pb-16">
+            <Head title={`${course.title} | Professional Certificate`} />
+            <div className="pb-20 bg-background">
                 {/* Hero */}
-                <section className="bg-foreground text-background pt-8 pb-10 border-b border-border">
-                    <div className="mx-auto max-w-7xl px-4 sm:px-6">
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                            <div className="lg:col-span-7">
-                                <div className="flex items-center gap-1.5 text-primary text-[10px] font-medium mb-3">
-                                    <Link href="/courses" className="hover:underline">Courses</Link>
-                                    <span className="opacity-40">/</span>
-                                    <span>Professional Certificate</span>
+                <section className="bg-[#0a0a0a] text-white pt-12 pb-16 border-b border-white/5 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.1),transparent)]" />
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6 relative z-10">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                            <div className="lg:col-span-7 space-y-8">
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-3 text-primary text-[11px] font-bold uppercase tracking-[0.2em]">
+                                        <Link href="/courses" className="hover:text-primary/80 transition-colors">Catalog</Link>
+                                        <span className="text-white/20">/</span>
+                                        <span className="text-white/60">Specialization Path</span>
+                                    </div>
+                                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] tracking-tight">
+                                        {course.title}
+                                    </h1>
+                                    <p className="text-lg text-white/60 max-w-2xl leading-relaxed font-medium">
+                                        Master the industrial standards of {course.title.toLowerCase()}. A comprehensive 24-week immersive track designed for high-performance careers.
+                                    </p>
                                 </div>
-                                <h1 className="text-3xl md:text-4xl font-bold text-background leading-tight mb-4">{course.title}</h1>
-                                <p className="text-sm text-background/70 mb-6 max-w-2xl leading-relaxed">{course.description} Comprehensive hands-on training designed to take you from beginner to professional in 24 weeks.</p>
-                                <div className="flex flex-wrap items-center gap-4 mb-5">
-                                    <div className="flex items-center gap-2">
-                                        <div className="flex -space-x-2">
-                                            {[1,2,3].map(i=><div key={i} className="size-7 rounded-sm border-2 border-foreground bg-muted overflow-hidden shrink-0"><img src={`https://i.pravatar.cc/100?u=${i+30}`} alt="User" className="size-full object-cover"/></div>)}
+
+                                <div className="flex flex-wrap items-center gap-6 py-2">
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex -space-x-3">
+                                            {[1,2,3,4].map(i=><div key={i} className="size-9 rounded-sm border-2 border-[#0a0a0a] bg-muted overflow-hidden shrink-0"><img src={`https://i.pravatar.cc/100?u=${i+40}`} alt="User" className="size-full object-cover"/></div>)}
                                         </div>
-                                        <span className="text-[11px] font-medium text-background/60">1.2k+ Enrolled</span>
+                                        <div className="flex flex-col">
+                                            <span className="text-sm font-bold text-white">1,248+ Learners</span>
+                                            <span className="text-[10px] font-bold text-white/40 uppercase tracking-tighter">Actively Enrolled</span>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <Star className="size-3.5 text-orange-400 fill-current"/>
-                                        <span className="text-xs font-medium">4.9 / 5</span>
+                                    <div className="h-10 w-px bg-white/10 hidden md:block" />
+                                    <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-1">
+                                            {[1,2,3,4,5].map(i=><Star key={i} className="size-3.5 text-amber-400 fill-current"/>)}
+                                        </div>
+                                        <span className="text-sm font-bold text-white">4.92 / 5.0</span>
                                     </div>
                                 </div>
-                                <div className="flex flex-col sm:flex-row gap-2">
-                                    <Button size="default" className="h-9 px-6 rounded-sm font-medium bg-primary text-white shadow-none w-full sm:w-auto" onClick={handleEnroll} disabled={processing||(is_enrolled&&enrollment_status==='paid')}>
-                                        {is_enrolled&&enrollment_status==='paid'?'Already Enrolled':(enrollment_status==='pending'?'Proceed to Payment':`Enroll Now @ ₹${course.price}`)}
+
+                                <div className="flex flex-col sm:flex-row gap-3 pt-4">
+                                    <Button size="lg" className="h-12 px-8 rounded-sm font-black uppercase tracking-widest bg-primary text-white shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/40 transition-all border-none w-full sm:w-auto" onClick={handleEnroll} disabled={processing||(is_enrolled&&enrollment_status==='paid')}>
+                                        {is_enrolled&&enrollment_status==='paid'?'Access Course Content':(enrollment_status==='pending'?'Complete Transaction':`Enroll Now • ₹${course.price.toLocaleString()}`)}
                                     </Button>
-                                    <Button variant="outline" size="default" className="h-9 px-6 rounded-sm font-medium border-background/20 text-background bg-transparent hover:bg-background/10 shadow-none w-full sm:w-auto">Download Brochure</Button>
+                                    <Button variant="outline" size="lg" className="h-12 px-8 rounded-sm font-bold uppercase tracking-widest border-white/20 text-white bg-transparent hover:bg-white/5 shadow-none w-full sm:w-auto transition-all">
+                                        Syllabus PDF
+                                    </Button>
                                 </div>
                             </div>
+
                             <div className="lg:col-span-5">
-                                <div className="relative aspect-video rounded-sm border border-border overflow-hidden bg-muted">
-                                    <img src="/images/ai_cover.png" alt={course.title} className="size-full object-cover opacity-80"/>
+                                <div className="relative aspect-[16/10] rounded-sm border border-white/10 overflow-hidden bg-[#111] shadow-2xl group">
+                                    <img src="/images/ai_cover.png" alt={course.title} className="size-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-105"/>
                                     <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="size-14 rounded-sm bg-background/20 backdrop-blur-sm border border-background/30 flex items-center justify-center text-white cursor-pointer hover:bg-primary transition-colors">
-                                            <PlayCircle className="size-7 fill-current"/>
+                                        <div className="size-16 rounded-sm bg-primary text-white flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl">
+                                            <PlayCircle className="size-8 fill-current"/>
                                         </div>
                                     </div>
-                                    <div className="absolute bottom-3 left-3 right-3 p-2.5 bg-foreground/90 rounded-sm border border-background/20 text-background">
-                                        <div className="flex items-center gap-2">
-                                            <div className="size-1.5 rounded-full bg-red-500 animate-pulse"/>
-                                            <span className="text-[10px] font-medium">Next Batch: {formatDate(course.batches[0]?.start_date||'2026-05-01')}</span>
+                                    <div className="absolute bottom-4 left-4 right-4 p-3 bg-black/60 backdrop-blur-md rounded-sm border border-white/10 text-white">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-2">
+                                                <div className="size-2 rounded-full bg-emerald-500 animate-pulse"/>
+                                                <span className="text-[11px] font-bold uppercase tracking-tight">Open Enrollment</span>
+                                            </div>
+                                            <span className="text-[11px] font-bold text-white/60">Starts: {formatDate(course.batches[0]?.start_date||'2026-05-01')}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -69,58 +90,97 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                 </section>
 
                 {/* Stats Bar */}
-                <section className="border-b border-border bg-muted/20 py-4">
+                <section className="border-b border-border bg-muted/5 py-6">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6">
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                            {[{icon:Clock,label:'Duration',value:'24 Weeks'},{icon:Zap,label:'Learning',value:'Live Projects'},{icon:Users,label:'Format',value:'Live Interactive'},{icon:Briefcase,label:'Career',value:'Job Assist'},{icon:Award,label:'Certificate',value:'Professional'}].map(({icon:Icon,label,value})=>(
-                                <div key={label} className="flex items-center gap-2 p-2.5 rounded-sm border border-border bg-background">
-                                    <Icon className="size-3.5 text-primary shrink-0"/>
-                                    <div><div className="text-[9px] font-medium text-muted-foreground">{label}</div><div className="text-xs font-semibold">{value}</div></div>
+                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                            {[
+                                {icon:Clock,label:'Timeline',value:'24 Weeks Intensive'},
+                                {icon:Zap,label:'Velocity',value:'Hands-on Labs'},
+                                {icon:Users,label:'Engagement',value:'Live Interactive'},
+                                {icon:Briefcase,label:'Placement',value:'Career Coaching'},
+                                {icon:Award,label:'Accreditation',value:'Govt. Recognized'}
+                            ].map(({icon:Icon,label,value})=>(
+                                <div key={label} className="flex items-center gap-3 p-4 rounded-sm border border-border/60 bg-background shadow-sm hover:border-primary/30 transition-all group">
+                                    <div className="size-10 rounded-sm bg-primary/5 flex items-center justify-center border border-primary/10 group-hover:bg-primary/10 transition-colors shrink-0">
+                                        <Icon className="size-5 text-primary"/>
+                                    </div>
+                                    <div>
+                                        <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">{label}</div>
+                                        <div className="text-xs font-black text-foreground">{value}</div>
+                                    </div>
                                 </div>
                             ))}
                         </div>
                     </div>
                 </section>
 
-                {/* Highlights */}
-                <section className="py-10 border-b border-border">
+                {/* Core Value Props */}
+                <section className="py-20">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                            <div>
-                                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-primary/10 text-primary rounded-sm border border-primary/10 text-[10px] font-medium mb-3">Skill Development</div>
-                                <h2 className="text-lg font-semibold text-foreground mb-5">Become a job-ready <span className="text-primary">{course.title} Expert</span></h2>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                                    {[{t:'Industry Curriculum',d:'Designed by senior engineers from top tech companies.'},{t:'Hands-on Projects',d:'Build real-world applications for your portfolio.'},{t:'1:1 Mentorship',d:'Personal doubt clearing sessions with experts.'},{t:'Certification',d:'Get a verified professional certificate on completion.'}].map(({t,d})=>(
-                                        <div key={t} className="p-3 rounded-sm border border-border bg-background space-y-1">
-                                            <div className="flex items-center gap-1.5"><div className="size-1.5 rounded-full bg-primary"/><span className="font-semibold text-xs">{t}</span></div>
-                                            <p className="text-[11px] text-muted-foreground leading-relaxed pl-3">{d}</p>
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                            <div className="lg:col-span-7 space-y-10">
+                                <div className="space-y-4">
+                                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-sm border border-primary/10 text-[11px] font-bold uppercase tracking-widest">
+                                        Why Choose Learn Syntax
+                                    </div>
+                                    <h2 className="text-3xl font-black text-foreground tracking-tight leading-tight">
+                                        Master the technology stack used by <span className="text-primary italic">Fortune 500 companies.</span>
+                                    </h2>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                    {[
+                                        {t:'Industry Experts',d:'Mentorship from senior leads at Google, Amazon & Meta.'},
+                                        {t:'Production Grade',d:'Build scalable applications with modern architecture.'},
+                                        {t:'Global Recognition',d:'Certificates valid across top-tier tech organizations.'},
+                                        {t:'Job Ready',d:'End-to-end assistance from resume to final interview.'}
+                                    ].map(({t,d})=>(
+                                        <div key={t} className="p-5 rounded-sm border border-border/80 bg-background shadow-sm space-y-3 hover:border-primary/20 transition-all">
+                                            <div className="flex items-center gap-3">
+                                                <div className="size-2 rounded-full bg-primary shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
+                                                <span className="font-black text-xs uppercase tracking-wider">{t}</span>
+                                            </div>
+                                            <p className="text-sm text-muted-foreground font-medium leading-relaxed">{d}</p>
                                         </div>
                                     ))}
                                 </div>
                             </div>
-                            <div className="border border-border rounded-sm p-3 bg-muted/10">
-                                <img src="/images/mentor.png" alt="Learning" className="w-full h-[220px] object-cover rounded-sm border border-border mb-3"/>
-                                <div className="flex items-center gap-2.5 p-2.5 bg-background border border-border rounded-sm">
-                                    <div className="size-8 rounded-sm bg-primary text-white flex items-center justify-center shrink-0"><CheckCircle2 className="size-4"/></div>
-                                    <div><div className="font-semibold text-xs">Verified Path</div><div className="text-[10px] text-muted-foreground">Enroll to start your journey</div></div>
+
+                            <div className="lg:col-span-5 relative">
+                                <div className="absolute -top-4 -right-4 size-32 bg-primary/5 rounded-full blur-3xl" />
+                                <div className="relative border border-border/80 rounded-sm p-4 bg-muted/10 shadow-2xl">
+                                    <img src="/images/mentor.png" alt="Learning" className="w-full h-[320px] object-cover rounded-sm border border-border/60 mb-5"/>
+                                    <div className="flex items-center gap-4 p-4 bg-background border border-border/80 rounded-sm shadow-sm">
+                                        <div className="size-12 rounded-sm bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-lg"><CheckCircle2 className="size-6"/></div>
+                                        <div>
+                                            <div className="font-black text-xs uppercase tracking-widest">Verified Instructor Path</div>
+                                            <div className="text-[11px] font-bold text-muted-foreground mt-0.5 uppercase tracking-tighter">Curriculum 2.0 Compliant</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* Curriculum */}
-                <section className="py-10 bg-muted/10 border-b border-border">
+                {/* Curriculum Section */}
+                <section className="py-20 bg-muted/5 border-y border-border/60">
                     <div className="mx-auto max-w-4xl px-4 sm:px-6">
-                        <div className="mb-5"><h2 className="text-lg font-semibold text-foreground">Course Curriculum</h2><p className="text-xs text-muted-foreground mt-0.5">A structured path to mastery, broken down into modules.</p></div>
-                        <div className="space-y-2">
-                            {[1,2,3,4].map(i=>(
-                                <div key={i} className="rounded-sm border border-border bg-background p-3 flex items-center justify-between cursor-pointer hover:border-primary/50 transition-colors">
-                                    <div className="flex items-center gap-3">
-                                        <div className="size-7 rounded-sm bg-muted flex items-center justify-center font-medium text-xs text-muted-foreground border border-border">{String(i).padStart(2,'0')}</div>
-                                        <h3 className="font-medium text-sm">Module {i}: Core Concepts</h3>
+                        <div className="text-center mb-12 space-y-3">
+                            <h2 className="text-3xl font-black text-foreground tracking-tight uppercase">Syllabus Breakdown</h2>
+                            <p className="text-sm font-bold text-muted-foreground max-w-lg mx-auto uppercase tracking-widest">A deep dive into the modules you will master</p>
+                        </div>
+                        <div className="space-y-3">
+                            {[1,2,3,4,5,6].map(i=>(
+                                <div key={i} className="rounded-sm border border-border/80 bg-background p-5 flex items-center justify-between cursor-pointer hover:border-primary transition-all group shadow-sm">
+                                    <div className="flex items-center gap-4">
+                                        <div className="size-10 rounded-sm bg-muted/50 flex items-center justify-center font-black text-xs text-muted-foreground border border-border/60 group-hover:bg-primary group-hover:text-white transition-all">{String(i).padStart(2,'0')}</div>
+                                        <h3 className="font-black text-sm uppercase tracking-tight group-hover:text-primary transition-colors">Phase {i}: Advanced Integration Patterns</h3>
                                     </div>
-                                    <ChevronDown className="size-3.5 text-muted-foreground"/>
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-[10px] font-bold text-muted-foreground/40 uppercase hidden sm:inline">12 Lessons</span>
+                                        <ChevronDown className="size-4 text-muted-foreground group-hover:text-primary transition-colors"/>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -128,14 +188,26 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                 </section>
 
                 {/* FAQ */}
-                <section className="py-10">
+                <section className="py-20">
                     <div className="mx-auto max-w-3xl px-4 sm:px-6">
-                        <div className="flex items-center gap-2 mb-5"><HelpCircle className="size-4 text-primary"/><h2 className="text-lg font-semibold text-foreground">Frequently Asked Questions</h2></div>
-                        <div className="space-y-2">
-                            {[{q:'Who is this course for?',a:'Designed for beginners and intermediate learners looking to master modern industry standards.'},{q:'Do I get a certificate?',a:'Yes, upon successful completion, you will receive an official professional certificate.'},{q:'Is there placement assistance?',a:'Yes, we provide dedicated job assistance and portfolio reviews.'}].map(({q,a})=>(
-                                <div key={q} className="rounded-sm border border-border bg-background p-3 hover:border-primary/50 transition-colors cursor-pointer">
-                                    <div className="flex items-center justify-between mb-1.5"><h3 className="font-medium text-sm text-foreground">{q}</h3><ChevronDown className="size-3.5 text-muted-foreground shrink-0"/></div>
-                                    <p className="text-xs text-muted-foreground leading-relaxed">{a}</p>
+                        <div className="flex flex-col items-center text-center gap-4 mb-12">
+                            <div className="size-12 rounded-sm bg-primary/5 flex items-center justify-center text-primary border border-primary/10">
+                                <HelpCircle className="size-6"/>
+                            </div>
+                            <h2 className="text-3xl font-black text-foreground tracking-tight uppercase">Support & Intelligence</h2>
+                        </div>
+                        <div className="space-y-4">
+                            {[
+                                {q:'Who is eligible for this track?',a:'Designed for ambitious learners and industry professionals looking to pivot into specialized engineering roles.'},
+                                {q:'Is the certification global?',a:'Yes, our certificates are cryptographically signed and recognized by leading organizations globally.'},
+                                {q:'What if I miss a live session?',a:'All sessions are recorded in 4K and made available on your personalized learning portal within 2 hours.'}
+                            ].map(({q,a})=>(
+                                <div key={q} className="rounded-sm border border-border/80 bg-background p-6 hover:border-primary transition-all group shadow-sm">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <h3 className="font-black text-[15px] text-foreground uppercase tracking-tight">{q}</h3>
+                                        <ChevronDown className="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0"/>
+                                    </div>
+                                    <p className="text-sm font-medium text-muted-foreground leading-relaxed pl-1 border-l-2 border-primary/20">{a}</p>
                                 </div>
                             ))}
                         </div>

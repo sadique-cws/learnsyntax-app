@@ -1,7 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import PublicLayout from '@/layouts/public-layout';
-import { Clock, Users, Search } from 'lucide-react';
+import { Clock, Users, Search, BookOpen, Trophy, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 
 export default function CourseIndex({ courses }: { courses: any[] }) {
@@ -12,54 +12,93 @@ export default function CourseIndex({ courses }: { courses: any[] }) {
         course.description.toLowerCase().includes(search.toLowerCase())
     );
 
+    const covers = [
+        '/images/ai_cover.png', 
+        '/images/web_cover.png', 
+        '/images/python_cover.png'
+    ];
+
     return (
         <>
-            <Head title="Our Courses" />
-            <div className="w-full p-4 lg:p-6 max-w-7xl mx-auto">
-                <div className="mb-6">
-                    <h1 className="text-xl font-semibold text-foreground">All Courses</h1>
-                    <p className="text-xs text-muted-foreground mt-0.5">Master your skills with our industry-leading programming courses.</p>
+            <Head title="Course Catalog | Learn Syntax" />
+            <div className="w-full p-4 lg:p-6 max-w-7xl mx-auto space-y-8">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div className="space-y-1">
+                        <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-sm bg-primary/5 border border-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest mb-2">
+                            Academic Catalog
+                        </div>
+                        <h1 className="text-3xl font-bold text-foreground tracking-tight">Master Industrial Skills</h1>
+                        <p className="text-sm font-medium text-muted-foreground/60 max-w-xl">
+                            Curated professional paths designed to take you from fundamentals to advanced specialization in modern technology.
+                        </p>
+                    </div>
+
+                    {/* Search Bar */}
+                    <div className="relative w-full md:w-80">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground/40" />
+                        <input
+                            type="text"
+                            placeholder="Filter courses..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className="w-full pl-9 pr-4 h-10 rounded-sm border border-border bg-background focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all text-sm font-bold text-foreground placeholder:text-muted-foreground/30 shadow-sm"
+                        />
+                    </div>
                 </div>
 
-                {/* Search Bar */}
-                <div className="relative mb-6 max-w-sm">
-                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground/50" />
-                    <input
-                        type="text"
-                        placeholder="Search courses..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="w-full pl-8 pr-3 py-1.5 h-9 rounded-sm border border-border bg-background focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all text-sm font-medium text-foreground placeholder:text-muted-foreground/40"
-                    />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     {filteredCourses.map((course, idx) => {
-                        const covers = ['/images/ai_cover.png', '/images/web_cover.png', '/images/python_cover.png'];
                         const cover = covers[idx % covers.length];
 
                         return (
-                            <Link key={course.id} href={`/courses/${course.slug}`} className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm">
-                                <div className="flex flex-col border border-border bg-card rounded-sm overflow-hidden transition-colors hover:border-primary/50 h-full">
-                                    <div className="relative aspect-[16/9] bg-muted border-b border-border">
-                                        <img src={cover} alt={course.title} className="w-full h-full object-cover transition-opacity group-hover:opacity-90" />
-                                        <div className="absolute top-2 right-2 px-1.5 py-0.5 bg-background border border-border rounded-sm text-[10px] font-medium text-foreground">
-                                            ₹{course.price}
+                            <Link key={course.id} href={`/courses/${course.slug}`} className="group block focus:outline-none">
+                                <div className="flex flex-col border border-border/80 bg-background rounded-sm overflow-hidden transition-all hover:border-primary/40 group-hover:shadow-md h-full relative">
+                                    <div className="absolute top-3 right-3 z-10">
+                                        <div className="px-2 py-0.5 bg-background/90 backdrop-blur-sm border border-border rounded-sm text-[11px] font-bold text-foreground shadow-sm">
+                                            ₹{course.price.toLocaleString()}
                                         </div>
                                     </div>
-                                    <div className="p-3 flex flex-col flex-1">
-                                        <div className="text-[10px] font-medium text-primary mb-1.5">Programming</div>
-                                        <h3 className="text-sm font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-3 leading-snug">
-                                            {course.title}
-                                        </h3>
-                                        <div className="mt-auto flex items-center justify-between text-[10px] text-muted-foreground pt-2.5 border-t border-border">
-                                            <div className="flex items-center gap-1 font-medium">
-                                                <Clock className="size-3 text-foreground/50" />
-                                                <span>24 Weeks</span>
+
+                                    <div className="relative aspect-[16/10] bg-muted border-b border-border/60 overflow-hidden">
+                                        <img 
+                                            src={cover} 
+                                            alt={course.title} 
+                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    </div>
+
+                                    <div className="p-4 flex flex-col flex-1 space-y-4">
+                                        <div>
+                                            <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-widest mb-2">
+                                                <BookOpen className="size-3" />
+                                                <span>Development</span>
                                             </div>
-                                            <div className="flex items-center gap-1 font-medium">
-                                                <Users className="size-3 text-foreground/50" />
-                                                <span>1.2k+ Enrolled</span>
+                                            <h3 className="text-[15px] font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-tight">
+                                                {course.title}
+                                            </h3>
+                                        </div>
+
+                                        <div className="mt-auto space-y-4">
+                                            <div className="flex items-center justify-between text-[10px] font-bold text-muted-foreground/60 uppercase tracking-tight">
+                                                <div className="flex items-center gap-1.5">
+                                                    <Clock className="size-3.5" strokeWidth={2.5} />
+                                                    <span>24 Weeks</span>
+                                                </div>
+                                                <div className="flex items-center gap-1.5">
+                                                    <Trophy className="size-3.5" strokeWidth={2.5} />
+                                                    <span>Verified</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="flex items-center justify-between gap-2 pt-4 border-t border-border/60">
+                                                <span className="text-[11px] font-bold text-foreground group-hover:text-primary transition-all flex items-center gap-1">
+                                                    Explore Path <ArrowRight className="size-3 group-hover:translate-x-0.5 transition-transform" />
+                                                </span>
+                                                <div className="flex items-center gap-1 text-[9px] font-bold text-muted-foreground/40">
+                                                    <Users className="size-3" />
+                                                    <span>1.2k</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -70,9 +109,15 @@ export default function CourseIndex({ courses }: { courses: any[] }) {
                 </div>
 
                 {filteredCourses.length === 0 && (
-                    <div className="py-16 text-center border border-dashed border-border rounded-sm mt-4">
-                        <Search className="size-8 text-muted-foreground/20 mx-auto mb-2" />
-                        <p className="text-sm text-muted-foreground">No courses found matching your search.</p>
+                    <div className="py-24 text-center border border-dashed border-border/80 rounded-sm bg-muted/5">
+                        <div className="size-16 rounded-full bg-muted/20 flex items-center justify-center mx-auto mb-4 border border-border/60">
+                            <Search className="size-8 text-muted-foreground/20" />
+                        </div>
+                        <h3 className="text-base font-bold text-foreground">No matches found</h3>
+                        <p className="text-xs font-medium text-muted-foreground mt-1">Try adjusting your search criteria to find available paths.</p>
+                        <Button variant="outline" size="sm" className="mt-6 h-9 px-6 rounded-sm text-[11px] font-bold uppercase tracking-tight" onClick={() => setSearch('')}>
+                            Clear Filters
+                        </Button>
                     </div>
                 )}
             </div>
