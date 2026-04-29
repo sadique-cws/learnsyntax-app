@@ -678,5 +678,4 @@ AdminStudentShow.layout = (page: React.ReactNode) => (
     <AppLayout breadcrumbs={[{ title: 'System Control', href: '#' }, { title: 'Node Registry', href: '/admin/students' }, { title: 'Node Profile', href: '#' }]}>
         {page}
     </AppLayout>
-);yout>
 );

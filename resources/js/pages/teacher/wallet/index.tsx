@@ -11,11 +11,20 @@ export default function WalletPage({ balance, actual_balance, transactions, with
     .filter((req: any) => req.status === 'pending')
     .reduce((acc: number, cur: any) => acc + parseFloat(cur.amount), 0);
 
+  const formatDate = (dateString: string) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
   return (
     <>
       <Head title="Earnings & Settlements Wallet" />
       
-      <div className="w-full max-w-5xl mx-auto p-4 lg:p-8 space-y-8 font-sans select-none">
+      <div className="w-full max-w-6xl mx-auto p-4 lg:p-8 space-y-8 font-sans select-none">
         
         {/* Action Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-card p-6 rounded-2xl border border-border shadow-sm relative overflow-hidden">
@@ -89,7 +98,7 @@ export default function WalletPage({ balance, actual_balance, transactions, with
                                     </div>
                                     <div className="font-medium">
                                         <p className="text-foreground font-bold">{tx.description}</p>
-                                        <p className="text-[10px] text-muted-foreground mt-0.5">{new Date(tx.created_at).toLocaleDateString()}</p>
+                                        <p className="text-[10px] text-muted-foreground mt-0.5">{formatDate(tx.created_at)}</p>
                                     </div>
                                 </div>
                                 <div className={`font-black text-sm ${tx.type === 'credit' ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
@@ -138,7 +147,7 @@ export default function WalletPage({ balance, actual_balance, transactions, with
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <span>Requested:</span>
-                                        <span className="font-bold text-foreground">{new Date(req.created_at).toLocaleDateString()}</span>
+                                        <span className="font-bold text-foreground">{formatDate(req.created_at)}</span>
                                     </div>
                                     {req.admin_notes && (
                                         <div className="mt-1 p-2 rounded bg-red-500/5 border border-red-500/10 text-red-500 text-[9px]">

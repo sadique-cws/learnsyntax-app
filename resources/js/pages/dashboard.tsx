@@ -148,7 +148,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                         </div>
                                         <div className="flex items-end gap-0.5 h-6">
                                             {Array.from({ length: 24 }).map((_, i) => (
-                                                <div key={i} className="flex-1 bg-primary rounded-t-[1px]" style={{ height: `${Math.max(10, Math.random() * 100)}%` }} />
+                                                <div key={i} className="flex-1 bg-primary rounded-t-[1px]" style={{ height: `${Math.max(10, ((i * 31) % 90) + 10)}%` }} />
                                             ))}
                                         </div>
                                     </div>
