@@ -12,12 +12,12 @@ export default function AdminStudentIndex({ students }: { students: any[] }) {
             sortable: true,
             render: (student) => (
                 <div className="flex items-center gap-3">
-                    <div className="size-10 rounded bg-primary/5 border border-primary/10 flex items-center justify-center font-black text-primary text-xs shrink-0 ">
-                        <User className="size-4" />
+                    <div className="size-10 rounded-md bg-primary/5 border border-primary/10 flex items-center justify-center text-primary shrink-0">
+                        <User className="size-5 opacity-70" />
                     </div>
                     <div>
-                        <div className="font-bold text-sm text-foreground">{student.name}</div>
-                        <div className="text-[10px] text-muted-foreground font-bold  tracking-tight">{student.email}</div>
+                        <div className="font-semibold text-sm text-foreground leading-tight">{student.name}</div>
+                        <div className="text-[11px] text-muted-foreground font-medium mt-0.5">{student.email}</div>
                     </div>
                 </div>
             )
@@ -28,8 +28,8 @@ export default function AdminStudentIndex({ students }: { students: any[] }) {
             sortable: false,
             render: (student) => (
                 <div className="flex items-center gap-2">
-                    <BookOpen className="size-3 text-muted-foreground" />
-                    <span className="font-bold text-xs">{student.enrollments.length} Programs</span>
+                    <div className="size-1.5 rounded-full bg-primary/40" />
+                    <span className="font-medium text-xs text-muted-foreground"><span className="text-foreground font-semibold">{student.enrollments.length}</span> Programs</span>
                 </div>
             )
         },
@@ -38,7 +38,7 @@ export default function AdminStudentIndex({ students }: { students: any[] }) {
             label: 'Joined Date',
             sortable: true,
             render: (student) => (
-                <span className="text-xs text-muted-foreground">{new Date(student.created_at).toLocaleDateString()}</span>
+                <span className="text-[13px] font-medium text-muted-foreground/80">{new Date(student.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
             )
         }
     ];

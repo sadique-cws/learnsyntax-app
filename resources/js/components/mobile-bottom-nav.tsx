@@ -51,7 +51,7 @@ export function MobileBottomNav() {
     ];
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-border bg-background px-4 lg:hidden ">
+        <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-20 items-center justify-around border-t border-border bg-background px-2 lg:hidden pb-safe">
             {navItems.map((item) => {
                 const active = isCurrentUrl(item.href);
                 return (
@@ -59,12 +59,20 @@ export function MobileBottomNav() {
                         key={item.title}
                         href={item.href}
                         className={cn(
-                            'flex flex-col items-center justify-center space-y-1 transition-colors',
+                            'flex flex-col items-center justify-center space-y-1 relative min-w-[64px] h-full',
                             active ? 'text-primary' : 'text-muted-foreground'
                         )}
                     >
-                        <item.icon className={cn('h-5 w-5', active && 'fill-current')} />
-                        <span className="text-[10px] font-medium">{item.title}</span>
+                        <div className={cn(
+                            "flex items-center justify-center w-16 h-8 rounded-full transition-colors duration-200",
+                            active ? "bg-primary/10" : "bg-transparent"
+                        )}>
+                            <item.icon className={cn('size-[22px]', active && 'fill-primary/20')} strokeWidth={active ? 2.5 : 2} />
+                        </div>
+                        <span className={cn(
+                            "text-[11px] font-bold tracking-tight transition-all",
+                            active ? "opacity-100" : "opacity-80"
+                        )}>{item.title}</span>
                     </Link>
                 );
             })}

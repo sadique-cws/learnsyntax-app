@@ -23,6 +23,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
+import { Card } from "@/components/ui/card";
 
 export interface Column<T> {
     key: keyof T | string;
@@ -164,30 +165,30 @@ export function AdminDataTable<T extends { id: number | string }>({
             {(title || onAdd) && (
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
                     <div>
-                        {title && <h1 className="text-2xl font-medium  text-foreground">{title}</h1>}
-                        {subtitle && <p className="text-muted-foreground text-xs font-medium  mt-1">{subtitle}</p>}
+                        {title && <h1 className="text-[20px] font-semibold text-foreground leading-tight tracking-tight">{title}</h1>}
+                        {subtitle && <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>}
                     </div>
                     {onAdd && (
-                        <Button onClick={onAdd} className="rounded-sm font-medium  text-[11px] h-10 px-6">
+                        <Button onClick={onAdd} className="bg-primary hover:bg-primary/90 text-primary-foreground h-10 font-medium px-6 shadow-md shadow-primary/20 rounded-md text-xs">
                             {addLabel}
                         </Button>
                     )}
                 </div>
             )}
 
-            <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
-                <div className="relative w-full lg:w-72 shrink-0">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center bg-background p-4 rounded-lg border border-border/50 shadow-sm">
+                <div className="relative w-full lg:w-80 shrink-0">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground/70" />
                     <Input 
                         placeholder={searchPlaceholder} 
-                        className="pl-10 h-10 rounded-sm border-border bg-card text-sm"
+                        className="pl-10 h-10 rounded-md border-border bg-muted/20 text-xs font-medium focus-visible:bg-background transition-colors"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
                 </div>
                 
                 {dateFilterKey && (
-                    <div className="flex items-center gap-3 p-1 px-4 rounded-sm border border-border bg-muted/30 hover:border-primary/30 transition-colors group/range">
+                    <div className="flex items-center gap-3 p-1 px-4 rounded-md border border-border/50 bg-muted/10 hover:border-primary/20 transition-colors group/range">
                         <Calendar 
                             className="size-3.5 text-muted-foreground group-hover/range:text-primary transition-colors cursor-pointer" 
                             onClick={() => (document.getElementById('date-filter-start') as HTMLInputElement)?.showPicker?.()}
@@ -201,7 +202,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                                 onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
                                 onClick={(e) => e.currentTarget.showPicker?.()}
                             />
-                            <span className="text-[10px] font-bold text-muted-foreground/50  tracking-tighter">to</span>
+                            <span className="text-[10px] font-bold text-muted-foreground/40 lowercase">to</span>
                             <Input 
                                 type="date" 
                                 className="h-8 border-none bg-transparent text-[11px] font-semibold focus-visible:ring-0 w-[100px] p-0 cursor-pointer"
@@ -213,7 +214,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                         {(dateRange.start || dateRange.end) && (
                             <button 
                                 onClick={() => setDateRange({ start: '', end: '' })}
-                                className="p-1 hover:bg-background rounded-sm transition-colors"
+                                className="p-1 hover:bg-background rounded-full transition-colors"
                             >
                                 <X className="size-3 text-muted-foreground hover:text-destructive" />
                             </button>
@@ -227,8 +228,8 @@ export function AdminDataTable<T extends { id: number | string }>({
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className={cn(
-                                "rounded-sm h-10 px-4 font-medium text-[11px]  border-border bg-card",
-                                hasActiveFilters && "border-primary text-primary"
+                                "rounded-md h-10 px-4 font-medium text-xs border-border/50 bg-muted/10 hover:bg-muted/20 transition-colors",
+                                hasActiveFilters && "border-primary/30 text-primary bg-primary/5"
                             )}>
                                 <Filter className="size-4 mr-2" />
                                 Filter
@@ -239,18 +240,18 @@ export function AdminDataTable<T extends { id: number | string }>({
                                 )}
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56 rounded-sm border-border">
-                            <DropdownMenuLabel className="text-[11px] font-medium tracking-tight">Filter By</DropdownMenuLabel>
+                        <DropdownMenuContent align="end" className="w-56 rounded-md border-border shadow-lg">
+                            <DropdownMenuLabel className="text-[11px] font-bold text-muted-foreground/60 tracking-wider uppercase px-2 py-2">Filter By</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             {filterableColumns.map(filter => (
                                 <div key={filter.key}>
-                                    <DropdownMenuLabel className="text-[10px] font-medium text-muted-foreground px-2 py-1.5">{filter.label}</DropdownMenuLabel>
+                                    <DropdownMenuLabel className="text-[10px] font-bold text-muted-foreground/40 px-2 py-1.5 uppercase tracking-widest">{filter.label}</DropdownMenuLabel>
                                     {filter.options.map(option => (
                                         <DropdownMenuCheckboxItem
                                             key={String(option.value)}
                                             checked={(activeFilters[filter.key] || []).includes(option.value)}
                                             onCheckedChange={() => toggleFilter(filter.key, option.value)}
-                                            className="text-xs font-medium"
+                                            className="text-xs font-medium py-2"
                                         >
                                             {option.label}
                                         </DropdownMenuCheckboxItem>
@@ -261,7 +262,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                             {hasActiveFilters && (
                                 <DropdownMenuItem 
                                     onClick={clearFilters}
-                                    className="text-xs font-medium  text-destructive justify-center"
+                                    className="text-xs font-semibold text-destructive focus:text-destructive focus:bg-destructive/5 justify-center py-2"
                                 >
                                     Clear All Filters
                                 </DropdownMenuItem>
@@ -279,9 +280,9 @@ export function AdminDataTable<T extends { id: number | string }>({
                         return values.map(val => {
                             const option = filterDef?.options.find(o => o.value === val);
                             return (
-                                <div key={`${key}-${val}`} className="flex items-center gap-1.5 px-2 py-1 bg-primary/10 border border-primary/20 rounded-sm text-[10px] font-medium  text-primary">
-                                    {filterDef?.label}: {option?.label || val}
-                                    <X className="size-3 cursor-pointer" onClick={() => toggleFilter(key, val)} />
+                                <div key={`${key}-${val}`} className="flex items-center gap-2 px-3 py-1 bg-primary/5 border border-primary/20 rounded-full text-[10px] font-bold text-primary tracking-tight">
+                                    <span className="opacity-60">{filterDef?.label}:</span> {option?.label || val}
+                                    <X className="size-3 cursor-pointer hover:text-destructive transition-colors ml-1" onClick={() => toggleFilter(key, val)} />
                                 </div>
                             );
                         });
@@ -289,16 +290,16 @@ export function AdminDataTable<T extends { id: number | string }>({
                 </div>
             )}
 
-            <div className="border border-border rounded-sm bg-card overflow-hidden">
+            <Card className="border-border/50 shadow-sm overflow-hidden bg-background">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="bg-muted/30 border-b border-border">
+                            <tr className="bg-muted/30 border-b border-border/50">
                                 {columns.map((col) => (
                                     <th 
                                         key={String(col.key)}
                                         className={cn(
-                                            "px-4 py-3 text-[11px] font-medium  transition-colors text-muted-foreground",
+                                            "px-5 py-4 text-[11px] font-bold tracking-wider uppercase text-muted-foreground/60 transition-colors",
                                             col.sortable && "cursor-pointer hover:bg-muted/50",
                                             col.align === 'right' && "text-right",
                                             col.align === 'center' && "text-center"
@@ -315,17 +316,17 @@ export function AdminDataTable<T extends { id: number | string }>({
                                         </div>
                                     </th>
                                 ))}
-                                {actions && <th className="px-4 py-3 text-[11px] font-medium  text-right text-muted-foreground">Actions</th>}
+                                {actions && <th className="px-5 py-4 text-[11px] font-bold tracking-wider uppercase text-right text-muted-foreground/60">Actions</th>}
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-border">
+                        <tbody className="divide-y divide-border/50">
                             {filteredAndSortedData.map((item) => (
                                 <tr key={item.id} className="hover:bg-muted/10 transition-colors group">
                                     {columns.map((col) => (
                                         <td 
                                             key={String(col.key)} 
                                             className={cn(
-                                                "px-4 py-4 text-sm font-medium tracking-tight",
+                                                "px-5 py-4 text-[13px] font-medium text-foreground/80",
                                                 col.align === 'right' && "text-right",
                                                 col.align === 'center' && "text-center"
                                             )}
@@ -334,7 +335,7 @@ export function AdminDataTable<T extends { id: number | string }>({
                                         </td>
                                     ))}
                                     {actions && (
-                                        <td className="px-4 py-4 text-right">
+                                        <td className="px-5 py-4 text-right">
                                             {actions(item)}
                                         </td>
                                     )}
@@ -342,15 +343,18 @@ export function AdminDataTable<T extends { id: number | string }>({
                             ))}
                             {filteredAndSortedData.length === 0 && (
                                 <tr>
-                                    <td colSpan={columns.length + (actions ? 1 : 0)} className="px-4 py-12 text-center text-muted-foreground">
-                                        <div className="text-xs font-medium  opacity-50">No matching records found</div>
+                                    <td colSpan={columns.length + (actions ? 1 : 0)} className="px-5 py-20 text-center text-muted-foreground">
+                                        <div className="flex flex-col items-center gap-3">
+                                            <Search className="size-8 text-muted-foreground/20" />
+                                            <div className="text-xs font-semibold opacity-60 uppercase tracking-widest">No matching records found</div>
+                                        </div>
                                     </td>
                                 </tr>
                             )}
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </Card>
         </div>
     );
 }

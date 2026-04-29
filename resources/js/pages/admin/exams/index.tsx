@@ -33,12 +33,12 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
             sortable: true,
             render: (course) => (
                 <div className="flex items-center gap-3">
-                    <div className="size-10 rounded bg-primary/5 border border-primary/10 flex items-center justify-center font-medium text-primary text-xs shrink-0">
-                        <Trophy className="size-4" />
+                    <div className="size-10 rounded-md bg-primary/5 border border-primary/10 flex items-center justify-center text-primary shrink-0">
+                        <Trophy className="size-5 opacity-70" />
                     </div>
                     <div>
-                        <div className="font-medium text-sm text-foreground">{course.title}</div>
-                        <div className="text-[10px] text-muted-foreground font-medium tracking-tight">
+                        <div className="font-semibold text-sm text-foreground leading-tight">{course.title}</div>
+                        <div className="text-[11px] text-muted-foreground font-medium mt-0.5 tracking-tight">
                             {course.exam ? course.exam.title : 'Setup Pending'}
                         </div>
                     </div>
@@ -50,8 +50,9 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
             label: 'Weightage',
             sortable: false,
             render: (course) => (
-                <div className="px-2 py-0.5 bg-muted rounded text-[10px] font-medium  inline-block">
-                    {course.exam ? `${course.exam.total_marks} Marks` : 'N/A'}
+                <div className="flex items-center gap-2">
+                    <div className="size-1.5 rounded-full bg-primary/40" />
+                    <span className="font-medium text-xs text-muted-foreground"><span className="text-foreground font-semibold">{course.exam ? course.exam.total_marks : '0'}</span> Marks</span>
                 </div>
             )
         }

@@ -78,12 +78,12 @@ export default function AdminCourseIndex({ courses }: { courses: any[] }) {
             sortable: true,
             render: (course) => (
                 <div className="flex items-center gap-3">
-                    <div className="size-10 rounded bg-primary/5 border border-primary/10 flex items-center justify-center font-black text-primary text-xs shrink-0 ">
-                        {course.title[0]}
+                    <div className="size-10 rounded-md bg-primary/5 border border-primary/10 flex items-center justify-center text-primary shrink-0">
+                        <BookOpen className="size-5 opacity-70" />
                     </div>
                     <div>
-                        <div className="font-bold text-sm text-foreground">{course.title}</div>
-                        <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-tight">{course.slug}</div>
+                        <div className="font-semibold text-sm text-foreground leading-tight">{course.title}</div>
+                        <div className="text-[11px] text-muted-foreground font-medium mt-0.5 tracking-tight">{course.slug}</div>
                     </div>
                 </div>
             )
@@ -92,15 +92,16 @@ export default function AdminCourseIndex({ courses }: { courses: any[] }) {
             key: 'price',
             label: 'Price',
             sortable: true,
-            render: (course) => <span className="font-bold">₹{course.price}</span>
+            render: (course) => <span className="font-semibold text-foreground">₹{course.price.toLocaleString()}</span>
         },
         {
             key: 'enrollments_count',
             label: 'Learners',
             sortable: true,
             render: (course) => (
-                <div className="px-2 py-0.5 bg-muted rounded text-[10px] font-black uppercase inline-block">
-                    {course.enrollments_count} Enrolled
+                <div className="flex items-center gap-2">
+                    <div className="size-1.5 rounded-full bg-primary/40" />
+                    <span className="font-medium text-xs text-muted-foreground"><span className="text-foreground font-semibold">{course.enrollments_count}</span> Enrolled</span>
                 </div>
             )
         },
@@ -111,10 +112,13 @@ export default function AdminCourseIndex({ courses }: { courses: any[] }) {
             render: (course) => (
                 <div className="flex items-center gap-2">
                     <div className={cn(
-                        "size-2 rounded-full",
-                        course.is_active ? "bg-green-500" : "bg-muted"
+                        "size-1.5 rounded-full",
+                        course.is_active ? "bg-green-500" : "bg-muted-foreground/30"
                     )} />
-                    <span className="text-[10px] font-bold uppercase text-muted-foreground">
+                    <span className={cn(
+                        "text-[12px] font-medium",
+                        course.is_active ? "text-green-600" : "text-muted-foreground"
+                    )}>
                         {course.is_active ? 'Active' : 'Inactive'}
                     </span>
                 </div>

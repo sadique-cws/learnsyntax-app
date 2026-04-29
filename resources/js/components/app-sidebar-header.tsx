@@ -54,15 +54,15 @@ export function AppSidebarHeader({
 
             <div className="flex items-center gap-4 sm:gap-8">
                 <div className="hidden lg:flex items-center gap-6 border-r border-border pr-6 mr-2">
-                    <div className="flex items-center gap-2 text-[10px] font-black   text-muted-foreground/60">
-                        <Wifi className="size-3.5 text-primary" />
+                    <div className="flex items-center gap-2 text-[11px] font-medium text-muted-foreground">
+                        <Wifi className="size-3.5 text-primary/70" />
                         <span>{speed}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-[10px] font-black   text-muted-foreground/60">
-                        <Calendar className="size-3.5 text-primary" />
+                    <div className="flex items-center gap-2 text-[11px] font-medium text-muted-foreground">
+                        <Calendar className="size-3.5 text-primary/70" />
                         <span>{dateTime.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-[10px] font-black   text-primary bg-primary/5 px-3 py-1.5 rounded-sm border border-primary/10">
+                    <div className="flex items-center gap-2 text-[11px] font-semibold text-primary bg-primary/5 px-3 py-1.5 rounded-md border border-primary/10">
                         <Clock className="size-3.5" />
                         <span>{dateTime.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}</span>
                     </div>
@@ -70,8 +70,8 @@ export function AppSidebarHeader({
 
                 <div className="flex items-center gap-3">
                     <div className="hidden sm:flex flex-col items-end">
-                        <span className="text-[10px] font-black   leading-none mb-0.5">{auth.user.name}</span>
-                        <span className="text-[8px] font-bold text-muted-foreground  ">{auth.user.is_admin ? 'Administrator' : 'Student'}</span>
+                        <span className="text-[12px] font-semibold leading-none mb-1">{auth.user.name}</span>
+                        <span className="text-[10px] font-medium text-muted-foreground">{auth.user.is_admin ? 'Administrator' : 'Student'}</span>
                     </div>
                     <Button 
                         variant="ghost" 
