@@ -70,11 +70,13 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                                 <div className="flex flex-col sm:flex-row gap-3">
                                     <Button 
                                         size="lg" 
-                                        className="h-12 px-8 rounded font-bold bg-primary hover:bg-primary/90 text-white   text-xs w-full sm:w-auto"
+                                        className="h-12 px-8 rounded font-bold bg-primary hover:bg-primary/90 text-white text-xs w-full sm:w-auto"
                                         onClick={handleEnroll}
-                                        disabled={processing || is_enrolled}
+                                        disabled={processing || (is_enrolled && enrollment_status === 'paid')}
                                     >
-                                        {is_enrolled ? 'Already Enrolled' : `Enroll Now @ ₹${course.price}`}
+                                        {is_enrolled && enrollment_status === 'paid' 
+                                            ? 'Already Enrolled' 
+                                            : (enrollment_status === 'pending' ? 'Proceed to Payment' : `Enroll Now @ ₹${course.price}`)}
                                     </Button>
                                     <Button variant="outline" size="lg" className="h-12 px-8 rounded font-bold border-background/20 text-background bg-foreground hover:bg-background/10 hover:text-background   text-xs w-full sm:w-auto">
                                         Download Brochure

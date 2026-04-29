@@ -48,9 +48,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return inertia('dashboard', [
                 'stats' => [
                     'courses' => Course::count(),
-                    'enrollments' => Enrollment::count(),
+                    'enrollments' => Enrollment::where('status', 'paid')->count(),
                     'revenue' => (float) Payment::where('status', 'completed')->sum('amount'),
-                    'signups_this_week' => Enrollment::where('created_at', '>=', now()->subDays(7))->count(),
+                    'signups_this_week' => Enrollment::where('status', 'paid')->where('created_at', '>=', now()->subDays(7))->count(),
                     'recent_users' => $recentUsers,
                 ],
             ]);
@@ -61,7 +61,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         }
 
         return inertia('dashboard', [
-            'enrollments' => $user->enrollments()->with(['course', 'batch', 'payment.invoice', 'certificate'])->get(),
+            'enrollments' => $user->enrollments()->where('status', 'paid')->with(['course', 'batch', 'payment.invoice', 'certificate'])->get(),
             'is_student' => $user->is_student,
         ]);
     })->name('dashboard');

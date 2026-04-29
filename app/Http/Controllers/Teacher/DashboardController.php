@@ -30,6 +30,7 @@ class DashboardController extends Controller
         $courses = $teacher->courses()->get();
         
         $query = \App\Models\Enrollment::whereIn('course_id', $courses->pluck('id'))
+            ->where('status', 'paid')
             ->with(['user', 'course', 'batch']);
             
         if ($request->has('course_id') && $request->course_id != '') {
