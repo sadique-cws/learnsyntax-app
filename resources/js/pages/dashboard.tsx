@@ -197,12 +197,18 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
 
     return (
         <>
-            <Head title="My Learning Portal" />
+            <Head title={is_student ? "My Learning Portal" : "Welcome to LearnSyntax"} />
             <div className="w-full flex flex-1 flex-col gap-10 p-4 lg:p-6">
                 <div>
-                    <span className="text-[10px] font-black text-primary   mb-2 block">Student Dashboard</span>
-                    <h1 className="text-4xl font-medium  text-foreground leading-none mb-3">My Learning Center</h1>
-                    <p className="text-xs font-medium text-muted-foreground  max-w-2xl">Access your academic programs, track assignment progress, and manage your professional certifications from a single interface.</p>
+                    <span className="text-[10px] font-black text-primary   mb-2 block">{is_student ? "Student Dashboard" : "Getting Started"}</span>
+                    <h1 className="text-4xl font-medium  text-foreground leading-none mb-3">
+                        {is_student ? "My Learning Center" : "Welcome to LearnSyntax"}
+                    </h1>
+                    <p className="text-xs font-medium text-muted-foreground  max-w-2xl">
+                        {is_student 
+                            ? "Access your academic programs, track assignment progress, and manage your professional certifications from a single interface."
+                            : "You're just one step away from advancing your career. Browse our professional certification programs to get started."}
+                    </p>
                 </div>
 
                 {/* Academic Achievement / Certificates */}

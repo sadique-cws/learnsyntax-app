@@ -37,6 +37,8 @@ class UserFactory extends Factory
             'gender' => fake()->randomElement(['male', 'female']),
             'qualification' => 'Bachelor of Technology',
             'is_admin' => false,
+            'is_teacher' => false,
+            'is_student' => false,
         ];
     }
 

@@ -109,13 +109,22 @@ export function AppSidebar() {
                     title: 'Browse Courses',
                     href: '/courses',
                     icon: ShoppingBag,
-                },
-                {
-                    title: 'My Courses',
-                    href: '/dashboard',
-                    icon: Book,
                 }
             );
+
+            if (user.is_student) {
+                mainNavItems.push({
+                    title: 'My Learning Center',
+                    href: '/dashboard',
+                    icon: GraduationCap,
+                });
+            } else {
+                mainNavItems.push({
+                    title: 'Become a Student',
+                    href: '/courses',
+                    icon: CheckCircle2,
+                });
+            }
         }
     } else {
         mainNavItems.push(

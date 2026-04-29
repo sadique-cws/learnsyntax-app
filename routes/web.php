@@ -32,13 +32,14 @@ Route::get('/courses/{course:slug}', [CourseController::class, 'show'])->name('s
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         $user = auth()->user();
+
         if ($user->is_admin) {
             $recentUsers = \App\Models\User::with('enrollments')->latest()->take(5)->get()->map(function($u) {
                 return [
                     'name' => $u->name,
                     'email' => $u->email,
                     'initials' => collect(explode(' ', $u->name))->map(fn($n) => mb_substr($n, 0, 1))->join(''),
-                    'role' => $u->is_admin ? 'ADMIN' : 'STUDENT',
+                    'role' => $u->is_admin ? 'ADMIN' : ($u->is_teacher ? 'TEACHER' : ($u->is_student ? 'STUDENT' : 'USER')),
                     'active' => true,
                     'color' => $u->is_admin ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
                 ];
@@ -55,8 +56,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ]);
         }
 
+        if ($user->is_teacher) {
+            return redirect()->route('teacher.dashboard');
+        }
+
         return inertia('dashboard', [
             'enrollments' => $user->enrollments()->with(['course', 'batch', 'payment.invoice', 'certificate'])->get(),
+            'is_student' => $user->is_student,
         ]);
     })->name('dashboard');
 
