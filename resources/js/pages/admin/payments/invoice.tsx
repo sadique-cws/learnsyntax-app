@@ -13,7 +13,7 @@ export default function InvoicePage({ invoice, company }: { invoice: any, compan
     return (
         <>
             <Head title={`Invoice ${invoice.invoice_number}`} />
-            <div className="w-full p-4 space-y-3 print:p-0 print:space-y-0">
+            <div className="invoice-container w-full p-4 space-y-3 print:p-0 print:space-y-0">
                 {/* Action Bar */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 print:hidden">
                     <div className="flex items-center gap-3">
@@ -198,7 +198,7 @@ export default function InvoicePage({ invoice, company }: { invoice: any, compan
                                         <td className="border-r border-black py-1 px-1">{invoice.cgst}</td>
                                         <td className="border-r border-black py-1 px-1"></td>
                                         <td className="border-r border-black py-1 px-1">{invoice.sgst}</td>
-                                        <td className="py-1 px-2">{parseFloat(invoice.cgst) + parseFloat(invoice.sgst)}</td>
+                                        <td className="py-1.5 px-2">{parseFloat(invoice.cgst) + parseFloat(invoice.sgst)}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -228,6 +228,46 @@ export default function InvoicePage({ invoice, company }: { invoice: any, compan
                     </div>
                 </div>
             </div>
+
+            {/* Print Styles */}
+            <style dangerouslySetInnerHTML={{ __html: `
+                @media print {
+                    @page { size: portrait; margin: 0; }
+                    
+                    /* Hide everything by default */
+                    body * {
+                        visibility: hidden !important;
+                    }
+                    
+                    /* Show only the invoice container and its children */
+                    .invoice-container, .invoice-container * {
+                        visibility: visible !important;
+                    }
+                    
+                    /* Reset body background and positioning */
+                    body { 
+                        margin: 0 !important; 
+                        padding: 0 !important;
+                        background: white !important; 
+                    }
+                    
+                    /* Position the container at the top left of the print page */
+                    .invoice-container {
+                        position: fixed !important;
+                        left: 0 !important;
+                        top: 0 !important;
+                        width: 100vw !important;
+                        height: auto !important;
+                        max-width: none !important;
+                        border: none !important;
+                        margin: 0 !important;
+                        padding: 20px !important;
+                        transform: none !important;
+                    }
+
+                    .print-hidden { display: none !important; }
+                }
+            ` }} />
         </>
     );
 }
