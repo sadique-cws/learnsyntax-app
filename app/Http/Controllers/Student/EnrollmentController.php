@@ -139,6 +139,22 @@ class EnrollmentController extends Controller
             $teacher->increment('wallet_balance', $commissionAmount);
         }
 
+        // Send Notification to Student
+        \App\Jobs\SendNotificationJob::dispatch(
+            $enrollment->user,
+            ['mail', 'database'],
+            'Course Purchased Successfully!',
+            'emails.course-purchase',
+            [
+                'name' => $enrollment->user->name,
+                'course_name' => $enrollment->course->title,
+                'price' => '₹' . $enrollment->course->price,
+                'message' => 'Thank you for purchasing ' . $enrollment->course->title . '. You can now select your batch and start learning!',
+                'link' => route('student.enrollments.batch', $enrollment),
+                'button_text' => 'Start Learning'
+            ]
+        )->afterCommit();
+
         return redirect()->route('student.enrollments.batch', $enrollment);
     }
 

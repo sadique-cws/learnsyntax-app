@@ -28,7 +28,7 @@ class CreateNewUser implements CreatesNewUsers
             'college' => ['nullable', 'string', 'max:255'],
         ])->validate();
 
-        return User::create([
+        $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => $input['password'],
@@ -37,5 +37,20 @@ class CreateNewUser implements CreatesNewUsers
             'qualification' => $input['qualification'],
             'college' => $input['college'] ?? null,
         ]);
+
+        \App\Jobs\SendNotificationJob::dispatch(
+            $user,
+            ['mail', 'database'],
+            'Welcome to ' . config('app.name'),
+            'emails.signup-welcome',
+            [
+                'name' => $user->name,
+                'message' => 'Welcome to our platform! We are glad to have you.',
+                'link' => url('/dashboard'),
+                'button_text' => 'Go to Dashboard'
+            ]
+        )->afterCommit();
+
+        return $user;
     }
 }
