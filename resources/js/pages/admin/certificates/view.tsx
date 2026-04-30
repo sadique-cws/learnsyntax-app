@@ -110,11 +110,23 @@ export default function CertificateView({ certificate }: { certificate: any }) {
                         left: 0 !important;
                         top: 0 !important;
                         width: 100vw !important;
-                        height: auto !important;
+                        height: 100vh !important;
                         max-width: none !important;
+                        max-height: none !important;
                         border: none !important;
                         margin: 0 !important;
+                        padding: 0 !important;
                         transform: none !important;
+                        page-break-after: avoid !important;
+                        page-break-before: avoid !important;
+                    }
+
+                    /* Prevent extra blank pages */
+                    html, body {
+                        height: 100% !important;
+                        overflow: hidden !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
                     }
 
                     /* Hide the action bar specifically just in case */
