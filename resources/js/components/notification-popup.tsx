@@ -14,7 +14,8 @@ import { Button } from '@/components/ui/button';
 export function NotificationPopup() {
     const { auth } = usePage().props as any;
     const [isOpen, setIsOpen] = useState(false);
-    const latest = auth.latestNotification;
+    const [newNotification, setNewNotification] = useState<any>(null);
+    const latest = newNotification || auth.latestNotification;
 
     useEffect(() => {
         // Only show if we haven't shown it in this session and there's a latest unread notification
@@ -22,6 +23,27 @@ export function NotificationPopup() {
             setIsOpen(true);
         }
     }, [latest]);
+
+    // Real-time listener
+    useEffect(() => {
+        if (auth.user && (window as any).Echo) {
+            const channel = `App.Models.User.${auth.user.id}`;
+            (window as any).Echo.private(channel)
+                .notification((notification: any) => {
+                    console.log('Real-time notification received:', notification);
+                    // Clear the notified flag to allow showing the new one
+                    sessionStorage.removeItem('notified');
+                    setNewNotification({
+                        ...notification,
+                        data: notification // Laravel Echo notification payload is direct
+                    });
+                });
+
+            return () => {
+                (window as any).Echo.leave(channel);
+            };
+        }
+    }, [auth.user]);
 
     const handleAction = (view = false) => {
         sessionStorage.setItem('notified', 'true');
@@ -52,15 +74,15 @@ export function NotificationPopup() {
                         </div>
                         <div className="flex-1 min-w-0">
                             <DialogTitle className="text-lg font-bold text-foreground">
-                                Important Update
+                                {latest.data?.subject || 'Important Update'}
                             </DialogTitle>
                             <div className="mt-2 p-3 bg-muted/30 border border-border rounded-sm">
                                 <p className="text-sm text-foreground font-medium leading-relaxed italic">
-                                    "{latest.data.body || latest.data.message || 'You have new updates waiting for you.'}"
+                                    "{latest.data?.body || latest.data?.message || 'You have new updates waiting for you.'}"
                                 </p>
                             </div>
                             <DialogDescription className="mt-3 text-[11px] text-muted-foreground font-medium uppercase tracking-tight">
-                                Received {new Date(latest.created_at).toLocaleString()}
+                                Received {latest.created_at ? new Date(latest.created_at).toLocaleString() : 'Just now'}
                             </DialogDescription>
                         </div>
                     </div>

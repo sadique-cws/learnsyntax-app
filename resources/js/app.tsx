@@ -7,6 +7,30 @@ import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { configureEcho } from '@laravel/echo-react';
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+
+(window as any).Pusher = Pusher;
+(window as any).Echo = new Echo({
+    broadcaster: 'reverb',
+    key: import.meta.env.VITE_REVERB_APP_KEY,
+    wsHost: import.meta.env.VITE_REVERB_HOST,
+    wsPort: import.meta.env.VITE_REVERB_PORT ?? 8089,
+    wssPort: import.meta.env.VITE_REVERB_PORT ?? 8089,
+    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
+    enabledTransports: ['ws', 'wss'],
+});
+
+configureEcho({
+    broadcaster: 'reverb',
+    key: import.meta.env.VITE_REVERB_APP_KEY,
+    wsHost: import.meta.env.VITE_REVERB_HOST,
+    wsPort: import.meta.env.VITE_REVERB_PORT ?? 8089,
+    wssPort: import.meta.env.VITE_REVERB_PORT ?? 8089,
+    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
+    enabledTransports: ['ws', 'wss'],
+});
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
