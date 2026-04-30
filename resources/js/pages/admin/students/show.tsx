@@ -216,23 +216,27 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                             </div>
                                             <div className="grid grid-cols-2 gap-2">
                                                 <div className="p-2.5 rounded-sm bg-muted/5 border border-border">
-                                                    <div className="text-[10px] text-muted-foreground mb-0.5">Assignments</div>
-                                                    <div className="text-sm font-semibold tabular-nums">{Math.round(enrollment.assignment_average)}%</div>
+                                                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-tight mb-0.5">Avg Assignment</div>
+                                                    <div className="text-sm font-black text-foreground tabular-nums">{Math.round(enrollment.assignment_average)}%</div>
                                                 </div>
                                                 <div className="p-2.5 rounded-sm bg-muted/5 border border-border">
-                                                    <div className="text-[10px] text-muted-foreground mb-0.5">Exams</div>
-                                                    <div className="text-sm font-semibold tabular-nums">{Math.round(enrollment.exam_score)}%</div>
+                                                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-tight mb-0.5">Exam Score</div>
+                                                    <div className="text-sm font-black text-primary tabular-nums">{Math.round(enrollment.exam_score)}%</div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="flex items-center justify-between pt-3 border-t border-border">
                                             <div className="flex items-center gap-3">
-                                                <span className="text-xs text-muted-foreground">
-                                                    Enrolled {new Date(enrollment.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                                                </span>
-                                                {enrollment.certificate && (
-                                                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-sm bg-primary/5 text-primary text-[10px] font-medium border border-primary/10">
-                                                        <Award className="size-2.5" /> Certified
+                                                {enrollment.certificate ? (
+                                                    <div className="flex flex-col items-end">
+                                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm bg-emerald-50 text-emerald-600 text-[10px] font-bold border border-emerald-100">
+                                                            <Award className="size-2.5" /> CERTIFIED
+                                                        </span>
+                                                        <span className="text-[9px] text-muted-foreground mt-1 font-mono">{enrollment.certificate.certificate_number}</span>
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-xs text-muted-foreground">
+                                                        Enrolled {new Date(enrollment.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                                                     </span>
                                                 )}
                                             </div>
@@ -277,14 +281,23 @@ export default function AdminStudentShow({ student, available_batches, stats, al
                                     <div key={attempt.id} className="px-3 py-2.5 flex items-center justify-between hover:bg-muted/5 transition-colors">
                                         <div className="min-w-0">
                                             <div className="text-sm font-medium text-foreground truncate">{attempt.exam.title}</div>
-                                            <div className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                                                <Clock className="size-2.5" /> {new Date(attempt.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
+                                            <div className="flex items-center gap-2 mt-0.5">
+                                                <div className="text-[10px] text-muted-foreground flex items-center gap-1">
+                                                    <Clock className="size-2.5" /> {new Date(attempt.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
+                                                </div>
+                                                <span className="text-[10px] text-muted-foreground">•</span>
+                                                <div className="text-[10px] text-muted-foreground font-medium tabular-nums">
+                                                    {attempt.marks_obtained} / {attempt.exam.total_marks} pts
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-3 shrink-0">
                                             <div className="text-right">
-                                                <div className="text-sm font-semibold text-primary tabular-nums">{attempt.score}%</div>
-                                                <div className="text-[10px] text-muted-foreground capitalize">{attempt.status}</div>
+                                                <div className="text-sm font-black text-primary tabular-nums">{attempt.score}%</div>
+                                                <div className={cn(
+                                                    "text-[10px] font-bold uppercase tracking-tight",
+                                                    attempt.status === 'passed' ? "text-emerald-600" : "text-amber-600"
+                                                )}>{attempt.status}</div>
                                             </div>
                                             <ChevronRight className="size-3.5 text-muted-foreground/20" />
                                         </div>

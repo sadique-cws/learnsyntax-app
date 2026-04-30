@@ -220,6 +220,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Global Academic Views
+    Route::get('academic/learning', [AcademicController::class, 'myLearning'])->name('student.academic.learning');
     Route::get('academic/assignments', [AcademicController::class, 'allAssignments'])->name('student.academic.all-assignments');
     Route::get('academic/exams', [AcademicController::class, 'allExams'])->name('student.academic.all-exams');
     Route::get('academic/payments', [AcademicController::class, 'allPayments'])->name('student.academic.all-payments');

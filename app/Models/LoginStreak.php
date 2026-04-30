@@ -67,12 +67,16 @@ class LoginStreak extends Model
         $longestEver = static::where('user_id', $userId)->max('longest_streak') ?? 0;
         $longest = max($longestEver, $currentStreak);
 
-        return static::create([
-            'user_id' => $userId,
-            'login_date' => $todayStr,
-            'current_streak' => $currentStreak,
-            'longest_streak' => $longest,
-        ]);
+        try {
+            return static::create([
+                'user_id' => $userId,
+                'login_date' => $todayStr,
+                'current_streak' => $currentStreak,
+                'longest_streak' => $longest,
+            ]);
+        } catch (\Illuminate\Database\UniqueConstraintViolationException $e) {
+            return static::where('user_id', $userId)->where('login_date', $todayStr)->first();
+        }
     }
 
     /**

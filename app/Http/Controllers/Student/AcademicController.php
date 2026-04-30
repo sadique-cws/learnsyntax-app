@@ -284,4 +284,20 @@ class AcademicController extends Controller
             abort(403);
         }
     }
+    public function myLearning()
+    {
+        $user = auth()->user();
+        $enrollments = Enrollment::where('user_id', $user->id)
+            ->with(['course', 'batch', 'certificate'])
+            ->get();
+
+        foreach ($enrollments as $enrollment) {
+            $enrollment->append(['assignment_average', 'exam_score', 'overall_average']);
+            $enrollment->is_eligible = $enrollment->isEligibleForCertificate();
+        }
+
+        return inertia('student/academic/my-learning', [
+            'enrollments' => $enrollments,
+        ]);
+    }
 }

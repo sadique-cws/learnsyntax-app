@@ -80,6 +80,11 @@ export function AppSidebar() {
                     icon: GraduationCap,
                 });
                 mainNavItems.push({
+                    title: 'My Learning',
+                    href: '/academic/learning',
+                    icon: Book,
+                });
+                mainNavItems.push({
                     title: 'My Assignments',
                     href: '/academic/assignments',
                     icon: BookOpen,
