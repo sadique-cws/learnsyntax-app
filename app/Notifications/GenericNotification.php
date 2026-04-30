@@ -56,7 +56,7 @@ class GenericNotification extends Notification
     {
         return [
             'subject' => $this->subject,
-            'message' => $this->data['message'] ?? '',
+            'body' => $this->data['body'] ?? ($this->data['message'] ?? ''),
             'link' => $this->data['link'] ?? null,
             'data' => $this->data,
         ];

@@ -68,7 +68,7 @@ class AssignmentController extends Controller
                 'New Assignment: ' . $assignment->title,
                 'emails.notification',
                 [
-                    'message' => "A new assignment has been issued for your batch: {$batch->name}. Due date: {$assignment->due_date}",
+                    'body' => "A new assignment has been issued for your batch: {$batch->name}. Due date: {$assignment->due_date}",
                     'link' => route('student.academic.assignments', $enrollment->id),
                     'button_text' => 'View Assignment'
                 ]
@@ -76,6 +76,46 @@ class AssignmentController extends Controller
         }
 
         return back()->with('success', 'Assignment issued successfully.');
+    }
+
+    public function update(Request $request, Assignment $assignment)
+    {
+        $teacher = auth()->user()->teacher;
+        $courseIds = $teacher->courses()->pluck('id');
+        
+        $batch = Batch::whereIn('course_id', $courseIds)->findOrFail($assignment->batch_id);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'max_marks' => 'required|integer|min:1',
+            'due_date' => 'nullable|date',
+        ]);
+
+        $assignment->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'max_marks' => $request->max_marks,
+            'due_date' => $request->due_date,
+        ]);
+
+        // Re-Notify Students
+        $enrollments = $batch->enrollments()->with('user')->get();
+        foreach ($enrollments as $enrollment) {
+            \App\Jobs\SendNotificationJob::dispatch(
+                $enrollment->user,
+                ['mail', 'database'],
+                'Assignment Updated: ' . $assignment->title,
+                'emails.notification',
+                [
+                    'body' => "An assignment has been updated for your batch: {$batch->name}. Check the new details and due date.",
+                    'link' => route('student.academic.assignments', $enrollment->id),
+                    'button_text' => 'View Changes'
+                ]
+            )->afterCommit();
+        }
+
+        return back()->with('success', 'Assignment updated successfully.');
     }
 
     public function show(Assignment $assignment)

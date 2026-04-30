@@ -45,7 +45,7 @@ class CreateNewUser implements CreatesNewUsers
             'emails.signup-welcome',
             [
                 'name' => $user->name,
-                'message' => 'Welcome to our platform! We are glad to have you.',
+                'body' => 'Welcome to our platform! We are glad to have you.',
                 'link' => url('/dashboard'),
                 'button_text' => 'Go to Dashboard'
             ]

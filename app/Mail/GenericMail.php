@@ -43,9 +43,13 @@ class GenericMail extends Mailable
      */
     public function content(): Content
     {
+        $data = is_array($this->mailData) ? $this->mailData : [];
+        $data['subject'] = $this->subject;
+        $data['body'] = $data['body'] ?? ($data['message'] ?? '');
+
         return new Content(
             view: $this->template,
-            with: $this->mailData,
+            with: $data,
         );
     }
 

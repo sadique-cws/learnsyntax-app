@@ -73,16 +73,16 @@ class AcademicController extends Controller
 
         // Notify Teacher
         $course = $enrollment->course;
-        $teacherUser = $course->teacher->user;
+        $teacher = $course->teacher;
 
-        if ($teacherUser) {
+        if ($teacher && $teacher->user) {
             \App\Jobs\SendNotificationJob::dispatch(
-                $teacherUser,
+                $teacher->user,
                 ['mail', 'database'],
                 'Assignment Submitted: ' . auth()->user()->name,
                 'emails.notification',
                 [
-                    'message' => "Student " . auth()->user()->name . " has submitted an assignment: {$assignment->title} for Course: {$course->title}",
+                    'body' => "Student " . auth()->user()->name . " has submitted an assignment: {$assignment->title} for Course: {$course->title}",
                     'link' => route('teacher.assignments.show', $assignment->id),
                     'button_text' => 'Review Assignment'
                 ]

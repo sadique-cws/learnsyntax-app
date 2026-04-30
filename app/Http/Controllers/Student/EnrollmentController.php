@@ -149,7 +149,7 @@ class EnrollmentController extends Controller
                 'name' => $enrollment->user->name,
                 'course_name' => $enrollment->course->title,
                 'price' => '₹' . $enrollment->course->price,
-                'message' => 'Thank you for purchasing ' . $enrollment->course->title . '. You can now select your batch and start learning!',
+                'body' => 'Thank you for purchasing ' . $enrollment->course->title . '. You can now select your batch and start learning!',
                 'link' => route('student.enrollments.batch', $enrollment),
                 'button_text' => 'Start Learning'
             ]

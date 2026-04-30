@@ -224,6 +224,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Academic Management (Assignments)
         Route::get('assignments', [\App\Http\Controllers\Teacher\AssignmentController::class, 'index'])->name('teacher.assignments.index');
         Route::post('assignments', [\App\Http\Controllers\Teacher\AssignmentController::class, 'store'])->name('teacher.assignments.store');
+        Route::patch('assignments/{assignment}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'update'])->name('teacher.assignments.update');
         Route::get('assignments/{assignment}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'show'])->name('teacher.assignments.show');
         Route::patch('submissions/{submission}/grade', [\App\Http\Controllers\Teacher\AssignmentController::class, 'grade'])->name('teacher.submissions.grade');
         Route::post('submissions/{submission}/comment', [\App\Http\Controllers\Teacher\AssignmentController::class, 'comment'])->name('teacher.submissions.comment');

@@ -77,7 +77,7 @@ export default function Notifications({ notifications }: { notifications: any })
                                             </div>
                                         </div>
                                         <p className="text-xs text-muted-foreground mt-1 leading-normal max-w-2xl">
-                                            {notification.data.message}
+                                            {notification.data.body}
                                         </p>
                                         
                                         {notification.data.link && (
