@@ -5,6 +5,8 @@ import { AppSidebarHeader } from '@/components/app-sidebar-header';
 import { MobileBottomNav } from '@/components/mobile-bottom-nav';
 import type { AppLayoutProps } from '@/types';
 
+import { NotificationPopup } from '@/components/notification-popup';
+
 export default function AppSidebarLayout({
     children,
     breadcrumbs = [],
@@ -16,6 +18,7 @@ export default function AppSidebarLayout({
                 <AppSidebarHeader breadcrumbs={breadcrumbs} />
                 {children}
                 <MobileBottomNav />
+                <NotificationPopup />
             </AppContent>
         </AppShell>
     );

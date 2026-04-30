@@ -5,6 +5,8 @@ import { MobileBottomNav } from '@/components/mobile-bottom-nav';
 import { TeacherSidebar } from '@/components/teacher-sidebar';
 import type { BreadcrumbItem } from '@/types';
 
+import { NotificationPopup } from '@/components/notification-popup';
+
 export default function TeacherLayout({
     breadcrumbs = [],
     children,
@@ -19,6 +21,7 @@ export default function TeacherLayout({
                 <AppSidebarHeader breadcrumbs={breadcrumbs} />
                 {children}
                 <MobileBottomNav />
+                <NotificationPopup />
             </AppContent>
         </AppShell>
     );

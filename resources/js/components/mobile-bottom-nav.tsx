@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Home, LayoutGrid, User, Palette } from 'lucide-react';
+import { Home, LayoutGrid, User, Bell } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { dashboard, home } from '@/routes';
@@ -14,7 +14,7 @@ export function MobileBottomNav() {
     const navItems = user ? [
         { title: 'Home', href: dashboard().url, icon: Home },
         { title: 'Explore', href: '/courses', icon: LayoutGrid },
-        { title: 'Theme', href: appearanceEdit().url, icon: Palette },
+        { title: 'Alerts', href: '/notifications', icon: Bell, count: auth.unreadNotificationsCount },
         { title: 'Profile', href: profileEdit().url, icon: User },
     ] : [
         { title: 'Home', href: '/', icon: Home },
@@ -35,7 +35,14 @@ export function MobileBottomNav() {
                             active ? 'text-primary' : 'text-muted-foreground'
                         )}
                     >
-                        <item.icon className={cn('size-5', active && 'text-primary')} strokeWidth={active ? 2 : 1.5} />
+                        <div className="relative">
+                            <item.icon className={cn('size-5', active && 'text-primary')} strokeWidth={active ? 2 : 1.5} />
+                            {(item as any).count > 0 && (
+                                <span className="absolute -top-1 -right-1 flex h-3.5 min-w-[14px] items-center justify-center rounded-full bg-red-500 px-0.5 text-[8px] font-bold text-white ring-1 ring-background">
+                                    {(item as any).count}
+                                </span>
+                            )}
+                        </div>
                         <span className={cn(
                             "text-[10px] font-medium transition-colors",
                             active ? "text-primary" : "text-muted-foreground"

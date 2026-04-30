@@ -2,8 +2,8 @@ import { Breadcrumbs } from '@/components/breadcrumbs';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import type { BreadcrumbItem as BreadcrumbItemType } from '@/types';
 import { useEffect, useState } from 'react';
-import { LogOut } from 'lucide-react';
-import { router, usePage } from '@inertiajs/react';
+import { Bell, LogOut } from 'lucide-react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 
 export function AppSidebarHeader({
@@ -39,11 +39,26 @@ export function AppSidebarHeader({
                 </div>
 
                 <div className="flex items-center gap-2">
+                    <Link href="/notifications">
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="relative size-8 rounded-sm text-muted-foreground hover:bg-muted"
+                        >
+                            <Bell className="size-4" />
+                            {auth.unreadNotificationsCount > 0 && (
+                                <span className="absolute -top-0.5 -right-0.5 flex h-3.5 min-w-[14px] items-center justify-center rounded-full bg-red-500 px-0.5 text-[8px] font-bold text-white ring-2 ring-background">
+                                    {auth.unreadNotificationsCount}
+                                </span>
+                            )}
+                        </Button>
+                    </Link>
+
                     <div className="hidden sm:flex flex-col items-end">
                         <span className="text-xs font-medium text-foreground leading-none">{auth.user.name}</span>
-                        <span className="text-[10px] text-muted-foreground mt-0.5">{auth.user.is_admin ? 'Admin' : 'Student'}</span>
+                        <span className="text-[10px] text-muted-foreground mt-0.5">{auth.user.is_admin ? 'Admin' : (auth.user.is_teacher ? 'Teacher' : 'Student')}</span>
                     </div>
-                    <Button 
+                    <Button
                         variant="ghost" 
                         size="icon" 
                         onClick={handleLogout}
