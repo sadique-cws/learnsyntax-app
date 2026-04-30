@@ -109,6 +109,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Academic Management (Assignments & Exams)
         Route::prefix('academic')->group(function () {
+            // Curriculum Management
+            Route::get('courses/{course}/curriculum', [App\Http\Controllers\Admin\CourseController::class, 'curriculum'])->name('admin.courses.curriculum');
+            Route::post('courses/{course}/modules', [App\Http\Controllers\Admin\CourseController::class, 'storeModule'])->name('admin.courses.modules.store');
+            Route::patch('modules/{module}', [App\Http\Controllers\Admin\CourseController::class, 'updateModule'])->name('admin.modules.update');
+            Route::delete('modules/{module}', [App\Http\Controllers\Admin\CourseController::class, 'destroyModule'])->name('admin.modules.destroy');
+            Route::post('modules/{module}/chapters', [App\Http\Controllers\Admin\CourseController::class, 'storeChapter'])->name('admin.modules.chapters.store');
+            Route::patch('chapters/{chapter}', [App\Http\Controllers\Admin\CourseController::class, 'updateChapter'])->name('admin.chapters.update');
+            Route::delete('chapters/{chapter}', [App\Http\Controllers\Admin\CourseController::class, 'destroyChapter'])->name('admin.chapters.destroy');
+
             Route::get('assignments', [AssignmentController::class, 'index'])->name('admin.assignments.index');
             Route::post('assignments', [AssignmentController::class, 'store'])->name('admin.assignments.store');
             Route::get('assignments/{assignment}', [AssignmentController::class, 'show'])->name('admin.assignments.show');
@@ -132,6 +141,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Student Academic Routes
     Route::prefix('my-course/{enrollment}')->group(function () {
+        Route::get('progress', [AcademicController::class, 'progress'])->name('student.academic.progress');
         Route::get('assignments', [AcademicController::class, 'assignments'])->name('student.academic.assignments');
         Route::post('assignments/{assignment}', [AcademicController::class, 'submitAssignment'])->name('student.academic.submit-assignment');
         Route::get('exam', [AcademicController::class, 'exam'])->name('student.academic.exam');
@@ -153,12 +163,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('kyc', [KycController::class, 'show'])->name('teacher.kyc');
         Route::post('kyc', [KycController::class, 'store'])->name('teacher.kyc.store');
 
+        // Learning Progress & Logs
+        Route::get('progress', [DashboardController::class, 'progressIndex'])->name('teacher.progress.index');
+        Route::get('batches/{batch}/progress', [DashboardController::class, 'progress'])->name('teacher.batches.progress');
+        Route::post('batches/{batch}/progress', [DashboardController::class, 'storeLog'])->name('teacher.batches.progress.store');
+
         // Academic Management (Assignments)
         Route::get('assignments', [\App\Http\Controllers\Teacher\AssignmentController::class, 'index'])->name('teacher.assignments.index');
         Route::post('assignments', [\App\Http\Controllers\Teacher\AssignmentController::class, 'store'])->name('teacher.assignments.store');
         Route::get('assignments/{assignment}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'show'])->name('teacher.assignments.show');
         Route::patch('submissions/{submission}/grade', [\App\Http\Controllers\Teacher\AssignmentController::class, 'grade'])->name('teacher.submissions.grade');
         Route::post('submissions/{submission}/comment', [\App\Http\Controllers\Teacher\AssignmentController::class, 'comment'])->name('teacher.submissions.comment');
+        // Progress Logging
+        Route::get('progress', [DashboardController::class, 'progressIndex'])->name('teacher.progress.index');
+        Route::get('batches/{batch}/progress', [DashboardController::class, 'progress'])->name('teacher.batches.progress');
+        Route::post('batches/{batch}/progress', [DashboardController::class, 'storeLog'])->name('teacher.batches.progress.store');
     });
 
 });

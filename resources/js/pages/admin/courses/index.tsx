@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
-import { Plus, Edit2, Trash2, BookOpen } from 'lucide-react';
+import { Plus, Edit2, Trash2, BookOpen, Layers, Eye } from 'lucide-react';
 import { AdminDataTable, Column } from '@/components/admin/admin-data-table';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
@@ -36,7 +36,9 @@ export default function AdminCourseIndex({ courses }: { courses: any[] }) {
                         <BookOpen className="size-3.5" />
                     </div>
                     <div className="min-w-0">
-                        <div className="text-sm font-medium text-foreground truncate">{course.title}</div>
+                        <a href={`/courses/${course.slug}`} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-foreground truncate hover:text-primary transition-colors">
+                            {course.title}
+                        </a>
                         <div className="text-xs text-muted-foreground truncate">{course.slug}</div>
                     </div>
                 </div>
@@ -84,8 +86,20 @@ export default function AdminCourseIndex({ courses }: { courses: any[] }) {
                     <AdminDataTable title="All Courses" data={courses} columns={columns} searchPlaceholder="Search courses..."
                         actions={(course) => (
                             <div className="flex items-center justify-end gap-1">
-                                <Button variant="ghost" size="icon" className="size-7 rounded-sm text-muted-foreground hover:text-foreground hover:bg-muted/50" onClick={() => handleEdit(course)}><Edit2 className="size-3" /></Button>
-                                <Button variant="ghost" size="icon" className="size-7 rounded-sm text-muted-foreground hover:text-destructive hover:bg-destructive/5" onClick={() => handleDelete(course.id)}><Trash2 className="size-3" /></Button>
+                                <Button asChild variant="ghost" size="icon" className="size-7 rounded-sm text-muted-foreground hover:text-foreground hover:bg-muted/50" title="View Public Page">
+                                    <a href={`/courses/${course.slug}`} target="_blank" rel="noopener noreferrer">
+                                        <Eye className="size-3" />
+                                    </a>
+                                </Button>
+                                <Button variant="ghost" size="icon" className="size-7 rounded-sm text-muted-foreground hover:text-foreground hover:bg-muted/50" title="Curriculum" onClick={() => router.get(`/admin/academic/courses/${course.id}/curriculum`)}>
+                                    <Layers className="size-3" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="size-7 rounded-sm text-muted-foreground hover:text-foreground hover:bg-muted/50" onClick={() => handleEdit(course)}>
+                                    <Edit2 className="size-3" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="size-7 rounded-sm text-muted-foreground hover:text-destructive hover:bg-destructive/5" onClick={() => handleDelete(course.id)}>
+                                    <Trash2 className="size-3" />
+                                </Button>
                             </div>
                         )}
                     />

@@ -29,7 +29,7 @@ class CourseController extends Controller
         }
 
         return inertia('courses/show', [
-            'course' => $course->load('batches'),
+            'course' => $course->load(['batches', 'modules.chapters']),
             'is_enrolled' => $enrollment !== null,
             'enrollment_status' => $enrollment?->status,
             'enrollment_id' => $enrollment?->id,

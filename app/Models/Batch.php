@@ -25,4 +25,9 @@ class Batch extends Model
     {
         return $this->hasMany(Assignment::class);
     }
+
+    public function learningLogs()
+    {
+        return $this->hasMany(DailyLearningLog::class);
+    }
 }

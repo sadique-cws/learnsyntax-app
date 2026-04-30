@@ -277,7 +277,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                         
                                         <div className="flex gap-2.5">
                                             <Button asChild variant="outline" size="sm" className="flex-1 h-9 rounded-sm text-[11px] font-bold uppercase tracking-tight shadow-none border-border/80 hover:bg-muted/50 transition-all">
-                                                <Link href={`/courses/${enrollment.course.slug}`}>Details</Link>
+                                                <Link href={`/my-course/${enrollment.id}/progress`}>Roadmap</Link>
                                             </Button>
                                             <Button asChild size="sm" className="flex-1 h-9 rounded-sm text-[11px] font-bold uppercase tracking-tight shadow-none bg-primary hover:bg-primary/90 transition-all">
                                                 <Link href={`/my-course/${enrollment.id}/assignments`}>Continue</Link>

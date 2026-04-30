@@ -13,6 +13,22 @@ use Illuminate\Http\Request;
 
 class AcademicController extends Controller
 {
+    public function progress(Enrollment $enrollment)
+    {
+        $this->authorizeAccess($enrollment);
+
+        $enrollment->load([
+            'course.modules.chapters.learningLogs' => function ($query) use ($enrollment) {
+                $query->where('batch_id', $enrollment->batch_id);
+            },
+            'batch'
+        ]);
+
+        return inertia('student/academic/progress', [
+            'enrollment' => $enrollment,
+        ]);
+    }
+
     public function assignments(Enrollment $enrollment)
     {
         $this->authorizeAccess($enrollment);

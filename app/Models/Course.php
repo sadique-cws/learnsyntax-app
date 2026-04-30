@@ -30,4 +30,9 @@ class Course extends Model
     {
         return $this->hasOne(Exam::class);
     }
+
+    public function modules()
+    {
+        return $this->hasMany(CourseModule::class)->orderBy('sort_order');
+    }
 }
