@@ -233,7 +233,7 @@ function GradingForm({ submission, maxMarks }: { submission: any, maxMarks: numb
     return (
         <section className="space-y-3">
             <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Evaluate marks</span>
+                <span className="text-[10px] font-bold text-muted-foreground ">Evaluate marks</span>
                 {submission.is_late && (
                     <span className="text-[8px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded border border-red-100">-10 Penalty</span>
                 )}
@@ -285,7 +285,7 @@ function CommentSection({ submission }: { submission: any }) {
 
     return (
         <section className="space-y-3 pt-2">
-            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Feedback Loop</span>
+            <span className="text-[10px] font-bold text-muted-foreground ">Feedback Loop</span>
             
             <div className="space-y-3">
                 {submission.admin_comments && (

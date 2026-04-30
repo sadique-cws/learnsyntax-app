@@ -88,22 +88,22 @@ export function TeacherSidebar() {
 
             <SidebarContent className="gap-0 py-2">
                 <SidebarGroup>
-                    <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 px-4 mb-2">Main</SidebarGroupLabel>
+                    <SidebarGroupLabel className="text-[10px] font-bold  text-muted-foreground/60 px-4 mb-2">Main</SidebarGroupLabel>
                     <NavMain items={overviewItems} />
                 </SidebarGroup>
 
                 <SidebarGroup>
-                    <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 px-4 mb-2">Management</SidebarGroupLabel>
+                    <SidebarGroupLabel className="text-[10px] font-bold  text-muted-foreground/60 px-4 mb-2">Management</SidebarGroupLabel>
                     <NavMain items={academicItems} />
                 </SidebarGroup>
 
                 <SidebarGroup>
-                    <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 px-4 mb-2">Financials</SidebarGroupLabel>
+                    <SidebarGroupLabel className="text-[10px] font-bold  text-muted-foreground/60 px-4 mb-2">Financials</SidebarGroupLabel>
                     <NavMain items={financeItems} />
                 </SidebarGroup>
 
                 <SidebarGroup>
-                    <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 px-4 mb-2">Account</SidebarGroupLabel>
+                    <SidebarGroupLabel className="text-[10px] font-bold  text-muted-foreground/60 px-4 mb-2">Account</SidebarGroupLabel>
                     <NavMain items={settingItems} />
                 </SidebarGroup>
             </SidebarContent>

@@ -24,7 +24,7 @@ export default function InvoicePage({ invoice, company }: { invoice: any, compan
                         <Link href="/admin/payments" className="size-6 rounded-sm border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-200 transition-all bg-white">
                             <ChevronLeft className="size-3.5" />
                         </Link>
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Registry / Invoices</span>
+                        <span className="text-[10px] font-bold text-slate-400 ">Registry / Invoices</span>
                     </div>
                     <div className="flex gap-2.5">
                         <Button 

@@ -38,7 +38,7 @@ export default function Register() {
                 <div className="grid gap-4">
                     <div className="space-y-3">
                         <div className="flex items-center gap-2 pb-1 border-b border-border/50">
-                            <h2 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Account Details</h2>
+                            <h2 className="text-[10px] font-bold text-muted-foreground ">Account Details</h2>
                         </div>
                         
                         <div className="grid grid-cols-2 gap-x-3 gap-y-2.5">
@@ -131,7 +131,7 @@ export default function Register() {
 
                     <div className="space-y-3">
                         <div className="flex items-center gap-2 pb-1 border-b border-border/50">
-                            <h2 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Security</h2>
+                            <h2 className="text-[10px] font-bold text-muted-foreground ">Security</h2>
                         </div>
                         
                         <div className="grid grid-cols-2 gap-3">

@@ -4,8 +4,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
-import { Plus, ChevronRight, GraduationCap } from 'lucide-react';
+import { Plus, ChevronRight, GraduationCap, ChevronDown, FileText, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
 import { AdminDataTable, Column } from '@/components/admin/admin-data-table';
 
@@ -94,37 +95,42 @@ export default function AdminAssignmentIndex({ batches }: { batches: any[] }) {
                                         </form>
                                     </DialogContent>
                                 </Dialog>
-                                <div className="relative group/menu">
-                                    <Button variant="ghost" size="sm" className="h-7 px-2 rounded-sm text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50">
-                                        View <ChevronRight className="size-3 ml-0.5" />
-                                    </Button>
-                                    <div className="absolute right-0 top-full mt-1 w-72 bg-background border border-border rounded-sm opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible z-50 p-1 shadow-md transition-all duration-200">
-                                        <div className="px-2 py-1.5 text-[10px] font-semibold text-muted-foreground/60 border-b border-border mb-1 flex justify-between items-center bg-muted/5">
-                                            <span className="uppercase tracking-wider">Assignments</span>
-                                            <span className="tabular-nums bg-muted px-1.5 py-0.5 rounded-sm">{batch.assignments.length}</span>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" size="sm" className="h-7 px-2 rounded-sm text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50">
+                                            View <ChevronDown className="size-3 ml-0.5" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end" className="w-72 p-1 rounded-sm border border-border shadow-xl">
+                                        <div className="px-2 py-1.5 text-[10px] font-bold text-muted-foreground/60 border-b border-border mb-1 flex justify-between items-center bg-muted/5">
+                                            <span className="">Available Tasks</span>
+                                            <span className="tabular-nums bg-muted px-1.5 py-0.5 rounded-sm border border-border/40">{batch.assignments.length}</span>
                                         </div>
                                         <div className="max-h-[300px] overflow-y-auto">
                                             {batch.assignments.map((a: any) => (
-                                                <Link key={a.id} href={`/admin/academic/assignments/${a.id}`} className="flex items-center justify-between p-2.5 rounded-sm hover:bg-muted/80 group/link transition-colors mb-0.5 last:mb-0">
-                                                    <div className="flex-1 min-w-0 pr-3">
-                                                        <div className="text-xs font-medium text-foreground truncate">{a.title}</div>
-                                                        <div className="text-[10px] text-muted-foreground mt-1 flex items-center gap-2">
-                                                            <span>{a.handed_in_count} submitted</span>
-                                                            <span className="size-1 rounded-full bg-border" />
-                                                            <span>{a.marked_count} graded</span>
+                                                <DropdownMenuItem key={a.id} asChild className="p-0 focus:bg-transparent">
+                                                    <Link href={`/admin/academic/assignments/${a.id}`} className="flex items-center justify-between p-3 rounded-sm hover:bg-muted group/link transition-all mb-0.5 last:mb-0 border border-transparent hover:border-border/50">
+                                                        <div className="flex-1 min-w-0 pr-4">
+                                                            <div className="text-[12px] font-bold text-foreground truncate group-hover/link:text-primary transition-colors">{a.title}</div>
+                                                            <div className="text-[10px] text-muted-foreground mt-1.5 flex items-center gap-2 font-medium">
+                                                                <span className="flex items-center gap-1"><FileText className="size-3" /> {a.handed_in_count} in</span>
+                                                                <span className="size-1 rounded-full bg-border" />
+                                                                <span className="flex items-center gap-1 text-emerald-600/80"><CheckCircle2 className="size-3" /> {a.marked_count} graded</span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <ChevronRight className="size-3 text-muted-foreground/30 group-hover/link:text-foreground transition-transform group-hover/link:translate-x-0.5" />
-                                                </Link>
+                                                        <ChevronRight className="size-3 text-muted-foreground/30 group-hover/link:text-foreground transition-transform group-hover/link:translate-x-0.5" />
+                                                    </Link>
+                                                </DropdownMenuItem>
                                             ))}
                                             {batch.assignments.length === 0 && (
-                                                <div className="py-8 text-center">
-                                                    <div className="text-[10px] font-medium text-muted-foreground/40 uppercase tracking-widest">No assignments found</div>
+                                                <div className="py-10 text-center flex flex-col items-center justify-center gap-2 opacity-50">
+                                                    <AlertCircle className="size-5 text-muted-foreground/30" strokeWidth={1.5} />
+                                                    <div className="text-[10px] font-bold text-muted-foreground ">No assignments found</div>
                                                 </div>
                                             )}
                                         </div>
-                                    </div>
-                                </div>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             </div>
                         )}
                     />

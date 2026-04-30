@@ -22,7 +22,7 @@ function ModuleItem({ module, index, isFirst }: { module: any, index: number, is
                         {index + 1}
                     </div>
                     <div>
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-0.5">Module {index + 1}</span>
+                        <span className="text-[10px] font-bold text-slate-400  block mb-0.5">Module {index + 1}</span>
                         <h3 className={cn(
                             "font-bold text-[15px] transition-colors",
                             isOpen ? "text-indigo-600" : "text-slate-900"
@@ -66,7 +66,7 @@ function ModuleItem({ module, index, isFirst }: { module: any, index: number, is
                             </div>
                         ) : (
                             <div className="py-8 text-center">
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic">Chapters coming soon</p>
+                                <p className="text-[10px] font-bold text-slate-400  italic">Chapters coming soon</p>
                             </div>
                         )}
                     </div>
@@ -129,10 +129,10 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                                 </div>
 
                                 <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                                    <Button size="lg" className="h-12 px-8 rounded-sm font-bold uppercase tracking-widest bg-primary text-white shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/40 transition-all border-none w-full sm:w-auto" onClick={handleEnroll} disabled={processing||(is_enrolled&&enrollment_status==='paid')}>
+                                    <Button size="lg" className="h-12 px-8 rounded-sm font-bold  bg-primary text-white shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-primary/40 transition-all border-none w-full sm:w-auto" onClick={handleEnroll} disabled={processing||(is_enrolled&&enrollment_status==='paid')}>
                                         {is_enrolled&&enrollment_status==='paid'?'Enter Classroom':(enrollment_status==='pending'?'Resume Payment':`Join Program • ₹${course.price.toLocaleString()}`)}
                                     </Button>
-                                    <Button variant="outline" size="lg" className="h-12 px-8 rounded-sm font-bold uppercase tracking-widest border-white/20 text-white bg-transparent hover:bg-white/5 shadow-none w-full sm:w-auto transition-all">
+                                    <Button variant="outline" size="lg" className="h-12 px-8 rounded-sm font-bold  border-white/20 text-white bg-transparent hover:bg-white/5 shadow-none w-full sm:w-auto transition-all">
                                         Download Curriculum
                                     </Button>
                                 </div>
@@ -177,7 +177,7 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                                         <Icon className="size-5 text-primary"/>
                                     </div>
                                     <div>
-                                        <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">{label}</div>
+                                        <div className="text-[10px] font-bold text-muted-foreground  mb-0.5">{label}</div>
                                         <div className="text-xs font-bold text-foreground">{value}</div>
                                     </div>
                                 </div>
@@ -192,7 +192,7 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
                             <div className="lg:col-span-7 space-y-10">
                                 <div className="space-y-4">
-                                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-sm border border-primary/10 text-[11px] font-bold uppercase tracking-widest">
+                                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-sm border border-primary/10 text-[11px] font-bold ">
                                         The Learn Syntax Advantage
                                     </div>
                                     <h2 className="text-3xl font-bold text-foreground tracking-tight leading-tight">
@@ -225,7 +225,7 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                                     <div className="flex items-center gap-4 p-4 bg-background border border-border/80 rounded-sm shadow-sm">
                                         <div className="size-12 rounded-sm bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-lg"><CheckCircle2 className="size-6"/></div>
                                         <div>
-                                            <div className="font-bold text-xs uppercase tracking-widest">Certified Instruction</div>
+                                            <div className="font-bold text-xs ">Certified Instruction</div>
                                             <div className="text-[11px] font-bold text-muted-foreground mt-0.5 uppercase tracking-tighter">Industry Validated</div>
                                         </div>
                                     </div>
@@ -239,7 +239,7 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                 <section className="py-20 bg-slate-50/50 border-y border-slate-200">
                     <div className="mx-auto max-w-3xl px-4 sm:px-6">
                         <div className="text-center mb-16 space-y-4">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-sm border border-indigo-100 text-[10px] font-bold uppercase tracking-widest">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-sm border border-indigo-100 text-[10px] font-bold ">
                                 Learning Journey
                             </div>
                             <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Curriculum Roadmap</h2>
@@ -256,7 +256,7 @@ export default function CourseShow({ course, is_enrolled, enrollment_status, enr
                             ) : (
                                 <div className="py-20 text-center rounded-sm border border-dashed border-slate-200 bg-slate-50/50">
                                     <BookOpen className="size-12 text-slate-200 mx-auto mb-4" strokeWidth={1} />
-                                    <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-widest">Curriculum Under Review</h3>
+                                    <h3 className="text-sm font-semibold text-slate-500 ">Curriculum Under Review</h3>
                                     <p className="text-xs font-medium text-slate-400 mt-1 italic leading-relaxed max-w-[240px] mx-auto">
                                         The roadmap for this program is being optimized for current industry standards.
                                     </p>

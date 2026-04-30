@@ -1,6 +1,6 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
-import { CheckCircle2, Circle, Clock, BookOpen, Layers, Milestone, Info, Layout } from 'lucide-react';
+import { CheckCircle2, Circle, Clock, BookOpen, Layers, Milestone, Info, Layout, ChevronLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function StudentProgress({ enrollment }: { enrollment: any }) {
@@ -18,11 +18,16 @@ export default function StudentProgress({ enrollment }: { enrollment: any }) {
             
             <div className="w-full p-4 space-y-6">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="space-y-1">
-                        <h1 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                            <Milestone className="size-4 text-primary" /> Learning Journey
-                        </h1>
-                        <p className="text-xs text-muted-foreground">{course.title} • Batch {batch?.name}</p>
+                    <div className="flex items-center gap-4">
+                        <Link href="/dashboard" className="p-2.5 hover:bg-muted rounded-sm border border-border/50 text-muted-foreground hover:text-foreground transition-all shrink-0" aria-label="Back to dashboard">
+                            <ChevronLeft className="size-4" />
+                        </Link>
+                        <div className="space-y-0.5">
+                            <h1 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                                <Milestone className="size-4 text-primary" /> Learning Journey
+                            </h1>
+                            <p className="text-xs text-muted-foreground">{course.title} • Batch {batch?.name}</p>
+                        </div>
                     </div>
 
                     <div className="flex items-center gap-4 bg-primary/5 px-4 py-2 rounded-sm border border-primary/10">

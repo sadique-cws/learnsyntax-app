@@ -26,7 +26,7 @@ export default function Welcome({ courses = [] }: { courses?: any[] }) {
                 <section className="px-6 py-8 md:py-12 max-w-7xl mx-auto">
                     <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
                         <div className="flex-1 space-y-6 order-2 md:order-1 text-center md:text-left">
-                            <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-primary/5 text-primary text-[10px] font-bold uppercase tracking-widest rounded-sm border border-primary/10 mx-auto md:mx-0">
+                            <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-primary/5 text-primary text-[10px] font-bold  rounded-sm border border-primary/10 mx-auto md:mx-0">
                                 <MonitorPlay className="size-3" />
                                 <span>The Future of Learning</span>
                             </div>
@@ -92,7 +92,7 @@ export default function Welcome({ courses = [] }: { courses?: any[] }) {
                 <section className="border-y border-border/40 bg-muted/10 py-3 mb-10">
                     <div className="max-w-7xl mx-auto px-6">
                         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
-                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mr-2 shrink-0">Explore:</span>
+                            <span className="text-[10px] font-bold text-muted-foreground  mr-2 shrink-0">Explore:</span>
                             {categories.map((cat) => (
                                 <button
                                     key={cat.id}
@@ -116,7 +116,7 @@ export default function Welcome({ courses = [] }: { courses?: any[] }) {
                         <div className="space-y-1">
                             <div className="flex items-center gap-2">
                                 <div className="h-1 w-8 bg-primary rounded-full" />
-                                <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Trending Now</span>
+                                <span className="text-[10px] font-bold text-primary ">Trending Now</span>
                             </div>
                             <h2 className="text-2xl font-bold text-foreground tracking-tight">Popular Learning Paths</h2>
                         </div>

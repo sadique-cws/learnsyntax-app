@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
+import TeacherLayout from '@/layouts/teacher-layout';
 import { ChevronRight, Users, BookOpen, Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -50,7 +50,7 @@ export default function TeacherProgressIndex({ batches }: { batches: any[] }) {
                     {batches.length === 0 && (
                         <div className="col-span-full py-24 text-center rounded-sm border border-dashed border-border bg-muted/5">
                             <Users className="size-12 text-muted-foreground/20 mx-auto mb-4" strokeWidth={1} />
-                            <h2 className="text-sm font-semibold text-foreground uppercase tracking-widest">No Active Batches Assigned</h2>
+                            <h2 className="text-sm font-semibold text-foreground ">No Active Batches Assigned</h2>
                             <p className="text-xs font-medium text-muted-foreground/40 mt-1 italic">You are not currently assigned to any operational training units.</p>
                         </div>
                     )}
@@ -61,5 +61,5 @@ export default function TeacherProgressIndex({ batches }: { batches: any[] }) {
 }
 
 TeacherProgressIndex.layout = (page: React.ReactNode) => (
-    <AppLayout breadcrumbs={[{ title: 'Instructor', href: '#' }, { title: 'Learning Progress', href: '#' }]}>{page}</AppLayout>
+    <TeacherLayout breadcrumbs={[{ title: 'Instructor', href: '#' }, { title: 'Learning Progress', href: '#' }]}>{page}</TeacherLayout>
 );

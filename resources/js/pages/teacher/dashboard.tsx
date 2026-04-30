@@ -39,7 +39,7 @@ export default function TeacherDashboard({ stats }: any) {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="rounded-sm border border-border/80 bg-background p-5 shadow-sm group hover:border-primary/30 transition-all">
                         <div className="flex items-center justify-between mb-4">
-                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Active Portfolio</span>
+                            <span className="text-[10px] font-bold text-muted-foreground ">Active Portfolio</span>
                             <div className="size-8 rounded-sm bg-primary/5 border border-primary/10 flex items-center justify-center text-primary">
                                 <BookOpen className="size-4" />
                             </div>
@@ -53,7 +53,7 @@ export default function TeacherDashboard({ stats }: any) {
 
                     <div className="rounded-sm border border-border/80 bg-background p-5 shadow-sm group hover:border-primary/30 transition-all">
                         <div className="flex items-center justify-between mb-4">
-                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Gross Earnings</span>
+                            <span className="text-[10px] font-bold text-muted-foreground ">Gross Earnings</span>
                             <div className="size-8 rounded-sm bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
                                 <TrendingUp className="size-4" />
                             </div>
@@ -68,7 +68,7 @@ export default function TeacherDashboard({ stats }: any) {
 
                     <div className="rounded-sm border border-border/80 bg-background p-5 shadow-sm group hover:border-primary/30 transition-all">
                         <div className="flex items-center justify-between mb-4">
-                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Available Balance</span>
+                            <span className="text-[10px] font-bold text-muted-foreground ">Available Balance</span>
                             <div className="size-8 rounded-sm bg-muted/30 border border-border/60 flex items-center justify-center text-muted-foreground">
                                 <IndianRupee className="size-4" />
                             </div>
@@ -83,7 +83,7 @@ export default function TeacherDashboard({ stats }: any) {
                 {/* Quick Actions */}
                 <div className="rounded-sm border border-border/80 bg-background overflow-hidden shadow-sm">
                     <div className="px-5 py-3.5 bg-muted/5 border-b border-border/80 flex items-center justify-between">
-                        <h2 className="text-[11px] font-bold text-foreground uppercase tracking-widest">Platform Command Center</h2>
+                        <h2 className="text-[11px] font-bold text-foreground ">Platform Command Center</h2>
                         <span className="text-[9px] font-bold text-muted-foreground/60 uppercase">Quick Access</span>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-border/60">

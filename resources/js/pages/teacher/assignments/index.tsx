@@ -124,7 +124,7 @@ export default function TeacherAssignmentIndex({ batches }: { batches: any[] }) 
                                             ))}
                                             {batch.assignments.length === 0 && (
                                                 <div className="py-8 text-center">
-                                                    <div className="text-[10px] font-medium text-muted-foreground/40 uppercase tracking-widest">No issued tasks</div>
+                                                    <div className="text-[10px] font-medium text-muted-foreground/40 ">No issued tasks</div>
                                                 </div>
                                             )}
                                         </div>

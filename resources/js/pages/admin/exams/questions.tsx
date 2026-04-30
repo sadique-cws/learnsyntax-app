@@ -154,7 +154,7 @@ export default function AdminExamQuestions({ exam }: { exam: any }) {
 
                     <div className="lg:col-span-8 space-y-4">
                         <div className="flex items-center justify-between px-1">
-                            <h2 className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+                            <h2 className="text-[11px] font-bold text-muted-foreground  flex items-center gap-2">
                                 <Layers className="size-3.5" /> Exam Paper Distribution
                             </h2>
                             <span className="text-[10px] font-bold text-primary px-2 py-0.5 bg-primary/5 border border-primary/10 rounded-sm uppercase">{filteredQuestions.length} Questions</span>

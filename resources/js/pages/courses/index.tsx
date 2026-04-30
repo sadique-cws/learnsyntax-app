@@ -24,7 +24,7 @@ export default function CourseIndex({ courses }: { courses: any[] }) {
             <div className="w-full p-4 lg:p-6 max-w-7xl mx-auto space-y-8">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div className="space-y-1">
-                        <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-sm bg-primary/5 border border-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest mb-2">
+                        <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-sm bg-primary/5 border border-primary/10 text-primary text-[10px] font-bold  mb-2">
                             Academic Catalog
                         </div>
                         <h1 className="text-3xl font-bold text-foreground tracking-tight">Master Industrial Skills</h1>
@@ -70,7 +70,7 @@ export default function CourseIndex({ courses }: { courses: any[] }) {
 
                                     <div className="p-4 flex flex-col flex-1 space-y-4">
                                         <div>
-                                            <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-widest mb-2">
+                                            <div className="flex items-center gap-2 text-[10px] font-bold text-primary  mb-2">
                                                 <BookOpen className="size-3" />
                                                 <span>Development</span>
                                             </div>

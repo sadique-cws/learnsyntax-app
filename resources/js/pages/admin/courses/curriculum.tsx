@@ -144,7 +144,7 @@ export default function AdminCourseCurriculum({ course }: { course: any }) {
                                 {module.chapters.length === 0 && (
                                     <div className="py-10 text-center bg-muted/5">
                                         <Layers className="size-8 text-muted-foreground/20 mx-auto mb-2" strokeWidth={1} />
-                                        <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">Empty Module Unit</p>
+                                        <p className="text-[10px] font-bold text-muted-foreground/40 ">Empty Module Unit</p>
                                     </div>
                                 )}
                             </div>
@@ -154,7 +154,7 @@ export default function AdminCourseCurriculum({ course }: { course: any }) {
                     {course.modules.length === 0 && (
                         <div className="py-24 text-center rounded-sm border border-dashed border-border/80 bg-muted/5">
                             <Layers className="size-12 text-muted-foreground/20 mx-auto mb-4" strokeWidth={1} />
-                            <h2 className="text-sm font-semibold text-foreground uppercase tracking-widest">Curriculum Foundation Missing</h2>
+                            <h2 className="text-sm font-semibold text-foreground ">Curriculum Foundation Missing</h2>
                             <p className="text-[10px] font-medium text-muted-foreground/40 uppercase mt-1 italic">Begin by defining structural modules for this course.</p>
                         </div>
                     )}

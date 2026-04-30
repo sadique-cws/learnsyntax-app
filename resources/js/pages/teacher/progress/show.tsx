@@ -110,7 +110,7 @@ export default function TeacherProgressShow({ batch }: { batch: any }) {
                                                     </div>
                                                 )}
                                                 {!log && (
-                                                    <div className="text-[10px] text-muted-foreground/30 uppercase tracking-widest font-medium">Pending Delivery</div>
+                                                    <div className="text-[10px] text-muted-foreground/30  font-medium">Pending Delivery</div>
                                                 )}
                                             </div>
                                         </TableCell>
@@ -120,7 +120,7 @@ export default function TeacherProgressShow({ batch }: { batch: any }) {
                                                     href={log.video_url} 
                                                     target="_blank" 
                                                     rel="noopener noreferrer" 
-                                                    className="text-[11px] text-blue-600 hover:underline flex items-center gap-1.5 break-all leading-relaxed"
+                                                    className="text-[11px] text-primary hover:underline flex items-center gap-1.5 break-all leading-relaxed"
                                                 >
                                                     <Video className="size-3 shrink-0" />
                                                     {log.video_url}
@@ -132,9 +132,9 @@ export default function TeacherProgressShow({ batch }: { batch: any }) {
                                         <TableCell className="py-2 px-3 text-right align-top">
                                             <Button 
                                                 onClick={() => openLogModal(chapter)}
-                                                variant="ghost" 
+                                                variant="outline" 
                                                 size="sm" 
-                                                className="h-7 px-2 rounded-sm text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-all opacity-0 group-hover:opacity-100"
+                                                className="h-7 px-2 rounded-sm text-[10px] font-bold  text-muted-foreground hover:text-primary transition-all border-border/50 hover:bg-muted/50 shadow-none"
                                             >
                                                 {log ? <Edit2 className="size-3 mr-1" /> : <Plus className="size-3 mr-1" />}
                                                 {log ? 'Edit' : 'Add'}
@@ -158,13 +158,13 @@ export default function TeacherProgressShow({ batch }: { batch: any }) {
                     </DialogHeader>
                     <form onSubmit={handleSubmit} className="p-6 space-y-5">
                         <div className="p-4 rounded-sm bg-slate-50 border border-border space-y-1">
-                            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Syllabus Topic</div>
+                            <div className="text-[10px] font-bold text-slate-500 ">Syllabus Topic</div>
                             <div className="text-sm font-bold text-foreground">{selectedChapter?.title}</div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Execution Date</Label>
+                                <Label className="text-[10px] font-bold text-muted-foreground ">Execution Date</Label>
                                 <Input 
                                     type="date" 
                                     className="h-10 rounded-sm text-sm border-border shadow-none focus-visible:ring-primary/20" 
@@ -174,7 +174,7 @@ export default function TeacherProgressShow({ batch }: { batch: any }) {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Status</Label>
+                                <Label className="text-[10px] font-bold text-muted-foreground ">Status</Label>
                                 <Select value={form.data.status} onValueChange={v => form.setData('status', v)}>
                                     <SelectTrigger className="h-10 rounded-sm text-sm border-border shadow-none focus:ring-primary/20">
                                         <SelectValue placeholder="Status" />
@@ -189,7 +189,7 @@ export default function TeacherProgressShow({ batch }: { batch: any }) {
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Session Summary (Remarks)</Label>
+                            <Label className="text-[10px] font-bold text-muted-foreground ">Session Summary (Remarks)</Label>
                             <Textarea 
                                 className="min-h-[100px] rounded-sm text-sm shadow-none resize-none border-border p-4 leading-relaxed focus-visible:ring-primary/20" 
                                 value={form.data.remarks} 
@@ -200,7 +200,7 @@ export default function TeacherProgressShow({ batch }: { batch: any }) {
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
+                            <Label className="text-[10px] font-bold text-muted-foreground  flex items-center gap-1.5">
                                 <Video className="size-3" /> Video Recording URL
                             </Label>
                             <Input 
@@ -213,8 +213,8 @@ export default function TeacherProgressShow({ batch }: { batch: any }) {
                         </div>
 
                         <DialogFooter className="pt-6 border-t border-border flex flex-row gap-3">
-                            <Button type="button" variant="ghost" onClick={() => setShowLogModal(false)} className="flex-1 h-10 rounded-sm text-[10px] font-bold uppercase tracking-widest shadow-none">Cancel</Button>
-                            <Button type="submit" disabled={form.processing} className="flex-1 h-10 rounded-sm text-[10px] font-bold uppercase tracking-widest shadow-none gap-2">
+                            <Button type="button" variant="ghost" onClick={() => setShowLogModal(false)} className="flex-1 h-10 rounded-sm text-[10px] font-bold  shadow-none">Cancel</Button>
+                            <Button type="submit" disabled={form.processing} className="flex-1 h-10 rounded-sm text-[10px] font-bold  shadow-none gap-2">
                                 <Save className="size-3.5" /> Save Entry
                             </Button>
                         </DialogFooter>

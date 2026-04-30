@@ -149,4 +149,9 @@
     body {
         @apply bg-background text-foreground;
     }
+
+    a {
+        color: inherit;
+        text-decoration: inherit;
+    }
 }

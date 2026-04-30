@@ -26,7 +26,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                     <div className="grid gap-4 md:grid-cols-3">
                         <div className="rounded-sm border border-border/80 bg-background p-5 shadow-sm group hover:border-primary/30 transition-all">
                             <div className="flex items-center justify-between mb-4">
-                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Total Revenue</span>
+                                <span className="text-[10px] font-bold text-muted-foreground ">Total Revenue</span>
                                 <div className="size-8 rounded-sm bg-primary/5 flex items-center justify-center text-primary border border-primary/10">
                                     <IndianRupee className="size-4" />
                                 </div>
@@ -40,7 +40,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
 
                         <div className="rounded-sm border border-border/80 bg-background p-5 shadow-sm group hover:border-primary/30 transition-all">
                             <div className="flex items-center justify-between mb-4">
-                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Weekly Signups</span>
+                                <span className="text-[10px] font-bold text-muted-foreground ">Weekly Signups</span>
                                 <div className="size-8 rounded-sm bg-primary/5 flex items-center justify-center text-primary border border-primary/10">
                                     <Users className="size-4" />
                                 </div>
@@ -55,7 +55,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
 
                         <div className="rounded-sm border border-border/80 bg-background p-5 shadow-sm group hover:border-primary/30 transition-all">
                             <div className="flex items-center justify-between mb-4">
-                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Active Inventory</span>
+                                <span className="text-[10px] font-bold text-muted-foreground ">Active Inventory</span>
                                 <div className="size-8 rounded-sm bg-primary/5 flex items-center justify-center text-primary border border-primary/10">
                                     <BookOpen className="size-4" />
                                 </div>
@@ -73,7 +73,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                         <div className="lg:col-span-2 rounded-sm border border-border/80 bg-background overflow-hidden shadow-sm">
                             <div className="flex items-center justify-between px-4 py-3 border-b border-border/80 bg-muted/5">
                                 <h2 className="text-[11px] font-bold text-foreground uppercase tracking-wider">User Activity Monitor</h2>
-                                <Button asChild variant="outline" size="sm" className="h-7 px-3 text-[10px] font-bold uppercase tracking-tight text-primary hover:bg-primary hover:text-white rounded-sm border-primary/10 transition-all shadow-none">
+                                <Button asChild variant="outline" size="sm" className="h-7 px-3 text-[10px] font-bold uppercase tracking-tight shadow-none">
                                     <Link href="/admin/students">View All Directory</Link>
                                 </Button>
                             </div>
@@ -81,10 +81,10 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                 <table className="w-full text-left">
                                     <thead>
                                         <tr className="border-b border-border/60 bg-muted/20">
-                                            <th className="px-4 py-2.5 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Identify</th>
-                                            <th className="px-4 py-2.5 text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-center">Authorization</th>
-                                            <th className="px-4 py-2.5 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Availability</th>
-                                            <th className="px-4 py-2.5 text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-right">Action</th>
+                                            <th className="px-4 py-2.5 text-[10px] font-bold text-muted-foreground ">Identify</th>
+                                            <th className="px-4 py-2.5 text-[10px] font-bold text-muted-foreground  text-center">Authorization</th>
+                                            <th className="px-4 py-2.5 text-[10px] font-bold text-muted-foreground ">Availability</th>
+                                            <th className="px-4 py-2.5 text-[10px] font-bold text-muted-foreground  text-right">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-border/60">
@@ -138,7 +138,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                 <div className="p-4 space-y-5">
                                     <div>
                                         <div className="flex justify-between items-end mb-2">
-                                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Network Load</span>
+                                            <span className="text-[10px] font-bold text-muted-foreground ">Network Load</span>
                                             <span className="text-xs font-bold text-foreground tabular-nums">24.8%</span>
                                         </div>
                                         <div className="flex items-end gap-[1px] h-8 bg-muted/10 rounded-sm p-1">
@@ -150,7 +150,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                     
                                     <div>
                                         <div className="flex justify-between items-end mb-2">
-                                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Storage Array</span>
+                                            <span className="text-[10px] font-bold text-muted-foreground ">Storage Array</span>
                                             <span className="text-xs font-bold text-foreground tabular-nums text-muted-foreground/60"><span className="text-foreground font-bold">5.2 GB</span> / 10 GB</span>
                                         </div>
                                         <div className="h-1.5 w-full bg-muted/30 rounded-full overflow-hidden">
@@ -160,11 +160,11 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
 
                                     <div className="grid grid-cols-2 gap-3 pt-2">
                                         <div className="p-3 rounded-sm bg-muted/5 border border-border/60 hover:border-primary/20 transition-all">
-                                            <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1 text-muted-foreground/60">DB Cluster</div>
+                                            <div className="text-[9px] font-bold text-muted-foreground  mb-1 text-muted-foreground/60">DB Cluster</div>
                                             <div className="text-base font-bold text-foreground tabular-nums tracking-tight leading-none">1,204 <span className="text-[8px] text-emerald-500 font-bold uppercase tracking-tighter">IOPS</span></div>
                                         </div>
                                         <div className="p-3 rounded-sm bg-muted/5 border border-border/60 hover:border-primary/20 transition-all">
-                                            <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1 text-muted-foreground/60">Uptime</div>
+                                            <div className="text-[9px] font-bold text-muted-foreground  mb-1 text-muted-foreground/60">Uptime</div>
                                             <div className="text-base font-bold text-foreground tabular-nums tracking-tight leading-none">24D <span className="text-[8px] text-muted-foreground/40 font-bold uppercase tracking-tighter">12H</span></div>
                                         </div>
                                     </div>
@@ -228,7 +228,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                         <div className="text-[13px] font-bold text-foreground truncate leading-tight">{enrollment.course.title}</div>
                                         <div className="text-[10px] font-medium text-muted-foreground mt-0.5 italic">Verified by Learn Syntax</div>
                                     </div>
-                                    <Button asChild variant="outline" size="sm" className="h-7 px-3 rounded-sm text-[10px] font-bold uppercase tracking-tight shadow-none shrink-0 hover:bg-primary hover:text-white border-primary/20 transition-all">
+                                    <Button asChild variant="outline" size="sm" className="h-7 px-3 rounded-sm text-[10px] font-bold uppercase tracking-tight shadow-none shrink-0">
                                         <Link href={`/my-course/${enrollment.id}/certificate`}>View</Link>
                                     </Button>
                                 </div>
@@ -241,7 +241,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                     {/* Active Courses */}
                     <div className="lg:col-span-8 space-y-4">
                         <div className="flex items-center justify-between">
-                            <h2 className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+                            <h2 className="text-[11px] font-bold text-muted-foreground  flex items-center gap-2">
                                 <div className="size-2 rounded-full bg-primary animate-pulse" /> My Active Learning
                             </h2>
                         </div>
@@ -258,7 +258,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                     </div>
                                     
                                     <div className="mb-4">
-                                        <div className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1.5">{enrollment.batch?.type ?? 'Standard'} TRACK</div>
+                                        <div className="text-[10px] font-bold text-primary  mb-1.5">{enrollment.batch?.type ?? 'Standard'} TRACK</div>
                                         <h3 className="text-base font-bold text-foreground leading-snug group-hover:text-primary transition-colors">{enrollment.course.title}</h3>
                                         <p className="text-xs font-medium text-muted-foreground mt-1">{enrollment.batch?.name ?? 'Batch assignment pending'}</p>
                                     </div>
@@ -276,7 +276,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                         </div>
                                         
                                         <div className="flex gap-2.5">
-                                            <Button asChild variant="outline" size="sm" className="flex-1 h-9 rounded-sm text-[11px] font-bold uppercase tracking-tight shadow-none border-border/80 hover:bg-muted/50 transition-all">
+                                            <Button asChild variant="outline" size="sm" className="flex-1 h-9 rounded-sm text-[11px] font-bold uppercase tracking-tight shadow-none border-border/80 hover:bg-primary/5 hover:text-primary hover:border-primary/30 transition-all">
                                                 <Link href={`/my-course/${enrollment.id}/progress`}>Roadmap</Link>
                                             </Button>
                                             <Button asChild size="sm" className="flex-1 h-9 rounded-sm text-[11px] font-bold uppercase tracking-tight shadow-none bg-primary hover:bg-primary/90 transition-all">
@@ -300,7 +300,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
 
                     {/* Payment History Sidebar */}
                     <div className="lg:col-span-4 space-y-4">
-                        <h2 className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+                        <h2 className="text-[11px] font-bold text-muted-foreground  flex items-center gap-2">
                             <Receipt className="size-4" /> Billing History
                         </h2>
                         <div className="space-y-3">
@@ -321,7 +321,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                                 <span className="text-sm font-bold text-foreground tabular-nums">₹{enrollment.payment.amount}</span>
                                                 <span className="text-[10px] text-emerald-600 font-bold uppercase tracking-tighter">Status: Paid</span>
                                             </div>
-                                            <Button asChild variant="outline" size="sm" className="h-7 px-3 rounded-sm text-[10px] font-bold uppercase tracking-tight shadow-none border-primary/10 hover:bg-primary hover:text-white transition-all">
+                                            <Button asChild variant="outline" size="sm" className="h-7 px-3 rounded-sm text-[10px] font-bold uppercase tracking-tight shadow-none">
                                                 <Link href={enrollment.payment.invoice ? `/admin/invoices/${enrollment.payment.invoice.id}` : '#'}>Receipt</Link>
                                             </Button>
                                         </div>
@@ -329,7 +329,7 @@ export default function Dashboard({ enrollments = [], stats = null }: { enrollme
                                 ))
                             ) : (
                                 <div className="py-12 text-center border border-border/80 rounded-sm bg-muted/5">
-                                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">No Transactions Found</p>
+                                    <p className="text-[10px] font-bold text-muted-foreground ">No Transactions Found</p>
                                 </div>
                             )}
                         </div>
