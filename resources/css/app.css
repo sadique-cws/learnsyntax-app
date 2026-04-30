@@ -154,4 +154,24 @@
         color: inherit;
         text-decoration: inherit;
     }
+
+    /* Global cursor-pointer for all interactive elements */
+    button,
+    [role="button"],
+    a,
+    select,
+    summary,
+    [type="checkbox"],
+    [type="radio"],
+    label[for],
+    input[type="file"]::file-selector-button {
+        cursor: pointer;
+    }
+
+    input:disabled,
+    button:disabled,
+    select:disabled,
+    textarea:disabled {
+        cursor: not-allowed;
+    }
 }

@@ -97,35 +97,48 @@ export default function AdminAssignmentIndex({ batches }: { batches: any[] }) {
                                 </Dialog>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" size="sm" className="h-7 px-2 rounded-sm text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50">
-                                            View <ChevronDown className="size-3 ml-0.5" />
+                                        <Button variant="ghost" size="sm" className="h-7 px-2.5 rounded-sm text-xs font-bold text-primary hover:bg-primary/5 border border-primary/10">
+                                            View <ChevronDown className="size-3 ml-1" />
                                         </Button>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="w-72 p-1 rounded-sm border border-border shadow-xl">
-                                        <div className="px-2 py-1.5 text-[10px] font-bold text-muted-foreground/60 border-b border-border mb-1 flex justify-between items-center bg-muted/5">
-                                            <span className="">Available Tasks</span>
-                                            <span className="tabular-nums bg-muted px-1.5 py-0.5 rounded-sm border border-border/40">{batch.assignments.length}</span>
+                                    <DropdownMenuContent align="end" className="w-80 p-0 rounded-sm border border-border shadow-xl overflow-hidden">
+                                        <div className="px-4 py-3 border-b border-border bg-muted/10 flex justify-between items-center">
+                                            <div className="flex flex-col">
+                                                <span className="text-[10px] font-bold text-foreground uppercase tracking-widest">Available Tasks</span>
+                                                <span className="text-[9px] text-muted-foreground font-medium uppercase tracking-tighter mt-0.5">{batch.name}</span>
+                                            </div>
+                                            <span className="text-[10px] font-black text-primary bg-primary/10 px-2 py-0.5 rounded-sm border border-primary/10 tabular-nums">
+                                                {batch.assignments.length}
+                                            </span>
                                         </div>
-                                        <div className="max-h-[300px] overflow-y-auto">
-                                            {batch.assignments.map((a: any) => (
+                                        <div className="max-h-[360px] overflow-y-auto p-1.5 bg-white">
+                                            {[...batch.assignments].sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).map((a: any) => (
                                                 <DropdownMenuItem key={a.id} asChild className="p-0 focus:bg-transparent">
-                                                    <Link href={`/admin/academic/assignments/${a.id}`} className="flex items-center justify-between p-3 rounded-sm hover:bg-muted group/link transition-all mb-0.5 last:mb-0 border border-transparent hover:border-border/50">
+                                                    <Link href={`/admin/academic/assignments/${a.id}`} className="flex items-center justify-between p-3.5 rounded-sm hover:bg-muted/30 group/link transition-all mb-1 last:mb-0 border border-transparent hover:border-border/60">
                                                         <div className="flex-1 min-w-0 pr-4">
-                                                            <div className="text-[12px] font-bold text-foreground truncate group-hover/link:text-primary transition-colors">{a.title}</div>
-                                                            <div className="text-[10px] text-muted-foreground mt-1.5 flex items-center gap-2 font-medium">
-                                                                <span className="flex items-center gap-1"><FileText className="size-3" /> {a.handed_in_count} in</span>
-                                                                <span className="size-1 rounded-full bg-border" />
-                                                                <span className="flex items-center gap-1 text-emerald-600/80"><CheckCircle2 className="size-3" /> {a.marked_count} graded</span>
+                                                            <div className="text-[13px] font-bold text-foreground truncate group-hover/link:text-primary transition-colors leading-tight">{a.title}</div>
+                                                            <div className="mt-2.5 flex items-center gap-3">
+                                                                <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-tight">
+                                                                    <FileText className="size-3 text-primary/40" /> {a.handed_in_count} <span className="opacity-50">In</span>
+                                                                </div>
+                                                                <div className="h-2.5 w-px bg-border/60" />
+                                                                <div className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 uppercase tracking-tight">
+                                                                    <CheckCircle2 className="size-3 text-emerald-500/50" /> {a.marked_count} <span className="opacity-50">Graded</span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <ChevronRight className="size-3 text-muted-foreground/30 group-hover/link:text-foreground transition-transform group-hover/link:translate-x-0.5" />
+                                                        <div className="size-6 rounded-sm bg-muted flex items-center justify-center text-muted-foreground group-hover/link:bg-primary group-hover/link:text-white transition-all">
+                                                            <ChevronRight className="size-3.5" />
+                                                        </div>
                                                     </Link>
                                                 </DropdownMenuItem>
                                             ))}
                                             {batch.assignments.length === 0 && (
-                                                <div className="py-10 text-center flex flex-col items-center justify-center gap-2 opacity-50">
-                                                    <AlertCircle className="size-5 text-muted-foreground/30" strokeWidth={1.5} />
-                                                    <div className="text-[10px] font-bold text-muted-foreground ">No assignments found</div>
+                                                <div className="py-12 text-center flex flex-col items-center justify-center gap-2 opacity-40">
+                                                    <div className="size-10 rounded-full bg-muted/20 flex items-center justify-center mb-1">
+                                                        <AlertCircle className="size-5 text-muted-foreground/30" strokeWidth={1.5} />
+                                                    </div>
+                                                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">No assignments found</div>
                                                 </div>
                                             )}
                                         </div>

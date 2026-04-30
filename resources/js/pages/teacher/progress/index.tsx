@@ -42,7 +42,7 @@ export default function TeacherProgressIndex({ batches }: { batches: any[] }) {
 
                             <div className="mt-6 pt-4 border-t border-border/50 flex items-center justify-between">
                                 <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Update Curriculum Logs</span>
-                                <ChevronRight className="size-4 text-muted-foreground/30 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                                <ChevronRight className="size-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                             </div>
                         </Link>
                     ))}

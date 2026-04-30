@@ -119,7 +119,7 @@ export default function TeacherAssignmentIndex({ batches }: { batches: any[] }) 
                                                             <span>{a.marked_count} graded</span>
                                                         </div>
                                                     </div>
-                                                    <ChevronRight className="size-3 text-muted-foreground/30 group-hover/link:text-foreground transition-transform group-hover/link:translate-x-0.5" />
+                                                    <ChevronRight className="size-3 text-muted-foreground group-hover/link:text-foreground transition-transform group-hover/link:translate-x-0.5" />
                                                 </Link>
                                             ))}
                                             {batch.assignments.length === 0 && (
