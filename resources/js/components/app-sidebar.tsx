@@ -81,13 +81,18 @@ export function AppSidebar() {
                 });
                 mainNavItems.push({
                     title: 'My Assignments',
-                    href: '/dashboard', // User can see them on dashboard now
+                    href: '/academic/assignments',
                     icon: BookOpen,
                 });
                 mainNavItems.push({
                     title: 'My Exams',
-                    href: '/dashboard', // User can see them on dashboard now
+                    href: '/academic/exams',
                     icon: Trophy,
+                });
+                mainNavItems.push({
+                    title: 'My Payments',
+                    href: '/academic/payments',
+                    icon: CreditCard,
                 });
             } else {
                 mainNavItems.push({

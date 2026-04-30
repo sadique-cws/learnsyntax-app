@@ -96,7 +96,10 @@ class AcademicController extends Controller
     {
         $this->authorizeAccess($enrollment);
 
-        $exam = Exam::where('course_id', $enrollment->course_id)->first();
+        $exam = Exam::where('course_id', $enrollment->course_id)
+            ->with('questions')
+            ->first();
+
         if (! $exam) {
             return back()->with('error', 'Exam not scheduled yet.');
         }
@@ -141,7 +144,7 @@ class AcademicController extends Controller
     {
         $this->authorizeAccess($enrollment);
 
-        $exam = Exam::where('course_id', $enrollment->course_id)->firstOrFail();
+        $exam = Exam::where('course_id', $enrollment->course_id)->with('questions')->firstOrFail();
 
         if (ExamAttempt::where('exam_id', $exam->id)->where('user_id', auth()->id())->exists()) {
             return back()->with('error', 'You have already submitted this exam.');
@@ -151,13 +154,20 @@ class AcademicController extends Controller
             return back()->with('error', 'Passcode verification required.');
         }
 
-        // Simulating final exam logic
-        $marks = rand(25, $exam->total_marks);
+        $answers = $request->input('answers', []);
+        $marksObtained = 0;
+
+        foreach ($exam->questions as $question) {
+            $submittedAnswer = $answers[$question->id] ?? null;
+            if ($submittedAnswer !== null && (string)$submittedAnswer === (string)$question->correct_answer) {
+                $marksObtained += $question->marks;
+            }
+        }
 
         ExamAttempt::create([
             'exam_id' => $exam->id,
             'user_id' => auth()->id(),
-            'marks_obtained' => $marks,
+            'marks_obtained' => $marksObtained,
             'completed_at' => now(),
         ]);
 
@@ -186,6 +196,69 @@ class AcademicController extends Controller
         return inertia('student/academic/certificate', [
             'enrollment' => $enrollment->load(['course', 'user']),
             'certificate' => $certificate,
+        ]);
+    }
+
+    public function allAssignments()
+    {
+        $user = auth()->user();
+        $enrollments = $user->enrollments()->where('status', 'paid')->with(['course', 'batch.assignments.submissions' => function($q) use ($user) {
+            $q->where('user_id', $user->id);
+        }])->get();
+
+        $assignments = collect();
+        foreach ($enrollments as $enrollment) {
+            if ($enrollment->batch) {
+                foreach ($enrollment->batch->assignments as $assignment) {
+                    $assignment->course_title = $enrollment->course->title;
+                    $assignment->enrollment_id = $enrollment->id;
+                    $assignments->push($assignment);
+                }
+            }
+        }
+
+        return inertia('student/academic/all-assignments', [
+            'assignments' => $assignments,
+        ]);
+    }
+
+    public function allExams()
+    {
+        $user = auth()->user();
+        $enrollments = $user->enrollments()->where('status', 'paid')->with(['course.exams.attempts' => function($q) use ($user) {
+            $q->where('user_id', $user->id);
+        }])->get();
+
+        $exams = collect();
+        foreach ($enrollments as $enrollment) {
+            foreach ($enrollment->course->exams as $exam) {
+                if ($exam->is_active) {
+                    $exam->course_title = $enrollment->course->title;
+                    $exam->enrollment_id = $enrollment->id;
+                    $exam->user_attempt = $exam->attempts->first();
+                    $exams->push($exam);
+                }
+            }
+        }
+
+        return inertia('student/academic/all-exams', [
+            'exams' => $exams,
+        ]);
+    }
+
+    public function allPayments()
+    {
+        $user = auth()->user();
+        $payments = \App\Models\Payment::whereHas('enrollment', function($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })
+            ->whereIn('status', ['paid', 'completed'])
+            ->with(['enrollment.course', 'invoice'])
+            ->latest()
+            ->get();
+
+        return inertia('student/academic/all-payments', [
+            'payments' => $payments,
         ]);
     }
 

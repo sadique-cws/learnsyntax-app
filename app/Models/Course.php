@@ -31,6 +31,11 @@ class Course extends Model
         return $this->hasMany(Exam::class);
     }
 
+    public function exam()
+    {
+        return $this->hasOne(Exam::class)->latestOfMany();
+    }
+
     public function modules()
     {
         return $this->hasMany(CourseModule::class)->orderBy('sort_order');

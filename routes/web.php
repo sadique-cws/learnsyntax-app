@@ -99,12 +99,28 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         $q->where('user_id', $user->id);
                     }])->get();
                 
+                foreach($batchAssignments as $assignment) {
+                    $assignment->enrollment_id = $enrollment->id;
+                }
+                
                 $allAssignments = $allAssignments->merge($batchAssignments);
             }
 
             // Available exams for the course
-            $courseExams = $enrollment->course->exams()->where('is_active', true)->get();
+            $courseExams = $enrollment->course->exams()
+                ->where('is_active', true)
+                ->with(['attempts' => function($q) use ($user) {
+                    $q->where('user_id', $user->id);
+                }])->get();
+            
+            foreach($courseExams as $exam) {
+                $exam->enrollment_id = $enrollment->id;
+                $exam->user_attempt = $exam->attempts->first();
+            }
             $availableExams = $availableExams->merge($courseExams);
+
+            // Check eligibility for certificate
+            $enrollment->is_eligible = $enrollment->isEligibleForCertificate();
         }
 
         return inertia('dashboard', [
@@ -202,6 +218,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('exam', [AcademicController::class, 'submitExam'])->name('student.academic.submit-exam');
         Route::get('certificate', [AcademicController::class, 'certificate'])->name('student.academic.certificate');
     });
+
+    // Global Academic Views
+    Route::get('academic/assignments', [AcademicController::class, 'allAssignments'])->name('student.academic.all-assignments');
+    Route::get('academic/exams', [AcademicController::class, 'allExams'])->name('student.academic.all-exams');
+    Route::get('academic/payments', [AcademicController::class, 'allPayments'])->name('student.academic.all-payments');
 
     // Teacher Routes
     Route::middleware(['can:teacher'])->prefix('teacher')->group(function () {

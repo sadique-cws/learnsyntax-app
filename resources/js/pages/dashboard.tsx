@@ -1,7 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Book, Receipt, Users, Award, CheckCircle2, ArrowRight, IndianRupee, BookOpen, Trophy, Flame, Star, Target, Clock, Calendar } from 'lucide-react';
+import { Book, Receipt, Users, Award, CheckCircle2, ArrowRight, IndianRupee, BookOpen, Trophy, Flame, Star, Target, Clock, Calendar, Download, CreditCard } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 
@@ -18,7 +18,7 @@ export default function Dashboard({ enrollments = [], assignments = [], availabl
     if (stats) {
         // Admin Dashboard (Internal view)
         return (
-            <AppLayout breadcrumbs={[{ title: 'Dashboard', href: '/dashboard' }]}>
+            <>
                 <Head title="Admin Dashboard" />
                 <div className="w-full p-4 space-y-3">
                     <div className="flex items-center justify-between">
@@ -124,13 +124,13 @@ export default function Dashboard({ enrollments = [], assignments = [], availabl
                         </div>
                     </div>
                 </div>
-            </AppLayout>
+            </>
         );
     }
 
     // Student Dashboard
     return (
-        <AppLayout breadcrumbs={[{ title: 'Dashboard', href: '/dashboard' }]}>
+        <>
             <Head title="Learning Portal" />
             <div className="w-full p-4 space-y-3">
                 {/* Header */}
@@ -157,6 +157,38 @@ export default function Dashboard({ enrollments = [], assignments = [], availabl
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
                     {/* Left Side: Courses & Certs */}
                     <div className="lg:col-span-8 space-y-3">
+                        {/* Recent Payments Summary */}
+                        <div className="rounded-sm border border-border bg-card overflow-hidden">
+                            <div className="flex items-center justify-between px-3 py-2 border-b border-border bg-muted/5">
+                                <div className="flex items-center gap-1.5">
+                                    <CreditCard className="size-3.5 text-primary" />
+                                    <h2 className="text-xs font-semibold text-foreground">Recent Payments</h2>
+                                </div>
+                                <Button asChild variant="link" className="h-auto p-0 text-[10px] text-primary hover:no-underline">
+                                    <Link href="/academic/payments">View All History</Link>
+                                </Button>
+                            </div>
+                            <div className="divide-y divide-border">
+                                {enrollments.filter((e: any) => e.payment).slice(0, 2).map((enrollment: any) => (
+                                    <div key={enrollment.id} className="p-3 hover:bg-muted/5 transition-colors flex items-center justify-between">
+                                        <div className="min-w-0">
+                                            <div className="text-[11px] font-medium text-foreground truncate">{enrollment.course.title}</div>
+                                            <div className="text-[9px] text-muted-foreground uppercase font-bold tracking-tight mt-0.5">
+                                                ₹{parseFloat(enrollment.payment.amount).toLocaleString('en-IN')} • {new Date(enrollment.payment.created_at).toLocaleDateString()}
+                                            </div>
+                                        </div>
+                                        {enrollment.payment.invoice && (
+                                            <Button asChild variant="ghost" size="sm" className="h-7 px-3 rounded-sm text-[10px] font-medium hover:bg-primary/5 hover:text-primary">
+                                                <a href={`/admin/invoices/${enrollment.payment.invoice.id}`} target="_blank" rel="noreferrer" className="flex items-center gap-1.5">
+                                                    <Download className="size-3" /> Invoice
+                                                </a>
+                                            </Button>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
                         {/* Certifications - Win Section */}
                         {enrollments.some((e: any) => e.certificate) && (
                             <div className="rounded-sm border border-border overflow-hidden">
@@ -167,7 +199,7 @@ export default function Dashboard({ enrollments = [], assignments = [], availabl
                                     </div>
                                 </div>
                                 <div className="divide-y divide-border">
-                                    {enrollments.filter((e: any) => e.certificate).map((enrollment: any) => (
+                                    {enrollments.filter((e: any) => e.certificate || e.is_eligible).map((enrollment: any) => (
                                         <div key={enrollment.id} className="flex items-center justify-between px-3 py-3 hover:bg-muted/5 transition-colors">
                                             <div className="flex items-center gap-3 min-w-0">
                                                 <div className="size-8 rounded-sm bg-primary/5 flex items-center justify-center text-primary border border-primary/10 shrink-0">
@@ -175,11 +207,13 @@ export default function Dashboard({ enrollments = [], assignments = [], availabl
                                                 </div>
                                                 <div className="min-w-0">
                                                     <div className="text-sm font-medium text-foreground truncate">{enrollment.course.title}</div>
-                                                    <div className="text-[10px] text-muted-foreground">{enrollment.certificate.certificate_number}</div>
+                                                    <div className="text-[10px] text-muted-foreground">
+                                                        {enrollment.certificate ? enrollment.certificate.certificate_number : 'Certification Earned'}
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <Button asChild variant="outline" size="sm" className="h-7 px-3 rounded-sm text-xs font-medium shadow-none cursor-pointer">
-                                                <Link href={`/my-course/${enrollment.id}/certificate`}>View</Link>
+                                            <Button asChild size="sm" className="h-7 px-3 rounded-sm text-[10px] font-medium shadow-none cursor-pointer bg-primary hover:bg-primary/90">
+                                                <Link href={`/my-course/${enrollment.id}/certificate`}>Download</Link>
                                             </Button>
                                         </div>
                                     ))}
@@ -188,19 +222,25 @@ export default function Dashboard({ enrollments = [], assignments = [], availabl
                         )}
 
                         {/* All Assignments */}
-                        <div className="rounded-sm border border-border overflow-hidden">
+                        <div id="assignments" className="scroll-mt-6 rounded-sm border border-border overflow-hidden">
                             <div className="flex items-center justify-between px-3 py-2 border-b border-border bg-muted/5">
                                 <div className="flex items-center gap-1.5">
                                     <BookOpen className="size-3.5 text-primary" />
-                                    <h2 className="text-xs font-semibold text-foreground">All Assignments</h2>
+                                    <h2 className="text-xs font-semibold text-foreground">My Assignments</h2>
                                 </div>
-                                <span className="text-[10px] font-bold text-muted-foreground bg-muted/10 px-1.5 py-0.5 rounded-sm tabular-nums">
-                                    {assignments.length} Total
-                                </span>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[10px] font-bold text-muted-foreground bg-muted/10 px-1.5 py-0.5 rounded-sm tabular-nums">
+                                        {assignments.length}
+                                    </span>
+                                    <Button asChild variant="link" className="h-auto p-0 text-[10px] text-primary hover:no-underline">
+                                        <Link href="/academic/assignments">View All</Link>
+                                    </Button>
+                                </div>
                             </div>
+                            {/* ... same content ... */}
                             {assignments.length > 0 ? (
                                 <div className="divide-y divide-border">
-                                    {assignments.map((assignment: any) => {
+                                    {assignments.slice(0, 5).map((assignment: any) => {
                                         const submission = assignment.submissions?.[0];
                                         const isSubmitted = !!submission;
                                         const isGraded = submission?.grade !== null && submission?.grade !== undefined;
@@ -229,12 +269,19 @@ export default function Dashboard({ enrollments = [], assignments = [], availabl
                                                         </div>
                                                     </div>
                                                     <Button asChild variant={isSubmitted ? "outline" : "default"} size="sm" className="h-7 px-3 rounded-sm text-[10px] font-medium shadow-none cursor-pointer shrink-0">
-                                                        <Link href={`/dashboard`}>{isSubmitted ? 'View Work' : 'Submit'}</Link>
+                                                        <Link href={`/my-course/${assignment.enrollment_id}/assignments`}>{isSubmitted ? 'View' : 'Submit'}</Link>
                                                     </Button>
                                                 </div>
                                             </div>
                                         );
                                     })}
+                                    {assignments.length > 5 && (
+                                        <div className="p-2 text-center bg-muted/5 border-t border-border">
+                                            <Button asChild variant="ghost" size="sm" className="h-6 text-[10px] font-medium text-muted-foreground hover:text-primary cursor-pointer">
+                                                <Link href="/academic/assignments">Show {assignments.length - 5} more assignments...</Link>
+                                            </Button>
+                                        </div>
+                                    )}
                                 </div>
                             ) : (
                                 <div className="p-6 text-center text-[10px] text-muted-foreground">No assignments assigned yet</div>
@@ -242,15 +289,20 @@ export default function Dashboard({ enrollments = [], assignments = [], availabl
                         </div>
 
                         {/* Available Exams */}
-                        <div className="rounded-sm border border-border overflow-hidden">
+                        <div id="exams" className="scroll-mt-6 rounded-sm border border-border overflow-hidden">
                             <div className="flex items-center justify-between px-3 py-2 border-b border-border bg-muted/5">
                                 <div className="flex items-center gap-1.5">
                                     <Trophy className="size-3.5 text-orange-500" />
                                     <h2 className="text-xs font-semibold text-foreground">Available Exams</h2>
                                 </div>
-                                <span className="text-[10px] font-bold text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded-sm tabular-nums border border-orange-100">
-                                    {availableExams.length} Live
-                                </span>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[10px] font-bold text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded-sm tabular-nums border border-orange-100">
+                                        {availableExams.length}
+                                    </span>
+                                    <Button asChild variant="link" className="h-auto p-0 text-[10px] text-orange-600 hover:no-underline">
+                                        <Link href="/academic/exams">View All</Link>
+                                    </Button>
+                                </div>
                             </div>
                             {availableExams.length > 0 ? (
                                 <div className="divide-y divide-border">
@@ -263,13 +315,30 @@ export default function Dashboard({ enrollments = [], assignments = [], availabl
                                                         <span className="text-[10px] text-muted-foreground flex items-center gap-1">
                                                             <Clock className="size-3" /> {exam.duration} mins
                                                         </span>
-                                                        <span className="text-[10px] text-orange-600 font-bold bg-orange-50 px-1.5 rounded-sm border border-orange-100 uppercase">
-                                                            LIVE
+                                                        <span className={cn(
+                                                            "text-[10px] font-bold px-1.5 rounded-sm border uppercase",
+                                                            exam.user_attempt 
+                                                                ? "bg-emerald-50 text-emerald-600 border-emerald-100" 
+                                                                : "bg-orange-50 text-orange-600 border-orange-100"
+                                                        )}>
+                                                            {exam.user_attempt ? 'Completed' : 'LIVE'}
                                                         </span>
+                                                        {exam.user_attempt && (
+                                                            <span className="text-[10px] font-bold text-emerald-600">
+                                                                Score: {exam.user_attempt.marks_obtained}/{exam.total_marks}
+                                                            </span>
+                                                        )}
                                                     </div>
                                                 </div>
-                                                <Button asChild size="sm" className="h-7 px-3 rounded-sm text-[10px] font-medium shadow-none cursor-pointer bg-orange-500 hover:bg-orange-600 text-white border-orange-600">
-                                                    <Link href={`/dashboard`}>Take Exam</Link>
+                                                <Button asChild size="sm" className={cn(
+                                                    "h-7 px-3 rounded-sm text-[10px] font-medium shadow-none cursor-pointer",
+                                                    exam.user_attempt 
+                                                        ? "bg-muted text-muted-foreground border-border hover:bg-muted/80" 
+                                                        : "bg-orange-500 hover:bg-orange-600 text-white border-orange-600"
+                                                )}>
+                                                    <Link href={`/my-course/${exam.enrollment_id}/exam`}>
+                                                        {exam.user_attempt ? 'View' : 'Take Exam'}
+                                                    </Link>
                                                 </Button>
                                             </div>
                                         </div>
@@ -416,6 +485,7 @@ export default function Dashboard({ enrollments = [], assignments = [], availabl
                     </div>
                 </div>
             </div>
-        </AppLayout>
+        </>
     );
 }
+
