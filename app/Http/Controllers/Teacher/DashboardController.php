@@ -55,6 +55,8 @@ class DashboardController extends Controller
             'course_chapter_id' => 'required|exists:course_chapters,id',
             'date' => 'required|date',
             'remarks' => 'required|string',
+            'status' => 'required|string|in:delivered,pending,skipped',
+            'video_url' => 'nullable|url',
         ]);
 
         DailyLearningLog::updateOrCreate(
@@ -63,6 +65,8 @@ class DashboardController extends Controller
                 'teacher_id' => auth()->user()->teacher->id,
                 'date' => $request->date,
                 'remarks' => $request->remarks,
+                'status' => $request->status,
+                'video_url' => $request->video_url,
             ]
         );
 
