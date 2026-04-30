@@ -1,16 +1,12 @@
 import { Head } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
-import { Download, Printer, ShieldCheck, Award, MapPin, Calendar, CheckCircle2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-
+import { Download, Printer, Award } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function CertificateView({ certificate }: { certificate: any }) {
-    const [isPrinting, setIsPrinting] = useState(false);
-
     useEffect(() => {
         // Trigger print dialog on load for a "Download" feel
-        const timer = setTimeout(() => window.print(), 800);
+        const timer = setTimeout(() => window.print(), 1000);
         return () => clearTimeout(timer);
     }, []);
 
@@ -18,8 +14,13 @@ export default function CertificateView({ certificate }: { certificate: any }) {
         window.print();
     };
 
+    // Calculate dates (hardcoded for now as per user request, but can be dynamic)
+    const startDate = "23 Dec 2025";
+    const endDate = "05 Jan 2026";
+    const duration = "2-Week";
+
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col items-center py-12 px-4 print:p-0 print:bg-white">
+        <div className="min-h-screen bg-slate-100 flex flex-col items-center py-12 px-4 print:p-0 print:bg-white">
             <Head title={`Certificate - ${certificate.certificate_number}`} />
             
             {/* Action Bar (Hidden in Print) */}
@@ -29,7 +30,7 @@ export default function CertificateView({ certificate }: { certificate: any }) {
                         <Award className="size-6" />
                     </div>
                     <div>
-                        <h1 className="text-lg font-bold text-foreground">Official Certificate</h1>
+                        <h1 className="text-lg font-bold text-foreground">Internship Certificate</h1>
                         <p className="text-xs text-muted-foreground font-mono">#{certificate.certificate_number}</p>
                     </div>
                 </div>
@@ -41,81 +42,43 @@ export default function CertificateView({ certificate }: { certificate: any }) {
             </div>
 
             {/* Certificate Canvas */}
-            <div className="w-full max-w-[1000px] aspect-[1.414/1] bg-white shadow-2xl rounded-sm overflow-hidden relative border-[12px] border-slate-900 print:shadow-none print:border-[10px] print:rounded-none">
-                {/* Decorative Elements */}
-                <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.03]" 
-                    style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
-                
-                <div className="absolute top-0 right-0 w-64 h-64 bg-slate-900 -mr-32 -mt-32 rotate-45"></div>
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-slate-900 -ml-32 -mb-32 rotate-45"></div>
+            <div className="w-full max-w-[1100px] aspect-[1.414/1] bg-white shadow-sm border-4 border-black relative print:shadow-none overflow-hidden">
+                {/* Background Image Template */}
+                <img 
+                    src="/certificate.png" 
+                    alt="Certificate Template" 
+                    className="absolute inset-0 w-full h-full object-contain"
+                />
 
-                {/* Content */}
-                <div className="h-full flex flex-col p-16 relative">
-                    {/* Header */}
-                    <div className="flex justify-between items-start mb-16">
-                        <div className="flex flex-col items-start">
-                            <div className="flex items-center gap-2 mb-2">
-                                <div className="size-10 bg-slate-900 flex items-center justify-center text-white rounded-sm">
-                                    <span className="text-xl font-black">LS</span>
-                                </div>
-                                <span className="text-2xl font-black tracking-tighter text-slate-900">LEARNSYNTAX</span>
-                            </div>
-                            <p className="text-[10px] font-bold tracking-widest text-slate-500 uppercase">Academy of Digital Excellence</p>
-                        </div>
-                        <div className="text-right">
-                            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Certificate Number</div>
-                            <div className="text-sm font-mono font-black text-slate-900">{certificate.certificate_number}</div>
-                        </div>
+                {/* Overlaid Dynamic Content */}
+                <div className="absolute inset-0 flex flex-col items-center pointer-events-none">
+                    
+                    {/* Certificate Number (Vertical on Right) */}
+                    <div className="absolute top-[66%] right-[2.8%] rotate-90 origin-right text-[18px] font-bold text-slate-900 font-mono tracking-wider">
+                        {certificate.certificate_number}
                     </div>
 
-                    {/* Main Text */}
-                    <div className="flex-1 flex flex-col items-center text-center">
-                        <h2 className="text-5xl font-black text-slate-900 mb-8 tracking-tight uppercase leading-none">
-                            Certificate of <br/> Achievement
-                        </h2>
-                        
-                        <div className="w-24 h-1 bg-slate-900 mb-8"></div>
-                        
-                        <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">This is to certify that</p>
-                        <h3 className="text-4xl font-serif font-black text-slate-900 mb-6 italic">{certificate.enrollment.user.name}</h3>
-                        
-                        <p className="text-base text-slate-600 max-w-[600px] leading-relaxed">
-                            has successfully completed all requirements for the professional course in <br/>
-                            <span className="font-bold text-slate-900 uppercase underline decoration-2 underline-offset-4">{certificate.enrollment.course.title}</span> <br/>
-                            demonstrating exceptional proficiency and dedication in the field.
+                    {/* Achiever Name - Positioned on the line */}
+                    <div className="absolute top-[43.5%] w-full text-center px-24">
+                        <h3 className="text-3xl md:text-4xl font-serif font-black text-slate-900 tracking-tight">
+                            {certificate.enrollment.user.name}
+                        </h3>
+                    </div>
+
+                    {/* Certification Text - Below the line */}
+                    <div className="absolute top-[56%] w-full px-24 md:px-32 text-center">
+                        <p className="text-[13px] md:text-[14px] leading-[1.8] text-slate-800 font-medium max-w-[850px] mx-auto text-justify md:text-center">
+                            This is to certify that <span className="font-bold">Mr. {certificate.enrollment.user.name}</span> has successfully completed a 
+                            <span className="font-bold"> {duration} Internship Program</span> at 
+                            <span className="font-bold"> Comestro Techlabs Pvt. Ltd.</span>, in partial fulfillment of the 
+                            <span className="font-bold"> B.Tech curriculum</span>, conducted in 
+                            <span className="font-bold"> Offline mode</span> from 
+                            <span className="font-bold"> {startDate} to {endDate}</span>. 
+                            His performance was found to be sincere and satisfactory.
                         </p>
                     </div>
 
-                    {/* Footer */}
-                    <div className="flex justify-between items-end mt-16 pt-16 border-t border-slate-100">
-                        <div className="flex flex-col items-start gap-4">
-                            <div className="flex items-center gap-2">
-                                <ShieldCheck className="size-5 text-slate-900" />
-                                <div className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Verified Academic Record</div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-8">
-                                <div>
-                                    <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Issued Date</div>
-                                    <div className="text-xs font-black text-slate-900">{new Date(certificate.issued_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })}</div>
-                                </div>
-                                <div>
-                                    <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Accreditation</div>
-                                    <div className="text-xs font-black text-slate-900 text-emerald-600">ISO 9001:2015</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col items-center">
-                            <div className="mb-2 font-serif italic text-2xl text-slate-800">Admin Team</div>
-                            <div className="w-48 h-px bg-slate-300 mb-2"></div>
-                            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Authorized Signatory <br/> LearnSyntax App</div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Decorative Seal */}
-                <div className="absolute bottom-16 right-64 opacity-10">
-                    <Award className="size-48 text-slate-900" />
+                    {/* Signatory Name could go here if needed, but template already has "CEO / Director" */}
                 </div>
             </div>
 
