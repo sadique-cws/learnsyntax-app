@@ -19,16 +19,26 @@ export default function InvoicePage({ invoice, company }: { invoice: any, compan
             
             <div className="max-w-[850px] mx-auto print:max-w-none">
                 {/* Action Bar */}
-                <div className="flex justify-between items-center mb-6 print:hidden">
-                    <Link href="/admin/payments" className="flex items-center text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">
-                        <ChevronLeft className="size-3 mr-1" /> Back to Payments
-                    </Link>
-                    <div className="flex gap-3">
-                        <Button variant="outline" onClick={handlePrint} className="rounded border-slate-300 bg-white">
-                            <Printer className="size-4 mr-2" /> Print
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 print:hidden">
+                    <div className="flex items-center gap-2">
+                        <Link href="/admin/payments" className="size-6 rounded-sm border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-200 transition-all bg-white">
+                            <ChevronLeft className="size-3.5" />
+                        </Link>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Registry / Invoices</span>
+                    </div>
+                    <div className="flex gap-2.5">
+                        <Button 
+                            variant="outline" 
+                            onClick={handlePrint} 
+                            className="h-9 px-4 rounded-sm text-[11px] font-bold uppercase tracking-tight border-slate-200 bg-white text-slate-600 hover:bg-slate-50 transition-all shadow-none"
+                        >
+                            <Printer className="size-3.5 mr-2" /> Print Invoice
                         </Button>
-                        <Button onClick={handlePrint} className="rounded shadow-none">
-                            <Download className="size-4 mr-2" /> Download PDF
+                        <Button 
+                            onClick={handlePrint} 
+                            className="h-9 px-4 rounded-sm text-[11px] font-bold uppercase tracking-tight bg-indigo-600 text-white hover:bg-indigo-700 transition-all shadow-none"
+                        >
+                            <Download className="size-3.5 mr-2" /> Save as PDF
                         </Button>
                     </div>
                 </div>

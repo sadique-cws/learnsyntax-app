@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Percent, ChevronRight, UserPlus, Mail, UserCog, X } from 'lucide-react';
+import { Percent, ChevronRight, UserPlus, Mail, UserCog, X, LogIn } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { AdminDataTable, Column } from '@/components/admin/admin-data-table';
 
@@ -15,6 +15,12 @@ export default function AdminTeachers({ teachers, users }: any) {
   const submit = (e: any) => {
     e.preventDefault();
     post('/admin/teachers', { onSuccess: () => { reset(); setShowAddForm(false); } });
+  };
+
+  const handleLoginAs = (id: number) => {
+    if (confirm('Are you sure you want to login as this teacher?')) {
+      router.post(`/admin/teachers/${id}/login-as`);
+    }
   };
 
   const columns: Column<any>[] = [
@@ -102,9 +108,20 @@ export default function AdminTeachers({ teachers, users }: any) {
         <div className="rounded-sm border border-border overflow-hidden">
           <AdminDataTable title="All Teachers" data={teachers} columns={columns} searchPlaceholder="Search teachers..."
             actions={(teacher) => (
-              <Button asChild variant="ghost" size="icon" className="size-7 rounded-sm text-muted-foreground hover:text-foreground hover:bg-muted/50">
-                <Link href={`/admin/teachers/${teacher.id}`}><ChevronRight className="size-3.5" /></Link>
-              </Button>
+              <div className="flex items-center gap-1">
+                <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="size-7 rounded-sm text-muted-foreground hover:text-primary hover:bg-primary/5"
+                    onClick={() => handleLoginAs(teacher.id)}
+                    title="Login as Teacher"
+                >
+                  <LogIn className="size-3.5" />
+                </Button>
+                <Button asChild variant="ghost" size="icon" className="size-7 rounded-sm text-muted-foreground hover:text-foreground hover:bg-muted/50">
+                  <Link href={`/admin/teachers/${teacher.id}`}><ChevronRight className="size-3.5" /></Link>
+                </Button>
+              </div>
             )}
           />
         </div>

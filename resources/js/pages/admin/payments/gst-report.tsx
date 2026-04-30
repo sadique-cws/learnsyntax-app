@@ -5,6 +5,8 @@ import { Receipt, FileText, ChevronLeft, Download } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AdminDataTable, Column } from '@/components/admin/admin-data-table';
 
+function cn(...classes: any[]) { return classes.filter(Boolean).join(' '); }
+
 export default function AdminGSTReport({ invoices, stats }: { invoices: any[], stats: any }) {
     const columns: Column<any>[] = [
         {
@@ -53,12 +55,6 @@ export default function AdminGSTReport({ invoices, stats }: { invoices: any[], s
                         <span className="text-muted-foreground">SGST:</span>
                         <span className="text-foreground">₹{invoice.sgst}</span>
                     </div>
-                    {invoice.igst > 0 && (
-                        <div className="flex justify-between gap-4">
-                            <span className="text-muted-foreground">IGST:</span>
-                            <span className="text-foreground">₹{invoice.igst}</span>
-                        </div>
-                    )}
                 </div>
             )
         },
@@ -79,6 +75,10 @@ export default function AdminGSTReport({ invoices, stats }: { invoices: any[], s
         }
     ];
 
+    const handleExport = () => {
+        window.location.href = '/admin/payments/gst-report/export';
+    };
+
     return (
         <>
             <Head title="GST Compliance Report" />
@@ -96,7 +96,7 @@ export default function AdminGSTReport({ invoices, stats }: { invoices: any[], s
                         <Button 
                             variant="outline" 
                             className="rounded h-11 px-6 font-medium text-xs border-border bg-card"
-                            onClick={() => window.location.href = route('admin.payments.gst-export')}
+                            onClick={handleExport}
                         >
                             <Download className="size-4 mr-2" /> Export GSTR-1
                         </Button>
