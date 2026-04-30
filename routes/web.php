@@ -180,6 +180,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('batches/{batch}/progress', [DashboardController::class, 'storeLog'])->name('teacher.batches.progress.store');
     });
 
+    // Notifications
+    Route::get('notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('notifications/{id}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('notifications/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+
 });
 
 require __DIR__.'/settings.php';

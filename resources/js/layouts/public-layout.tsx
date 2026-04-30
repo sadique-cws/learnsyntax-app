@@ -3,7 +3,7 @@ import { dashboard, login, register } from '@/routes';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Button } from '@/components/ui/button';
 import { useAppearance } from '@/hooks/use-appearance';
-import { Moon, Sun, Home, BookOpen, User, LogIn } from 'lucide-react';
+import { Moon, Sun, Home, BookOpen, User, LogIn, Bell } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
@@ -39,6 +39,19 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                         <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-sm size-8">
                             {mounted && (resolvedAppearance === 'dark' ? <Sun className="size-3.5" /> : <Moon className="size-3.5" />)}
                         </Button>
+
+                        {auth.user && (
+                            <Link href="/notifications" className="relative">
+                                <Button variant="ghost" size="icon" className="rounded-sm size-8">
+                                    <Bell className="size-3.5" />
+                                    {auth.unreadNotificationsCount > 0 && (
+                                        <span className="absolute top-0 right-0 flex h-3 w-3 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white ring-1 ring-background">
+                                            {auth.unreadNotificationsCount}
+                                        </span>
+                                    )}
+                                </Button>
+                            </Link>
+                        )}
 
                         {auth.user ? (
                             <div className="flex items-center gap-2.5 pl-3 ml-1 border-l border-border">
@@ -112,6 +125,19 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                     <BookOpen className="size-4" />
                     <span className="text-[10px] font-medium">Courses</span>
                 </Link>
+                {auth.user && (
+                    <Link href="/notifications" className="flex flex-col items-center justify-center w-full h-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors gap-0.5">
+                        <div className="relative">
+                            <Bell className="size-4" />
+                            {auth.unreadNotificationsCount > 0 && (
+                                <span className="absolute -top-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white">
+                                    {auth.unreadNotificationsCount}
+                                </span>
+                            )}
+                        </div>
+                        <span className="text-[10px] font-medium">Alerts</span>
+                    </Link>
+                )}
                 {auth.user ? (
                     <Link href={dashboard().url} className="flex flex-col items-center justify-center w-full h-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors gap-0.5">
                         <User className="size-4" />
