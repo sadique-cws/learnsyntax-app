@@ -204,9 +204,8 @@ class AcademicController extends Controller
             ]
         );
 
-        return inertia('student/academic/certificate', [
-            'enrollment' => $enrollment->load(['course', 'user']),
-            'certificate' => $certificate,
+        return inertia('admin/certificates/view', [
+            'certificate' => $certificate->load(['enrollment.user', 'enrollment.course']),
         ]);
     }
 
@@ -298,6 +297,17 @@ class AcademicController extends Controller
 
         return inertia('student/academic/my-learning', [
             'enrollments' => $enrollments,
+        ]);
+    }
+    public function downloadCertificate(Enrollment $enrollment)
+    {
+        $this->authorizeAccess($enrollment);
+        
+        $certificate = $enrollment->certificate()->firstOrFail();
+        $certificate->load(['enrollment.user', 'enrollment.course']);
+
+        return inertia('admin/certificates/view', [
+            'certificate' => $certificate,
         ]);
     }
 }

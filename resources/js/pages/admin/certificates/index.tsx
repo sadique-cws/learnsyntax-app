@@ -55,9 +55,11 @@ export default function CertificateIndex({ certificates }: { certificates: any[]
                     <AdminDataTable data={certificates} columns={columns} title="Issued Certificates" searchPlaceholder="Search certificates..."
                         actions={(cert) => (
                             <div className="flex items-center gap-1">
-                                <Button variant="ghost" size="icon" className="size-7 rounded-sm text-muted-foreground hover:text-foreground hover:bg-muted/50">
-                                    <Download className="size-3.5" />
-                                </Button>
+                                <Link href={`/admin/certificates/${cert.id}/download`} target="_blank">
+                                    <Button variant="ghost" size="icon" className="size-7 rounded-sm text-muted-foreground hover:text-foreground hover:bg-muted/50">
+                                        <Download className="size-3.5" />
+                                    </Button>
+                                </Link>
                                 <Link href={`/admin/students/${cert.enrollment.user_id}`}>
                                     <Button variant="ghost" size="icon" className="size-7 rounded-sm text-muted-foreground hover:text-foreground hover:bg-muted/50">
                                         <Eye className="size-3.5" />

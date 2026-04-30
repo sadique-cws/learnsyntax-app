@@ -146,9 +146,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('payments', [PaymentController::class, 'index'])->name('admin.payments.index');
         Route::get('payments/gst-report', [PaymentController::class, 'gstReport'])->name('admin.payments.gst-report');
         Route::get('payments/gst-report/export', [PaymentController::class, 'exportGstr1'])->name('admin.payments.gst-export');
-        Route::get('invoices/{invoice}', [PaymentController::class, 'showInvoice'])->name('admin.invoices.show');
         Route::post('payments/{payment}/generate-invoice', [PaymentController::class, 'generateInvoice'])->name('admin.payments.generate-invoice');
+    });
 
+    Route::get('admin/invoices/{invoice}', [PaymentController::class, 'showInvoice'])->name('admin.invoices.show');
+    
+    Route::middleware(['can:admin'])->prefix('admin')->group(function () {
         // Teachers Management
         Route::get('withdrawals', [TeacherController::class, 'withdrawals'])->name('admin.withdrawals.index');
         Route::post('withdrawals/{withdrawal}/status', [TeacherController::class, 'updateWithdrawalStatus'])->name('admin.withdrawals.status');
@@ -165,6 +168,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('students', [StudentController::class, 'index'])->name('admin.students.index');
         Route::get('students/qualified', [CertificateController::class, 'qualified'])->name('admin.students.qualified');
         Route::get('certificates', [CertificateController::class, 'index'])->name('admin.certificates.index');
+        Route::get('certificates/{certificate}/download', [CertificateController::class, 'download'])->name('admin.certificates.download');
         Route::get('students/{student}', [StudentController::class, 'show'])->name('admin.students.show');
         Route::patch('students/{student}', [StudentController::class, 'update'])->name('admin.students.update');
         Route::post('students/{student}/enroll', [StudentController::class, 'manualEnroll'])->name('admin.students.manual-enroll');
@@ -217,6 +221,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('exam/verify', [AcademicController::class, 'verifyPasscode'])->name('student.academic.verify-passcode');
         Route::post('exam', [AcademicController::class, 'submitExam'])->name('student.academic.submit-exam');
         Route::get('certificate', [AcademicController::class, 'certificate'])->name('student.academic.certificate');
+        Route::get('certificate/download', [AcademicController::class, 'downloadCertificate'])->name('student.academic.download-certificate');
     });
 
     // Global Academic Views

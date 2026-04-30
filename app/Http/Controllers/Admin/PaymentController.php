@@ -56,6 +56,11 @@ class PaymentController extends Controller
 
     public function showInvoice(Invoice $invoice)
     {
+        $user = auth()->user();
+        if (!$user->can('admin') && $invoice->payment->enrollment->user_id !== $user->id) {
+            abort(403);
+        }
+
         $settings = Setting::first() ?: new Setting([
             'company_name' => 'Learn Syntax Academy',
             'company_address' => '123 Tech Park, Sector 62, Noida, UP - 201309',

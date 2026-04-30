@@ -33,4 +33,12 @@ class CertificateController extends Controller
             'qualified' => $qualified,
         ]);
     }
+    public function download(Certificate $certificate)
+    {
+        $certificate->load(['enrollment.user', 'enrollment.course']);
+        
+        return Inertia::render('admin/certificates/view', [
+            'certificate' => $certificate,
+        ]);
+    }
 }

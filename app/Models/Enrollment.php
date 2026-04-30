@@ -11,6 +11,8 @@ class Enrollment extends Model
 {
     use HasFactory;
 
+    protected $appends = ['assignment_average', 'exam_score', 'overall_average'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

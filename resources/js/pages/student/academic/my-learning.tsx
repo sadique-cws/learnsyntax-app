@@ -150,6 +150,9 @@ export default function MyLearning({ enrollments = [] }: MyLearningProps) {
                                                 {enrollment.certificate && (
                                                     <span className="text-emerald-600 font-bold uppercase tracking-tight">Completed</span>
                                                 )}
+                                                {enrollment.is_eligible && !enrollment.certificate && (
+                                                    <span className="text-amber-600 font-bold uppercase tracking-tight">Eligible for Cert</span>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -158,11 +161,19 @@ export default function MyLearning({ enrollments = [] }: MyLearningProps) {
                                         "flex items-center gap-2 pt-4",
                                         viewMode === 'list' && "md:pt-0 md:justify-end"
                                     )}>
-                                        <Button asChild size="sm" className="flex-1 h-8 rounded-sm text-[11px] font-bold shadow-none cursor-pointer">
-                                            <Link href={`/my-course/${enrollment.id}/progress`}>
-                                                Continue Learning
-                                            </Link>
-                                        </Button>
+                                        {enrollment.is_eligible || enrollment.certificate ? (
+                                            <Button asChild size="sm" className="flex-1 h-8 rounded-sm text-[11px] font-bold shadow-none cursor-pointer bg-emerald-600 hover:bg-emerald-700">
+                                                <Link href={`/my-course/${enrollment.id}/certificate`} target="_blank">
+                                                    Download Certificate
+                                                </Link>
+                                            </Button>
+                                        ) : (
+                                            <Button asChild size="sm" className="flex-1 h-8 rounded-sm text-[11px] font-bold shadow-none cursor-pointer">
+                                                <Link href={`/my-course/${enrollment.id}/progress`}>
+                                                    Continue Learning
+                                                </Link>
+                                            </Button>
+                                        )}
                                         <Button asChild variant="outline" size="sm" className="h-8 px-2 rounded-sm shadow-none cursor-pointer">
                                             <Link href={`/my-course/${enrollment.id}/progress`}>
                                                 <ChevronRight className="size-4" />

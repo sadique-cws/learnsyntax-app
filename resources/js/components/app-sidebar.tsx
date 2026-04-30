@@ -75,9 +75,9 @@ export function AppSidebar() {
 
             if (user.is_student) {
                 mainNavItems.push({
-                    title: 'My Learning',
+                    title: 'Dashboard',
                     href: '/dashboard',
-                    icon: GraduationCap,
+                    icon: LayoutGrid,
                 });
                 mainNavItems.push({
                     title: 'My Learning',
