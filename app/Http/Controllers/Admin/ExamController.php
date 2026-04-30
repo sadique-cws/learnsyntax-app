@@ -14,7 +14,7 @@ class ExamController extends Controller
     public function index()
     {
         return inertia('admin/exams/index', [
-            'courses' => Course::with('exam')->get(),
+            'courses' => Course::with(['exam' => fn ($q) => $q->withCount('questions')])->get(),
         ]);
     }
 

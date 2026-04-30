@@ -1,8 +1,7 @@
 import { Head, useForm } from '@inertiajs/react';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, Lock, Key } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
-import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TwoFactorRecoveryCodes from '@/components/two-factor-recovery-codes';
@@ -10,7 +9,7 @@ import TwoFactorSetupModal from '@/components/two-factor-setup-modal';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
-import { edit } from '@/routes/security';
+import SettingsLayout from '@/layouts/settings/layout';
 import { disable, enable } from '@/routes/two-factor';
 
 type Props = {
@@ -54,7 +53,6 @@ export default function Security({
         if (prevTwoFactorEnabled.current && !twoFactorEnabled) {
             clearTwoFactorAuthData();
         }
-
         prevTwoFactorEnabled.current = twoFactorEnabled;
     }, [twoFactorEnabled, clearTwoFactorAuthData]);
 
@@ -64,183 +62,150 @@ export default function Security({
             preserveScroll: true,
             onSuccess: () => updatePasswordForm.reset(),
             onError: (errors) => {
-                if (errors.password) {
-                    passwordInput.current?.focus();
-                }
-                if (errors.current_password) {
-                    currentPasswordInput.current?.focus();
-                }
+                if (errors.password) passwordInput.current?.focus();
+                if (errors.current_password) currentPasswordInput.current?.focus();
             },
         });
     };
 
     return (
-        <>
-            <Head title="Security settings" />
+        <SettingsLayout>
+            <Head title="Security Settings" />
 
-            <h1 className="sr-only">Security settings</h1>
-
-            <div className="space-y-6">
-                <Heading
-                    variant="small"
-                    title="Update password"
-                    description="Ensure your account is using a long, random password to stay secure"
-                />
-
-                <form onSubmit={updatePassword} className="space-y-6">
-                    <div className="grid gap-2">
-                        <Label htmlFor="current_password">
-                            Current password
-                        </Label>
-
-                        <PasswordInput
-                            id="current_password"
-                            ref={currentPasswordInput}
-                            name="current_password"
-                            value={updatePasswordForm.data.current_password}
-                            onChange={e => updatePasswordForm.setData('current_password', e.target.value)}
-                            className="mt-1 block w-full"
-                            autoComplete="current-password"
-                            placeholder="Current password"
-                        />
-
-                        <InputError message={updatePasswordForm.errors.current_password} />
+            <div className="space-y-4">
+                {/* Update Password */}
+                <div className="rounded-sm border border-border bg-card overflow-hidden">
+                    <div className="px-4 py-3 border-b border-border bg-muted/5">
+                        <h2 className="text-sm font-semibold text-foreground">Update Password</h2>
+                        <p className="text-[11px] text-muted-foreground mt-0.5">Ensure your account is using a long, random password to stay secure.</p>
                     </div>
+                    
+                    <form onSubmit={updatePassword} className="p-4 space-y-4 max-w-xl">
+                        <div className="grid gap-1.5">
+                            <Label htmlFor="current_password" name="current_password" className="text-xs font-medium text-muted-foreground">Current Password</Label>
+                            <PasswordInput
+                                id="current_password"
+                                ref={currentPasswordInput}
+                                value={updatePasswordForm.data.current_password}
+                                onChange={e => updatePasswordForm.setData('current_password', e.target.value)}
+                                className="h-9 rounded-sm border-border text-sm shadow-none focus-visible:ring-1"
+                                placeholder="••••••••"
+                            />
+                            <InputError message={updatePasswordForm.errors.current_password} />
+                        </div>
 
-                    <div className="grid gap-2">
-                        <Label htmlFor="password">New password</Label>
+                        <div className="grid gap-1.5">
+                            <Label htmlFor="password" name="password" className="text-xs font-medium text-muted-foreground">New Password</Label>
+                            <PasswordInput
+                                id="password"
+                                ref={passwordInput}
+                                value={updatePasswordForm.data.password}
+                                onChange={e => updatePasswordForm.setData('password', e.target.value)}
+                                className="h-9 rounded-sm border-border text-sm shadow-none focus-visible:ring-1"
+                                placeholder="••••••••"
+                            />
+                            <InputError message={updatePasswordForm.errors.password} />
+                        </div>
 
-                        <PasswordInput
-                            id="password"
-                            ref={passwordInput}
-                            name="password"
-                            value={updatePasswordForm.data.password}
-                            onChange={e => updatePasswordForm.setData('password', e.target.value)}
-                            className="mt-1 block w-full"
-                            autoComplete="new-password"
-                            placeholder="New password"
-                        />
+                        <div className="grid gap-1.5">
+                            <Label htmlFor="password_confirmation" name="password_confirmation" className="text-xs font-medium text-muted-foreground">Confirm New Password</Label>
+                            <PasswordInput
+                                id="password_confirmation"
+                                value={updatePasswordForm.data.password_confirmation}
+                                onChange={e => updatePasswordForm.setData('password_confirmation', e.target.value)}
+                                className="h-9 rounded-sm border-border text-sm shadow-none focus-visible:ring-1"
+                                placeholder="••••••••"
+                            />
+                            <InputError message={updatePasswordForm.errors.password_confirmation} />
+                        </div>
 
-                        <InputError message={updatePasswordForm.errors.password} />
-                    </div>
+                        <div className="flex items-center pt-2">
+                            <Button disabled={updatePasswordForm.processing} size="sm" className="h-8 px-6 rounded-sm text-xs font-medium">
+                                {updatePasswordForm.processing ? 'Saving...' : 'Save Password'}
+                            </Button>
+                        </div>
+                    </form>
+                </div>
 
-                    <div className="grid gap-2">
-                        <Label htmlFor="password_confirmation">
-                            Confirm password
-                        </Label>
-
-                        <PasswordInput
-                            id="password_confirmation"
-                            name="password_confirmation"
-                            value={updatePasswordForm.data.password_confirmation}
-                            onChange={e => updatePasswordForm.setData('password_confirmation', e.target.value)}
-                            className="mt-1 block w-full"
-                            autoComplete="new-password"
-                            placeholder="Confirm password"
-                        />
-
-                        <InputError
-                            message={updatePasswordForm.errors.password_confirmation}
-                        />
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        <Button
-                            disabled={updatePasswordForm.processing}
-                            data-test="update-password-button"
-                        >
-                            Save password
-                        </Button>
-                    </div>
-                </form>
-            </div>
-
-            {canManageTwoFactor && (
-                <div className="space-y-6">
-                    <Heading
-                        variant="small"
-                        title="Two-factor authentication"
-                        description="Manage your two-factor authentication settings"
-                    />
-                    {twoFactorEnabled ? (
-                        <div className="flex flex-col items-start justify-start space-y-4">
-                            <p className="text-sm text-muted-foreground">
-                                You will be prompted for a secure, random pin
-                                during login, which you can retrieve from the
-                                TOTP-supported application on your phone.
-                            </p>
-
-                            <div className="relative inline">
-                                <form onSubmit={(e) => { e.preventDefault(); disable2FAForm.delete(disable().url); }}>
-                                    <Button
-                                        variant="destructive"
-                                        type="submit"
-                                        disabled={disable2FAForm.processing}
-                                    >
-                                        Disable 2FA
-                                    </Button>
-                                </form>
+                {/* Two-Factor Authentication */}
+                {canManageTwoFactor && (
+                    <div className="rounded-sm border border-border bg-card overflow-hidden">
+                        <div className="px-4 py-3 border-b border-border bg-muted/5 flex items-center justify-between">
+                            <div>
+                                <h2 className="text-sm font-semibold text-foreground">Two-Factor Authentication</h2>
+                                <p className="text-[11px] text-muted-foreground mt-0.5">Add an extra layer of security to your account using TOTP.</p>
+                            </div>
+                            {twoFactorEnabled && (
+                                <span className="inline-flex items-center px-1.5 py-0.5 rounded-sm bg-emerald-50 text-emerald-600 text-[10px] font-bold border border-emerald-100">
+                                    Enabled
+                                </span>
+                            )}
+                        </div>
+                        
+                        <div className="p-4 space-y-4">
+                            <div className="flex gap-4">
+                                <div className={cn(
+                                    "size-10 rounded-sm flex items-center justify-center shrink-0 border",
+                                    twoFactorEnabled ? "bg-emerald-50 border-emerald-100 text-emerald-600" : "bg-muted/5 border-border text-muted-foreground/40"
+                                )}>
+                                    <ShieldCheck className="size-5" />
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-xs text-muted-foreground leading-relaxed">
+                                        {twoFactorEnabled 
+                                            ? "You will be prompted for a secure, random pin during login, which you can retrieve from your authenticator app."
+                                            : "When you enable two-factor authentication, you will be prompted for a secure pin during login. This pin can be retrieved from a TOTP-supported application on your phone."
+                                        }
+                                    </p>
+                                </div>
                             </div>
 
-                            <TwoFactorRecoveryCodes
-                                recoveryCodesList={recoveryCodesList}
-                                fetchRecoveryCodes={fetchRecoveryCodes}
-                                errors={twoFactorErrors}
-                            />
-                        </div>
-                    ) : (
-                        <div className="flex flex-col items-start justify-start space-y-4">
-                            <p className="text-sm text-muted-foreground">
-                                When you enable two-factor authentication, you
-                                will be prompted for a secure pin during login.
-                                This pin can be retrieved from a TOTP-supported
-                                application on your phone.
-                            </p>
-
-                            <div>
-                                {hasSetupData ? (
-                                    <Button
-                                        onClick={() => setShowSetupModal(true)}
-                                    >
-                                        <ShieldCheck />
-                                        Continue setup
-                                    </Button>
+                            <div className="pt-2">
+                                {twoFactorEnabled ? (
+                                    <div className="space-y-4">
+                                        <form onSubmit={(e) => { e.preventDefault(); disable2FAForm.delete(disable().url); }}>
+                                            <Button variant="outline" type="submit" disabled={disable2FAForm.processing} className="h-8 px-4 rounded-sm text-xs font-medium border-destructive/20 text-destructive hover:bg-destructive/5 hover:text-destructive shadow-none">
+                                                Disable 2FA
+                                            </Button>
+                                        </form>
+                                        <TwoFactorRecoveryCodes
+                                            recoveryCodesList={recoveryCodesList}
+                                            fetchRecoveryCodes={fetchRecoveryCodes}
+                                            errors={twoFactorErrors}
+                                        />
+                                    </div>
                                 ) : (
-                                    <form onSubmit={(e) => { e.preventDefault(); enable2FAForm.post(enable().url, { onSuccess: () => setShowSetupModal(true) }); }}>
-                                        <Button
-                                            type="submit"
-                                            disabled={enable2FAForm.processing}
-                                        >
-                                            Enable 2FA
-                                        </Button>
-                                    </form>
+                                    <div>
+                                        {hasSetupData ? (
+                                            <Button onClick={() => setShowSetupModal(true)} size="sm" className="h-8 px-4 rounded-sm text-xs font-medium">
+                                                <Key className="size-3.5 mr-2" /> Continue setup
+                                            </Button>
+                                        ) : (
+                                            <form onSubmit={(e) => { e.preventDefault(); enable2FAForm.post(enable().url, { onSuccess: () => setShowSetupModal(true) }); }}>
+                                                <Button type="submit" disabled={enable2FAForm.processing} size="sm" className="h-8 px-4 rounded-sm text-xs font-medium">
+                                                    Enable 2FA
+                                                </Button>
+                                            </form>
+                                        )}
+                                    </div>
                                 )}
                             </div>
                         </div>
-                    )}
 
-                    <TwoFactorSetupModal
-                        isOpen={showSetupModal}
-                        onClose={() => setShowSetupModal(false)}
-                        requiresConfirmation={requiresConfirmation}
-                        twoFactorEnabled={twoFactorEnabled}
-                        qrCodeSvg={qrCodeSvg}
-                        manualSetupKey={manualSetupKey}
-                        clearSetupData={clearSetupData}
-                        fetchSetupData={fetchSetupData}
-                        errors={twoFactorErrors}
-                    />
-                </div>
-            )}
-        </>
+                        <TwoFactorSetupModal
+                            isOpen={showSetupModal}
+                            onClose={() => setShowSetupModal(false)}
+                            requiresConfirmation={requiresConfirmation}
+                            twoFactorEnabled={twoFactorEnabled}
+                            qrCodeSvg={qrCodeSvg}
+                            manualSetupKey={manualSetupKey}
+                            clearSetupData={clearSetupData}
+                            fetchSetupData={fetchSetupData}
+                            errors={twoFactorErrors}
+                        />
+                    </div>
+                )}
+            </div>
+        </SettingsLayout>
     );
 }
-
-Security.layout = {
-    breadcrumbs: [
-        {
-            title: 'Security settings',
-            href: edit(),
-        },
-    ],
-};

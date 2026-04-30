@@ -33,10 +33,30 @@ export default function AdminExamIndex({ courses }: { courses: any[] }) {
             )
         },
         {
+            key: 'questions_count', label: 'Questions',
+            render: (course) => (
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded-sm bg-slate-50 text-slate-600 text-xs font-medium border border-slate-100 tabular-nums">
+                    {course.exam ? `${course.exam.questions_count ?? 0} Q` : '—'}
+                </span>
+            )
+        },
+        {
             key: 'total_marks', label: 'Total Marks',
             render: (course) => (
                 <span className="text-sm font-medium text-foreground tabular-nums">{course.exam ? course.exam.total_marks : '—'}</span>
             )
+        },
+        {
+            key: 'status', label: 'Status',
+            render: (course) => {
+                if (!course.exam) return <span className="text-xs text-muted-foreground">—</span>;
+                const isLive = course.exam.is_active;
+                return (
+                    <span className={`inline-flex items-center px-1.5 py-0.5 rounded-sm text-[10px] font-medium border ${isLive ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
+                        {isLive ? 'Live' : 'Draft'}
+                    </span>
+                );
+            }
         }
     ];
 

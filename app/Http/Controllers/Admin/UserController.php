@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\LoginStreak;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -11,7 +12,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with(['enrollments.course', 'enrollments.batch'])
+        $users = User::with(['enrollments.course', 'enrollments.batch', 'latestLoginStreak'])
             ->latest()
             ->get();
 
@@ -46,5 +47,28 @@ class UserController extends Controller
         $user->delete();
 
         return back()->with('success', 'User deleted successfully');
+    }
+
+    public function topStrikers()
+    {
+        $strikers = User::whereHas('latestLoginStreak')
+            ->with('latestLoginStreak')
+            ->get()
+            ->map(function($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'streak' => $user->latestLoginStreak->current_streak,
+                    'longest' => $user->latestLoginStreak->longest_streak,
+                    'last_login' => $user->latestLoginStreak->login_date,
+                ];
+            })
+            ->sortByDesc('streak')
+            ->values();
+
+        return Inertia::render('admin/reports/top-strikers', [
+            'strikers' => $strikers,
+        ]);
     }
 }

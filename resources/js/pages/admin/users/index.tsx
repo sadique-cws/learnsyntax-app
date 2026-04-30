@@ -1,7 +1,7 @@
 import { Head, useForm, Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
-import { Shield, GraduationCap, Trash2, Edit2, UserPlus, ShieldAlert, Users } from 'lucide-react';
+import { Shield, GraduationCap, Trash2, Edit2, UserPlus, ShieldAlert, Users, Flame, Trophy } from 'lucide-react';
 import { AdminDataTable, Column } from '@/components/admin/admin-data-table';
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -117,6 +117,25 @@ export default function AdminUserIndex({ users }: { users: any[] }) {
             )
         },
         {
+            key: 'streak',
+            label: 'Streak',
+            sortable: true,
+            render: (user) => (
+                <div className="flex items-center gap-1.5">
+                    {user.latest_login_streak ? (
+                        <>
+                            <Flame className="size-3 text-orange-500" />
+                            <span className="text-xs font-semibold text-orange-600 tabular-nums">
+                                {user.latest_login_streak.current_streak}d
+                            </span>
+                        </>
+                    ) : (
+                        <span className="text-[10px] text-muted-foreground/30">—</span>
+                    )}
+                </div>
+            )
+        },
+        {
             key: 'created_at',
             label: 'Joined',
             sortable: true,
@@ -138,6 +157,11 @@ export default function AdminUserIndex({ users }: { users: any[] }) {
                         <h1 className="text-lg font-semibold text-foreground">Users</h1>
                         <p className="text-xs text-muted-foreground mt-0.5">{users.length} registered users</p>
                     </div>
+                    <Button asChild variant="outline" size="sm" className="h-8 rounded-sm text-xs font-medium border-border shadow-none">
+                        <Link href="/admin/reports/top-strikers">
+                            <Trophy className="size-3.5 mr-1.5 text-orange-500" /> Top Strikers
+                        </Link>
+                    </Button>
                 </div>
 
                 <div className="rounded-sm border border-border overflow-hidden">

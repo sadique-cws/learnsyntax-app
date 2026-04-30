@@ -4,14 +4,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
-import { Plus, ChevronRight, GraduationCap, ChevronDown, FileText, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Plus, ChevronRight, GraduationCap, FileText, CheckCircle2, AlertCircle, Clock } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
 import { AdminDataTable, Column } from '@/components/admin/admin-data-table';
 
 export default function AdminAssignmentIndex({ batches }: { batches: any[] }) {
     const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [viewBatch, setViewBatch] = useState<any>(null);
     const { data, setData, post, processing, reset } = useForm({
         batch_id: '', title: '', description: '', max_marks: 100, due_date: '',
     });
@@ -95,60 +95,82 @@ export default function AdminAssignmentIndex({ batches }: { batches: any[] }) {
                                         </form>
                                     </DialogContent>
                                 </Dialog>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" size="sm" className="h-7 px-2.5 rounded-sm text-xs font-bold text-primary hover:bg-primary/5 border border-primary/10">
-                                            View <ChevronDown className="size-3 ml-1" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="w-80 p-0 rounded-sm border border-border shadow-xl overflow-hidden">
-                                        <div className="px-4 py-3 border-b border-border bg-muted/10 flex justify-between items-center">
-                                            <div className="flex flex-col">
-                                                <span className="text-[10px] font-bold text-foreground uppercase tracking-widest">Available Tasks</span>
-                                                <span className="text-[9px] text-muted-foreground font-medium uppercase tracking-tighter mt-0.5">{batch.name}</span>
-                                            </div>
-                                            <span className="text-[10px] font-black text-primary bg-primary/10 px-2 py-0.5 rounded-sm border border-primary/10 tabular-nums">
-                                                {batch.assignments.length}
-                                            </span>
-                                        </div>
-                                        <div className="max-h-[360px] overflow-y-auto p-1.5 bg-white">
-                                            {[...batch.assignments].sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).map((a: any) => (
-                                                <DropdownMenuItem key={a.id} asChild className="p-0 focus:bg-transparent">
-                                                    <Link href={`/admin/academic/assignments/${a.id}`} className="flex items-center justify-between p-3.5 rounded-sm hover:bg-muted/30 group/link transition-all mb-1 last:mb-0 border border-transparent hover:border-border/60">
-                                                        <div className="flex-1 min-w-0 pr-4">
-                                                            <div className="text-[13px] font-bold text-foreground truncate group-hover/link:text-primary transition-colors leading-tight">{a.title}</div>
-                                                            <div className="mt-2.5 flex items-center gap-3">
-                                                                <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-tight">
-                                                                    <FileText className="size-3 text-primary/40" /> {a.handed_in_count} <span className="opacity-50">In</span>
-                                                                </div>
-                                                                <div className="h-2.5 w-px bg-border/60" />
-                                                                <div className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 uppercase tracking-tight">
-                                                                    <CheckCircle2 className="size-3 text-emerald-500/50" /> {a.marked_count} <span className="opacity-50">Graded</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="size-6 rounded-sm bg-muted flex items-center justify-center text-muted-foreground group-hover/link:bg-primary group-hover/link:text-white transition-all">
-                                                            <ChevronRight className="size-3.5" />
-                                                        </div>
-                                                    </Link>
-                                                </DropdownMenuItem>
-                                            ))}
-                                            {batch.assignments.length === 0 && (
-                                                <div className="py-12 text-center flex flex-col items-center justify-center gap-2 opacity-40">
-                                                    <div className="size-10 rounded-full bg-muted/20 flex items-center justify-center mb-1">
-                                                        <AlertCircle className="size-5 text-muted-foreground/30" strokeWidth={1.5} />
-                                                    </div>
-                                                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">No assignments found</div>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+
+                                <Button
+                                    variant="ghost" size="sm"
+                                    className="h-7 px-2.5 rounded-sm text-xs font-medium text-primary hover:bg-primary/5 border border-primary/10"
+                                    onClick={() => setViewBatch(batch)}
+                                >
+                                    View
+                                </Button>
                             </div>
                         )}
                     />
                 </div>
             </div>
+
+            {/* View Assignments Modal */}
+            <Dialog open={!!viewBatch} onOpenChange={(open) => { if (!open) setViewBatch(null); }}>
+                <DialogContent className="rounded-sm border border-border max-w-lg p-0 overflow-hidden shadow-none">
+                    <DialogHeader className="px-4 py-3 border-b border-border bg-muted/5">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <DialogTitle className="text-sm font-semibold">{viewBatch?.name}</DialogTitle>
+                                <p className="text-xs text-muted-foreground mt-0.5">{viewBatch?.course?.title}</p>
+                            </div>
+                            <span className="text-xs font-semibold text-primary bg-primary/5 px-2 py-0.5 rounded-sm border border-primary/10 tabular-nums">
+                                {viewBatch?.assignments?.length ?? 0} tasks
+                            </span>
+                        </div>
+                    </DialogHeader>
+                    <div className="max-h-[400px] overflow-y-auto divide-y divide-border">
+                        {viewBatch?.assignments?.length > 0 ? (
+                            [...viewBatch.assignments]
+                                .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                                .map((a: any) => (
+                                    <Link
+                                        key={a.id}
+                                        href={`/admin/academic/assignments/${a.id}`}
+                                        className="flex items-center justify-between px-4 py-3 hover:bg-muted/5 transition-colors group"
+                                    >
+                                        <div className="min-w-0 pr-4">
+                                            <div className="text-sm font-medium text-foreground truncate group-hover:text-primary transition-colors">{a.title}</div>
+                                            <div className="mt-1.5 flex items-center gap-3 flex-wrap">
+                                                {a.due_date && (
+                                                    <>
+                                                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                                            <Clock className="size-3" />
+                                                            <span className="tabular-nums">{new Date(a.due_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</span>
+                                                        </div>
+                                                        <div className="h-3 w-px bg-border" />
+                                                    </>
+                                                )}
+                                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                                    <FileText className="size-3" /> {a.handed_in_count} <span className="text-[10px]">in</span>
+                                                </div>
+                                                <div className="h-3 w-px bg-border" />
+                                                <div className="flex items-center gap-1.5 text-xs text-emerald-600">
+                                                    <CheckCircle2 className="size-3 text-emerald-500" /> {a.marked_count} <span className="text-[10px]">graded</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="size-6 rounded-sm bg-muted flex items-center justify-center text-muted-foreground group-hover:bg-primary group-hover:text-white transition-all shrink-0">
+                                            <ChevronRight className="size-3.5" />
+                                        </div>
+                                    </Link>
+                                ))
+                        ) : (
+                            <div className="py-12 text-center">
+                                <AlertCircle className="size-6 text-muted-foreground/20 mx-auto mb-2" strokeWidth={1.5} />
+                                <p className="text-xs text-muted-foreground">No assignments found</p>
+                            </div>
+                        )}
+                    </div>
+                    <div className="px-4 py-2 border-t border-border bg-muted/5">
+                        <span className="text-[10px] text-muted-foreground">{viewBatch?.assignments?.length ?? 0} assignments • sorted by newest first</span>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </>
     );
 }

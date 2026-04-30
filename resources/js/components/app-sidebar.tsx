@@ -63,6 +63,7 @@ export function AppSidebar() {
                 { title: 'Batches', href: '/admin/batches', icon: FolderGit2 },
                 { title: 'Payments', href: '/admin/payments', icon: CreditCard },
                 { title: 'GST Reports', href: '/admin/payments/gst-report', icon: Receipt },
+                { title: 'Top Strikers', href: '/admin/reports/top-strikers', icon: Trophy },
                 { title: 'Assignments', href: '/admin/academic/assignments', icon: BookOpen },
                 { title: 'Exams', href: '/admin/academic/exams', icon: Trophy },
                 { title: 'Settings', href: '/admin/settings', icon: Settings },
@@ -77,6 +78,16 @@ export function AppSidebar() {
                     title: 'My Learning',
                     href: '/dashboard',
                     icon: GraduationCap,
+                });
+                mainNavItems.push({
+                    title: 'My Assignments',
+                    href: '/dashboard', // User can see them on dashboard now
+                    icon: BookOpen,
+                });
+                mainNavItems.push({
+                    title: 'My Exams',
+                    href: '/dashboard', // User can see them on dashboard now
+                    icon: Trophy,
                 });
             } else {
                 mainNavItems.push({

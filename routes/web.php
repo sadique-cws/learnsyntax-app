@@ -17,6 +17,7 @@ use App\Http\Controllers\Teacher\KycController;
 use App\Http\Controllers\Teacher\WalletController;
 use App\Models\Course;
 use App\Models\Enrollment;
+use App\Models\LoginStreak;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -47,6 +48,28 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 ];
             });
 
+            // Top streak leaders for admin monitoring
+            $streakLeaders = LoginStreak::select('user_id')
+                ->selectRaw('MAX(current_streak) as streak')
+                ->selectRaw('MAX(longest_streak) as best')
+                ->selectRaw('COUNT(*) as total_logins')
+                ->selectRaw('MAX(login_date) as last_login')
+                ->groupBy('user_id')
+                ->orderByDesc('streak')
+                ->take(10)
+                ->get()
+                ->map(function ($row) {
+                    $user = \App\Models\User::find($row->user_id);
+                    return [
+                        'name' => $user?->name ?? 'Unknown',
+                        'email' => $user?->email ?? '',
+                        'streak' => $row->streak,
+                        'best' => $row->best,
+                        'total_logins' => $row->total_logins,
+                        'last_login' => $row->last_login,
+                    ];
+                });
+
             return inertia('dashboard', [
                 'stats' => [
                     'courses' => Course::count(),
@@ -54,6 +77,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     'revenue' => (float) Payment::where('status', 'completed')->sum('amount'),
                     'signups_this_week' => Enrollment::where('status', 'paid')->where('created_at', '>=', now()->subDays(7))->count(),
                     'recent_users' => $recentUsers,
+                    'streak_leaders' => $streakLeaders,
                 ],
             ]);
         }
@@ -62,9 +86,33 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return redirect()->route('teacher.dashboard');
         }
 
+        $enrollments = $user->enrollments()->where('status', 'paid')->with(['course', 'batch.assignments', 'certificate', 'payment.invoice'])->get();
+        
+        $allAssignments = collect();
+        $availableExams = collect();
+
+        foreach ($enrollments as $enrollment) {
+            if ($enrollment->batch) {
+                // Fetch all assignments for the batch with the user's submission
+                $batchAssignments = $enrollment->batch->assignments()
+                    ->with(['submissions' => function($q) use ($user) {
+                        $q->where('user_id', $user->id);
+                    }])->get();
+                
+                $allAssignments = $allAssignments->merge($batchAssignments);
+            }
+
+            // Available exams for the course
+            $courseExams = $enrollment->course->exams()->where('is_active', true)->get();
+            $availableExams = $availableExams->merge($courseExams);
+        }
+
         return inertia('dashboard', [
-            'enrollments' => $user->enrollments()->where('status', 'paid')->with(['course', 'batch', 'payment.invoice', 'certificate'])->get(),
+            'enrollments' => $enrollments,
+            'assignments' => $allAssignments,
+            'availableExams' => $availableExams,
             'is_student' => $user->is_student,
+            'streak' => LoginStreak::getStreakData($user->id),
         ]);
     })->name('dashboard');
 
@@ -132,6 +180,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::delete('questions/{question}', [ExamController::class, 'destroyQuestion'])->name('admin.questions.destroy');
             Route::get('exams/{exam}/results', [ExamController::class, 'results'])->name('admin.exams.results');
             Route::patch('exam-attempts/{attempt}', [ExamController::class, 'updateResult'])->name('admin.exam-attempts.update');
+        });
+
+        // Reports Management
+        Route::prefix('reports')->group(function () {
+            Route::get('top-strikers', [UserController::class, 'topStrikers'])->name('admin.reports.top-strikers');
         });
 
         // Settings

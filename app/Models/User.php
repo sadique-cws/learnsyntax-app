@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -45,5 +48,15 @@ class User extends Authenticatable
     public function teacher()
     {
         return $this->hasOne(Teacher::class);
+    }
+
+    public function loginStreaks(): HasMany
+    {
+        return $this->hasMany(LoginStreak::class);
+    }
+
+    public function latestLoginStreak(): HasOne
+    {
+        return $this->hasOne(LoginStreak::class)->latestOfMany('login_date');
     }
 }

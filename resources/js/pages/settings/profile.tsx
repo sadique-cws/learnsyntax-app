@@ -1,13 +1,13 @@
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/delete-user';
-import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { edit } from '@/routes/profile';
 import { send } from '@/routes/verification';
+import SettingsLayout from '@/layouts/settings/layout';
+import { User, Mail, CheckCircle2 } from 'lucide-react';
 
 export default function Profile({
     mustVerifyEmail,
@@ -16,7 +16,7 @@ export default function Profile({
     mustVerifyEmail: boolean;
     status?: string;
 }) {
-    const { auth } = usePage().props;
+    const { auth } = usePage().props as any;
 
     const { data, setData, patch, processing, errors } = useForm({
         name: auth.user.name,
@@ -31,106 +31,89 @@ export default function Profile({
     };
 
     return (
-        <>
-            <Head title="Profile settings" />
+        <SettingsLayout>
+            <Head title="Profile Information" />
 
-            <h1 className="sr-only">Profile settings</h1>
-
-            <div className="space-y-6">
-                <Heading
-                    variant="small"
-                    title="Profile information"
-                    description="Update your name and email address"
-                />
-
-                <form onSubmit={submit} className="space-y-6">
-                    <div className="grid gap-2">
-                        <Label htmlFor="name">Name</Label>
-
-                        <Input
-                            id="name"
-                            className="mt-1 block w-full"
-                            value={data.name}
-                            onChange={e => setData('name', e.target.value)}
-                            name="name"
-                            required
-                            autoComplete="name"
-                            placeholder="Full name"
-                        />
-
-                        <InputError
-                            className="mt-2"
-                            message={errors.name}
-                        />
+            <div className="space-y-4">
+                {/* Profile Form */}
+                <div className="rounded-sm border border-border bg-card overflow-hidden">
+                    <div className="px-4 py-3 border-b border-border bg-muted/5">
+                        <h2 className="text-sm font-semibold text-foreground">Profile Information</h2>
+                        <p className="text-[11px] text-muted-foreground mt-0.5">Update your account's profile information and email address.</p>
                     </div>
+                    
+                    <form onSubmit={submit} className="p-4 space-y-4 max-w-xl">
+                        <div className="grid gap-1.5">
+                            <Label htmlFor="name" className="text-xs font-medium text-muted-foreground">Display Name</Label>
+                            <div className="relative">
+                                <User className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground/50" />
+                                <Input
+                                    id="name"
+                                    className="pl-9 h-9 rounded-sm border-border text-sm shadow-none focus-visible:ring-1"
+                                    value={data.name}
+                                    onChange={e => setData('name', e.target.value)}
+                                    required
+                                    autoComplete="name"
+                                    placeholder="Your full name"
+                                />
+                            </div>
+                            <InputError message={errors.name} />
+                        </div>
 
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">Email address</Label>
+                        <div className="grid gap-1.5">
+                            <Label htmlFor="email" className="text-xs font-medium text-muted-foreground">Email Address</Label>
+                            <div className="relative">
+                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground/50" />
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    className="pl-9 h-9 rounded-sm border-border text-sm shadow-none focus-visible:ring-1"
+                                    value={data.email}
+                                    onChange={e => setData('email', e.target.value)}
+                                    required
+                                    autoComplete="username"
+                                    placeholder="your@email.com"
+                                />
+                            </div>
+                            <InputError message={errors.email} />
+                        </div>
 
-                        <Input
-                            id="email"
-                            type="email"
-                            className="mt-1 block w-full"
-                            value={data.email}
-                            onChange={e => setData('email', e.target.value)}
-                            name="email"
-                            required
-                            autoComplete="username"
-                            placeholder="Email address"
-                        />
-
-                        <InputError
-                            className="mt-2"
-                            message={errors.email}
-                        />
-                    </div>
-
-                    {mustVerifyEmail &&
-                        auth.user.email_verified_at === null && (
-                            <div>
-                                <p className="-mt-4 text-sm text-muted-foreground">
-                                    Your email address is unverified.{' '}
+                        {mustVerifyEmail && auth.user.email_verified_at === null && (
+                            <div className="p-3 rounded-sm bg-amber-50 border border-amber-100 flex gap-3 items-start">
+                                <div className="p-1 rounded-full bg-amber-100 text-amber-600 mt-0.5">
+                                    <CheckCircle2 className="size-3" />
+                                </div>
+                                <div>
+                                    <p className="text-[11px] text-amber-800 font-medium">
+                                        Your email address is unverified.
+                                    </p>
                                     <Link
                                         href={send()}
                                         as="button"
-                                        className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                                        className="text-[10px] text-amber-600 underline hover:text-amber-700 font-bold mt-1"
                                     >
-                                        Click here to resend the
-                                        verification email.
+                                        Click here to resend the verification email.
                                     </Link>
-                                </p>
-
-                                {status ===
-                                    'verification-link-sent' && (
-                                    <div className="mt-2 text-sm font-medium text-green-600">
-                                        A new verification link has been
-                                        sent to your email address.
-                                    </div>
-                                )}
+                                    {status === 'verification-link-sent' && (
+                                        <div className="mt-1 text-[10px] font-bold text-emerald-600">
+                                            A new verification link has been sent.
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         )}
 
-                    <div className="flex items-center gap-4">
-                        <Button
-                            disabled={processing}
-                            data-test="update-profile-button"
-                        >
-                            Save
-                        </Button>
-                    </div>
-                </form>
-            </div>
+                        <div className="flex items-center gap-3 pt-2">
+                            <Button disabled={processing} size="sm" className="h-8 px-6 rounded-sm text-xs font-medium">
+                                {processing ? 'Saving...' : 'Update Profile'}
+                            </Button>
+                        </div>
+                    </form>
+                </div>
 
-            <DeleteUser />
-        </>
+                {/* Delete Account Area */}
+                <DeleteUser />
+            </div>
+        </SettingsLayout>
     );
 }
-
-Profile.layout = {
-    breadcrumbs: [
-        {
-            title: 'Profile settings',
-            href: edit(),
-        },
-    ],
-};
