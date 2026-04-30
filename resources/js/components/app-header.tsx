@@ -45,6 +45,11 @@ const mainNavItems: NavItem[] = [
         href: dashboard(),
         icon: LayoutGrid,
     },
+    {
+        title: 'Notifications',
+        href: '/notifications',
+        icon: Bell,
+    },
 ];
 
 const rightNavItems: NavItem[] = [
@@ -102,12 +107,19 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                                 <Link
                                                     key={item.title}
                                                     href={item.href}
-                                                    className="flex items-center space-x-2 font-medium"
+                                                    className="flex items-center justify-between font-medium"
                                                 >
-                                                    {item.icon && (
-                                                        <item.icon className="h-5 w-5" />
+                                                    <div className="flex items-center space-x-2">
+                                                        {item.icon && (
+                                                            <item.icon className="h-5 w-5" />
+                                                        )}
+                                                        <span>{item.title}</span>
+                                                    </div>
+                                                    {item.title === 'Notifications' && auth.unreadNotificationsCount > 0 && (
+                                                        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+                                                            {auth.unreadNotificationsCount}
+                                                        </span>
                                                     )}
-                                                    <span>{item.title}</span>
                                                 </Link>
                                             ))}
                                         </div>
@@ -166,6 +178,11 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                                 <item.icon className="mr-2 h-4 w-4" />
                                             )}
                                             {item.title}
+                                            {item.title === 'Notifications' && auth.unreadNotificationsCount > 0 && (
+                                                <span className="ml-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+                                                    {auth.unreadNotificationsCount}
+                                                </span>
+                                            )}
                                         </Link>
                                         {isCurrentUrl(item.href) && (
                                             <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"></div>

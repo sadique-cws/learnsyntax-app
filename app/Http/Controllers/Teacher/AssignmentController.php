@@ -51,13 +51,29 @@ class AssignmentController extends Controller
 
         $batch = Batch::whereIn('course_id', $courseIds)->findOrFail($request->batch_id);
 
-        Assignment::create([
+        $assignment = Assignment::create([
             'batch_id' => $batch->id,
             'title' => $request->title,
             'description' => $request->description,
             'max_marks' => $request->max_marks,
             'due_date' => $request->due_date,
         ]);
+
+        // Notify Students
+        $enrollments = $batch->enrollments()->with('user')->get();
+        foreach ($enrollments as $enrollment) {
+            \App\Jobs\SendNotificationJob::dispatch(
+                $enrollment->user,
+                ['mail', 'database'],
+                'New Assignment: ' . $assignment->title,
+                'emails.notification',
+                [
+                    'message' => "A new assignment has been issued for your batch: {$batch->name}. Due date: {$assignment->due_date}",
+                    'link' => route('student.academic.assignments', $enrollment->id),
+                    'button_text' => 'View Assignment'
+                ]
+            )->afterCommit();
+        }
 
         return back()->with('success', 'Assignment issued successfully.');
     }

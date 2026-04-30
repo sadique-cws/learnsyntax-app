@@ -71,6 +71,24 @@ class AcademicController extends Controller
             $submission->update(['file_path' => $path]);
         }
 
+        // Notify Teacher
+        $course = $enrollment->course;
+        $teacherUser = $course->teacher->user;
+
+        if ($teacherUser) {
+            \App\Jobs\SendNotificationJob::dispatch(
+                $teacherUser,
+                ['mail', 'database'],
+                'Assignment Submitted: ' . auth()->user()->name,
+                'emails.notification',
+                [
+                    'message' => "Student " . auth()->user()->name . " has submitted an assignment: {$assignment->title} for Course: {$course->title}",
+                    'link' => route('teacher.assignments.show', $assignment->id),
+                    'button_text' => 'Review Assignment'
+                ]
+            )->afterCommit();
+        }
+
         return back()->with('success', 'Assignment submitted successfully!');
     }
 
