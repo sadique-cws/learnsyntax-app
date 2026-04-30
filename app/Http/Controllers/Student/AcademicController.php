@@ -34,9 +34,11 @@ class AcademicController extends Controller
         $this->authorizeAccess($enrollment);
 
         $assignments = Assignment::where('batch_id', $enrollment->batch_id)
-            ->with(['submissions' => function ($q) {
-                $q->where('user_id', auth()->id());
-            }])
+            ->with([
+                'submissions' => function ($q) {
+                    $q->where('user_id', auth()->id());
+                }
+            ])
             ->get();
 
         return inertia('student/academic/assignments', [
@@ -53,6 +55,15 @@ class AcademicController extends Controller
             'content' => 'nullable|string',
             'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240', // 10MB max
         ]);
+
+        // Check if already submitted
+        $existing = AssignmentSubmission::where('assignment_id', $assignment->id)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if ($existing && ($existing->status === 'submitted' || $existing->status === 'graded')) {
+            return back()->with('error', 'You have already submitted this assignment and cannot modify it.');
+        }
 
         $submission = AssignmentSubmission::updateOrCreate(
             [
@@ -100,7 +111,7 @@ class AcademicController extends Controller
             ->with('questions')
             ->first();
 
-        if (! $exam) {
+        if (!$exam) {
             return back()->with('error', 'Exam not scheduled yet.');
         }
 
@@ -150,7 +161,7 @@ class AcademicController extends Controller
             return back()->with('error', 'You have already submitted this exam.');
         }
 
-        if ($exam->passcode && ! session("exam_verified_{$exam->id}")) {
+        if ($exam->passcode && !session("exam_verified_{$exam->id}")) {
             return back()->with('error', 'Passcode verification required.');
         }
 
@@ -159,7 +170,7 @@ class AcademicController extends Controller
 
         foreach ($exam->questions as $question) {
             $submittedAnswer = $answers[$question->id] ?? null;
-            if ($submittedAnswer !== null && (string)$submittedAnswer === (string)$question->correct_answer) {
+            if ($submittedAnswer !== null && (string) $submittedAnswer === (string) $question->correct_answer) {
                 $marksObtained += $question->marks;
             }
         }
@@ -181,14 +192,14 @@ class AcademicController extends Controller
     {
         $this->authorizeAccess($enrollment);
 
-        if (! $enrollment->isEligibleForCertificate()) {
+        if (!$enrollment->isEligibleForCertificate()) {
             return back()->with('error', 'You need an average of at least 60% in assignments and exam to download the certificate.');
         }
 
         $certificate = Certificate::firstOrCreate(
             ['enrollment_id' => $enrollment->id],
             [
-                'certificate_number' => 'LS-'.strtoupper(str()->random(8)),
+                'certificate_number' => 'LS-' . strtoupper(str()->random(8)),
                 'issued_at' => now(),
             ]
         );
@@ -202,9 +213,12 @@ class AcademicController extends Controller
     public function allAssignments()
     {
         $user = auth()->user();
-        $enrollments = $user->enrollments()->where('status', 'paid')->with(['course', 'batch.assignments.submissions' => function($q) use ($user) {
-            $q->where('user_id', $user->id);
-        }])->get();
+        $enrollments = $user->enrollments()->where('status', 'paid')->with([
+            'course',
+            'batch.assignments.submissions' => function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            }
+        ])->get();
 
         $assignments = collect();
         foreach ($enrollments as $enrollment) {
@@ -225,9 +239,11 @@ class AcademicController extends Controller
     public function allExams()
     {
         $user = auth()->user();
-        $enrollments = $user->enrollments()->where('status', 'paid')->with(['course.exams.attempts' => function($q) use ($user) {
-            $q->where('user_id', $user->id);
-        }])->get();
+        $enrollments = $user->enrollments()->where('status', 'paid')->with([
+            'course.exams.attempts' => function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            }
+        ])->get();
 
         $exams = collect();
         foreach ($enrollments as $enrollment) {
@@ -249,9 +265,9 @@ class AcademicController extends Controller
     public function allPayments()
     {
         $user = auth()->user();
-        $payments = \App\Models\Payment::whereHas('enrollment', function($q) use ($user) {
-                $q->where('user_id', $user->id);
-            })
+        $payments = \App\Models\Payment::whereHas('enrollment', function ($q) use ($user) {
+            $q->where('user_id', $user->id);
+        })
             ->whereIn('status', ['paid', 'completed'])
             ->with(['enrollment.course', 'invoice'])
             ->latest()

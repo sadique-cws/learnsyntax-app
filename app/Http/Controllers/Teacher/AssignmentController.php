@@ -147,6 +147,11 @@ class AssignmentController extends Controller
         
         $batch = Batch::whereIn('course_id', $courseIds)->findOrFail($submission->assignment->batch_id);
 
+        // Restriction: Student must have submitted before teacher can grade
+        if ($submission->status === 'pending' || !$submission->submitted_at) {
+            return back()->with('error', 'Cannot grade assignment. Student has not submitted it yet.');
+        }
+
         $request->validate([
             'marks_obtained' => 'required|integer|min:0|max:'.$submission->assignment->max_marks,
             'admin_comments' => 'nullable|string',
@@ -166,6 +171,25 @@ class AssignmentController extends Controller
             'status' => 'graded',
             'admin_comments' => $request->admin_comments,
         ]);
+
+        // Notify Student
+        $enrollment = Enrollment::where('user_id', $submission->user_id)
+            ->where('batch_id', $submission->assignment->batch_id)
+            ->first();
+
+        if ($enrollment) {
+            \App\Jobs\SendNotificationJob::dispatch(
+                $submission->user,
+                ['mail', 'database'],
+                'Assignment Graded: ' . $submission->assignment->title,
+                'emails.notification',
+                [
+                    'body' => "Your assignment '{$submission->assignment->title}' has been graded. Marks: {$finalMarks}/{$submission->assignment->max_marks}. Feedback: " . ($request->admin_comments ?? 'No comments.'),
+                    'link' => route('student.academic.assignments', $enrollment->id),
+                    'button_text' => 'View Grade'
+                ]
+            )->afterCommit();
+        }
 
         return back()->with('success', 'Marks updated successfully.'.$penaltyMessage);
     }

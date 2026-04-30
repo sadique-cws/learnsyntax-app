@@ -117,9 +117,12 @@ export default function TeacherAssignmentShow({ assignment }: { assignment: any 
                                 <div className="flex items-center gap-2">
                                     <span className={cn(
                                         "px-2 py-0.5 rounded-sm text-[10px] font-bold tracking-wide border",
-                                        currentSubmission.status === 'graded' ? "bg-emerald-50 text-emerald-600 border-emerald-100" : "bg-amber-50 text-amber-600 border-amber-100"
+                                        currentSubmission.status === 'graded' ? "bg-emerald-50 text-emerald-600 border-emerald-100" : 
+                                        currentSubmission.submitted_at ? "bg-amber-50 text-amber-600 border-amber-100" :
+                                        "bg-slate-50 text-slate-500 border-slate-100"
                                     )}>
-                                        {currentSubmission.status === 'graded' ? 'Graded' : 'Submitted'}
+                                        {currentSubmission.status === 'graded' ? 'Graded' : 
+                                         currentSubmission.submitted_at ? 'Submitted' : 'Not Submitted'}
                                     </span>
                                     {currentSubmission.is_late && (
                                         <span className="flex items-center gap-1 px-2 py-0.5 bg-red-50 text-red-600 border border-red-100 rounded-sm text-[10px] font-bold">
@@ -256,13 +259,14 @@ function GradingForm({ submission, maxMarks }: { submission: any, maxMarks: numb
 
                 <Button 
                     type="submit" 
-                    disabled={processing}
+                    disabled={processing || !submission.submitted_at}
                     className={cn(
                         "w-full h-9 rounded-sm font-medium text-xs shadow-none",
-                        isSaved ? "bg-emerald-600 hover:bg-emerald-600 text-white" : "bg-indigo-600 hover:bg-indigo-700 text-white"
+                        isSaved ? "bg-emerald-600 hover:bg-emerald-600 text-white" : 
+                        (!submission.submitted_at ? "bg-muted text-muted-foreground" : "bg-indigo-600 hover:bg-indigo-700 text-white")
                     )}
                 >
-                    {processing ? 'Saving...' : (isSaved ? 'Marks Saved' : 'Save Grade')}
+                    {processing ? 'Saving...' : (isSaved ? 'Marks Saved' : (!submission.submitted_at ? 'Not Submitted' : 'Save Grade'))}
                 </Button>
             </form>
         </section>

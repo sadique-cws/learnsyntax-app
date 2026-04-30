@@ -121,11 +121,11 @@ export default function StudentAssignments({ enrollment, assignments }: { enroll
                                                 <div className="flex items-center gap-2">
                                                     <span className={cn(
                                                         "inline-flex items-center px-1.5 py-0.5 rounded-sm text-[10px] font-medium border",
-                                                        submission?.status === 'submitted' 
+                                                        submission?.submitted_at 
                                                             ? "bg-amber-50 text-amber-600 border-amber-100"
                                                             : "bg-slate-50 text-slate-500 border-slate-100"
                                                     )}>
-                                                        {submission ? 'Submitted' : 'Assigned'}
+                                                        {submission?.submitted_at ? 'Submitted' : 'Assigned'}
                                                     </span>
                                                     {isExpanded ? <ChevronDown className="size-3 text-muted-foreground" /> : <ChevronRight className="size-3 text-muted-foreground" />}
                                                 </div>
@@ -161,6 +161,46 @@ export default function StudentAssignments({ enrollment, assignments }: { enroll
                                                                 <p className="text-[11px] font-medium text-emerald-700 italic border-t border-emerald-200 mt-2 pt-2">
                                                                     "{submission.admin_comments}"
                                                                 </p>
+                                                            )}
+                                                        </div>
+                                                    ) : submission?.submitted_at ? (
+                                                        <div className="bg-background border border-border p-4 rounded-sm space-y-4 animate-in fade-in duration-300">
+                                                            <div className="flex items-center justify-between border-b border-border pb-2">
+                                                                <span className="text-[11px] font-bold text-foreground flex items-center gap-1.5">
+                                                                    <CheckCircle2 className="size-3.5 text-emerald-500" />
+                                                                    Submission Recorded
+                                                                </span>
+                                                                <span className="text-[10px] text-muted-foreground tabular-nums">
+                                                                    {new Date(submission.submitted_at).toLocaleString()}
+                                                                </span>
+                                                            </div>
+                                                            
+                                                            {submission.content && (
+                                                                <div className="space-y-1.5">
+                                                                    <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-tight">Your Response</Label>
+                                                                    <div className="text-xs font-medium text-foreground bg-muted/5 border border-border p-3 rounded-sm whitespace-pre-wrap leading-relaxed">
+                                                                        {submission.content}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
+                                                            {submission.file_path && (
+                                                                <div className="space-y-1.5">
+                                                                    <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-tight">Attachment</Label>
+                                                                    <div className="flex items-center justify-between p-2.5 bg-card border border-border rounded-sm group hover:border-primary/20 transition-colors">
+                                                                        <div className="flex items-center gap-2 min-w-0">
+                                                                            <Paperclip className="size-3.5 text-indigo-500 shrink-0" />
+                                                                            <span className="text-[11px] font-bold text-foreground truncate max-w-[200px]">
+                                                                                {submission.file_path.split('/').pop()}
+                                                                            </span>
+                                                                        </div>
+                                                                        <Button variant="outline" size="sm" className="h-6 px-2 rounded-sm text-[10px] font-bold uppercase tracking-tight" asChild>
+                                                                            <a href={`/storage/${submission.file_path}`} target="_blank">
+                                                                                View
+                                                                            </a>
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
                                                             )}
                                                         </div>
                                                     ) : (
