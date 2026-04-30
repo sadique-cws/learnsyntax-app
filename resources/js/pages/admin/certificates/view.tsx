@@ -24,7 +24,7 @@ export default function CertificateView({ certificate }: { certificate: any }) {
             <Head title={`Certificate - ${certificate.certificate_number}`} />
             
             {/* Action Bar (Hidden in Print) */}
-            <div className="w-full max-w-[1000px] flex justify-between items-center mb-8 print:hidden">
+            <div className="w-full max-w-[1100px] flex justify-between items-center mb-8 print:hidden">
                 <div className="flex items-center gap-2">
                     <div className="size-10 rounded-sm bg-primary/10 flex items-center justify-center text-primary">
                         <Award className="size-6" />
@@ -42,7 +42,7 @@ export default function CertificateView({ certificate }: { certificate: any }) {
             </div>
 
             {/* Certificate Canvas */}
-            <div className="w-full max-w-[1100px] aspect-[1.414/1] bg-white shadow-sm border-4 border-black relative print:shadow-none overflow-hidden">
+            <div className="certificate-canvas w-full max-w-[1100px] aspect-[1.414/1] bg-white shadow-sm border-4 border-black relative print:shadow-none overflow-hidden">
                 {/* Background Image Template */}
                 <img 
                     src="/certificate.png" 
@@ -86,7 +86,38 @@ export default function CertificateView({ certificate }: { certificate: any }) {
             <style dangerouslySetInnerHTML={{ __html: `
                 @media print {
                     @page { size: landscape; margin: 0; }
-                    body { margin: 0; background: white; }
+                    
+                    /* Hide everything by default */
+                    body * {
+                        visibility: hidden !important;
+                    }
+                    
+                    /* Show only the certificate canvas and its children */
+                    .certificate-canvas, .certificate-canvas * {
+                        visibility: visible !important;
+                    }
+                    
+                    /* Reset body background and positioning */
+                    body { 
+                        margin: 0 !important; 
+                        padding: 0 !important;
+                        background: white !important; 
+                    }
+                    
+                    /* Position the canvas at the top left of the print page */
+                    .certificate-canvas {
+                        position: fixed !important;
+                        left: 0 !important;
+                        top: 0 !important;
+                        width: 100vw !important;
+                        height: auto !important;
+                        max-width: none !important;
+                        border: none !important;
+                        margin: 0 !important;
+                        transform: none !important;
+                    }
+
+                    /* Hide the action bar specifically just in case */
                     .print-hidden { display: none !important; }
                 }
             ` }} />
