@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendNotificationJob;
 use App\Models\Assignment;
 use App\Models\AssignmentSubmission;
 use App\Models\Batch;
@@ -10,16 +12,35 @@ use Illuminate\Http\Request;
 
 class AssignmentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $teacher = auth()->user()->teacher;
-        if (!$teacher) {
+        if (! $teacher) {
             return redirect()->route('teacher.dashboard')->withErrors(['msg' => 'Access Restricted. Teacher profile incomplete.']);
+        }
+
+        $selectedType = $request->query('type');
+        if (! in_array($selectedType, ['course', 'workshop'], true)) {
+            $selectedType = null;
         }
 
         $courseIds = $teacher->courses()->pluck('id');
 
         $batches = Batch::whereIn('course_id', $courseIds)
+            ->whereHas('course', function ($query) use ($selectedType) {
+                if ($selectedType === 'workshop') {
+                    $query->where('type', 'workshop');
+
+                    return;
+                }
+
+                if ($selectedType === 'course') {
+                    $query->where(function ($courseQuery) {
+                        $courseQuery->where('type', 'course')
+                            ->orWhereNull('type');
+                    });
+                }
+            })
             ->with(['course', 'assignments' => function ($q) {
                 $q->withCount([
                     'submissions as handed_in_count' => function ($q) {
@@ -29,10 +50,13 @@ class AssignmentController extends Controller
                         $q->where('status', 'graded');
                     },
                 ]);
-            }])->withCount('enrollments')->get();
+            }])
+            ->withCount('enrollments')
+            ->get();
 
         return inertia('teacher/assignments/index', [
             'batches' => $batches,
+            'selectedType' => $selectedType,
         ]);
     }
 
@@ -62,15 +86,15 @@ class AssignmentController extends Controller
         // Notify Students
         $enrollments = $batch->enrollments()->with('user')->get();
         foreach ($enrollments as $enrollment) {
-            \App\Jobs\SendNotificationJob::dispatch(
+            SendNotificationJob::dispatch(
                 $enrollment->user,
                 ['mail', 'database'],
-                'New Assignment: ' . $assignment->title,
+                'New Assignment: '.$assignment->title,
                 'emails.notification',
                 [
                     'body' => "A new assignment has been issued for your batch: {$batch->name}. Due date: {$assignment->due_date}",
                     'link' => route('student.academic.assignments', $enrollment->id),
-                    'button_text' => 'View Assignment'
+                    'button_text' => 'View Assignment',
                 ]
             )->afterCommit();
         }
@@ -82,7 +106,7 @@ class AssignmentController extends Controller
     {
         $teacher = auth()->user()->teacher;
         $courseIds = $teacher->courses()->pluck('id');
-        
+
         $batch = Batch::whereIn('course_id', $courseIds)->findOrFail($assignment->batch_id);
 
         $request->validate([
@@ -102,15 +126,15 @@ class AssignmentController extends Controller
         // Re-Notify Students
         $enrollments = $batch->enrollments()->with('user')->get();
         foreach ($enrollments as $enrollment) {
-            \App\Jobs\SendNotificationJob::dispatch(
+            SendNotificationJob::dispatch(
                 $enrollment->user,
                 ['mail', 'database'],
-                'Assignment Updated: ' . $assignment->title,
+                'Assignment Updated: '.$assignment->title,
                 'emails.notification',
                 [
                     'body' => "An assignment has been updated for your batch: {$batch->name}. Check the new details and due date.",
                     'link' => route('student.academic.assignments', $enrollment->id),
-                    'button_text' => 'View Changes'
+                    'button_text' => 'View Changes',
                 ]
             )->afterCommit();
         }
@@ -144,11 +168,11 @@ class AssignmentController extends Controller
     {
         $teacher = auth()->user()->teacher;
         $courseIds = $teacher->courses()->pluck('id');
-        
+
         $batch = Batch::whereIn('course_id', $courseIds)->findOrFail($submission->assignment->batch_id);
 
         // Restriction: Student must have submitted before teacher can grade
-        if ($submission->status === 'pending' || !$submission->submitted_at) {
+        if ($submission->status === 'pending' || ! $submission->submitted_at) {
             return back()->with('error', 'Cannot grade assignment. Student has not submitted it yet.');
         }
 
@@ -178,15 +202,15 @@ class AssignmentController extends Controller
             ->first();
 
         if ($enrollment) {
-            \App\Jobs\SendNotificationJob::dispatch(
+            SendNotificationJob::dispatch(
                 $submission->user,
                 ['mail', 'database'],
-                'Assignment Graded: ' . $submission->assignment->title,
+                'Assignment Graded: '.$submission->assignment->title,
                 'emails.notification',
                 [
-                    'body' => "Your assignment '{$submission->assignment->title}' has been graded. Marks: {$finalMarks}/{$submission->assignment->max_marks}. Feedback: " . ($request->admin_comments ?? 'No comments.'),
+                    'body' => "Your assignment '{$submission->assignment->title}' has been graded. Marks: {$finalMarks}/{$submission->assignment->max_marks}. Feedback: ".($request->admin_comments ?? 'No comments.'),
                     'link' => route('student.academic.assignments', $enrollment->id),
-                    'button_text' => 'View Grade'
+                    'button_text' => 'View Grade',
                 ]
             )->afterCommit();
         }
@@ -198,7 +222,7 @@ class AssignmentController extends Controller
     {
         $teacher = auth()->user()->teacher;
         $courseIds = $teacher->courses()->pluck('id');
-        
+
         $batch = Batch::whereIn('course_id', $courseIds)->findOrFail($submission->assignment->batch_id);
 
         $request->validate([

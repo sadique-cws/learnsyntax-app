@@ -91,14 +91,14 @@ export default function StudentInvoice({ invoice, company }: { invoice: any, com
                         <div className="grid grid-cols-2 border-b border-black min-h-[80px]">
                             <div className="p-2 border-r border-black">
                                 <div className="text-[9px] text-gray-500 italic">Consignee (Ship to)</div>
-                                <div className="font-bold mt-1 text-sm">{invoice.payment.enrollment.user.name}</div>
-                                <div className="font-medium">{invoice.payment.enrollment.user.email}</div>
-                                <div>Phone: {invoice.payment.enrollment.user.phone}</div>
+                                <div className="font-bold mt-1 text-sm">{invoice.payment.enrollment?.user?.name}</div>
+                                <div className="font-medium">{invoice.payment.enrollment?.user?.email}</div>
+                                <div>Phone: {invoice.payment.enrollment?.user?.phone}</div>
                             </div>
                             <div className="p-2">
                                 <div className="text-[9px] text-gray-500 italic">Buyer (Bill to)</div>
-                                <div className="font-bold mt-1 text-sm">{invoice.payment.enrollment.user.name}</div>
-                                <div className="font-medium">{invoice.payment.enrollment.user.email}</div>
+                                <div className="font-bold mt-1 text-sm">{invoice.payment.enrollment?.user?.name}</div>
+                                <div className="font-medium">{invoice.payment.enrollment?.user?.email}</div>
                                 {invoice.gst_number && (
                                     <div className="mt-2 pt-1 border-t border-black/10 border-dashed">
                                         <div>GSTIN/UIN: <span className="font-bold">{invoice.gst_number}</span></div>
@@ -124,8 +124,12 @@ export default function StudentInvoice({ invoice, company }: { invoice: any, com
                                 <tr className="border-b border-black align-top min-h-[200px]">
                                     <td className="border-r border-black py-4 px-1 text-center">1</td>
                                     <td className="border-r border-black py-4 px-2 h-[200px]">
-                                        <div className="font-bold text-sm mb-1">{invoice.payment.enrollment.course.title}</div>
-                                        <div className="text-[10px] text-gray-600 italic">Educational Services - Online Course Access</div>
+                                        <div className="font-bold text-sm mb-1">{invoice.payment.enrollment?.course?.title}</div>
+                                        <div className="text-[10px] text-gray-600 italic">
+                                            {invoice.payment.enrollment?.course?.type === 'workshop'
+                                                ? 'Educational Services - Live Workshop Access'
+                                                : 'Educational Services - Online Course Access'}
+                                        </div>
                                         <div className="mt-12 flex justify-end font-bold text-[10px]">
                                             <div className="flex flex-col items-end gap-1">
                                                 <span>CGST @ 9%</span>

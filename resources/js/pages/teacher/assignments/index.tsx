@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { useState } from 'react';
 import { AdminDataTable, Column } from '@/components/admin/admin-data-table';
 
-export default function TeacherAssignmentIndex({ batches }: { batches: any[] }) {
+export default function TeacherAssignmentIndex({ batches, selectedType }: { batches: any[]; selectedType?: 'course' | 'workshop' | null }) {
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const { data, setData, post, processing, reset } = useForm({
         batch_id: '', title: '', description: '', max_marks: 100, due_date: '',
@@ -30,7 +30,12 @@ export default function TeacherAssignmentIndex({ batches }: { batches: any[] }) 
                     </div>
                     <div className="min-w-0">
                         <div className="text-sm font-medium text-foreground truncate">{batch.name}</div>
-                        <div className="text-xs text-muted-foreground truncate">{batch.course.title}</div>
+                        <div className="text-xs text-muted-foreground truncate flex items-center gap-2">
+                            <span>{batch.course.title}</span>
+                            <span className="inline-flex items-center px-1 py-0.5 rounded-sm border border-slate-200 text-[10px] text-slate-600">
+                                {(batch.course.type ?? 'course') === 'workshop' ? 'Workshop' : 'Course'}
+                            </span>
+                        </div>
                     </div>
                 </div>
             )
@@ -55,6 +60,24 @@ export default function TeacherAssignmentIndex({ batches }: { batches: any[] }) 
                         Assignments Manager
                     </h1>
                     <p className="text-xs text-muted-foreground mt-0.5">Create tasks and manage academic outcomes efficiently.</p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <Link href="/teacher/assignments" preserveScroll>
+                        <Button variant={!selectedType ? 'default' : 'outline'} size="sm" className="h-8 rounded-sm text-xs">
+                            All
+                        </Button>
+                    </Link>
+                    <Link href="/teacher/assignments?type=course" preserveScroll>
+                        <Button variant={selectedType === 'course' ? 'default' : 'outline'} size="sm" className="h-8 rounded-sm text-xs">
+                            Course
+                        </Button>
+                    </Link>
+                    <Link href="/teacher/assignments?type=workshop" preserveScroll>
+                        <Button variant={selectedType === 'workshop' ? 'default' : 'outline'} size="sm" className="h-8 rounded-sm text-xs">
+                            Workshop
+                        </Button>
+                    </Link>
                 </div>
                 
                 <div className="rounded-sm border border-border overflow-hidden bg-card">

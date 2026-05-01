@@ -11,36 +11,40 @@ import { configureEcho } from '@laravel/echo-react';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
-(window as any).Pusher = Pusher;
-(window as any).Echo = new Echo({
-    broadcaster: 'reverb',
-    key: import.meta.env.VITE_REVERB_APP_KEY,
-    wsHost: import.meta.env.VITE_REVERB_HOST,
-    wsPort: import.meta.env.VITE_REVERB_PORT ?? 8089,
-    wssPort: import.meta.env.VITE_REVERB_PORT ?? 8089,
-    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
-    enabledTransports: ['ws', 'wss'],
-});
+if (typeof window !== 'undefined') {
+    (window as any).Pusher = Pusher;
+    (window as any).Echo = new Echo({
+        broadcaster: 'reverb',
+        key: import.meta.env.VITE_REVERB_APP_KEY,
+        wsHost: import.meta.env.VITE_REVERB_HOST,
+        wsPort: import.meta.env.VITE_REVERB_PORT ?? 8089,
+        wssPort: import.meta.env.VITE_REVERB_PORT ?? 8089,
+        forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
+        enabledTransports: ['ws', 'wss'],
+    });
 
-configureEcho({
-    broadcaster: 'reverb',
-    key: import.meta.env.VITE_REVERB_APP_KEY,
-    wsHost: import.meta.env.VITE_REVERB_HOST,
-    wsPort: import.meta.env.VITE_REVERB_PORT ?? 8089,
-    wssPort: import.meta.env.VITE_REVERB_PORT ?? 8089,
-    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
-    enabledTransports: ['ws', 'wss'],
-});
+    configureEcho({
+        broadcaster: 'reverb',
+        key: import.meta.env.VITE_REVERB_APP_KEY,
+        wsHost: import.meta.env.VITE_REVERB_HOST,
+        wsPort: import.meta.env.VITE_REVERB_PORT ?? 8089,
+        wssPort: import.meta.env.VITE_REVERB_PORT ?? 8089,
+        forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
+        enabledTransports: ['ws', 'wss'],
+    });
+}
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const pages = import.meta.glob('./pages/**/*.tsx');
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
-    resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx')),
+    resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, pages as Record<string, any>),
     layout: (name) => {
         switch (true) {
             case name === 'welcome' || 
                  name.startsWith('courses/') || 
+                 name.startsWith('workshops/') ||
                  name === 'admin/payments/invoice' || 
                  name === 'student/academic/invoice' ||
                  name === 'admin/certificates/view':

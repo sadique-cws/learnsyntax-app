@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
-use App\Models\CourseModule;
 use App\Models\CourseChapter;
+use App\Models\CourseModule;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::withCount('enrollments')->get();
+        $courses = Course::query()->ofType('course')->withCount('enrollments')->get();
 
         return inertia('admin/courses/index', [
             'courses' => $courses,
@@ -28,6 +28,8 @@ class CourseController extends Controller
         ]);
 
         $validated['slug'] = str($request->title)->slug();
+        $validated['type'] = 'course';
+        $validated['meta'] = null;
 
         Course::create($validated);
 
@@ -36,6 +38,8 @@ class CourseController extends Controller
 
     public function update(Request $request, Course $course)
     {
+        abort_unless($course->type === 'course', 404);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -66,6 +70,7 @@ class CourseController extends Controller
     {
         $request->validate(['title' => 'required|string|max:255']);
         $course->modules()->create(['title' => $request->title, 'sort_order' => $course->modules()->count()]);
+
         return back();
     }
 
@@ -73,12 +78,14 @@ class CourseController extends Controller
     {
         $request->validate(['title' => 'required|string|max:255']);
         $module->update(['title' => $request->title]);
+
         return back();
     }
 
     public function destroyModule(CourseModule $module)
     {
         $module->delete();
+
         return back();
     }
 
@@ -86,10 +93,11 @@ class CourseController extends Controller
     {
         $request->validate(['title' => 'required|string|max:255', 'description' => 'nullable|string']);
         $module->chapters()->create([
-            'title' => $request->title, 
+            'title' => $request->title,
             'description' => $request->description,
-            'sort_order' => $module->chapters()->count()
+            'sort_order' => $module->chapters()->count(),
         ]);
+
         return back();
     }
 
@@ -97,12 +105,14 @@ class CourseController extends Controller
     {
         $request->validate(['title' => 'required|string|max:255', 'description' => 'nullable|string']);
         $chapter->update(['title' => $request->title, 'description' => $request->description]);
+
         return back();
     }
 
     public function destroyChapter(CourseChapter $chapter)
     {
         $chapter->delete();
+
         return back();
     }
 }

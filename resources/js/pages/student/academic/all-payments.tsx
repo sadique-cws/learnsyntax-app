@@ -41,7 +41,7 @@ export default function AllPayments({ payments = [] }: AllPaymentsProps) {
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="border-b border-border bg-muted/5">
-                                        <th className="px-4 py-3 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Course</th>
+                                        <th className="px-4 py-3 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Item</th>
                                         <th className="px-4 py-3 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Date</th>
                                         <th className="px-4 py-3 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Amount</th>
                                         <th className="px-4 py-3 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Status</th>
@@ -52,7 +52,8 @@ export default function AllPayments({ payments = [] }: AllPaymentsProps) {
                                     {payments.map((payment) => (
                                         <tr key={payment.id} className="hover:bg-muted/5 transition-colors">
                                             <td className="px-4 py-4">
-                                                <div className="text-sm font-semibold text-foreground">{payment.enrollment?.course?.title || 'Course Enrollment'}</div>
+                                                <div className="text-sm font-semibold text-foreground">{payment.payment_title || payment.enrollment?.course?.title || 'Payment'}</div>
+                                                <div className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">{payment.payment_type || 'course'}</div>
                                                 <div className="text-[10px] text-muted-foreground">ID: {payment.transaction_id || payment.id}</div>
                                             </td>
                                             <td className="px-4 py-4 text-xs text-muted-foreground tabular-nums">
@@ -95,7 +96,7 @@ export default function AllPayments({ payments = [] }: AllPaymentsProps) {
                         <div className="p-12 text-center">
                             <CreditCard className="size-12 text-muted-foreground/15 mx-auto mb-3" />
                             <h3 className="text-sm font-semibold text-foreground">No transactions found</h3>
-                            <p className="text-xs text-muted-foreground mt-1">Your payment history will appear here once you enroll in a course.</p>
+                            <p className="text-xs text-muted-foreground mt-1">Your payment history will appear here once you enroll in a course or workshop.</p>
                         </div>
                     )}
                 </div>

@@ -10,7 +10,10 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::where('is_active', true)->get();
+        $courses = Course::query()
+            ->ofType('course')
+            ->where('is_active', true)
+            ->get();
 
         return inertia('courses/index', [
             'courses' => $courses,
@@ -19,6 +22,8 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
+        abort_unless($course->type === 'course', 404);
+
         $user = auth()->user();
         $enrollment = null;
 

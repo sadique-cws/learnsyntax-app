@@ -19,6 +19,7 @@ export function MobileBottomNav() {
     ] : [
         { title: 'Home', href: '/', icon: Home },
         { title: 'Courses', href: '/courses', icon: LayoutGrid },
+        { title: 'Workshops', href: '/workshops', icon: CalendarDays },
         { title: 'Login', href: '/login', icon: User },
     ];
 

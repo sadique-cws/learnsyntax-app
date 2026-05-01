@@ -18,10 +18,10 @@ class Teacher extends Model
     ];
 
     protected $casts = [
-        'commission_percent'  => 'decimal:2',
-        'wallet_balance'      => 'decimal:2',
-        'kyc_submitted_at'    => 'datetime',
-        'kyc_reviewed_at'     => 'datetime',
+        'commission_percent' => 'decimal:2',
+        'wallet_balance' => 'decimal:2',
+        'kyc_submitted_at' => 'datetime',
+        'kyc_reviewed_at' => 'datetime',
     ];
 
     /** KYC has been approved by admin */
@@ -44,6 +44,11 @@ class Teacher extends Model
     public function courses()
     {
         return $this->hasMany(Course::class);
+    }
+
+    public function workshops()
+    {
+        return $this->hasMany(Course::class)->where('type', 'workshop');
     }
 
     public function walletTransactions()

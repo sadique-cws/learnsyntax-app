@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, LayoutGrid, Wallet, LogOut, Users, GraduationCap, ShieldCheck, Activity } from 'lucide-react';
+import { BookOpen, LayoutGrid, Wallet, LogOut, Users, GraduationCap, ShieldCheck, Activity, CalendarDays } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -34,6 +34,11 @@ export function TeacherSidebar() {
             title: 'My Courses',
             href: '/teacher/courses',
             icon: BookOpen,
+        },
+        {
+            title: 'My Workshops',
+            href: '/teacher/workshops',
+            icon: CalendarDays,
         },
         {
             title: 'Assignments',

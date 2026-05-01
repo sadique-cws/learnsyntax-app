@@ -9,42 +9,48 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Student\AcademicController;
 use App\Http\Controllers\Student\CourseController;
 use App\Http\Controllers\Student\EnrollmentController;
+use App\Http\Controllers\Student\WorkshopEnrollmentController;
 use App\Http\Controllers\Teacher\DashboardController;
 use App\Http\Controllers\Teacher\KycController;
 use App\Http\Controllers\Teacher\WalletController;
+use App\Http\Controllers\Teacher\WorkshopController;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\LoginStreak;
 use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
 Route::get('/', function () {
     return inertia('welcome', [
         'canRegister' => Features::enabled(Features::registration()),
-        'courses' => Course::where('is_active', true)->take(3)->get(),
+        'courses' => Course::query()->ofType('course')->where('is_active', true)->take(3)->get(),
     ]);
 })->name('home');
 
 Route::get('/courses', [CourseController::class, 'index'])->name('student.courses.index');
 Route::get('/courses/{course:slug}', [CourseController::class, 'show'])->name('student.courses.show');
+Route::get('/workshops', [WorkshopEnrollmentController::class, 'index'])->name('student.workshops.index');
+Route::get('/workshops/{workshop:slug}', [WorkshopEnrollmentController::class, 'show'])->name('student.workshops.show');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         $user = auth()->user();
 
         if ($user->is_admin) {
-            $recentUsers = \App\Models\User::with('enrollments')->latest()->take(5)->get()->map(function($u) {
+            $recentUsers = User::with('enrollments')->latest()->take(5)->get()->map(function ($u) {
                 return [
                     'name' => $u->name,
                     'email' => $u->email,
-                    'initials' => collect(explode(' ', $u->name))->map(fn($n) => mb_substr($n, 0, 1))->join(''),
+                    'initials' => collect(explode(' ', $u->name))->map(fn ($n) => mb_substr($n, 0, 1))->join(''),
                     'role' => $u->is_admin ? 'ADMIN' : ($u->is_teacher ? 'TEACHER' : ($u->is_student ? 'STUDENT' : 'USER')),
                     'active' => true,
-                    'color' => $u->is_admin ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
+                    'color' => $u->is_admin ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700',
                 ];
             });
 
@@ -59,7 +65,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 ->take(10)
                 ->get()
                 ->map(function ($row) {
-                    $user = \App\Models\User::find($row->user_id);
+                    $user = User::find($row->user_id);
+
                     return [
                         'name' => $user?->name ?? 'Unknown',
                         'email' => $user?->email ?? '',
@@ -72,7 +79,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             return inertia('dashboard', [
                 'stats' => [
-                    'courses' => Course::count(),
+                    'courses' => Course::query()->ofType('course')->count(),
                     'enrollments' => Enrollment::where('status', 'paid')->count(),
                     'revenue' => (float) Payment::where('status', 'completed')->sum('amount'),
                     'signups_this_week' => Enrollment::where('status', 'paid')->where('created_at', '>=', now()->subDays(7))->count(),
@@ -87,7 +94,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         }
 
         $enrollments = $user->enrollments()->where('status', 'paid')->with(['course', 'batch.assignments', 'certificate', 'payment.invoice'])->get();
-        
+
         $allAssignments = collect();
         $availableExams = collect();
 
@@ -95,25 +102,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
             if ($enrollment->batch) {
                 // Fetch all assignments for the batch with the user's submission
                 $batchAssignments = $enrollment->batch->assignments()
-                    ->with(['submissions' => function($q) use ($user) {
+                    ->with(['submissions' => function ($q) use ($user) {
                         $q->where('user_id', $user->id);
                     }])->get();
-                
-                foreach($batchAssignments as $assignment) {
+
+                foreach ($batchAssignments as $assignment) {
                     $assignment->enrollment_id = $enrollment->id;
                 }
-                
+
                 $allAssignments = $allAssignments->merge($batchAssignments);
             }
 
             // Available exams for the course
             $courseExams = $enrollment->course->exams()
                 ->where('is_active', true)
-                ->with(['attempts' => function($q) use ($user) {
+                ->with(['attempts' => function ($q) use ($user) {
                     $q->where('user_id', $user->id);
                 }])->get();
-            
-            foreach($courseExams as $exam) {
+
+            foreach ($courseExams as $exam) {
                 $exam->enrollment_id = $enrollment->id;
                 $exam->user_attempt = $exam->attempts->first();
             }
@@ -138,6 +145,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/enrollments/{enrollment}/payment', [EnrollmentController::class, 'processPayment'])->name('student.enrollments.payment');
     Route::get('/enrollments/{enrollment}/batch', [EnrollmentController::class, 'batchSelection'])->name('student.enrollments.batch');
     Route::post('/enrollments/{enrollment}/batch', [EnrollmentController::class, 'selectBatch'])->name('student.enrollments.select-batch');
+    Route::post('/workshops/{workshop}/enroll', [WorkshopEnrollmentController::class, 'store'])->name('student.workshops.enroll');
+    Route::post('/workshops/{workshop}/payment', [WorkshopEnrollmentController::class, 'processPayment'])->name('student.workshops.payment');
 
     // Admin Routes
     Route::middleware(['can:admin'])->prefix('admin')->group(function () {
@@ -150,7 +159,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::get('admin/invoices/{invoice}', [PaymentController::class, 'showInvoice'])->name('admin.invoices.show');
-    
+
     Route::middleware(['can:admin'])->prefix('admin')->group(function () {
         // Teachers Management
         Route::get('withdrawals', [TeacherController::class, 'withdrawals'])->name('admin.withdrawals.index');
@@ -158,8 +167,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('teachers', TeacherController::class)->names('admin.teachers');
         Route::post('teachers/{teacher}/login-as', [TeacherController::class, 'loginAs'])->name('admin.teachers.login-as');
         // KYC Management
-        Route::get('kyc', [\App\Http\Controllers\Admin\TeacherController::class, 'kycIndex'])->name('admin.kyc.index');
-        Route::post('kyc/{teacher}/review', [\App\Http\Controllers\Admin\TeacherController::class, 'kycReview'])->name('admin.kyc.review');
+        Route::get('kyc', [TeacherController::class, 'kycIndex'])->name('admin.kyc.index');
+        Route::post('kyc/{teacher}/review', [TeacherController::class, 'kycReview'])->name('admin.kyc.review');
 
         // User Management
         Route::resource('users', UserController::class)->names('admin.users');
@@ -226,6 +235,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Global Academic Views
     Route::get('academic/learning', [AcademicController::class, 'myLearning'])->name('student.academic.learning');
+    Route::get('academic/workshops', [AcademicController::class, 'workshops'])->name('student.academic.workshops');
     Route::get('academic/assignments', [AcademicController::class, 'allAssignments'])->name('student.academic.all-assignments');
     Route::get('academic/exams', [AcademicController::class, 'allExams'])->name('student.academic.all-exams');
     Route::get('academic/payments', [AcademicController::class, 'allPayments'])->name('student.academic.all-payments');
@@ -237,6 +247,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('students', [DashboardController::class, 'students'])->name('teacher.students');
         Route::post('courses/{course}/batches', [App\Http\Controllers\Teacher\CourseController::class, 'storeBatch'])->name('teacher.courses.batches.store');
         Route::resource('courses', App\Http\Controllers\Teacher\CourseController::class)->names('teacher.courses');
+        Route::get('workshops', [WorkshopController::class, 'index'])->name('teacher.workshops.index');
+        Route::post('workshops', [WorkshopController::class, 'store'])->name('teacher.workshops.store');
+        Route::get('workshops/{workshop}', [WorkshopController::class, 'show'])->name('teacher.workshops.show');
+        Route::patch('workshops/{workshop}', [WorkshopController::class, 'update'])->name('teacher.workshops.update');
         Route::get('wallet', [WalletController::class, 'index'])->name('teacher.wallet');
         Route::get('wallet/withdraw', [WalletController::class, 'withdraw'])->name('teacher.wallet.withdraw.page');
         Route::post('wallet/withdraw', [WalletController::class, 'storeRequest'])->name('teacher.wallet.withdraw');
@@ -250,12 +264,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('batches/{batch}/progress', [DashboardController::class, 'storeLog'])->name('teacher.batches.progress.store');
 
         // Academic Management (Assignments)
-        Route::get('assignments', [\App\Http\Controllers\Teacher\AssignmentController::class, 'index'])->name('teacher.assignments.index');
-        Route::post('assignments', [\App\Http\Controllers\Teacher\AssignmentController::class, 'store'])->name('teacher.assignments.store');
-        Route::patch('assignments/{assignment}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'update'])->name('teacher.assignments.update');
-        Route::get('assignments/{assignment}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'show'])->name('teacher.assignments.show');
-        Route::patch('submissions/{submission}/grade', [\App\Http\Controllers\Teacher\AssignmentController::class, 'grade'])->name('teacher.submissions.grade');
-        Route::post('submissions/{submission}/comment', [\App\Http\Controllers\Teacher\AssignmentController::class, 'comment'])->name('teacher.submissions.comment');
+        Route::get('assignments', [App\Http\Controllers\Teacher\AssignmentController::class, 'index'])->name('teacher.assignments.index');
+        Route::post('assignments', [App\Http\Controllers\Teacher\AssignmentController::class, 'store'])->name('teacher.assignments.store');
+        Route::patch('assignments/{assignment}', [App\Http\Controllers\Teacher\AssignmentController::class, 'update'])->name('teacher.assignments.update');
+        Route::get('assignments/{assignment}', [App\Http\Controllers\Teacher\AssignmentController::class, 'show'])->name('teacher.assignments.show');
+        Route::patch('submissions/{submission}/grade', [App\Http\Controllers\Teacher\AssignmentController::class, 'grade'])->name('teacher.submissions.grade');
+        Route::post('submissions/{submission}/comment', [App\Http\Controllers\Teacher\AssignmentController::class, 'comment'])->name('teacher.submissions.comment');
         // Progress Logging
         Route::get('progress', [DashboardController::class, 'progressIndex'])->name('teacher.progress.index');
         Route::get('batches/{batch}/progress', [DashboardController::class, 'progress'])->name('teacher.batches.progress');
@@ -263,9 +277,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Notifications
-    Route::get('notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
-    Route::post('notifications/{id}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
-    Route::post('notifications/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
 
 });
 

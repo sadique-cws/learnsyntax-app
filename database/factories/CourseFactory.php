@@ -20,8 +20,10 @@ class CourseFactory extends Factory
         return [
             'title' => fake()->sentence(3),
             'slug' => str()->slug(fake()->sentence(3)),
+            'type' => 'course',
             'description' => fake()->paragraph(),
             'price' => 1000,
+            'meta' => null,
             'is_active' => true,
         ];
     }

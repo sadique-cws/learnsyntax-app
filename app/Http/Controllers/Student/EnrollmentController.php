@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendNotificationJob;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Invoice;
@@ -139,8 +140,7 @@ class EnrollmentController extends Controller
             $teacher->increment('wallet_balance', $commissionAmount);
         }
 
-        // Send Notification to Student
-        \App\Jobs\SendNotificationJob::dispatch(
+        SendNotificationJob::dispatch(
             $enrollment->user,
             ['mail', 'database'],
             'Course Purchased Successfully!',
@@ -148,12 +148,26 @@ class EnrollmentController extends Controller
             [
                 'name' => $enrollment->user->name,
                 'course_name' => $enrollment->course->title,
-                'price' => '₹' . $enrollment->course->price,
-                'body' => 'Thank you for purchasing ' . $enrollment->course->title . '. You can now select your batch and start learning!',
+                'price' => '₹'.$enrollment->course->price,
+                'body' => 'Thank you for purchasing '.$enrollment->course->title.'. You can now select your batch and start learning!',
                 'link' => route('student.enrollments.batch', $enrollment),
-                'button_text' => 'Start Learning'
+                'button_text' => 'Start Learning',
             ]
         )->afterCommit();
+
+        if ($teacher && $teacher->user) {
+            SendNotificationJob::dispatch(
+                $teacher->user,
+                ['mail', 'database'],
+                'New Course Enrollment',
+                'emails.notification',
+                [
+                    'body' => $enrollment->user->name.' purchased '.$enrollment->course->title.'.',
+                    'link' => route('teacher.courses.show', $enrollment->course),
+                    'button_text' => 'View Course',
+                ]
+            )->afterCommit();
+        }
 
         return redirect()->route('student.enrollments.batch', $enrollment);
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendNotificationJob;
 use App\Models\Assignment;
 use App\Models\AssignmentSubmission;
 use App\Models\Certificate;
@@ -10,7 +11,9 @@ use App\Models\Enrollment;
 use App\Models\Exam;
 use App\Models\ExamAttempt;
 use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\Setting;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class AcademicController extends Controller
@@ -23,7 +26,7 @@ class AcademicController extends Controller
             'course.modules.chapters.learningLogs' => function ($query) use ($enrollment) {
                 $query->where('batch_id', $enrollment->batch_id);
             },
-            'batch'
+            'batch',
         ]);
 
         return inertia('student/academic/progress', [
@@ -39,7 +42,7 @@ class AcademicController extends Controller
             ->with([
                 'submissions' => function ($q) {
                     $q->where('user_id', auth()->id());
-                }
+                },
             ])
             ->get();
 
@@ -73,7 +76,7 @@ class AcademicController extends Controller
                 'user_id' => auth()->id(),
             ],
             [
-                'content' => $request->content,
+                'content' => $request->input('content'),
                 'submitted_at' => now(),
                 'status' => 'submitted',
             ]
@@ -89,15 +92,15 @@ class AcademicController extends Controller
         $teacher = $course->teacher;
 
         if ($teacher && $teacher->user) {
-            \App\Jobs\SendNotificationJob::dispatch(
+            SendNotificationJob::dispatch(
                 $teacher->user,
                 ['mail', 'database'],
-                'Assignment Submitted: ' . auth()->user()->name,
+                'Assignment Submitted: '.auth()->user()->name,
                 'emails.notification',
                 [
-                    'body' => "Student " . auth()->user()->name . " has submitted an assignment: {$assignment->title} for Course: {$course->title}",
+                    'body' => 'Student '.auth()->user()->name." has submitted an assignment: {$assignment->title} for Course: {$course->title}",
                     'link' => route('teacher.assignments.show', $assignment->id),
-                    'button_text' => 'Review Assignment'
+                    'button_text' => 'Review Assignment',
                 ]
             )->afterCommit();
         }
@@ -113,7 +116,7 @@ class AcademicController extends Controller
             ->with('questions')
             ->first();
 
-        if (!$exam) {
+        if (! $exam) {
             return back()->with('error', 'Exam not scheduled yet.');
         }
 
@@ -163,7 +166,7 @@ class AcademicController extends Controller
             return back()->with('error', 'You have already submitted this exam.');
         }
 
-        if ($exam->passcode && !session("exam_verified_{$exam->id}")) {
+        if ($exam->passcode && ! session("exam_verified_{$exam->id}")) {
             return back()->with('error', 'Passcode verification required.');
         }
 
@@ -194,14 +197,14 @@ class AcademicController extends Controller
     {
         $this->authorizeAccess($enrollment);
 
-        if (!$enrollment->isEligibleForCertificate()) {
+        if (! $enrollment->isEligibleForCertificate()) {
             return back()->with('error', 'You need an average of at least 60% in assignments and exam to download the certificate.');
         }
 
         $certificate = Certificate::firstOrCreate(
             ['enrollment_id' => $enrollment->id],
             [
-                'certificate_number' => 'LS-' . strtoupper(str()->random(8)),
+                'certificate_number' => 'LS-'.strtoupper(str()->random(8)),
                 'issued_at' => now(),
             ]
         );
@@ -218,7 +221,7 @@ class AcademicController extends Controller
             'course',
             'batch.assignments.submissions' => function ($q) use ($user) {
                 $q->where('user_id', $user->id);
-            }
+            },
         ])->get();
 
         $assignments = collect();
@@ -243,7 +246,7 @@ class AcademicController extends Controller
         $enrollments = $user->enrollments()->where('status', 'paid')->with([
             'course.exams.attempts' => function ($q) use ($user) {
                 $q->where('user_id', $user->id);
-            }
+            },
         ])->get();
 
         $exams = collect();
@@ -266,16 +269,48 @@ class AcademicController extends Controller
     public function allPayments()
     {
         $user = auth()->user();
-        $payments = \App\Models\Payment::whereHas('enrollment', function ($q) use ($user) {
-            $q->where('user_id', $user->id);
-        })
-            ->whereIn('status', ['paid', 'completed'])
-            ->with(['enrollment.course', 'invoice'])
+        $payments = Payment::whereIn('status', ['paid', 'completed'])
+            ->whereHas('enrollment', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })
+            ->with(['enrollment.course.teacher.user', 'invoice'])
             ->latest()
-            ->get();
+            ->get()
+            ->map(function (Payment $payment) {
+                $course = $payment->enrollment?->course;
+                $title = $course?->title ?? 'Payment';
+
+                $payment->payment_title = $title;
+                $payment->payment_type = $course?->type ?? 'course';
+
+                return $payment;
+            });
 
         return inertia('student/academic/all-payments', [
             'payments' => $payments,
+        ]);
+    }
+
+    public function workshops()
+    {
+        $user = auth()->user();
+
+        $workshopEnrollments = Enrollment::where('user_id', $user->id)
+            ->where('status', 'paid')
+            ->whereHas('course', function ($query) {
+                $query->ofType('workshop');
+            })
+            ->with(['course.teacher.user', 'payment.invoice'])
+            ->latest()
+            ->get();
+
+        foreach ($workshopEnrollments as $workshopEnrollment) {
+            $workshopEnrollment->workshop = $workshopEnrollment->course;
+            $workshopEnrollment->status_label = now()->gt($workshopEnrollment->course->starts_at) ? 'Completed' : 'Upcoming';
+        }
+
+        return inertia('student/academic/my-workshops', [
+            'workshopEnrollments' => $workshopEnrollments,
         ]);
     }
 
@@ -285,6 +320,7 @@ class AcademicController extends Controller
             abort(403);
         }
     }
+
     public function myLearning()
     {
         $user = auth()->user();
@@ -292,6 +328,7 @@ class AcademicController extends Controller
             ->with(['course', 'batch', 'certificate'])
             ->get();
 
+        /** @var Collection<int, Enrollment> $enrollments */
         foreach ($enrollments as $enrollment) {
             $enrollment->append(['assignment_average', 'exam_score', 'overall_average']);
             $enrollment->is_eligible = $enrollment->isEligibleForCertificate();
@@ -301,10 +338,11 @@ class AcademicController extends Controller
             'enrollments' => $enrollments,
         ]);
     }
+
     public function downloadCertificate(Enrollment $enrollment)
     {
         $this->authorizeAccess($enrollment);
-        
+
         $certificate = $enrollment->certificate()->firstOrFail();
         $certificate->load(['enrollment.user', 'enrollment.course']);
 
@@ -315,11 +353,27 @@ class AcademicController extends Controller
 
     public function showInvoice(Invoice $invoice)
     {
-        $this->authorizeAccess($invoice->payment->enrollment);
+        $this->authorizeInvoiceAccess($invoice);
+
+        $invoice->load([
+            'payment.enrollment.user',
+            'payment.enrollment.course',
+        ]);
 
         return inertia('student/academic/invoice', [
-            'invoice' => $invoice->load(['payment.enrollment.user', 'payment.enrollment.course']),
-            'company' => \App\Models\Setting::getCompanyInfo(),
+            'invoice' => $invoice,
+            'company' => Setting::getCompanyInfo(),
         ]);
+    }
+
+    protected function authorizeInvoiceAccess(Invoice $invoice): void
+    {
+        $payment = $invoice->payment;
+
+        if ($payment?->enrollment && $payment->enrollment->user_id === auth()->id()) {
+            return;
+        }
+
+        abort(403);
     }
 }

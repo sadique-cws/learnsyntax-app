@@ -3,7 +3,7 @@ import { dashboard, login, register } from '@/routes';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Button } from '@/components/ui/button';
 import { useAppearance } from '@/hooks/use-appearance';
-import { Moon, Sun, Home, BookOpen, User, LogIn, Bell } from 'lucide-react';
+import { Moon, Sun, Home, BookOpen, User, LogIn, Bell, CalendarDays } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
@@ -30,6 +30,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                         <div className="hidden md:flex items-center gap-5 text-[13px] font-medium text-muted-foreground">
                             <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
                             <Link href="/courses" className="hover:text-foreground transition-colors">Courses</Link>
+                            <Link href="/workshops" className="hover:text-foreground transition-colors">Workshops</Link>
                             <Link href="#" className="hover:text-foreground transition-colors">Internships</Link>
                             <Link href="#" className="hover:text-foreground transition-colors">Tutorials</Link>
                         </div>
@@ -98,7 +99,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                         <ul className="space-y-2 text-xs text-muted-foreground">
                             <li><Link href="/courses" className="hover:text-foreground transition-colors">All Courses</Link></li>
                             <li><Link href="#" className="hover:text-foreground transition-colors">Internships</Link></li>
-                            <li><Link href="#" className="hover:text-foreground transition-colors">Workshops</Link></li>
+                            <li><Link href="/workshops" className="hover:text-foreground transition-colors">Workshops</Link></li>
                         </ul>
                     </div>
                     <div>
@@ -124,6 +125,10 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                 <Link href="/courses" className="flex flex-col items-center justify-center w-full h-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors gap-0.5">
                     <BookOpen className="size-4" />
                     <span className="text-[10px] font-medium">Courses</span>
+                </Link>
+                <Link href="/workshops" className="flex flex-col items-center justify-center w-full h-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors gap-0.5">
+                    <CalendarDays className="size-4" />
+                    <span className="text-[10px] font-medium">Workshops</span>
                 </Link>
                 {auth.user && (
                     <Link href="/notifications" className="flex flex-col items-center justify-center w-full h-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors gap-0.5">

@@ -12,7 +12,10 @@ class CourseController extends Controller
     public function index()
     {
         $teacher = auth()->user()->teacher;
-        $courses = $teacher->courses()->with(['enrollments.user', 'enrollments.payment'])->get();
+        $courses = $teacher->courses()
+            ->ofType('course')
+            ->with(['enrollments.user', 'enrollments.payment'])
+            ->get();
 
         return inertia('teacher/courses/index', [
             'courses' => $courses,
@@ -33,9 +36,11 @@ class CourseController extends Controller
         $course = $teacher->courses()->create([
             'title' => $request->title,
             'slug' => Str::slug($request->title).'-'.uniqid(),
+            'type' => 'course',
             'price' => $request->price,
             'description' => $request->description,
             'is_active' => true,
+            'meta' => null,
         ]);
 
         if ($request->hasFile('image')) {
@@ -48,12 +53,14 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
+        abort_unless($course->type === 'course', 404);
+
         if ($course->teacher_id !== auth()->user()->teacher->id) {
             abort(403);
         }
 
         $course->load(['batches.enrollments.user', 'batches.enrollments.payment']);
-        
+
         return inertia('teacher/courses/show', [
             'course' => $course,
         ]);
@@ -84,6 +91,8 @@ class CourseController extends Controller
 
     public function update(Request $request, Course $course)
     {
+        abort_unless($course->type === 'course', 404);
+
         if ($course->teacher_id !== auth()->user()->teacher->id) {
             abort(403);
         }

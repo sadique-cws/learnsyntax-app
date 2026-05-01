@@ -6,10 +6,20 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['course_id', 'name', 'type', 'start_date', 'capacity', 'is_active'])]
+#[Fillable(['course_id', 'name', 'type', 'start_date', 'capacity', 'is_active', 'meta'])]
 class Batch extends Model
 {
     use HasFactory;
+
+    protected function casts(): array
+    {
+        return [
+            'start_date' => 'date',
+            'capacity' => 'integer',
+            'is_active' => 'boolean',
+            'meta' => 'array',
+        ];
+    }
 
     public function course()
     {

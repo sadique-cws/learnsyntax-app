@@ -1,6 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, FolderGit2, LayoutGrid, Book, Shield, 
-    CheckCircle2, Users, Award, CreditCard, ShoppingBag, Home, GraduationCap, Trophy, Receipt, Settings, Layers } from 'lucide-react';
+    CheckCircle2, Users, Award, CreditCard, ShoppingBag, Home, GraduationCap, Trophy, Receipt, Settings, Layers, CalendarDays } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -81,6 +81,11 @@ export function AppSidebar() {
                     icon: Book,
                 });
                 mainNavItems.push({
+                    title: 'My Workshops',
+                    href: '/academic/workshops',
+                    icon: CalendarDays,
+                });
+                mainNavItems.push({
                     title: 'My Assignments',
                     href: '/academic/assignments',
                     icon: BookOpen,
@@ -107,6 +112,7 @@ export function AppSidebar() {
         mainNavItems.push(
             { title: 'Home', href: '/', icon: Home },
             { title: 'All Courses', href: '/courses', icon: ShoppingBag },
+            { title: 'Workshops', href: '/workshops', icon: CalendarDays },
         );
     }
 
