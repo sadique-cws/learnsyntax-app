@@ -39,7 +39,11 @@ createInertiaApp({
     resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx')),
     layout: (name) => {
         switch (true) {
-            case name === 'welcome' || name.startsWith('courses/') || name === 'admin/payments/invoice':
+            case name === 'welcome' || 
+                 name.startsWith('courses/') || 
+                 name === 'admin/payments/invoice' || 
+                 name === 'student/academic/invoice' ||
+                 name === 'admin/certificates/view':
                 return null;
             case name.startsWith('auth/'):
                 return AuthLayout;

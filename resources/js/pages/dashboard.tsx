@@ -179,9 +179,9 @@ export default function Dashboard({ enrollments = [], assignments = [], availabl
                                         </div>
                                         {enrollment.payment.invoice && (
                                             <Button asChild variant="ghost" size="sm" className="h-7 px-3 rounded-sm text-[10px] font-medium hover:bg-primary/5 hover:text-primary">
-                                                <a href={`/admin/invoices/${enrollment.payment.invoice.id}`} target="_blank" rel="noreferrer" className="flex items-center gap-1.5">
+                                                <Link href={`/academic/invoices/${enrollment.payment.invoice.id}`} target="_blank" className="flex items-center gap-1.5">
                                                     <Download className="size-3" /> Invoice
-                                                </a>
+                                                </Link>
                                             </Button>
                                         )}
                                     </div>
@@ -264,7 +264,7 @@ export default function Dashboard({ enrollments = [], assignments = [], availabl
                                                                 <Calendar className="size-3" /> Due: {assignment.due_date || 'No date'}
                                                             </span>
                                                             <span className="text-[10px] text-primary font-bold bg-primary/5 px-1.5 rounded-sm border border-primary/10">
-                                                                {isGraded ? `${submission.grade}/${assignment.points}` : `${assignment.points} pts`}
+                                                                {isGraded ? `${submission.grade}/${assignment.max_marks}` : `${assignment.max_marks} pts`}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -475,7 +475,7 @@ export default function Dashboard({ enrollments = [], assignments = [], availabl
                                         <div className="flex items-center justify-between pt-2 border-t border-border">
                                             <span className="text-sm font-semibold text-foreground tabular-nums">₹{enrollment.payment.amount}</span>
                                             <Button asChild variant="outline" size="sm" className="h-6 px-2 rounded-sm text-[10px] font-medium shadow-none cursor-pointer">
-                                                <Link href={enrollment.payment.invoice ? `/admin/invoices/${enrollment.payment.invoice.id}` : '#'}>Receipt</Link>
+                                                <Link href={enrollment.payment.invoice ? `/academic/invoices/${enrollment.payment.invoice.id}` : '#'}>Receipt</Link>
                                             </Button>
                                         </div>
                                     </div>

@@ -64,7 +64,7 @@ export default function AllAssignments({ assignments = [] }: AllAssignmentsProps
                                                         <Calendar className="size-3.5" /> Due: {assignment.due_date || 'No date'}
                                                     </span>
                                                     <span className="text-[11px] text-primary font-bold">
-                                                        {isGraded ? `Score: ${submission.grade}/${assignment.points}` : `Weight: ${assignment.points} pts`}
+                                                        {isGraded ? `Score: ${submission.grade}/${assignment.max_marks}` : `Weight: ${assignment.max_marks} pts`}
                                                     </span>
                                                 </div>
                                             </div>

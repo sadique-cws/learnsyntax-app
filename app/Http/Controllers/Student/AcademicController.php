@@ -10,6 +10,7 @@ use App\Models\Enrollment;
 use App\Models\Exam;
 use App\Models\ExamAttempt;
 use App\Models\Invoice;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class AcademicController extends Controller

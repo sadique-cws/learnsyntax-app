@@ -61,15 +61,7 @@ class PaymentController extends Controller
             abort(403);
         }
 
-        $settings = Setting::first() ?: new Setting([
-            'company_name' => 'Learn Syntax Academy',
-            'company_address' => '123 Tech Park, Sector 62, Noida, UP - 201309',
-            'company_gstin' => '09ABCDE1234F1Z5',
-            'company_email' => 'billing@learnsyntax.com',
-            'company_phone' => '+91 98765 43210',
-            'company_state' => 'Uttar Pradesh',
-            'company_state_code' => '09',
-        ]);
+        $settings = Setting::getCompanyInfo();
 
         return inertia('admin/payments/invoice', [
             'invoice' => $invoice->load(['payment.enrollment.user', 'payment.enrollment.course']),
