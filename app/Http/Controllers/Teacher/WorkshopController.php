@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -13,10 +14,14 @@ class WorkshopController extends Controller
     {
         $teacher = auth()->user()->teacher;
         $workshops = $teacher->workshops()
+            ->with(['batches' => function ($query) {
+                $query->orderBy('starts_at')->orderBy('start_date');
+            }])
             ->withCount([
                 'enrollments as paid_enrollments_count' => function ($query) {
                     $query->where('status', 'paid');
                 },
+                'batches',
             ])
             ->with(['enrollments' => function ($query) {
                 $query->where('status', 'paid')->with('user');
@@ -35,11 +40,6 @@ class WorkshopController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'fee' => 'required|numeric|min:0',
-            'duration_hours' => 'required|numeric|min:0.5',
-            'starts_at' => 'required|date',
-            'topics' => 'nullable|string',
-            'venue' => 'nullable|string|max:255',
-            'capacity' => 'nullable|integer|min:1',
             'image' => 'nullable|image|max:4096',
         ]);
 
@@ -54,21 +54,6 @@ class WorkshopController extends Controller
             'price' => $validated['fee'],
             'meta' => null,
             'is_active' => true,
-        ]);
-
-        // Create initial batch for the workshop and store schedule/details in batch.meta
-        $workshop->batches()->create([
-            'name' => $validated['title'].' - Batch 1',
-            'type' => 'online',
-            'start_date' => $validated['starts_at'],
-            'capacity' => $validated['capacity'] ?? 0,
-            'meta' => [
-                'duration_hours' => (float) $validated['duration_hours'],
-                'starts_at' => $validated['starts_at'],
-                'topics' => $this->topicsToArray($validated['topics'] ?? null),
-                'venue' => $validated['venue'] ?? null,
-                'capacity' => $validated['capacity'] ?? null,
-            ],
         ]);
 
         if ($request->hasFile('image')) {
@@ -87,6 +72,8 @@ class WorkshopController extends Controller
         return inertia('teacher/workshops/show', [
             'workshop' => $workshop->load([
                 'batches' => function ($query) {
+                    $query->orderBy('starts_at')->orderBy('start_date');
+
                     $query->withCount(['enrollments as paid_enrollments_count' => function ($q) {
                         $q->where('status', 'paid');
                     }])->with(['enrollments' => function ($q) {
@@ -110,11 +97,6 @@ class WorkshopController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'fee' => 'required|numeric|min:0',
-            'duration_hours' => 'required|numeric|min:0.5',
-            'starts_at' => 'required|date',
-            'topics' => 'nullable|string',
-            'venue' => 'nullable|string|max:255',
-            'capacity' => 'nullable|integer|min:1',
             'image' => 'nullable|image|max:4096',
         ]);
 
@@ -123,22 +105,6 @@ class WorkshopController extends Controller
             'description' => $validated['description'] ?? null,
             'price' => $validated['fee'],
         ]);
-
-        // Update first batch's meta/schedule (if exists)
-        $batch = $workshop->batches()->orderBy('start_date')->first();
-        if ($batch) {
-            $batch->update([
-                'start_date' => $validated['starts_at'],
-                'capacity' => $validated['capacity'] ?? $batch->capacity,
-                'meta' => [
-                    'duration_hours' => (float) $validated['duration_hours'],
-                    'starts_at' => $validated['starts_at'],
-                    'topics' => $this->topicsToArray($validated['topics'] ?? null),
-                    'venue' => $validated['venue'] ?? null,
-                    'capacity' => $validated['capacity'] ?? null,
-                ],
-            ]);
-        }
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('workshops', 'public');
@@ -157,21 +123,24 @@ class WorkshopController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|in:online,offline',
-            'start_date' => 'required|date',
+            'starts_at' => 'required|date_format:Y-m-d\TH:i',
             'capacity' => 'required|integer|min:1',
-            'duration_hours' => 'nullable|numeric|min:0.5',
+            'duration_hours' => 'required|numeric|min:0.5',
             'topics' => 'nullable|string',
             'venue' => 'nullable|string|max:255',
         ]);
 
+        $startsAt = Carbon::createFromFormat('Y-m-d\TH:i', $request->starts_at);
+
         $workshop->batches()->create([
             'name' => $request->name,
             'type' => $request->type,
-            'start_date' => $request->start_date,
+            'start_date' => $startsAt->toDateString(),
+            'starts_at' => $startsAt,
             'capacity' => $request->capacity,
             'meta' => [
                 'duration_hours' => isset($request->duration_hours) ? (float) $request->duration_hours : null,
-                'starts_at' => $request->start_date,
+                'starts_at' => $startsAt->toDateTimeString(),
                 'topics' => $this->topicsToArray($request->topics ?? null),
                 'venue' => $request->venue ?? null,
                 'capacity' => $request->capacity,

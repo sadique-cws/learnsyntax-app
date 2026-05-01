@@ -59,7 +59,7 @@ class Course extends Model
             return (float) $fromCourse;
         }
 
-        $batch = $this->batches()->orderBy('start_date')->first();
+        $batch = $this->batches()->orderBy('starts_at')->orderBy('start_date')->first();
 
         return $batch ? data_get($batch->meta ?? [], 'duration_hours') : null;
     }
@@ -80,7 +80,7 @@ class Course extends Model
             return Carbon::parse($startsAt);
         }
 
-        $batch = $this->batches()->orderBy('start_date')->first();
+        $batch = $this->batches()->orderBy('starts_at')->orderBy('start_date')->first();
         if (! $batch) {
             return null;
         }
@@ -101,7 +101,7 @@ class Course extends Model
             return $fromCourse;
         }
 
-        $batch = $this->batches()->orderBy('start_date')->first();
+        $batch = $this->batches()->orderBy('starts_at')->orderBy('start_date')->first();
 
         return $batch ? data_get($batch->meta ?? [], 'topics') : null;
     }
@@ -117,7 +117,7 @@ class Course extends Model
             return $fromCourse;
         }
 
-        $batch = $this->batches()->orderBy('start_date')->first();
+        $batch = $this->batches()->orderBy('starts_at')->orderBy('start_date')->first();
 
         return $batch ? data_get($batch->meta ?? [], 'venue') : null;
     }
@@ -133,7 +133,7 @@ class Course extends Model
             return (int) $capacity;
         }
 
-        $batch = $this->batches()->orderBy('start_date')->first();
+        $batch = $this->batches()->orderBy('starts_at')->orderBy('start_date')->first();
         if (! $batch) {
             return null;
         }

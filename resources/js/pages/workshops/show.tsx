@@ -6,7 +6,6 @@ import {
     BookOpen,
     CalendarDays,
     CheckCircle2,
-    Clock3,
     CreditCard,
     IndianRupee,
     Loader2,
@@ -46,6 +45,12 @@ export default function WorkshopShow({ workshop, enrollment, can_enroll, enrollm
         return [];
     }, [workshop.topics]);
 
+    const batches = Array.isArray(workshop.batches) ? workshop.batches : [];
+    const firstBatch = batches[0] ?? null;
+    const batchTopics = Array.isArray(firstBatch?.meta?.topics) ? firstBatch.meta.topics : [];
+    const activeEnrollmentBatchId = enrollment?.batch_id ?? null;
+    const activeBatch = activeEnrollmentBatchId ? batches.find((batch: any) => batch.id === activeEnrollmentBatchId) : null;
+
     useEffect(() => {
         if (typeof window === 'undefined') {
             return;
@@ -58,11 +63,13 @@ export default function WorkshopShow({ workshop, enrollment, can_enroll, enrollm
         document.body.appendChild(script);
     }, []);
 
-    const handleEnroll = () => {
-        router.post(`/workshops/${workshop.id}/enroll`);
+    const handleEnroll = (batchId: number) => {
+        router.post(`/workshops/${workshop.id}/enroll`, {
+            batch_id: batchId,
+        });
     };
 
-    const handlePayment = () => {
+    const handlePayment = (batchId: number) => {
         if (!scriptLoaded || !window.Razorpay || !razorpay_key || !razorpay_order) {
             return;
         }
@@ -79,6 +86,7 @@ export default function WorkshopShow({ workshop, enrollment, can_enroll, enrollm
             order_id: razorpay_order.id,
             handler: (response: any) => {
                 router.post(`/workshops/${workshop.id}/payment`, {
+                    batch_id: batchId,
                     razorpay_payment_id: response.razorpay_payment_id,
                     razorpay_order_id: response.razorpay_order_id,
                     razorpay_signature: response.razorpay_signature,
@@ -129,9 +137,9 @@ export default function WorkshopShow({ workshop, enrollment, can_enroll, enrollm
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl">
                                     {[
                                         { label: 'Fee', value: `₹${Number(workshop.fee).toLocaleString('en-IN')}`, icon: IndianRupee },
-                                        { label: 'Duration', value: `${workshop.duration_hours} hrs`, icon: Clock3 },
-                                        { label: 'Starts', value: formatDateTime(workshop.starts_at), icon: CalendarDays },
-                                        { label: 'Seats', value: workshop.capacity ? `${workshop.capacity}` : 'Open', icon: Users },
+                                        { label: 'Batches', value: `${batches.length}`, icon: CalendarDays },
+                                        { label: 'Next Batch', value: firstBatch ? formatDateTime(firstBatch.starts_at || firstBatch.start_date) : 'No batch yet', icon: CalendarDays },
+                                        { label: 'Seats', value: workshop.paid_enrollments_count ? `${workshop.paid_enrollments_count}` : 'Open', icon: Users },
                                     ].map(({ label, value, icon: Icon }) => (
                                         <div key={label} className="rounded-sm border border-border bg-background p-3">
                                             <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
@@ -161,11 +169,11 @@ export default function WorkshopShow({ workshop, enrollment, can_enroll, enrollm
                                     <div className="space-y-2 text-xs text-muted-foreground">
                                         <div className="flex items-center gap-2">
                                             <MapPin className="size-3.5 text-primary" />
-                                            <span>{workshop.venue || 'Venue not set'}</span>
+                                            <span>{firstBatch?.meta?.venue || 'Venue not set'}</span>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <Clock3 className="size-3.5 text-primary" />
-                                            <span>Enrollment closes 1 hour before start</span>
+                                            <CalendarDays className="size-3.5 text-primary" />
+                                            <span>Enrollment closes 1 hour before each batch start</span>
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <ShieldCheck className="size-3.5 text-emerald-600" />
@@ -174,35 +182,35 @@ export default function WorkshopShow({ workshop, enrollment, can_enroll, enrollm
                                     </div>
 
                                     <div className="space-y-3 pt-1">
-                                        {enrollment?.status === 'paid' ? (
-                                            <div className="flex items-center gap-2 rounded-sm border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
-                                                <CheckCircle2 className="size-3.5" />
-                                                You are enrolled in this workshop.
-                                            </div>
-                                        ) : enrollment?.status === 'pending' ? (
-                                            <>
-                                                <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                                                    <Receipt className="size-3.5" />
-                                                    Complete payment to confirm your seat.
+                                        {activeEnrollmentBatchId ? (
+                                            enrollment?.status === 'paid' ? (
+                                                <div className="flex items-center gap-2 rounded-sm border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
+                                                    <CheckCircle2 className="size-3.5" />
+                                                    Enrolled in {activeBatch?.name || 'this batch'}.
                                                 </div>
+                                            ) : (
+                                                <>
+                                                    <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                                                        <Receipt className="size-3.5" />
+                                                        Complete payment to confirm your batch seat.
+                                                    </div>
 
-                                                <Button
-                                                    size="lg"
-                                                    className="h-10 px-6 rounded-sm text-sm font-medium shadow-none w-full"
-                                                    onClick={handlePayment}
-                                                    disabled={isPaying || !scriptLoaded || !razorpay_key || !razorpay_order}
-                                                >
-                                                    {isPaying ? (
-                                                        <span className="flex items-center gap-2"><Loader2 className="size-3.5 animate-spin" /> Processing...</span>
-                                                    ) : (
-                                                        <span className="flex items-center gap-2"><CreditCard className="size-3.5" /> Pay Now</span>
-                                                    )}
-                                                </Button>
-                                            </>
+                                                    <Button
+                                                        size="lg"
+                                                        className="h-10 px-6 rounded-sm text-sm font-medium shadow-none w-full"
+                                                        onClick={() => handlePayment(activeEnrollmentBatchId)}
+                                                        disabled={isPaying || !scriptLoaded || !razorpay_key || !razorpay_order}
+                                                    >
+                                                        {isPaying ? (
+                                                            <span className="flex items-center gap-2"><Loader2 className="size-3.5 animate-spin" /> Processing...</span>
+                                                        ) : (
+                                                            <span className="flex items-center gap-2"><CreditCard className="size-3.5" /> Pay Now</span>
+                                                        )}
+                                                    </Button>
+                                                </>
+                                            )
                                         ) : user ? (
-                                            <Button size="lg" className="h-10 px-6 rounded-sm text-sm font-medium shadow-none w-full" onClick={handleEnroll} disabled={!can_enroll}>
-                                                {can_enroll ? 'Enroll Now' : 'Enrollment Closed'}
-                                            </Button>
+                                            <div className="text-[10px] text-muted-foreground">Choose a batch below to enroll.</div>
                                         ) : (
                                             <Button asChild size="lg" className="h-10 px-6 rounded-sm text-sm font-medium shadow-none w-full">
                                                 <Link href="/login" className="flex items-center justify-center gap-2">
@@ -235,11 +243,11 @@ export default function WorkshopShow({ workshop, enrollment, can_enroll, enrollm
                                     <BookOpen className="size-3.5 text-primary" /> About this workshop
                                 </div>
                                 <p className="text-sm text-muted-foreground leading-relaxed">
-                                    This workshop is designed to give you focused, hands-on learning in a short format. You’ll get practical insights, clear topics, and a guided session with the instructor.
+                                    This workshop is organized into batches. Each batch has its own schedule, duration, venue, and capacity.
                                 </p>
-                                {topics.length > 0 && (
+                                {(batchTopics.length > 0 || topics.length > 0) && (
                                     <div className="flex flex-wrap gap-2">
-                                        {topics.map((topic: string) => (
+                                        {(batchTopics.length > 0 ? batchTopics : topics).map((topic: string) => (
                                             <span key={topic} className="inline-flex items-center rounded-sm border border-border bg-muted/10 px-2.5 py-1 text-[10px] font-medium text-muted-foreground">
                                                 {topic}
                                             </span>
@@ -267,10 +275,77 @@ export default function WorkshopShow({ workshop, enrollment, can_enroll, enrollm
                                         <CalendarDays className="size-3.5 text-primary" /> Schedule
                                     </div>
                                     <div className="space-y-2 text-xs text-muted-foreground">
-                                        <div className="flex items-center justify-between gap-3"><span>Starts at</span><span className="font-medium text-foreground">{formatDateTime(workshop.starts_at)}</span></div>
+                                        <div className="flex items-center justify-between gap-3"><span>Next batch</span><span className="font-medium text-foreground">{firstBatch ? formatDateTime(firstBatch.starts_at || firstBatch.start_date) : 'No batch yet'}</span></div>
                                         <div className="flex items-center justify-between gap-3"><span>Enrollment cutoff</span><span className="font-medium text-foreground">{enrollment_deadline}</span></div>
-                                        <div className="flex items-center justify-between gap-3"><span>Venue</span><span className="font-medium text-foreground">{workshop.venue || 'Online'}</span></div>
+                                        <div className="flex items-center justify-between gap-3"><span>Venue</span><span className="font-medium text-foreground">{firstBatch?.meta?.venue || 'Online'}</span></div>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div className="rounded-sm border border-border bg-card p-4 space-y-3">
+                                <div className="flex items-center justify-between gap-3">
+                                    <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Available batches</div>
+                                    <div className="text-[10px] text-muted-foreground">Enroll within 1 hour before start</div>
+                                </div>
+                                <div className="grid gap-3 md:grid-cols-2">
+                                    {batches.map((batch: any) => {
+                                        const batchDeadline = batch.starts_at ? new Date(batch.starts_at) : null;
+                                        const canJoin = batchDeadline ? new Date() < new Date(batchDeadline.getTime() - 60 * 60 * 1000) : true;
+                                        const isSelectedBatch = enrollment?.batch_id === batch.id;
+                                        const paidCount = batch.paid_enrollments_count || 0;
+                                        const duration = batch.meta?.duration_hours ?? '—';
+
+                                        return (
+                                            <div key={batch.id} className="rounded-sm border border-border bg-background p-3 space-y-3">
+                                                <div className="flex items-start justify-between gap-3">
+                                                    <div>
+                                                        <div className="text-sm font-semibold text-foreground">{batch.name}</div>
+                                                        <div className="text-[10px] text-muted-foreground mt-0.5">{batch.starts_at ? formatDateTime(batch.starts_at) : formatDateTime(batch.start_date)}</div>
+                                                    </div>
+                                                    <span className="text-[9px] font-medium px-1.5 py-0.5 rounded-sm border border-border bg-muted/10 text-muted-foreground">{batch.type}</span>
+                                                </div>
+
+                                                <div className="grid grid-cols-2 gap-2 text-[10px] text-muted-foreground">
+                                                    <div className="rounded-sm border border-border px-2 py-1.5">Duration: <span className="font-medium text-foreground">{duration} hrs</span></div>
+                                                    <div className="rounded-sm border border-border px-2 py-1.5">Seats: <span className="font-medium text-foreground">{paidCount}/{batch.capacity}</span></div>
+                                                    <div className="rounded-sm border border-border px-2 py-1.5 col-span-2">Venue: <span className="font-medium text-foreground">{batch.meta?.venue || 'Online'}</span></div>
+                                                </div>
+
+                                                {isSelectedBatch ? (
+                                                    enrollment?.status === 'paid' ? (
+                                                        <div className="flex items-center gap-2 rounded-sm border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
+                                                            <CheckCircle2 className="size-3.5" />
+                                                            Enrolled in this batch.
+                                                        </div>
+                                                    ) : (
+                                                        <Button
+                                                            size="sm"
+                                                            className="w-full h-9 rounded-sm text-xs font-medium shadow-none"
+                                                            onClick={() => handlePayment(batch.id)}
+                                                            disabled={isPaying || !scriptLoaded || !razorpay_key || !razorpay_order}
+                                                        >
+                                                            {isPaying ? <span className="flex items-center gap-2"><Loader2 className="size-3.5 animate-spin" /> Processing...</span> : <span className="flex items-center gap-2"><CreditCard className="size-3.5" /> Pay for this batch</span>}
+                                                        </Button>
+                                                    )
+                                                ) : user ? (
+                                                    <Button
+                                                        size="sm"
+                                                        className="w-full h-9 rounded-sm text-xs font-medium shadow-none"
+                                                        disabled={!canJoin || !!enrollment}
+                                                        onClick={() => handleEnroll(batch.id)}
+                                                    >
+                                                        {enrollment ? 'Already enrolled in another batch' : (canJoin ? 'Enroll in this batch' : 'Batch closed')}
+                                                    </Button>
+                                                ) : (
+                                                    <Button asChild size="sm" className="w-full h-9 rounded-sm text-xs font-medium shadow-none">
+                                                        <Link href="/login" className="flex items-center justify-center gap-2">
+                                                            Login to Enroll <ArrowRight className="size-3.5" />
+                                                        </Link>
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         </div>
@@ -296,10 +371,10 @@ export default function WorkshopShow({ workshop, enrollment, can_enroll, enrollm
                             <div className="rounded-sm border border-border bg-card p-4 space-y-3">
                                 <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Quick facts</div>
                                 <div className="space-y-2 text-xs text-muted-foreground">
-                                    <div className="flex items-center justify-between gap-3"><span>Duration</span><span className="font-medium text-foreground">{workshop.duration_hours} hrs</span></div>
+                                    <div className="flex items-center justify-between gap-3"><span>Batches</span><span className="font-medium text-foreground">{batches.length}</span></div>
                                     <div className="flex items-center justify-between gap-3"><span>Fee</span><span className="font-medium text-foreground">₹{Number(workshop.fee).toLocaleString('en-IN')}</span></div>
                                     <div className="flex items-center justify-between gap-3"><span>Seats filled</span><span className="font-medium text-foreground">{workshop.paid_enrollments_count || 0}</span></div>
-                                    <div className="flex items-center justify-between gap-3"><span>Deadline</span><span className="font-medium text-foreground">1 hour before start</span></div>
+                                    <div className="flex items-center justify-between gap-3"><span>Deadline</span><span className="font-medium text-foreground">1 hour before batch start</span></div>
                                 </div>
                             </div>
                         </div>

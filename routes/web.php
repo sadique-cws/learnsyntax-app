@@ -251,6 +251,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('workshops', [WorkshopController::class, 'store'])->name('teacher.workshops.store');
         Route::get('workshops/{workshop}', [WorkshopController::class, 'show'])->name('teacher.workshops.show');
         Route::patch('workshops/{workshop}', [WorkshopController::class, 'update'])->name('teacher.workshops.update');
+        Route::post('workshops/{workshop}/batches', [WorkshopController::class, 'storeBatch'])->name('teacher.workshops.batches.store');
         Route::get('wallet', [WalletController::class, 'index'])->name('teacher.wallet');
         Route::get('wallet/withdraw', [WalletController::class, 'withdraw'])->name('teacher.wallet.withdraw.page');
         Route::post('wallet/withdraw', [WalletController::class, 'storeRequest'])->name('teacher.wallet.withdraw');

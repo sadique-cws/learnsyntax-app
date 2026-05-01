@@ -6,6 +6,7 @@ use App\Models\Batch;
 use App\Models\Course;
 use App\Models\Teacher;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -42,7 +43,8 @@ class WorkshopSeeder extends Seeder
                 'description' => 'Master React hooks and functional component patterns.',
                 'fee' => 2999.00,
                 'duration_hours' => 16.0,
-                'starts_at' => now()->addDays(5)->toDateString(),
+                'starts_at' => now()->addDays(5)->setTime(10, 0)->toDateTimeString(),
+                'second_starts_at' => now()->addDays(5)->setTime(15, 0)->toDateTimeString(),
                 'topics' => 'useState, useEffect, useContext, useReducer, Custom Hooks',
                 'venue' => 'Mumbai Tech Hub, Building A, 3rd Floor',
                 'capacity' => 30,
@@ -52,7 +54,8 @@ class WorkshopSeeder extends Seeder
                 'description' => 'Learn how to secure your Laravel applications against common vulnerabilities.',
                 'fee' => 3499.00,
                 'duration_hours' => 20.0,
-                'starts_at' => now()->addDays(10)->toDateString(),
+                'starts_at' => now()->addDays(10)->setTime(11, 0)->toDateTimeString(),
+                'second_starts_at' => now()->addDays(10)->setTime(16, 30)->toDateTimeString(),
                 'topics' => 'CSRF Protection, SQL Injection, XSS, Authentication, Authorization, CORS',
                 'venue' => 'Bangalore Innovation Park, Tower 5',
                 'capacity' => 25,
@@ -62,7 +65,8 @@ class WorkshopSeeder extends Seeder
                 'description' => 'Learn techniques to optimize database queries and improve application performance.',
                 'fee' => 2499.00,
                 'duration_hours' => 12.0,
-                'starts_at' => now()->addDays(15)->toDateString(),
+                'starts_at' => now()->addDays(15)->setTime(9, 30)->toDateTimeString(),
+                'second_starts_at' => now()->addDays(15)->setTime(14, 30)->toDateTimeString(),
                 'topics' => 'Indexes, Query Optimization, N+1 Problems, Caching Strategies',
                 'venue' => 'Delhi Business Center, New Delhi',
                 'capacity' => 40,
@@ -72,7 +76,8 @@ class WorkshopSeeder extends Seeder
                 'description' => 'Comprehensive guide to testing modern full-stack applications.',
                 'fee' => 3999.00,
                 'duration_hours' => 24.0,
-                'starts_at' => now()->addDays(20)->toDateString(),
+                'starts_at' => now()->addDays(20)->setTime(10, 30)->toDateTimeString(),
+                'second_starts_at' => now()->addDays(20)->setTime(17, 0)->toDateTimeString(),
                 'topics' => 'Pest, PHPUnit, Vitest, Playwright, Test Driven Development',
                 'venue' => 'Online Virtual Classroom',
                 'capacity' => 50,
@@ -96,7 +101,8 @@ class WorkshopSeeder extends Seeder
                 'course_id' => $workshop->id,
                 'name' => $workshopData['title'].' - Batch 1',
                 'type' => 'online',
-                'start_date' => $workshopData['starts_at'],
+                'start_date' => Carbon::parse($workshopData['starts_at'])->toDateString(),
+                'starts_at' => $workshopData['starts_at'],
                 'capacity' => $workshopData['capacity'],
                 'meta' => [
                     'duration_hours' => (float) $workshopData['duration_hours'],
@@ -112,11 +118,12 @@ class WorkshopSeeder extends Seeder
                 'course_id' => $workshop->id,
                 'name' => $workshopData['title'].' - Batch 2',
                 'type' => 'offline',
-                'start_date' => now()->addDays(30)->toDateString(),
+                'start_date' => Carbon::parse($workshopData['second_starts_at'])->toDateString(),
+                'starts_at' => $workshopData['second_starts_at'],
                 'capacity' => $workshopData['capacity'],
                 'meta' => [
                     'duration_hours' => (float) $workshopData['duration_hours'],
-                    'starts_at' => now()->addDays(30)->toDateString(),
+                    'starts_at' => $workshopData['second_starts_at'],
                     'topics' => array_map('trim', explode(',', $workshopData['topics'])),
                     'venue' => 'Additional venue - TBA',
                     'capacity' => $workshopData['capacity'],

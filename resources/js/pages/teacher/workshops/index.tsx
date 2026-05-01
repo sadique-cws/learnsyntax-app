@@ -29,11 +29,6 @@ export default function TeacherWorkshopsIndex({ workshops = [] }: any) {
         title: '',
         description: '',
         fee: '',
-        duration_hours: '',
-        starts_at: '',
-        topics: '',
-        venue: '',
-        capacity: '',
         image: null as File | null,
     });
 
@@ -48,11 +43,6 @@ export default function TeacherWorkshopsIndex({ workshops = [] }: any) {
         title: '',
         description: '',
         fee: '',
-        duration_hours: '',
-        starts_at: '',
-        topics: '',
-        venue: '',
-        capacity: '',
         image: null as File | null,
     });
 
@@ -77,11 +67,6 @@ export default function TeacherWorkshopsIndex({ workshops = [] }: any) {
             title: workshop.title ?? '',
             description: workshop.description ?? '',
             fee: workshop.fee?.toString?.() ?? '',
-            duration_hours: workshop.duration_hours?.toString?.() ?? '',
-            starts_at: workshop.starts_at ? toDatetimeLocal(workshop.starts_at) : '',
-            topics: Array.isArray(workshop.topics) ? workshop.topics.join(', ') : (workshop.topics ?? ''),
-            venue: workshop.venue ?? '',
-            capacity: workshop.capacity?.toString?.() ?? '',
             image: null,
         });
     };
@@ -139,28 +124,6 @@ export default function TeacherWorkshopsIndex({ workshops = [] }: any) {
                                 <Input type="number" value={data.fee} onChange={(e) => setData('fee', e.target.value)} className="h-8 rounded-sm text-sm" placeholder="0" />
                                 {errors.fee && <p className="text-[10px] text-red-500">{errors.fee}</p>}
                             </div>
-                            <div className="space-y-1.5">
-                                <Label className="text-xs font-medium text-muted-foreground">Duration (hours)</Label>
-                                <Input type="number" step="0.5" value={data.duration_hours} onChange={(e) => setData('duration_hours', e.target.value)} className="h-8 rounded-sm text-sm" placeholder="2" />
-                                {errors.duration_hours && <p className="text-[10px] text-red-500">{errors.duration_hours}</p>}
-                            </div>
-                            <div className="space-y-1.5">
-                                <Label className="text-xs font-medium text-muted-foreground">Starts At</Label>
-                                <Input type="datetime-local" value={data.starts_at} onChange={(e) => setData('starts_at', e.target.value)} className="h-8 rounded-sm text-sm" />
-                                {errors.starts_at && <p className="text-[10px] text-red-500">{errors.starts_at}</p>}
-                            </div>
-                            <div className="space-y-1.5">
-                                <Label className="text-xs font-medium text-muted-foreground">Venue</Label>
-                                <Input value={data.venue} onChange={(e) => setData('venue', e.target.value)} className="h-8 rounded-sm text-sm" placeholder="Online / Offline location" />
-                            </div>
-                            <div className="space-y-1.5">
-                                <Label className="text-xs font-medium text-muted-foreground">Capacity</Label>
-                                <Input type="number" value={data.capacity} onChange={(e) => setData('capacity', e.target.value)} className="h-8 rounded-sm text-sm" placeholder="Optional" />
-                            </div>
-                        </div>
-                        <div className="space-y-1.5">
-                            <Label className="text-xs font-medium text-muted-foreground">Topics</Label>
-                            <Input value={data.topics} onChange={(e) => setData('topics', e.target.value)} className="h-8 rounded-sm text-sm" placeholder="React, Laravel, APIs" />
                         </div>
                         <div className="space-y-1.5">
                             <Label className="text-xs font-medium text-muted-foreground">Description</Label>
@@ -183,6 +146,10 @@ export default function TeacherWorkshopsIndex({ workshops = [] }: any) {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
                     {workshops.map((workshop: any) => (
+                        (() => {
+                            const firstBatch = Array.isArray(workshop.batches) ? workshop.batches[0] : null;
+
+                            return (
                         <div key={workshop.id} className="rounded-sm border border-border bg-card overflow-hidden">
                             <div className="p-3 border-b border-border bg-muted/5">
                                 <div className="flex items-start justify-between gap-3">
@@ -206,7 +173,7 @@ export default function TeacherWorkshopsIndex({ workshops = [] }: any) {
                                         <IndianRupee className="size-3" /> {Number(workshop.fee).toLocaleString('en-IN')}
                                     </span>
                                     <span className="inline-flex items-center gap-1 rounded-sm border border-border px-2 py-1">
-                                        <Clock3 className="size-3" /> {workshop.duration_hours} hrs
+                                        <Clock3 className="size-3" /> {workshop.batches?.length || 0} batches
                                     </span>
                                     <span className="inline-flex items-center gap-1 rounded-sm border border-border px-2 py-1">
                                         <Users className="size-3" /> {workshop.paid_enrollments_count || 0} enrolled
@@ -216,17 +183,17 @@ export default function TeacherWorkshopsIndex({ workshops = [] }: any) {
                                 <div className="grid grid-cols-1 gap-2 text-xs text-muted-foreground">
                                     <div className="flex items-center gap-2">
                                         <CalendarDays className="size-3.5 text-primary" />
-                                        <span>{mounted ? formatDateTime(workshop.starts_at) : 'Loading date...'}</span>
+                                        <span>{firstBatch ? (mounted ? formatDateTime(firstBatch.starts_at || firstBatch.start_date) : 'Loading date...') : 'No batch yet'}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <MapPin className="size-3.5 text-primary" />
-                                        <span>{workshop.venue || 'Venue not set'}</span>
+                                        <span>{firstBatch?.meta?.venue || 'Venue not set'}</span>
                                     </div>
                                 </div>
 
-                                {Array.isArray(workshop.topics) && workshop.topics.length > 0 && (
+                                {((Array.isArray(firstBatch?.meta?.topics) && firstBatch.meta.topics.length > 0) || (Array.isArray(workshop.topics) && workshop.topics.length > 0)) && (
                                     <div className="flex flex-wrap gap-1.5">
-                                        {workshop.topics.slice(0, 4).map((topic: string) => (
+                                        {(Array.isArray(firstBatch?.meta?.topics) && firstBatch.meta.topics.length > 0 ? firstBatch.meta.topics : workshop.topics).slice(0, 4).map((topic: string) => (
                                             <span key={topic} className="inline-flex items-center rounded-sm border border-border bg-muted/10 px-2 py-1 text-[10px] font-medium text-muted-foreground">
                                                 {topic}
                                             </span>
@@ -242,6 +209,8 @@ export default function TeacherWorkshopsIndex({ workshops = [] }: any) {
                                 </div>
                             </div>
                         </div>
+                            );
+                        })()
                     ))}
 
                     {workshops.length === 0 && !showAddForm && (
@@ -268,31 +237,9 @@ export default function TeacherWorkshopsIndex({ workshops = [] }: any) {
                                     <Label className="text-xs font-medium text-muted-foreground">Title</Label>
                                     <Input value={editData.title} onChange={(e) => setEditData('title', e.target.value)} className="h-8 rounded-sm text-sm" />
                                 </div>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div className="space-y-1.5">
-                                        <Label className="text-xs font-medium text-muted-foreground">Fee</Label>
-                                        <Input type="number" value={editData.fee} onChange={(e) => setEditData('fee', e.target.value)} className="h-8 rounded-sm text-sm" />
-                                    </div>
-                                    <div className="space-y-1.5">
-                                        <Label className="text-xs font-medium text-muted-foreground">Duration</Label>
-                                        <Input type="number" step="0.5" value={editData.duration_hours} onChange={(e) => setEditData('duration_hours', e.target.value)} className="h-8 rounded-sm text-sm" />
-                                    </div>
-                                </div>
                                 <div className="space-y-1.5">
-                                    <Label className="text-xs font-medium text-muted-foreground">Starts At</Label>
-                                    <Input type="datetime-local" value={editData.starts_at} onChange={(e) => setEditData('starts_at', e.target.value)} className="h-8 rounded-sm text-sm" />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <Label className="text-xs font-medium text-muted-foreground">Topics</Label>
-                                    <Input value={editData.topics} onChange={(e) => setEditData('topics', e.target.value)} className="h-8 rounded-sm text-sm" />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <Label className="text-xs font-medium text-muted-foreground">Venue</Label>
-                                    <Input value={editData.venue} onChange={(e) => setEditData('venue', e.target.value)} className="h-8 rounded-sm text-sm" />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <Label className="text-xs font-medium text-muted-foreground">Capacity</Label>
-                                    <Input type="number" value={editData.capacity} onChange={(e) => setEditData('capacity', e.target.value)} className="h-8 rounded-sm text-sm" />
+                                    <Label className="text-xs font-medium text-muted-foreground">Fee</Label>
+                                    <Input type="number" value={editData.fee} onChange={(e) => setEditData('fee', e.target.value)} className="h-8 rounded-sm text-sm" />
                                 </div>
                                 <div className="space-y-1.5">
                                     <Label className="text-xs font-medium text-muted-foreground">Description</Label>

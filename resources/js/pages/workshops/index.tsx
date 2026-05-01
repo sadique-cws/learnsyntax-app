@@ -47,6 +47,7 @@ export default function WorkshopsIndex({ workshops = [] }: { workshops: any[] })
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     {filteredWorkshops.map((workshop, idx) => {
                         const topics = Array.isArray(workshop.topics) ? workshop.topics.slice(0, 3) : [];
+                        const firstBatch = Array.isArray(workshop.batches) ? workshop.batches[0] : null;
 
                         return (
                             <Link key={workshop.id} href={`/workshops/${workshop.slug}`} className="group block focus:outline-none">
@@ -65,7 +66,7 @@ export default function WorkshopsIndex({ workshops = [] }: { workshops: any[] })
                                         <div>
                                             <div className="flex items-center gap-2 text-[10px] font-bold text-primary mb-2">
                                                 <Clock3 className="size-3" />
-                                                <span>{workshop.duration_hours} Hours</span>
+                                                <span>{workshop.batches_count || 0} Batches</span>
                                             </div>
                                             <h3 className="text-[15px] font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-tight">
                                                 {workshop.title}
@@ -79,7 +80,7 @@ export default function WorkshopsIndex({ workshops = [] }: { workshops: any[] })
                                             <div className="flex items-center justify-between text-[10px] font-bold text-muted-foreground/60 uppercase tracking-tight">
                                                 <div className="flex items-center gap-1.5">
                                                     <CalendarDays className="size-3.5" strokeWidth={2.5} />
-                                                    <span>{new Date(workshop.starts_at).toLocaleDateString('en-IN')}</span>
+                                                    <span>{firstBatch ? new Date(firstBatch.starts_at || firstBatch.start_date).toLocaleDateString('en-IN') : 'No batch yet'}</span>
                                                 </div>
                                                 <div className="flex items-center gap-1.5">
                                                     <Users className="size-3.5" strokeWidth={2.5} />
@@ -102,7 +103,7 @@ export default function WorkshopsIndex({ workshops = [] }: { workshops: any[] })
                                                     View Workshop <ArrowRight className="size-3 group-hover:translate-x-0.5 transition-transform" />
                                                 </span>
                                                 <div className="text-[9px] font-bold text-muted-foreground/40">
-                                                    {workshop.venue || 'Online'}
+                                                    {firstBatch?.meta?.venue || 'Online'}
                                                 </div>
                                             </div>
                                         </div>

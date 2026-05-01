@@ -11,6 +11,7 @@ use App\Models\Payment;
 use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Razorpay\Api\Api;
 
 class WorkshopEnrollmentController extends Controller
@@ -27,10 +28,14 @@ class WorkshopEnrollmentController extends Controller
         $workshops = Course::query()
             ->ofType('workshop')
             ->where('is_active', true)
+            ->with(['batches' => function ($query) {
+                $query->orderBy('starts_at')->orderBy('start_date');
+            }])
             ->withCount([
                 'enrollments as paid_enrollments_count' => function ($query) {
                     $query->where('status', 'paid');
                 },
+                'batches',
             ])
             ->latest()
             ->get();
@@ -50,10 +55,12 @@ class WorkshopEnrollmentController extends Controller
         if ($user) {
             $enrollment = Enrollment::where('user_id', $user->id)
                 ->where('course_id', $workshop->id)
+                ->with('batch')
                 ->first();
         }
 
-        $deadline = $workshop->starts_at?->copy()->subHour();
+        $displayBatch = $workshop->batches->first();
+        $deadline = $enrollment?->batch?->starts_at?->copy()->subHour() ?? $displayBatch?->starts_at?->copy()->subHour();
         $razorpayOrder = null;
 
         if ($user && $enrollment && $enrollment->status === 'pending' && $workshop->price > 0) {
@@ -61,29 +68,39 @@ class WorkshopEnrollmentController extends Controller
         }
 
         return inertia('workshops/show', [
-            'workshop' => $workshop->load(['teacher.user']),
+            'workshop' => $workshop->load(['teacher.user', 'batches' => function ($query) {
+                $query->orderBy('starts_at')->orderBy('start_date')->withCount(['enrollments as paid_enrollments_count' => function ($paidQuery) {
+                    $paidQuery->where('status', 'paid');
+                }]);
+            }]),
             'enrollment' => $enrollment,
             'is_enrolled' => $enrollment?->status === 'paid',
-            'can_enroll' => $deadline ? now()->lt($deadline) : false,
+            'can_enroll' => true,
             'enrollment_deadline' => $deadline?->toDateTimeString(),
             'razorpay_key' => config('services.razorpay.key'),
             'razorpay_order' => $razorpayOrder,
         ]);
     }
 
-    public function store(Course $workshop)
+    public function store(Request $request, Course $workshop)
     {
         $user = auth()->user();
         abort_unless($workshop->type === 'workshop', 404);
 
-        $deadline = $workshop->starts_at?->copy()->subHour();
+        $request->validate([
+            'batch_id' => ['required', Rule::exists('batches', 'id')->where('course_id', $workshop->id)],
+        ]);
+
+        $batch = $workshop->batches()->findOrFail($request->batch_id);
+
+        $deadline = $batch->starts_at?->copy()->subHour();
 
         if ($deadline && now()->greaterThan($deadline)) {
-            return back()->with('error', 'Workshop enrollment closes one hour before the start time.');
+            return back()->with('error', 'Batch enrollment closes one hour before the start time.');
         }
 
-        if ($workshop->capacity && $workshop->enrollments()->where('status', 'paid')->count() >= $workshop->capacity) {
-            return back()->with('error', 'This workshop is fully booked.');
+        if ($batch->capacity && $batch->enrollments()->where('status', 'paid')->count() >= $batch->capacity) {
+            return back()->with('error', 'This batch is fully booked.');
         }
 
         $existing = Enrollment::where('user_id', $user->id)
@@ -97,6 +114,7 @@ class WorkshopEnrollmentController extends Controller
         if ((float) $workshop->price <= 0) {
             $enrollment = Enrollment::create([
                 'course_id' => $workshop->id,
+                'batch_id' => $batch->id,
                 'user_id' => $user->id,
                 'status' => 'paid',
             ]);
@@ -117,11 +135,12 @@ class WorkshopEnrollmentController extends Controller
 
         Enrollment::create([
             'course_id' => $workshop->id,
+            'batch_id' => $batch->id,
             'user_id' => $user->id,
             'status' => 'pending',
         ]);
 
-        return redirect()->route('student.workshops.show', ['workshop' => $workshop->slug])->with('success', 'Workshop added to checkout. Please complete the payment to confirm your enrollment.');
+        return redirect()->route('student.workshops.show', ['workshop' => $workshop->slug])->with('success', 'Batch added to checkout. Please complete the payment to confirm your enrollment.');
     }
 
     public function processPayment(Request $request, Course $workshop)
@@ -130,11 +149,13 @@ class WorkshopEnrollmentController extends Controller
             'razorpay_payment_id' => 'required|string',
             'razorpay_order_id' => 'required|string',
             'razorpay_signature' => 'required|string',
+            'batch_id' => 'required|exists:batches,id',
             'gst_number' => 'nullable|string|max:20',
         ]);
 
         $enrollment = Enrollment::where('user_id', auth()->id())
             ->where('course_id', $workshop->id)
+            ->where('batch_id', $request->batch_id)
             ->firstOrFail();
 
         if ($enrollment->status === 'paid') {
