@@ -9,6 +9,7 @@ use App\Models\Certificate;
 use App\Models\Enrollment;
 use App\Models\Exam;
 use App\Models\ExamAttempt;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 
 class AcademicController extends Controller
@@ -231,7 +232,7 @@ class AcademicController extends Controller
         }
 
         return inertia('student/academic/all-assignments', [
-            'assignments' => $assignments,
+            'assignments' => $assignments->sortByDesc('created_at')->values(),
         ]);
     }
 
@@ -257,7 +258,7 @@ class AcademicController extends Controller
         }
 
         return inertia('student/academic/all-exams', [
-            'exams' => $exams,
+            'exams' => $exams->sortByDesc('created_at')->values(),
         ]);
     }
 
@@ -308,6 +309,16 @@ class AcademicController extends Controller
 
         return inertia('admin/certificates/view', [
             'certificate' => $certificate,
+        ]);
+    }
+
+    public function showInvoice(Invoice $invoice)
+    {
+        $this->authorizeAccess($invoice->payment->enrollment);
+
+        return inertia('student/academic/invoice', [
+            'invoice' => $invoice->load(['payment.enrollment.user', 'payment.enrollment.course']),
+            'company' => \App\Models\Setting::getCompanyInfo(),
         ]);
     }
 }

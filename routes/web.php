@@ -229,6 +229,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('academic/assignments', [AcademicController::class, 'allAssignments'])->name('student.academic.all-assignments');
     Route::get('academic/exams', [AcademicController::class, 'allExams'])->name('student.academic.all-exams');
     Route::get('academic/payments', [AcademicController::class, 'allPayments'])->name('student.academic.all-payments');
+    Route::get('academic/invoices/{invoice}', [AcademicController::class, 'showInvoice'])->name('student.academic.show-invoice');
 
     // Teacher Routes
     Route::middleware(['can:teacher'])->prefix('teacher')->group(function () {

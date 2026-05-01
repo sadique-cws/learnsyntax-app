@@ -78,9 +78,9 @@ export default function AllPayments({ payments = [] }: AllPaymentsProps) {
                                             <td className="px-4 py-4 text-right">
                                                 {payment.invoice ? (
                                                     <Button asChild variant="outline" size="sm" className="h-7 px-3 rounded-sm text-[10px] font-medium shadow-none border-border hover:bg-muted cursor-pointer">
-                                                        <a href={`/admin/invoices/${payment.invoice.id}`} target="_blank" rel="noreferrer" className="flex items-center gap-1.5">
+                                                        <Link href={`/academic/invoices/${payment.invoice.id}`} target="_blank" className="flex items-center gap-1.5">
                                                             <Download className="size-3" /> Invoice
-                                                        </a>
+                                                        </Link>
                                                     </Button>
                                                 ) : (
                                                     <span className="text-[10px] text-muted-foreground">Processing...</span>
