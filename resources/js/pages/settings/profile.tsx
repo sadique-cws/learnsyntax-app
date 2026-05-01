@@ -31,9 +31,6 @@ export default function Profile({
     };
 
     return (
-        <SettingsLayout>
-            <Head title="Profile Information" />
-
             <div className="space-y-4">
                 {/* Profile Form */}
                 <div className="rounded-sm border border-border bg-card overflow-hidden">
@@ -114,6 +111,5 @@ export default function Profile({
                 {/* Delete Account Area */}
                 <DeleteUser />
             </div>
-        </SettingsLayout>
     );
 }

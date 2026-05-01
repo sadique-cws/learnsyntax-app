@@ -69,9 +69,6 @@ export default function Security({
     };
 
     return (
-        <SettingsLayout>
-            <Head title="Security Settings" />
-
             <div className="space-y-4">
                 {/* Update Password */}
                 <div className="rounded-sm border border-border bg-card overflow-hidden">
@@ -206,6 +203,5 @@ export default function Security({
                     </div>
                 )}
             </div>
-        </SettingsLayout>
     );
 }

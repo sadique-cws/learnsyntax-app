@@ -42,7 +42,7 @@ export default function CertificateView({ certificate }: { certificate: any }) {
             </div>
 
             {/* Certificate Canvas */}
-            <div className="w-full max-w-[1100px] aspect-[1.414/1] bg-white shadow-2xl relative print:shadow-none overflow-hidden">
+            <div className="certificate-canvas w-full max-w-[1100px] aspect-[1.414/1] bg-white shadow-2xl relative print:shadow-none overflow-hidden">
                 {/* Background Image Template */}
                 <img 
                     src="/certificate.png" 
@@ -86,7 +86,50 @@ export default function CertificateView({ certificate }: { certificate: any }) {
             <style dangerouslySetInnerHTML={{ __html: `
                 @media print {
                     @page { size: landscape; margin: 0; }
-                    body { margin: 0; background: white; }
+                    
+                    /* Hide everything by default */
+                    body * {
+                        visibility: hidden !important;
+                    }
+                    
+                    /* Show only the certificate canvas and its children */
+                    .certificate-canvas, .certificate-canvas * {
+                        visibility: visible !important;
+                    }
+                    
+                    /* Reset body background and positioning */
+                    body { 
+                        margin: 0 !important; 
+                        padding: 0 !important;
+                        background: white !important; 
+                    }
+                    
+                    /* Position the canvas at the top left of the print page */
+                    .certificate-canvas {
+                        position: fixed !important;
+                        left: 0 !important;
+                        top: 0 !important;
+                        width: 100vw !important;
+                        height: 100vh !important;
+                        max-width: none !important;
+                        max-height: none !important;
+                        border: none !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        transform: none !important;
+                        page-break-after: avoid !important;
+                        page-break-before: avoid !important;
+                    }
+
+                    /* Prevent extra blank pages */
+                    html, body {
+                        height: 100% !important;
+                        overflow: hidden !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                    }
+
+                    /* Hide the action bar specifically just in case */
                     .print-hidden { display: none !important; }
                 }
             ` }} />

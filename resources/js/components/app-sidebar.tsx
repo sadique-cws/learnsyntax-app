@@ -74,11 +74,7 @@ export function AppSidebar() {
             );
 
             if (user.is_student) {
-                mainNavItems.push({
-                    title: 'Dashboard',
-                    href: '/dashboard',
-                    icon: LayoutGrid,
-                });
+
                 mainNavItems.push({
                     title: 'My Learning',
                     href: '/academic/learning',
